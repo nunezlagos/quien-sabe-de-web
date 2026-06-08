@@ -1,0 +1,46 @@
+@keyframes fillText {
+    0% { width: 0%; }
+    100% { width: 100%; }
+}
+
+.animate-fill {
+    animation: fillText 1.5s ease-in-out infinite alternate;
+}
+
+.hero-pattern {
+    background-color: #e0f2f1;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%232e8b57' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Search Mode Layout Changes */
+body.search-mode .hero-pattern {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+body.search-mode .hero-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+body.search-mode .hero-desc {
+    display: none;
+}
+
+body.search-mode .search-container {
+    max-width: 100%;
+    padding: 0.5rem;
+}
+
+/* Dashboard Navigation */
+.nav-link.active {
+    background-color: #f0fdf4; /* bg-green-50 */
+    color: #2E8B57; /* text-primary */
+    font-weight: 700;
+}
+.nav-link.inactive {
+    color: #4b5563; /* text-gray-600 */
+}
+.nav-link.inactive:hover {
+    background-color: #f9fafb; /* hover:bg-gray-50 */
+}
