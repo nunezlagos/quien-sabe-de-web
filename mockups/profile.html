@@ -67,6 +67,19 @@
                             </div>
                             <h1 class="text-xl font-extrabold text-gray-800 leading-tight break-words px-2" id="profile-name"></h1>
                             <span class="text-primary bg-green-50 px-3 py-1.5 rounded-xl text-xs font-bold mt-2 uppercase tracking-wide border border-green-100 inline-block leading-normal" id="profile-trade"></span>
+
+                            <!-- Badge Disponibilidad -->
+                            <span id="profile-availability" class="inline-flex items-center gap-1.5 mt-2 bg-green-100 text-green-700 px-3 py-1 rounded-full text-[11px] font-bold">
+                                <span class="availability-dot relative inline-block w-2 h-2 rounded-full bg-green-500"></span>
+                                Disponible ahora
+                            </span>
+                            <!-- Variante alternativa (no disponible):
+                            <span class="inline-flex items-center gap-1.5 mt-2 bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-[11px] font-bold">
+                                <i class="ri-time-line"></i>
+                                Próx. disponibilidad: lunes 9:00
+                            </span>
+                            -->
+
                             
                             <div class="flex items-center gap-1 mt-2 text-gray-600">
                                 <span class="text-yellow-400 text-base" id="profile-stars"></span>
@@ -281,6 +294,17 @@
             </div>
         </div>
     </div>
+
+    <style>
+        @keyframes availabilityPulse {
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+        .availability-dot {
+            animation: availabilityPulse 1.5s infinite;
+        }
+    </style>
 
     <script src="js/data.js"></script>
     <script src="js/utils.js"></script>

@@ -225,6 +225,132 @@
                     </div>
                 </div>
 
+                <!-- Mi Horario de Atención -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mb-6">
+                        <h3 class="font-bold text-gray-800 text-lg flex items-center gap-2">
+                            <i class="ri-time-line text-primary"></i> Mi Horario de Atención
+                        </h3>
+                        <button type="button" class="bg-white border border-gray-200 text-gray-600 hover:border-primary hover:text-primary py-2 px-4 rounded-xl transition text-sm font-bold flex items-center gap-2">
+                            <i class="ri-file-copy-line"></i> Aplicar mismo horario a todos los días
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                        <!-- Lunes -->
+                        <div class="bg-gray-50 rounded-2xl border border-gray-100 p-4">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="font-bold text-gray-800 text-sm">Lunes</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" class="sr-only peer" checked>
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                                </label>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="time" value="09:00" class="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                                <span class="text-gray-400 text-xs">a</span>
+                                <input type="time" value="18:00" class="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                            </div>
+                        </div>
+
+                        <!-- Martes -->
+                        <div class="bg-gray-50 rounded-2xl border border-gray-100 p-4">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="font-bold text-gray-800 text-sm">Martes</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" class="sr-only peer" checked>
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                                </label>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="time" value="09:00" class="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                                <span class="text-gray-400 text-xs">a</span>
+                                <input type="time" value="18:00" class="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                            </div>
+                        </div>
+
+                        <!-- Miércoles -->
+                        <div class="bg-gray-50 rounded-2xl border border-gray-100 p-4">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="font-bold text-gray-800 text-sm">Miércoles</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" class="sr-only peer" checked>
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                                </label>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="time" value="09:00" class="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                                <span class="text-gray-400 text-xs">a</span>
+                                <input type="time" value="18:00" class="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                            </div>
+                        </div>
+
+                        <!-- Jueves -->
+                        <div class="bg-gray-50 rounded-2xl border border-gray-100 p-4">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="font-bold text-gray-800 text-sm">Jueves</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" class="sr-only peer" checked>
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                                </label>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="time" value="09:00" class="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                                <span class="text-gray-400 text-xs">a</span>
+                                <input type="time" value="18:00" class="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                            </div>
+                        </div>
+
+                        <!-- Viernes -->
+                        <div class="bg-gray-50 rounded-2xl border border-gray-100 p-4">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="font-bold text-gray-800 text-sm">Viernes</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" class="sr-only peer" checked>
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                                </label>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="time" value="09:00" class="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                                <span class="text-gray-400 text-xs">a</span>
+                                <input type="time" value="18:00" class="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                            </div>
+                        </div>
+
+                        <!-- Sábado -->
+                        <div class="bg-gray-50 rounded-2xl border border-gray-100 p-4">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="font-bold text-gray-800 text-sm">Sábado</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" class="sr-only peer" checked>
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                                </label>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="time" value="10:00" class="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                                <span class="text-gray-400 text-xs">a</span>
+                                <input type="time" value="14:00" class="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                            </div>
+                        </div>
+
+                        <!-- Domingo -->
+                        <div class="bg-gray-50 rounded-2xl border border-gray-100 p-4">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="font-bold text-gray-800 text-sm">Domingo</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" class="sr-only peer">
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                                </label>
+                            </div>
+                            <p class="text-xs text-gray-400 font-medium italic text-center py-2">Cerrado</p>
+                        </div>
+                    </div>
+
+                    <button type="button" class="w-full mt-6 bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl shadow-md transition">
+                        Guardar horarios
+                    </button>
+                </div>
+
                 <!-- Tips Banner -->
                 <div class="bg-gradient-to-r from-accent to-orange-500 rounded-3xl p-6 text-white shadow-lg relative overflow-hidden">
                     <i class="ri-lightbulb-flash-line absolute -right-6 -bottom-6 text-9xl opacity-20 transform rotate-12"></i>
