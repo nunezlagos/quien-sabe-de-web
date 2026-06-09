@@ -1,0 +1,169 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Test Users API">
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6 text-gray-800">API Users Test</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
+          <i class="ri-user-add-line text-orange-500"></i> Create User
+        </h2>
+        <form id="createUserForm" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Name</label>
+            <input type="text" name="name" required minlength="2"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 p-2 border"
+              placeholder="Juan Pérez"
+            />
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" name="email" required
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 p-2 border"
+              placeholder="juan@example.com"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Role</label>
+            <select name="role" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 p-2 border">
+              <option value="user">User</option>
+              <option value="provider">Provider</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+
+          <button type="submit" 
+            class="w-full bg-orange-500 text-white font-bold py-2 px-4 rounded hover:bg-orange-600 transition duration-300">
+            Create User
+          </button>
+        </form>
+        <div id="formMessage" class="mt-4 text-sm hidden"></div>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-semibold flex items-center gap-2">
+            <i class="ri-team-line text-blue-500"></i> Current Users
+          </h2>
+          <button id="refreshBtn" class="text-sm text-gray-500 hover:text-orange-500 underline">
+            <i class="ri-refresh-line"></i> Refresh
+          </button>
+        </div>
+        
+        <div id="loading" class="text-center py-4 text-gray-500">Loading...</div>
+        <ul id="usersList" class="divide-y divide-gray-100 max-h-[500px] overflow-y-auto">
+        </ul>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('createUserForm');
+    const usersList = document.getElementById('usersList');
+    const loading = document.getElementById('loading');
+    const messageDiv = document.getElementById('formMessage');
+    const refreshBtn = document.getElementById('refreshBtn');
+
+    async function fetchUsers() {
+      if (!usersList || !loading) return;
+      
+      loading.style.display = 'block';
+
+      try {
+        const res = await fetch('/api/v1/users');
+        const json = await res.json();
+
+        usersList.innerHTML = '';
+
+        if (json.success && Array.isArray(json.data)) {
+          if (json.data.length === 0) {
+            usersList.innerHTML = '<li class="py-4 text-center text-gray-500">No users registered</li>';
+          } else {
+            usersList.innerHTML = json.data.map((user) => `
+              <li class="py-3 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold text-lg">
+                    ${user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <a href="/api/v1/users/${user.id}" target="_blank" class="font-bold text-gray-800 hover:text-orange-500 hover:underline cursor-pointer" title="View User JSON">${user.name}</a>
+                    <p class="text-xs text-gray-500">${user.email}</p>
+                  </div>
+                </div>
+                <span class="px-2 py-1 text-xs rounded-full ${getRoleColor(user.role)}">
+                  ${user.role}
+                </span>
+              </li>
+            `).join('');
+          }
+        } else {
+          usersList.innerHTML = `<li class="text-red-500 p-2">Error loading data: ${json.error || 'Unknown'}</li>`;
+        }
+      } catch (err) {
+        console.error(err);
+        usersList.innerHTML = `<li class="text-red-500 p-2">Connection error</li>`;
+      } finally {
+        loading.style.display = 'none';
+      }
+    }
+
+    function getRoleColor(role) {
+      switch(role) {
+        case 'admin': return 'bg-purple-100 text-purple-700';
+        case 'provider': return 'bg-blue-100 text-blue-700';
+        default: return 'bg-gray-100 text-gray-700';
+      }
+    }
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!messageDiv) return;
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      messageDiv.textContent = 'Sending...';
+      messageDiv.className = 'mt-4 text-sm text-gray-500 block';
+
+      try {
+        const res = await fetch('/api/v1/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        
+        const json = await res.json();
+
+        if (res.ok && json.success) {
+          messageDiv.textContent = 'User created successfully!';
+          messageDiv.className = 'mt-4 text-sm text-green-600 font-bold block';
+          form.reset();
+          loading.style.display = 'block'; 
+          fetchUsers(); 
+        } else {
+          const errorMsg = Array.isArray(json.error) ? json.error.join(', ') : (json.error || 'Unknown error');
+          messageDiv.textContent = `Error: ${errorMsg}`;
+          messageDiv.className = 'mt-4 text-sm text-red-600 font-bold block';
+        }
+      } catch (err) {
+        messageDiv.textContent = 'Network error creating user';
+        messageDiv.className = 'mt-4 text-sm text-red-600 font-bold block';
+      }
+    });
+
+    refreshBtn?.addEventListener('click', fetchUsers);
+    
+    if (!window.hasLoadedUsers) {
+        window.hasLoadedUsers = true;
+        fetchUsers();
+    }
+
+  </script>
+</BaseLayout>

@@ -1,0 +1,65 @@
+# ======================
+# Build / Output
+# ======================
+dist/
+.astro/
+
+# ======================
+# Dependencies
+# ======================
+node_modules/
+
+# ======================
+# Package manager logs
+# ======================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+bun-debug.log*
+
+# ======================
+# Environment variables
+# ======================
+.env
+.env.*
+!.env.example
+
+# ======================
+# OS files
+# ======================
+.DS_Store
+Thumbs.db
+
+# ======================
+# Editor / IDE
+# ======================
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ======================
+# Cache / temp
+# ======================
+.cache/
+.tmp/
+temp/
+# ======================
+# Cloudflare / Wrangler
+# ======================
+.wrangler/
+wrangler.toml
+
+# ======================
+# Artefactos de asistencia con IA (locales, no se versionan)
+# ======================
+# Configuración de Claude Code (CLAUDE.md, commands/, skills/, hooks/, settings*)
+.claude/
+# Documentación generada con apoyo IA (entregables académicos, drafts, etc.)
+docs/
+# Artefactos OpenSpec / MCP-opsx (proposals, changes, specs)
+openspec/
+# Bitácoras de sesión y progreso
+.agent/
+

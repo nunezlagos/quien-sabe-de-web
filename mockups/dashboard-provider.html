@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Proveedor - Quién Sabe</title>
+    <script src="js/tailwindcss.js"></script>
+    <link href="css/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/config.js"></script>
+</head>
+<body class="bg-bg-light font-sans">
+
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                <i class="ri-community-line text-primary"></i>
+                Quién<span class="text-primary">Sabe</span> <span class="text-xs bg-primary text-white px-2 py-0.5 rounded ml-2">PRO</span>
+            </a>
+            <div class="flex items-center gap-4">
+                <button class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-300 transition">
+                    <i class="ri-notification-3-line"></i>
+                </button>
+                <a href="index.html" class="text-sm text-red-500 hover:text-red-700 font-bold">Salir</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            
+            <!-- Sidebar -->
+            <aside class="md:col-span-1 space-y-4">
+                <div class="bg-white p-6 rounded-3xl shadow-sm text-center border border-gray-100">
+                    <div class="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-primary text-3xl font-bold">
+                        J
+                    </div>
+                    <h2 class="font-bold text-gray-800 text-lg">Juan Pérez</h2>
+                    <p class="text-sm text-gray-500 font-medium">Gasfiter</p>
+                    <div class="mt-4 flex justify-center gap-1 text-yellow-400 text-lg">
+                        <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-half-fill"></i>
+                        <span class="text-gray-400 ml-1 text-sm font-bold">(4.8)</span>
+                    </div>
+                </div>
+
+                <nav class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-4 border-b border-gray-50 bg-gray-50/50">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-gray-500 uppercase">Estado</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" value="" class="sr-only peer" checked>
+                                <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-500"></div>
+                                <span class="ml-2 text-xs font-bold text-green-600">Disponible</span>
+                            </label>
+                        </div>
+                    </div>
+                    <a href="#" class="block px-6 py-4 border-l-4 border-primary bg-green-50 text-primary font-bold"><i class="ri-dashboard-line mr-2 align-middle"></i> Resumen</a>
+                    <a href="#" class="block px-6 py-4 border-l-4 border-transparent hover:bg-gray-50 text-gray-600 font-medium transition"><i class="ri-edit-line mr-2 align-middle"></i> Editar Perfil</a>
+                    <a href="#" class="block px-6 py-4 border-l-4 border-transparent hover:bg-gray-50 text-gray-600 font-medium transition"><i class="ri-list-settings-line mr-2 align-middle"></i> Mis Servicios</a>
+                    <a href="#" class="block px-6 py-4 border-l-4 border-transparent hover:bg-gray-50 text-gray-600 font-medium transition"><i class="ri-chat-1-line mr-2 align-middle"></i> Reseñas</a>
+                    <button id="open-ticket-btn" class="w-full text-left px-6 py-4 border-l-4 border-transparent hover:bg-red-50 text-red-500 font-medium transition border-t border-gray-100 mt-2">
+                        <i class="ri-customer-service-2-line mr-2 align-middle"></i> Soporte / Ayuda
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- Main Panel -->
+            <div class="md:col-span-3 space-y-6">
+                
+                <div class="flex justify-end">
+                    <button id="preview-profile-btn" class="bg-white border border-gray-200 text-gray-600 px-4 py-2 rounded-xl text-sm font-bold hover:text-primary hover:border-primary transition flex items-center gap-2 shadow-sm">
+                        <i class="ri-eye-line"></i> Previsualizar Perfil Público
+                    </button>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
+                        <span class="text-3xl font-extrabold text-gray-800">124</span>
+                        <span class="text-xs text-gray-400 font-bold uppercase mt-1">Visitas Perfil</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
+                        <span class="text-3xl font-extrabold text-primary">15</span>
+                        <span class="text-xs text-gray-400 font-bold uppercase mt-1">Contactos</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
+                        <span class="text-3xl font-extrabold text-yellow-400 flex items-center gap-1">4.8 <i class="ri-star-fill text-xl"></i></span>
+                        <span class="text-xs text-gray-400 font-bold uppercase mt-1">Valoración</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
+                        <span class="text-3xl font-extrabold text-blue-500">3</span>
+                        <span class="text-xs text-gray-400 font-bold uppercase mt-1">Mensajes Nuevos</span>
+                    </div>
+                </div>
+
+                <!-- Edit Profile Banner (Compact) -->
+                <div class="relative bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+                    
+                    <!-- Avatar Upload -->
+                    <div class="px-6 pb-6 pt-6">
+                        <div class="relative w-20 h-20 mx-auto md:mx-0">
+                            <div class="w-20 h-20 bg-gray-100 rounded-full border-4 border-white shadow-md overflow-hidden flex items-center justify-center text-primary font-bold text-2xl relative group cursor-pointer">
+                                <span>J</span>
+                                <img src="" alt="" class="absolute inset-0 w-full h-full object-cover hidden" id="avatar-preview">
+                                <div class="absolute inset-0 bg-black/40 hidden group-hover:flex items-center justify-center transition">
+                                    <i class="ri-camera-line text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-3 flex flex-col md:flex-row justify-between items-end gap-4">
+                            <div>
+                                <h2 class="text-xl font-extrabold text-gray-800">Juan Pérez</h2>
+                                <p class="text-gray-500 text-sm font-medium">Gasfiter</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-xs font-bold hover:bg-gray-200 transition">Cancelar</button>
+                                <button class="px-4 py-1.5 bg-primary text-white rounded-lg text-xs font-bold hover:bg-primary-dark transition shadow-sm">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Edit Form (Compact) -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+                    <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2"><i class="ri-user-edit-line text-primary"></i> Editar Perfil</h3>
+                    
+                    <form class="space-y-4">
+                        <!-- Basic Info -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1">Nombre Completo</label>
+                                <input type="text" value="Juan Pérez" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1">Oficio Principal</label>
+                                <select class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                                    <option>Gasfiter</option>
+                                    <option>Electricista</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Bio -->
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">Biografía / Presentación</label>
+                            <textarea rows="2" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">Más de 15 años de experiencia en gasfitería domiciliaria. Especialista en calefonts y detección de fugas sin romper.</textarea>
+                        </div>
+
+                        <!-- Image Upload -->
+                        <div>
+                            <div class="flex justify-between items-end mb-2">
+                                <label class="block text-sm font-bold text-gray-700">Galería de Trabajos</label>
+                                <span class="text-[10px] text-gray-400 font-medium">Máx. 5 fotos</span>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                                <!-- Existing Images (Example with 2) -->
+                                <div class="relative group rounded-xl overflow-hidden h-24 bg-gray-100 border border-gray-200">
+                                    <img src="https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 bg-black/50 hidden group-hover:flex items-center justify-center transition">
+                                        <button type="button" class="text-white hover:text-red-400"><i class="ri-delete-bin-line text-xl"></i></button>
+                                    </div>
+                                </div>
+                                <div class="relative group rounded-xl overflow-hidden h-24 bg-gray-100 border border-gray-200">
+                                    <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 bg-black/50 hidden group-hover:flex items-center justify-center transition">
+                                        <button type="button" class="text-white hover:text-red-400"><i class="ri-delete-bin-line text-xl"></i></button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Empty Slots Placeholders -->
+                                <div class="h-24 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center">
+                                    <span class="text-xs text-gray-300">Vacío</span>
+                                </div>
+                                <div class="h-24 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center">
+                                    <span class="text-xs text-gray-300">Vacío</span>
+                                </div>
+                                
+                                <!-- Upload Button (Only if < 5) -->
+                                <label class="h-24 border-2 border-dashed border-primary/30 bg-green-50/50 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-green-50 transition text-primary">
+                                    <i class="ri-add-line text-2xl mb-1"></i>
+                                    <input type="file" class="hidden" accept="image/*">
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end pt-4">
+                            <button type="button" class="bg-primary hover:bg-primary-dark text-white font-bold py-3 px-8 rounded-xl shadow-md transition transform hover:-translate-y-0.5">
+                                Guardar Cambios
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Active Services -->
+                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-gray-800 text-lg">Mis Servicios Activos</h3>
+                        <button id="add-service-btn" class="text-primary hover:text-primary-dark text-sm font-bold flex items-center"><i class="ri-add-line mr-1 text-lg"></i> Agregar Nuevo</button>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100 hover:border-green-100 transition">
+                            <div>
+                                <h4 class="font-bold text-gray-800">Cambio de llave</h4>
+                                <p class="text-sm text-primary font-bold">$15.000</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="w-8 h-8 rounded-full bg-blue-50 text-blue-500 hover:bg-blue-100 flex items-center justify-center transition"><i class="ri-pencil-line"></i></button>
+                                <button class="w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition"><i class="ri-delete-bin-line"></i></button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100 hover:border-green-100 transition">
+                            <div>
+                                <h4 class="font-bold text-gray-800">Destape de cañería</h4>
+                                <p class="text-sm text-primary font-bold">$25.000</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="w-8 h-8 rounded-full bg-blue-50 text-blue-500 hover:bg-blue-100 flex items-center justify-center transition"><i class="ri-pencil-line"></i></button>
+                                <button class="w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition"><i class="ri-delete-bin-line"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips Banner -->
+                <div class="bg-gradient-to-r from-accent to-orange-500 rounded-3xl p-6 text-white shadow-lg relative overflow-hidden">
+                    <i class="ri-lightbulb-flash-line absolute -right-6 -bottom-6 text-9xl opacity-20 transform rotate-12"></i>
+                    <h3 class="font-bold text-lg mb-2 relative z-10 flex items-center gap-2"><i class="ri-lightbulb-line"></i> Consejo Pro</h3>
+                    <p class="opacity-90 text-sm relative z-10 font-medium">Los perfiles con foto real y descripción detallada reciben un 40% más de contactos. ¡Actualiza tu foto hoy!</p>
+                </div>
+
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer Banner -->
+    <footer class="relative bg-gray-900 text-white py-12 text-center text-xs mt-12 overflow-hidden">
+        <!-- Background Image with Blur -->
+        <div class="absolute inset-0 z-0 opacity-25">
+            <img src="https://images.unsplash.com/photo-1581094794329-cd11965d15eb?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover filter blur-sm grayscale">
+        </div>
+        
+        <!-- Gradient Overlay -->
+        <div class="absolute inset-0 z-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-gray-900/40"></div>
+
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
+            <div class="text-left">
+                <h4 class="text-xl font-extrabold text-white mb-1 flex items-center gap-2">
+                    <i class="ri-community-line text-primary"></i> QuiénSabe
+                </h4>
+                <p class="text-gray-400 max-w-xs">Conectando barrios, un oficio a la vez. Construido con cariño para la comunidad.</p>
+            </div>
+            
+            <div class="flex gap-8">
+                <a href="about.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Donaciones</a>
+                <a href="terms.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Términos</a>
+                <a href="transparency.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Transparencia</a>
+            </div>
+            
+            <div class="text-right text-gray-500">
+                <p class="font-bold">&copy; 2026 Quién Sabe.</p>
+                <p class="text-[10px]">Hecho en Chile 🇨🇱</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Support Ticket Modal -->
+    <div id="ticket-modal" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md mx-4 transform scale-95 transition-transform duration-300" id="ticket-modal-content">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50 rounded-t-3xl">
+                <h3 class="font-bold text-gray-800 text-lg flex items-center gap-2">
+                    <i class="ri-customer-service-2-line text-primary"></i> Crear Ticket de Ayuda
+                </h3>
+                <button id="close-ticket-btn" class="text-gray-400 hover:text-gray-600 transition">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+            
+            <form class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Tipo de Problema</label>
+                    <select class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                        <option>Problema Técnico</option>
+                        <option>Reportar Usuario</option>
+                        <option>Problema con Pagos/Cobros</option>
+                        <option>Sugerencia</option>
+                        <option>Otro</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Descripción del Problema</label>
+                    <textarea rows="4" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition" placeholder="Describe detalladamente qué sucedió..."></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Evidencias (Opcional)</label>
+                    <label class="block w-full border-2 border-dashed border-gray-200 rounded-xl p-4 text-center cursor-pointer hover:bg-gray-50 hover:border-primary/50 transition group">
+                        <i class="ri-upload-cloud-2-line text-3xl text-gray-300 group-hover:text-primary mb-2 block transition"></i>
+                        <span class="text-xs text-gray-500 font-medium">Click para subir capturas o archivos</span>
+                        <input type="file" class="hidden" multiple>
+                    </label>
+                </div>
+
+                <div class="pt-2">
+                    <button type="button" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl shadow-lg shadow-primary/30 transition transform hover:-translate-y-0.5">
+                        Enviar Ticket
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="preview-modal" class="fixed inset-0 bg-black/80 z-[100] hidden flex items-center justify-center backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="relative w-full max-w-5xl h-[90vh] mx-4 bg-gray-100 rounded-3xl overflow-hidden shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col" id="preview-modal-content">
+            
+            <!-- Header Preview Controls -->
+            <div class="bg-gray-900 text-white px-6 py-4 flex justify-between items-center shadow-md shrink-0">
+                <div class="flex items-center gap-3">
+                    <span class="bg-green-500 text-xs font-bold px-2 py-1 rounded">Vista Previa</span>
+                    <span class="text-gray-400 text-sm hidden sm:inline">Así verán tus vecinos tu perfil</span>
+                </div>
+                <div class="flex gap-4">
+                    <button class="text-gray-400 hover:text-white transition" title="Ver en Móvil"><i class="ri-smartphone-line text-xl"></i></button>
+                    <button class="text-gray-400 hover:text-white transition" title="Ver en Escritorio"><i class="ri-macbook-line text-xl"></i></button>
+                    <div class="w-px h-6 bg-gray-700 mx-2"></div>
+                    <button id="close-preview-btn" class="text-white hover:text-red-400 transition font-bold flex items-center gap-1">
+                        <i class="ri-close-circle-line text-xl"></i> Cerrar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Iframe Container -->
+            <div class="flex-grow bg-gray-200 overflow-hidden relative">
+                <iframe src="profile.html?id=1&preview=true" class="w-full h-full border-0 bg-white" id="preview-iframe"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Service Modal -->
+    <div id="service-modal" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md mx-4 transform scale-95 transition-transform duration-300" id="service-modal-content">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50 rounded-t-3xl">
+                <h3 class="font-bold text-gray-800 text-lg flex items-center gap-2">
+                    <i class="ri-price-tag-3-line text-primary"></i> <span id="service-modal-title">Nuevo Servicio</span>
+                </h3>
+                <button id="close-service-btn" class="text-gray-400 hover:text-gray-600 transition">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+            
+            <form class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Nombre del Servicio</label>
+                    <input type="text" placeholder="Ej: Visita técnica, Instalación..." class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Precio (Referencial)</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-2 text-gray-400 font-bold">$</span>
+                        <input type="number" placeholder="15000" class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-8 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Descripción (Opcional)</label>
+                    <textarea rows="2" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition"></textarea>
+                </div>
+
+                <div class="pt-2">
+                    <button type="button" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl shadow-lg shadow-primary/30 transition transform hover:-translate-y-0.5">
+                        Guardar Servicio
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script>
+        // --- MODAL UTILS ---
+        function toggleModal(modalId, contentId, show) {
+            const modal = document.getElementById(modalId);
+            const content = document.getElementById(contentId);
+            if (show) {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    content.classList.remove('scale-95');
+                    content.classList.add('scale-100');
+                }, 10);
+            } else {
+                modal.classList.add('opacity-0');
+                content.classList.remove('scale-100');
+                content.classList.add('scale-95');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        // --- TICKET MODAL LOGIC ---
+        const ticketModal = document.getElementById('ticket-modal');
+        const ticketContent = document.getElementById('ticket-modal-content');
+        const openTicketBtn = document.getElementById('open-ticket-btn');
+        const closeTicketBtn = document.getElementById('close-ticket-btn');
+
+        if(openTicketBtn) openTicketBtn.addEventListener('click', () => toggleModal('ticket-modal', 'ticket-modal-content', true));
+        if(closeTicketBtn) closeTicketBtn.addEventListener('click', () => toggleModal('ticket-modal', 'ticket-modal-content', false));
+        if(ticketModal) ticketModal.addEventListener('click', (e) => { if(e.target === ticketModal) toggleModal('ticket-modal', 'ticket-modal-content', false); });
+
+        // --- PREVIEW MODAL LOGIC ---
+        const previewModal = document.getElementById('preview-modal');
+        const previewContent = document.getElementById('preview-modal-content');
+        const openPreviewBtn = document.getElementById('preview-profile-btn');
+        const closePreviewBtn = document.getElementById('close-preview-btn');
+
+        function openPreview() {
+            // Refresh iframe to ensure latest changes
+            const iframe = document.getElementById('preview-iframe');
+            iframe.src = iframe.src;
+            toggleModal('preview-modal', 'preview-modal-content', true);
+        }
+
+        if(openPreviewBtn) openPreviewBtn.addEventListener('click', openPreview);
+        if(closePreviewBtn) closePreviewBtn.addEventListener('click', () => toggleModal('preview-modal', 'preview-modal-content', false));
+        if(previewModal) previewModal.addEventListener('click', (e) => { if(e.target === previewModal) toggleModal('preview-modal', 'preview-modal-content', false); });
+
+        // --- SERVICE MODAL LOGIC ---
+        const serviceModalBtn = document.getElementById('add-service-btn');
+        const closeServiceBtn = document.getElementById('close-service-btn');
+        const serviceModal = document.getElementById('service-modal');
+
+        if(serviceModalBtn) serviceModalBtn.addEventListener('click', () => toggleModal('service-modal', 'service-modal-content', true));
+        if(closeServiceBtn) closeServiceBtn.addEventListener('click', () => toggleModal('service-modal', 'service-modal-content', false));
+        if(serviceModal) serviceModal.addEventListener('click', (e) => { if(e.target === serviceModal) toggleModal('service-modal', 'service-modal-content', false); });
+
+    </script>
+</body>
+</html>

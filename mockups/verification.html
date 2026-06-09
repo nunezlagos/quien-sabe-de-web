@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificación de Oficio - Quién Sabe</title>
+    <script src="js/tailwindcss.js"></script>
+    <link href="css/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/config.js"></script>
+</head>
+<body class="bg-bg-light text-gray-800 font-sans">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                <i class="ri-community-line text-primary"></i>
+                Quién<span class="text-primary">Sabe</span>
+            </a>
+            <a href="index.html" class="text-sm font-bold text-gray-500 hover:text-primary transition">Volver</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="bg-primary text-white py-16 text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-10"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="inline-block p-4 rounded-full bg-white/10 backdrop-blur-md mb-4 border border-white/20">
+                <i class="ri-shield-check-fill text-5xl text-white"></i>
+            </div>
+            <h1 class="text-3xl md:text-5xl font-extrabold mb-4">Verifica tu Oficio</h1>
+            <p class="text-lg text-green-100 max-w-2xl mx-auto">Genera confianza en tu comunidad. Destaca tu perfil con el sello de verificado y consigue más clientes.</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12 max-w-4xl">
+        
+        <!-- Respect Note -->
+        <div class="bg-blue-50 border border-blue-100 rounded-2xl p-6 mb-12 flex items-start gap-4">
+            <i class="ri-heart-line text-3xl text-blue-500"></i>
+            <div>
+                <h3 class="font-bold text-blue-800 text-lg mb-1">Tu trabajo vale</h3>
+                <p class="text-blue-700 text-sm">Sabemos que eres un profesional, tengas o no una empresa formal. La verificación es solo una herramienta para que tus vecinos te conozcan mejor y confíen en tu talento.</p>
+            </div>
+        </div>
+
+        <!-- Steps -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 relative">
+            <!-- Connector Line -->
+            <div class="hidden md:block absolute top-12 left-0 w-full h-1 bg-gray-200 -z-10"></div>
+
+            <!-- Step 1 -->
+            <div class="bg-white p-8 rounded-3xl shadow-sm text-center border border-gray-100 relative">
+                <div class="w-12 h-12 bg-gray-800 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 border-4 border-white shadow-lg">1</div>
+                <h3 class="font-bold text-gray-800 text-lg mb-2">Regístrate</h3>
+                <p class="text-sm text-gray-500">Crea tu perfil con tus datos básicos y cuéntanos qué oficios realizas.</p>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="bg-white p-8 rounded-3xl shadow-sm text-center border border-gray-100 relative">
+                <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 border-4 border-white shadow-lg">2</div>
+                <h3 class="font-bold text-gray-800 text-lg mb-2">Sube Evidencias</h3>
+                <p class="text-sm text-gray-500">Fotos de tus trabajos, recomendaciones o certificados (opcional). ¡Todo suma!</p>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="bg-white p-8 rounded-3xl shadow-sm text-center border border-gray-100 relative">
+                <div class="w-12 h-12 bg-green-400 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 border-4 border-white shadow-lg">3</div>
+                <h3 class="font-bold text-gray-800 text-lg mb-2">¡Listo!</h3>
+                <p class="text-sm text-gray-500">Revisaremos tu perfil y te otorgaremos el sello de verificado.</p>
+            </div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+            <div class="bg-gray-50 p-6 border-b border-gray-100">
+                <h2 class="font-bold text-xl text-gray-800">Solicitud de Verificación</h2>
+                <p class="text-sm text-gray-500">Completa lo que puedas. No es necesario tener todo.</p>
+            </div>
+            
+            <form class="p-8 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">RUT / Identificación</label>
+                        <input type="text" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/50 transition" placeholder="12.345.678-9">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Oficio Principal</label>
+                        <select class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                            <option>Selecciona...</option>
+                            <option>Gasfiter</option>
+                            <option>Electricista</option>
+                            <option>Jardinero</option>
+                            <option>Otro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Certificaciones / Cursos <span class="text-gray-400 font-normal text-xs">(Opcional)</span></label>
+                    <div class="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center hover:bg-gray-50 transition cursor-pointer group">
+                        <i class="ri-file-upload-line text-4xl text-gray-300 group-hover:text-primary transition mb-2"></i>
+                        <p class="text-sm text-gray-500 font-bold">Haz clic para subir documentos</p>
+                        <p class="text-xs text-gray-400">PDF, JPG o PNG</p>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Fotos de trabajos realizados <span class="text-gray-400 font-normal text-xs">(Opcional, pero recomendado)</span></label>
+                    <div class="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center hover:bg-gray-50 transition cursor-pointer group">
+                        <i class="ri-image-add-line text-4xl text-gray-300 group-hover:text-primary transition mb-2"></i>
+                        <p class="text-sm text-gray-500 font-bold">Sube fotos de lo que haces</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <input type="checkbox" id="terms" class="w-5 h-5 text-primary rounded focus:ring-primary border-gray-300">
+                    <label for="terms" class="text-sm text-gray-600">Declaro que la información es real y soy quien digo ser.</label>
+                </div>
+
+                <button type="button" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/30 transition transform hover:-translate-y-0.5 text-lg">
+                    Enviar Solicitud
+                </button>
+            </form>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 text-center text-xs mt-12">
+        <div class="container mx-auto px-4">
+            <p class="text-gray-500">&copy; 2026 Quién Sabe. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

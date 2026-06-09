@@ -1,0 +1,25 @@
+FROM oven/bun:1.3.8-alpine
+
+WORKDIR /app
+
+# Dependencias del sistema mínimas (curl para healthchecks, git para algunos paquetes)
+RUN apk add --no-cache curl git bash
+
+# Instalar dependencias primero para cachear esta capa
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
+
+# El código fuente se monta como volume en docker-compose.dev.yml para hot reload.
+# Esto sólo deja la imagen lista por si se levanta sin volume.
+COPY . .
+
+EXPOSE 4323
+
+# Hot reload: Astro dev escucha en 0.0.0.0:4323. Wrangler platformProxy se inicializa solo.
+# CHOKIDAR_USEPOLLING habilita watch confiable dentro de volúmenes Docker.
+ENV CHOKIDAR_USEPOLLING=true
+ENV WATCHPACK_POLLING=true
+ENV HOST=0.0.0.0
+ENV PORT=4323
+
+CMD ["bun", "run", "dev", "--host", "0.0.0.0", "--port", "4323"]

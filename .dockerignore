@@ -1,0 +1,17 @@
+node_modules
+.wrangler
+.astro
+dist
+.git
+.env
+.env.*
+!.env.example
+.vscode
+.idea
+.DS_Store
+*.log
+.cache
+.tmp
+temp
+.claude/worktrees
+mockups

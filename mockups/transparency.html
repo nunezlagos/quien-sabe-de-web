@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transparencia - Quién Sabe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2E8B57',
+                        'primary-dark': '#1f633d',
+                        accent: '#FF7F50',
+                        'bg-light': '#eaeff2',
+                    },
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-bg-light text-gray-800 font-sans flex flex-col min-h-screen">
+
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                <i class="ri-community-line text-primary"></i>
+                Quién<span class="text-primary">Sabe</span>
+            </a>
+            <a href="index.html" class="text-gray-600 hover:text-primary transition font-bold text-sm">Volver</a>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-12 max-w-4xl flex-grow">
+        <div class="text-center mb-10">
+            <h1 class="text-3xl font-extrabold text-gray-800 mb-2">Transparencia Total</h1>
+            <p class="text-gray-600">Así es como usamos cada peso que donas. Cuentas claras, amistad larga.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 mb-12">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
+                <div class="text-sm text-gray-400 font-bold uppercase mb-2">Ingresos este mes</div>
+                <div class="text-3xl font-black text-green-500">$45.000</div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
+                <div class="text-sm text-gray-400 font-bold uppercase mb-2">Gastos Fijos</div>
+                <div class="text-3xl font-black text-red-500">$12.500</div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
+                <div class="text-sm text-gray-400 font-bold uppercase mb-2">Fondo Reserva</div>
+                <div class="text-3xl font-black text-blue-500">$32.500</div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="p-6 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                <h3 class="font-bold text-gray-800"><i class="ri-file-list-3-line mr-2"></i>Historial de Gastos</h3>
+                <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold">Actualizado hoy</span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-gray-600">
+                    <thead class="bg-gray-50 text-gray-400 uppercase font-bold text-xs">
+                        <tr>
+                            <th class="px-6 py-4">Fecha</th>
+                            <th class="px-6 py-4">Concepto</th>
+                            <th class="px-6 py-4">Monto</th>
+                            <th class="px-6 py-4">Comprobante</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4">01/05/2026</td>
+                            <td class="px-6 py-4">Renovación Dominio .CL</td>
+                            <td class="px-6 py-4 font-bold text-gray-800">$9.990</td>
+                            <td class="px-6 py-4"><a href="#" class="text-blue-500 hover:underline">Ver Boleta</a></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4">15/04/2026</td>
+                            <td class="px-6 py-4">Servidor VPS (Mensual)</td>
+                            <td class="px-6 py-4 font-bold text-gray-800">$4.500</td>
+                            <td class="px-6 py-4"><a href="#" class="text-blue-500 hover:underline">Ver Factura</a></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4">10/04/2026</td>
+                            <td class="px-6 py-4">Café para el programador ☕</td>
+                            <td class="px-6 py-4 font-bold text-gray-800">$2.500</td>
+                            <td class="px-6 py-4"><span class="text-gray-400 text-xs italic">Donación directa</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Banner -->
+    <footer class="relative bg-gray-900 text-white py-12 text-center text-xs mt-12 overflow-hidden">
+        <!-- Background Image with Blur -->
+        <div class="absolute inset-0 z-0 opacity-25">
+            <img src="https://images.unsplash.com/photo-1581094794329-cd11965d15eb?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover filter blur-sm grayscale">
+        </div>
+        
+        <!-- Gradient Overlay -->
+        <div class="absolute inset-0 z-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-gray-900/40"></div>
+
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
+            <div class="text-left">
+                <h4 class="text-xl font-extrabold text-white mb-1 flex items-center gap-2">
+                    <i class="ri-community-line text-primary"></i> QuiénSabe
+                </h4>
+                <p class="text-gray-400 max-w-xs">Conectando barrios, un oficio a la vez. Construido con cariño para la comunidad.</p>
+            </div>
+            
+            <div class="flex gap-8">
+                <a href="about.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Donaciones</a>
+                <a href="terms.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Términos</a>
+                <a href="transparency.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Transparencia</a>
+            </div>
+            
+            <div class="text-right text-gray-500">
+                <p class="font-bold">&copy; 2026 Quién Sabe.</p>
+                <p class="text-[10px]">Hecho en Chile 🇨🇱</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
