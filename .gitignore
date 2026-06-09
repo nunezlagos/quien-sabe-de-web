@@ -58,8 +58,8 @@ wrangler.toml
 .claude/
 # Documentación generada con apoyo IA (entregables académicos, drafts, etc.)
 docs/
-# Artefactos OpenSpec / MCP-opsx (proposals, changes, specs)
-openspec/
 # Bitácoras de sesión y progreso
 .agent/
+
+# openspec/ SÍ se versiona: es el contrato de requerimientos del equipo.
 
