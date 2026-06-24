@@ -1,17 +1,17 @@
-// src/lib/client/dashboard/prestador.ts
+// src/lib/client/dashboard/provider.ts
 // Lógica del dashboard del prestador.
 // Extraído de src/pages/dashboard-prestador.astro (regla R2: sin JS inline).
 
 import { mostrarToast } from '../ui/toast';
 
-export function inicializarDashboardPrestador(): void {
-  inicializarToggleVisibilidad();
-  inicializarToggleEstadoOficios();
-  inicializarFormularioPerfil();
-  inicializarBotonSoporte();
+export function initProviderDashboard(): void {
+  initVisibilityToggle();
+  initTradeStatusToggle();
+  initProfileForm();
+  initSupportButton();
 }
 
-function inicializarToggleVisibilidad(): void {
+function initVisibilityToggle(): void {
   const toggle = document.querySelector<HTMLInputElement>('[data-provider-toggle]');
   const label = document.querySelector<HTMLElement>('[data-toggle-label]');
   if (!toggle || !label) return;
@@ -25,9 +25,9 @@ function inicializarToggleVisibilidad(): void {
   });
 }
 
-function inicializarToggleEstadoOficios(): void {
-  const botones = document.querySelectorAll<HTMLButtonElement>('.js-toggle-status');
-  botones.forEach((boton) => {
+function initTradeStatusToggle(): void {
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.js-toggle-status');
+  buttons.forEach((boton) => {
     boton.addEventListener('click', async () => {
       const id = boton.dataset.toggleId;
       const statusActual = boton.dataset.toggleStatus ?? 'active';
@@ -57,7 +57,7 @@ function inicializarToggleEstadoOficios(): void {
   });
 }
 
-function inicializarFormularioPerfil(): void {
+function initProfileForm(): void {
   const form = document.getElementById('form-edit-profile') as HTMLFormElement | null;
   if (!form) return;
 
@@ -88,10 +88,10 @@ function inicializarFormularioPerfil(): void {
   });
 }
 
-function inicializarBotonSoporte(): void {
-  const enlace = document.querySelector<HTMLAnchorElement>('a[href="/dashboard-prestador/soporte"]');
-  if (!enlace) return;
-  enlace.addEventListener('click', (e) => {
+function initSupportButton(): void {
+  const link = document.querySelector<HTMLAnchorElement>('a[href="/dashboard-prestador/soporte"]');
+  if (!link) return;
+  link.addEventListener('click', (e) => {
     e.preventDefault();
     mostrarToast('Próximamente — formulario de tickets en próxima iteración (HU-12.7)', 'info');
   });
