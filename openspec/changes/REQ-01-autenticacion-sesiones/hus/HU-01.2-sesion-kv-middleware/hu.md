@@ -10,17 +10,17 @@
 
 ## Criterios de aceptación (Gherkin)
 
-### Escenario: Sesión nueva crea token en KV
-  Dado un login exitoso para `ana@ejemplo.cl`
+### Escenario: Login exitoso crea token en KV
+  Dado un login exitoso para `vecino@demo.cl`
   Cuando se ejecuta el handler de login
-  Entonces se escribe en KV (binding `SESSION`) una entrada `session:<token>` con `{ user_id, role, exp }`
+  Entonces se escribe en KV (binding `SESSION`) una entrada `session:<token>` con `{ user_id, role, exp, email_verified_at }`
   Y la TTL en KV es 14 días
   Y la cookie `session` recibe el token opaco
 
 ### Escenario: Middleware hidrata Astro.locals.user
   Dado un request con cookie `session=<token>` válido en KV
   Cuando el middleware `src/middleware.ts` se ejecuta
-  Entonces `Astro.locals.user` queda con `{ id, email, role, status }`
+  Entonces `Astro.locals.user` queda con `{ id, email, name, role, status, email_verified_at }`
   Y el request continúa hacia el handler
 
 ### Escenario: Cookie inválida no rompe el request

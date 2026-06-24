@@ -34,6 +34,9 @@
 - [ ] Endpoint `src/pages/api/v1/auth/logout.ts`
 - [ ] Helper `destroySession(token)` en `src/lib/services/auth/session.ts`
 - [ ] Reuso de `clearSessionCookie` en `src/lib/utils/cookies.ts`
+- [ ] Componente `src/components/auth/LogoutButton.astro` (botón reusable, usado en dashboard-user, dashboard-provider, dashboard-admin, navbar)
+- [ ] Lógica de cliente (fetch + redirect) en `src/lib/client/auth/logout.ts`
+- [ ] Estilos del botón en `src/styles/components.css` (clase `btn-logout`), NUNCA inline (regla R1)
 - [ ] Tests `tests/integration/auth/logout.test.ts` y E2E `tests/e2e/auth-logout.spec.ts`
 
 ## Definition of done

@@ -1,3 +1,5 @@
-status: planned
+status: deferred
 created: 2026-06-09
 archived: ~
+deferred_reason: "Fase demo solo usa email+password contra seed (HU-01.7). Botón Facebook en UI es visual-only; re-activar cuando se habilite OAuth real."
+reactivar_cuando: "Facebook Developers app creada + flujo Google (HU-01.3) ya implementado como referencia"

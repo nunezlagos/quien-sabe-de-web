@@ -1,6 +1,11 @@
 # HU-01.4 — Login con Facebook OAuth
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-01-autenticacion-sesiones
+**Estado:** **diferida** | **Prioridad:** P2 (era P1) | **REQ padre:** REQ-01-autenticacion-sesiones
+
+> ⚠️ **DIFERIDA** — En esta fase el proyecto solo usa email + password contra
+> el seed de usuarios demo (HU-01.7). El botón "Continuar con Facebook" se
+> renderiza como placeholder visual (sin acción). Re-activar después de que
+> HU-01.3 (Google) esté implementado y validado como referencia.
 
 ## Historia de usuario
 
@@ -8,42 +13,28 @@
 **Quiero** iniciar sesión con Facebook
 **Para** aprovechar mi cuenta social existente
 
-## Criterios de aceptación (Gherkin)
+## Criterios de aceptación (Gherkin) — referenciales, no activos
 
-### Escenario: Inicio del flujo OAuth Facebook
-  Cuando envío `GET /api/v1/auth/oauth/facebook`
-  Entonces recibo status 302 hacia `https://www.facebook.com/v18.0/dialog/oauth?...`
-  Y la URL incluye `state` aleatorio
+### Escenario: Botón "Continuar con Facebook" en demo
+  Dado que estoy en cualquier vista con `<AuthButtons>`
+  Cuando hago click en "Continuar con Facebook"
+  Entonces NO hay redirección a Facebook
+  Y se muestra un toast/alert "Próximamente — en esta demo solo email + contraseña"
+  Y el handler queda como `() => mostrarProximamente('Facebook')`
 
-### Escenario: Callback exitoso crea o asocia cuenta
-  Dado un callback con `code` válido para "ana@facebook.com"
-  Cuando se invoca `GET /api/v1/auth/oauth/facebook/callback?code=...&state=<válido>`
-  Entonces hay sesión activa para ese usuario
-  Y existe fila en `oauth_accounts` con provider `facebook`
-
-### Escenario: Email no provisto por Facebook → falla controlada
-  Dado que la respuesta de Facebook no incluye email
-  Cuando se procesa el callback
-  Entonces recibo status 400 con `{ "error": "email requerido por Facebook" }`
-  Y NO se crea usuario
-
-### Escenario: State inválido aborta el flujo
-  Cuando llega un callback con `state` no presente en KV
-  Entonces recibo status 400
-
-## Tareas técnicas
+## Tareas técnicas (cuando se reactive)
 
 - [ ] Variables `FACEBOOK_APP_ID` y `FACEBOOK_APP_SECRET` en `wrangler.toml.example`
 - [ ] Helper `src/lib/services/auth/oauth/facebook.ts`
 - [ ] Reuso del endpoint genérico `src/pages/api/v1/auth/oauth/[provider].ts`
 - [ ] Tests `tests/unit/auth/oauth/facebook.test.ts` y `tests/integration/auth/oauth-facebook.test.ts`
 
-## Definition of done
+## Definition of done (cuando se reactive)
 
 - [ ] Tests Vitest unit pasan
-- [ ] Tests Vitest integración pasan (`@cloudflare/vitest-pool-workers` contra D1/R2/KV)
+- [ ] Tests Vitest integración pasan
 - [ ] Test E2E Playwright pasa
-- [ ] Sabotaje confirmado: romper la fix → un test rojo verificable → restaurar
-- [ ] Coverage ≥ 90 % en el módulo afectado
-- [ ] Type check verde: `docker exec quien-sabe-app bunx tsc --noEmit`
-- [ ] PR mergeado a `main` vía `/respaldo`
+- [ ] Sabotaje confirmado
+- [ ] Coverage ≥ 90 %
+- [ ] Type check verde
+- [ ] PR mergeado
