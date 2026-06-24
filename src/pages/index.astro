@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageLoader from '../components/home/PageLoader.astro';
+import SkeletonGrid from '../components/home/SkeletonGrid.astro';
 import { getTradesService } from '../lib/services/trades.service';
 import { getDb } from '../database/client';
 import { communes } from '../database/schema';
@@ -21,9 +23,14 @@ const resultados = await tradesService.search({
 
 const db = getDb(Astro.locals);
 const communesList = await db.select({ id: communes.id, name: communes.name }).from(communes).orderBy(asc(communes.name)).all();
+
+const oficiosPopulares = ['Gasfíter', 'Electricista', 'Jardinero', 'Maestro', 'Pintor'];
+const estaBuscando = Boolean(q || communeId);
 ---
 
 <BaseLayout title="QuiénSabe — ¿Quién sabe de... en tu barrio?">
+  <PageLoader />
+
   <header class="bg-gradient-to-br from-orange-50 to-amber-50 py-16 md:py-24 relative overflow-hidden">
     <div class="container mx-auto px-4 text-center relative z-10">
       <h1 class="text-3xl md:text-5xl font-extrabold text-gray-800 mb-6 tracking-tight">
@@ -33,7 +40,13 @@ const communesList = await db.select({ id: communes.id, name: communes.name }).f
         Conecta con vecinos que saben hacer lo que necesitas. Rápido, confiable y de tu barrio.
       </p>
 
-      <form action="/" method="GET" class="bg-white p-2 rounded-2xl shadow-xl max-w-4xl mx-auto flex flex-col md:flex-row gap-2 border border-gray-100">
+      <div class="max-w-4xl mx-auto mb-4">
+        <div class="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg text-xs font-bold inline-flex items-center gap-2 shadow-sm border border-yellow-200">
+          <i class="ri-megaphone-fill"></i> ¡Oferta! Publica tu oficio GRATIS por tiempo limitado
+        </div>
+      </div>
+
+      <form id="search-form" action="/" method="GET" class="bg-white p-2 rounded-2xl shadow-xl max-w-4xl mx-auto flex flex-col md:flex-row gap-2 border border-gray-100">
         <input
           type="text"
           name="q"
@@ -52,7 +65,7 @@ const communesList = await db.select({ id: communes.id, name: communes.name }).f
         </select>
         <button
           type="submit"
-          class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-bold transition"
+          class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-bold transition flex items-center justify-center gap-2"
         >
           Buscar
         </button>
@@ -91,6 +104,23 @@ const communesList = await db.select({ id: communes.id, name: communes.name }).f
             ? `No encontramos oficios que coincidan con "${q}".`
             : 'Aún no hay oficios publicados. ¡Sé el primero!'}
         </p>
+
+        {q && !communeId && (
+          <div class="mb-6">
+            <p class="text-sm text-gray-500 mb-3">¿Quizás te interese alguno de estos oficios?</p>
+            <div class="flex flex-wrap justify-center gap-2">
+              {oficiosPopulares.map((oficio) => (
+                <a
+                  href={`/?q=${oficio.toLowerCase()}`}
+                  class="bg-gray-100 hover:bg-orange-100 text-gray-700 hover:text-orange-600 px-4 py-2 rounded-full text-sm font-bold transition"
+                >
+                  {oficio}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
         <a
           href={q ? '/' : '/crear-oficio'}
           class="inline-block bg-orange-500 text-white px-6 py-2 rounded-xl font-bold hover:bg-orange-600 transition"
@@ -145,4 +175,9 @@ const communesList = await db.select({ id: communes.id, name: communes.name }).f
       </div>
     )}
   </main>
+
+  <script>
+    import { inicializarSearchState } from '../lib/client/home/search-state';
+    inicializarSearchState();
+  </script>
 </BaseLayout>
