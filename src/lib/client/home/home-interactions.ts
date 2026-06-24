@@ -1,4 +1,4 @@
-export function inicializarHomeInteractions(): void {
+export function initHomeInteractions(): void {
   const mainBody = document.body;
   const searchSidebar = document.getElementById('search-sidebar');
   const heroSection = document.getElementById('hero-section');

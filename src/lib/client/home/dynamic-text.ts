@@ -8,7 +8,7 @@ const TRADES = [
   { name: 'Programador', article: 'un' },
 ];
 
-export function inicializarTextoDinamico(): void {
+export function initDynamicText(): void {
   const el = document.getElementById('dynamic-trade');
   if (!el) return;
 

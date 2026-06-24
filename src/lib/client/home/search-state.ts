@@ -1,4 +1,4 @@
-export function inicializarSearchState(): void {
+export function initSearchState(): void {
   const form = document.getElementById('search-form') as HTMLFormElement | null;
   if (!form) return;
 

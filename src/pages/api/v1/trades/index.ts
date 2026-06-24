@@ -58,9 +58,9 @@ export const POST: APIRoute = async (ctx) => {
   // Almacenamos WhatsApp en formato E.164-like sin el '+': 569XXXXXXXX (11 dígitos).
   // El wizard muestra "+56 9" como prefijo visual y el usuario tipea los 8 dígitos
   // restantes; acá anteponemos "569" para tener el número completo.
-  const whatsappCompleto = `569${whatsapp}`;
+  const fullWhatsapp = `569${whatsapp}`;
 
-  const nuevoTrade = await db
+  const newTrade = await db
     .insert(trades)
     .values({
       userId: usuario.id,
@@ -69,7 +69,7 @@ export const POST: APIRoute = async (ctx) => {
       slug: slugFinal,
       description,
       basePriceClp: base_price_clp,
-      whatsapp: whatsappCompleto,
+      whatsapp: fullWhatsapp,
       verified: false,
       status: 'active',
     })
@@ -78,6 +78,6 @@ export const POST: APIRoute = async (ctx) => {
 
   return new Response(null, {
     status: 302,
-    headers: { Location: `/verificar-oficio?slug=${nuevoTrade.slug}&ok=1` },
+    headers: { Location: `/verificar-oficio?slug=${newTrade.slug}&ok=1` },
   });
 };

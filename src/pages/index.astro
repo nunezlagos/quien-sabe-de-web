@@ -12,13 +12,13 @@ import { getDb } from '../database/client';
 import { communes } from '../database/schema';
 import { asc } from 'drizzle-orm';
 
-const enSesion = Boolean(Astro.locals.user);
+const isLoggedIn = Boolean(Astro.locals.user);
 const usuario = Astro.locals.user;
 
 const url = Astro.url;
 const q = url.searchParams.get('q') ?? '';
-const communeIdParam = url.searchParams.get('commune_id');
-const communeId = communeIdParam ? Number.parseInt(communeIdParam, 10) : undefined;
+const rawCommuneId = url.searchParams.get('commune_id');
+const communeId = rawCommuneId ? Number.parseInt(rawCommuneId, 10) : undefined;
 
 const tradesService = getTradesService(Astro.locals);
 const resultados = await tradesService.search({
@@ -72,7 +72,7 @@ const tradeOptions = uniqueTrades.map((name) => ({ name, slug: name.toLowerCase(
 
     <div class="flex flex-col md:flex-row gap-8 items-start">
       <!-- Sidebar Filters -->
-      <SidebarFilters visible={estaBuscando} />
+      <SidebarFilters visible={isSearching} />
 
       <!-- Grid Container -->
       <div class="flex-grow w-full">
@@ -106,12 +106,12 @@ const tradeOptions = uniqueTrades.map((name) => ({ name, slug: name.toLowerCase(
   </main>
 
   <!-- Login Modal -->
-  {enSesion ? null : <LoginModal />}
+  {isLoggedIn ? null : <LoginModal />}
 
   <script>
-    import { inicializarTextoDinamico } from '../lib/client/home/dynamic-text';
-    import { inicializarHomeInteractions } from '../lib/client/home/home-interactions';
-    inicializarTextoDinamico();
-    inicializarHomeInteractions();
+    import { initDynamicText } from '../lib/client/home/dynamic-text';
+    import { initHomeInteractions } from '../lib/client/home/home-interactions';
+    initDynamicText();
+    initHomeInteractions();
   </script>
 </BaseLayout>

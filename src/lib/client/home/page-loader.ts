@@ -1,4 +1,4 @@
-export function ocultarPageLoader(): void {
+export function hidePageLoader(): void {
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', hide);
   } else {
