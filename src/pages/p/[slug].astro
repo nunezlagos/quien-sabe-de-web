@@ -133,16 +133,16 @@ const otherTrades = provider
             href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(`Hola, te encontré en QuiénSabe por tu servicio de ${trade.name}.`)}`}
             target="_blank"
             rel="noopener noreferrer"
-            data-track-kind="whatsapp"
-            data-provider-id={trade.userId}
+            data-track-contact={trade.id}
+            data-track-type="whatsapp"
             class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-bold transition shadow-sm"
           >
             <i class="ri-whatsapp-line text-xl"></i> WhatsApp
           </a>
           <a
             href={`mailto:${email}?subject=${encodeURIComponent(`Consulta por ${trade.name} — QuiénSabe`)}`}
-            data-track-kind="email"
-            data-provider-id={trade.userId}
+            data-track-contact={trade.id}
+            data-track-type="email"
             class="flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-bold transition shadow-sm"
           >
             <i class="ri-mail-line text-xl"></i> Email
@@ -272,4 +272,9 @@ const otherTrades = provider
       </a>
     </div>
   </main>
+<script>
+  import { initContactTracking } from '../../lib/client/tracking/contact-tracker';
+  initContactTracking();
+</script>
+
 </BaseLayout>

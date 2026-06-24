@@ -65,9 +65,22 @@ export const reviews = sqliteTable('reviews', {
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
 
+/**
+ * Contact events: track whatsapp/email clicks from public profiles.
+ */
+export const contactEvents = sqliteTable('contact_events', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  tradeId: integer('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
+  visitorId: text('visitor_id'),
+  userId: integer('user_id').references(() => users.id, { onDelete: 'set null' }),
+  eventType: text('event_type', { enum: ['whatsapp', 'email', 'phone', 'profile'] }).notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});
+
 export type Usuario = typeof users.$inferSelect;
 export type UsuarioNuevo = typeof users.$inferInsert;
 export type Trade = typeof trades.$inferSelect;
 export type TradeNuevo = typeof trades.$inferInsert;
 export type Commune = typeof communes.$inferSelect;
 export type Review = typeof reviews.$inferSelect;
+export type ContactEvent = typeof contactEvents.$inferSelect;
