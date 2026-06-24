@@ -1,0 +1,284 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getDb } from '../database/client';
+import { trades, reviews } from '../database/schema';
+import { eq, desc, avg, count } from 'drizzle-orm';
+
+const usuario = Astro.locals.user;
+if (!usuario) {
+  return Astro.redirect('/iniciar-sesion?redirigir=/dashboard-prestador');
+}
+if (usuario.role !== 'provider' && usuario.role !== 'admin') {
+  return Astro.redirect('/dashboard');
+}
+
+const db = getDb(Astro.locals);
+
+const misOficios = await db
+  .select({
+    id: trades.id,
+    slug: trades.slug,
+    name: trades.name,
+    symbol: trades.symbol,
+    description: trades.description,
+    basePriceClp: trades.basePriceClp,
+    whatsapp: trades.whatsapp,
+    verified: trades.verified,
+    status: trades.status,
+    ratingAvg: avg(reviews.rating),
+    reviewCount: count(reviews.id),
+  })
+  .from(trades)
+  .leftJoin(reviews, eq(reviews.tradeId, trades.id))
+  .where(eq(trades.userId, usuario.id))
+  .groupBy(trades.id)
+  .orderBy(desc(trades.createdAt))
+  .all();
+
+const totalOficios = misOficios.length;
+const ratingGlobal = misOficios.length > 0
+  ? misOficios.reduce((acc, t) => acc + Number(t.ratingAvg || 0), 0) / misOficios.length
+  : 0;
+const totalReviews = misOficios.reduce((acc, t) => acc + Number(t.reviewCount || 0), 0);
+const visitas30d = 124; // Mock MVP
+const contactos30d = 15; // Mock MVP
+
+const initials = usuario.name.slice(0, 1).toUpperCase();
+---
+
+<BaseLayout title="Panel Proveedor — QuiénSabe">
+  <nav class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <a href="/" class="text-xl font-bold text-gray-800 flex items-center gap-2">
+        <i class="ri-community-line text-orange-500"></i>
+        Quién<span class="text-orange-500">Sabe</span> <span class="text-xs bg-orange-500 text-white px-2 py-0.5 rounded ml-2">PRO</span>
+      </a>
+      <div class="flex items-center gap-4">
+        <button class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-300 transition" aria-label="Notificaciones">
+          <i class="ri-notification-3-line"></i>
+        </button>
+        <a href="/api/v1/auth/cerrar-sesion" class="text-sm text-red-500 hover:text-red-700 font-bold js-logout-form">Salir</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <!-- Sidebar -->
+      <aside class="md:col-span-1 space-y-4">
+        <div class="bg-white p-6 rounded-3xl shadow-sm text-center border border-gray-100">
+          <div class="w-24 h-24 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 text-orange-500 text-3xl font-bold">
+            {initials}
+          </div>
+          <h2 class="font-bold text-gray-800 text-lg">{usuario.name}</h2>
+          <p class="text-sm text-gray-500 font-medium">{usuario.role}</p>
+          <div class="mt-4 flex justify-center gap-1 text-yellow-400 text-lg">
+            <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-half-fill"></i>
+            <span class="text-gray-400 ml-1 text-sm font-bold">({ratingGlobal.toFixed(1)})</span>
+          </div>
+        </div>
+
+        <nav class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+          <div class="p-4 border-b border-gray-50 bg-gray-50/50">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-gray-500 uppercase">Estado</span>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" checked class="sr-only peer" data-provider-toggle>
+                <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-500"></div>
+                <p class="text-xs font-bold text-orange-500 ml-2" data-toggle-label>Visible para vecinos</p>
+              </label>
+            </div>
+          </div>
+          <a href="/dashboard-prestador" class="block px-6 py-4 border-l-4 border-orange-500 bg-orange-50 text-orange-500 font-bold"><i class="ri-dashboard-line mr-2 align-middle"></i> Resumen</a>
+          <a href="#editar-perfil" class="block px-6 py-4 border-l-4 border-transparent hover:bg-gray-50 text-gray-600 font-medium transition"><i class="ri-edit-line mr-2 align-middle"></i> Editar Perfil</a>
+          <a href="#mis-servicios" class="block px-6 py-4 border-l-4 border-transparent hover:bg-gray-50 text-gray-600 font-medium transition"><i class="ri-list-settings-line mr-2 align-middle"></i> Mis Servicios</a>
+          <a href="#resenas" class="block px-6 py-4 border-l-4 border-transparent hover:bg-gray-50 text-gray-600 font-medium transition"><i class="ri-chat-1-line mr-2 align-middle"></i> Reseñas</a>
+          <a href="/dashboard-prestador/soporte" class="w-full text-left block px-6 py-4 border-l-4 border-transparent hover:bg-red-50 text-red-500 font-medium transition border-t border-gray-100 mt-2">
+            <i class="ri-customer-service-2-line mr-2 align-middle"></i> Soporte / Ayuda
+          </a>
+        </nav>
+      </aside>
+
+      <!-- Main Panel -->
+      <div class="md:col-span-3 space-y-6">
+        <div class="flex justify-end">
+          {misOficios.length > 0 && (
+            <a href={`/p/${misOficios[0].slug}`} class="bg-white border border-gray-200 text-gray-600 px-4 py-2 rounded-xl text-sm font-bold hover:text-orange-500 hover:border-orange-500 transition flex items-center gap-2 shadow-sm">
+              <i class="ri-eye-line"></i> Previsualizar Perfil Público
+            </a>
+          )}
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
+            <span class="text-3xl font-extrabold text-gray-800">{visitas30d}</span>
+            <span class="text-xs text-gray-400 font-bold uppercase mt-1">Visitas Perfil</span>
+          </div>
+          <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
+            <span class="text-3xl font-extrabold text-orange-500">{contactos30d}</span>
+            <span class="text-xs text-gray-400 font-bold uppercase mt-1">Contactos</span>
+          </div>
+          <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
+            <span class="text-3xl font-extrabold text-yellow-400 flex items-center gap-1">{ratingGlobal.toFixed(1)} <i class="ri-star-fill text-xl"></i></span>
+            <span class="text-xs text-gray-400 font-bold uppercase mt-1">Valoración</span>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-gray-100 text-center shadow-sm flex flex-col items-center justify-center">
+            <span class="text-3xl font-extrabold text-gray-800">{totalReviews}</span>
+            <span class="text-xs text-gray-400 font-bold uppercase mt-1">Reseñas</span>
+            <span class="text-xs text-green-500 font-bold mt-1">+{Math.floor(totalReviews/3)} este mes</span>
+          </div>
+        </div>
+
+        <!-- Banner Verificación -->
+        <div class="bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-4 flex items-start gap-3">
+          <i class="ri-time-line text-yellow-700 text-2xl flex-shrink-0 mt-0.5"></i>
+          <div class="flex-1">
+            <h4 class="font-bold text-yellow-900 text-sm">Tu verificación está en revisión</h4>
+            <p class="text-yellow-800 text-xs mt-1">Nuestro equipo está revisando tus documentos. Te avisaremos por email en 24-48h.</p>
+          </div>
+          <a href="/verificar-oficio" class="text-yellow-700 hover:text-yellow-900 text-xs font-bold underline flex-shrink-0">Ver estado</a>
+        </div>
+
+        <!-- Edit Profile Section -->
+        <section id="editar-perfil" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2"><i class="ri-user-edit-line text-orange-500"></i> Editar Perfil</h3>
+
+          <form class="space-y-4" action="/api/v1/providers/me" method="POST" id="form-edit-profile">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1">Nombre Completo</label>
+                <input type="text" name="name" value={usuario.name} class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1">Email (no editable)</label>
+                <input type="email" value={usuario.email} disabled class="w-full bg-gray-100 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-500 cursor-not-allowed">
+              </div>
+            </div>
+
+            {misOficios.length > 0 && (
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1">Biografía / Presentación</label>
+                <textarea name="description" rows="2" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition" placeholder="Cuéntales a los vecinos sobre ti y tu experiencia">{misOficios[0].description ?? ''}</textarea>
+              </div>
+            )}
+
+            {misOficios.length > 0 && (
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1">WhatsApp (para contacto)</label>
+                <div class="flex">
+                  <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-200 bg-gray-100 text-gray-500 text-xs font-bold">+56 9</span>
+                  <input type="tel" inputmode="numeric" pattern="[0-9]{8}" maxlength="8" name="whatsapp" value={(misOficios[0].whatsapp ?? '').replace(/^569/, '')} class="w-full bg-gray-50 border border-gray-200 rounded-r-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition" placeholder="12345678">
+                </div>
+                <p class="text-[10px] text-gray-400 mt-1">8 dígitos, sin el 9 inicial. Se almacena completo (569XXXXXXXX).</p>
+              </div>
+            )}
+
+            {misOficios.length === 0 && (
+              <div class="text-center py-4 text-sm text-gray-500 bg-gray-50 rounded-xl">
+                Publica tu primer oficio para habilitar la edición de biografía y WhatsApp.
+              </div>
+            )}
+
+            <div class="flex justify-end pt-4">
+              <button type="button" class="px-4 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-xs font-bold hover:bg-gray-200 transition mr-2">Cancelar</button>
+              <button type="submit" class="px-4 py-1.5 bg-orange-500 text-white rounded-lg text-xs font-bold hover:bg-orange-600 transition shadow-sm">Guardar cambios</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Mis Servicios -->
+        <section id="mis-servicios" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-gray-800 text-base flex items-center gap-2"><i class="ri-list-settings-line text-orange-500"></i> Mis Servicios Activos</h3>
+            <a href="/crear-oficio" class="text-xs bg-orange-500 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-orange-600 transition">+ Nuevo servicio</a>
+          </div>
+
+          {misOficios.length === 0 ? (
+            <div class="text-center py-8 text-gray-500">
+              <i class="ri-briefcase-line text-4xl text-gray-300 mb-2 block"></i>
+              <p class="mb-4">Aún no tienes oficios publicados.</p>
+              <a href="/crear-oficio" class="inline-block bg-orange-500 text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-orange-600 transition">Publicar mi primer oficio</a>
+            </div>
+          ) : (
+            <div class="space-y-3">
+              {misOficios.map((t) => (
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-white hover:shadow-sm transition border border-transparent hover:border-gray-100">
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs uppercase tracking-wide font-bold text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">{t.symbol}</span>
+                      <h4 class="font-bold text-gray-800 text-sm">{t.name}</h4>
+                      {t.verified && (
+                        <span class="text-xs font-bold text-blue-500"><i class="ri-shield-check-fill"></i> Verificado</span>
+                      )}
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">${(t.basePriceClp ?? 0).toLocaleString('es-CL')} CLP base</p>
+                    {Number(t.reviewCount) > 0 && (
+                      <p class="text-xs text-gray-400 mt-1">
+                        <i class="ri-star-fill text-yellow-400"></i> {(Number(t.ratingAvg) || 0).toFixed(1)} ({t.reviewCount})
+                      </p>
+                    )}
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class={`text-xs px-2 py-1 rounded-full font-bold ${t.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
+                      {t.status === 'active' ? 'Activo' : 'Pausado'}
+                    </span>
+                    <a href={`/p/${t.slug}`} class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg font-bold transition">Ver</a>
+                    <button
+                      data-toggle-id={t.id}
+                      data-toggle-status={t.status}
+                      class="text-xs bg-white border border-gray-200 hover:border-orange-500 text-gray-700 px-3 py-1.5 rounded-lg font-bold transition js-toggle-status"
+                    >
+                      {t.status === 'active' ? 'Pausar' : 'Activar'}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <!-- Mi Horario (placeholder MVP) -->
+        <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-gray-800 text-base flex items-center gap-2"><i class="ri-time-line text-orange-500"></i> Mi Horario de Atención</h3>
+            <span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">Próximamente</span>
+          </div>
+          <div class="grid grid-cols-7 gap-2">
+            {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((d, i) => (
+              <div class="text-center p-3 bg-gray-50 rounded-xl">
+                <p class="text-xs font-bold text-gray-500 uppercase mb-2">{d}</p>
+                <p class="text-sm font-bold text-gray-400">{i < 5 ? '9-18' : '—'}</p>
+              </div>
+            ))}
+          </div>
+          <p class="text-xs text-gray-500 mt-4 text-center">Configuración detallada de horario disponible en próxima versión (HU-24.2).</p>
+        </section>
+
+        <!-- Reseñas -->
+        <section id="resenas" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2"><i class="ri-chat-1-line text-orange-500"></i> Reseñas Recibidas</h3>
+          {totalReviews === 0 ? (
+            <p class="text-sm text-gray-500 text-center py-4">Aún no tienes reseñas.</p>
+          ) : (
+            <p class="text-sm text-gray-700">Tienes <b>{totalReviews}</b> reseñas en total con promedio <b>{ratingGlobal.toFixed(1)}</b>.</p>
+          )}
+        </section>
+
+        <!-- Tips Banner -->
+        <div class="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 flex items-start gap-3">
+          <i class="ri-lightbulb-flash-line text-yellow-700 text-2xl flex-shrink-0"></i>
+          <div>
+            <h4 class="font-bold text-yellow-900 text-sm">Consejo Pro</h4>
+            <p class="text-yellow-800 text-xs mt-1">Sube fotos de tus trabajos realizados para aumentar tu visibilidad. Los vecinos contratan 3x más a quienes muestran su portafolio.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    import { inicializarDashboardPrestador } from '../lib/client/dashboard/prestador';
+    inicializarDashboardPrestador();
+  </script>
+</BaseLayout>
