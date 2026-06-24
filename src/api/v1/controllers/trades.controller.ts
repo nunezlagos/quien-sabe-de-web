@@ -1,15 +1,15 @@
 import type { APIContext } from 'astro';
 import { getTradesService } from '../../../lib/services/trades.service';
-import { respuestaError, respuestaJson } from '../../../lib/utils/respuesta';
+import { errorResponse, jsonResponse } from '../../../lib/utils/response';
 
 export const listTrades = async (ctx: APIContext) => {
   try {
     const servicio = getTradesService(ctx);
     const trades = await servicio.getAllTrades();
-    return respuestaJson(trades);
+    return jsonResponse(trades);
   } catch (err: any) {
     console.error('listTrades failed', err);
-    return respuestaError(err.message || 'internal_error', 500);
+    return errorResponse(err.message || 'internal_error', 500);
   }
 };
 
@@ -24,28 +24,28 @@ export const searchTrades = async (ctx: APIContext) => {
 
     const servicio = getTradesService(ctx);
     const resultados = await servicio.search({ q, communeId, category, limit });
-    return respuestaJson({ resultados, total: resultados.length });
+    return jsonResponse({ resultados, total: resultados.length });
   } catch (err: any) {
     console.error('searchTrades failed', err);
-    return respuestaError(err.message || 'internal_error', 500);
+    return errorResponse(err.message || 'internal_error', 500);
   }
 };
 
 export const getTradeBySlug = async (ctx: APIContext) => {
   try {
     const slug = ctx.params.slug;
-    if (!slug) return respuestaError('slug requerido', 400);
+    if (!slug) return errorResponse('slug requerido', 400);
 
     const servicio = getTradesService(ctx);
     const trade = await servicio.getTradeBySlug(slug);
-    if (!trade) return respuestaError('no encontrado', 404);
+    if (!trade) return errorResponse('no encontrado', 404);
 
     const reviews = await servicio.getReviewsForTrade(trade.id);
     const rating = await servicio.getAverageRating(trade.id);
 
-    return respuestaJson({ trade, reviews, rating });
+    return jsonResponse({ trade, reviews, rating });
   } catch (err: any) {
     console.error('getTradeBySlug failed', err);
-    return respuestaError(err.message || 'internal_error', 500);
+    return errorResponse(err.message || 'internal_error', 500);
   }
 };

@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getDb } from '../../../../database/client';
 import { users } from '../../../../database/schema';
-import { respuestaError } from '../../../../lib/utils/respuesta';
+import { errorResponse } from '../../../../lib/utils/response';
 import { DonacionCuerpo } from '../../../../lib/validators/donations';
 
 export const prerender = false;

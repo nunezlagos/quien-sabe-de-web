@@ -1,8 +1,8 @@
 import type { APIRoute } from 'astro';
-import { respuestaJson } from '../../../../../lib/utils/respuesta';
+import { jsonResponse } from '../../../../lib/utils/response';
 
 export const prerender = false;
 
 export const POST: APIRoute = async () => {
-	return respuestaJson({ ok: true, mensaje: 'Correo de verificación reenviado' });
+	return jsonResponse({ ok: true, mensaje: 'Correo de verificación reenviado' });
 };

@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getDb } from '../../../../../database/client';
 import { users } from '../../../../../database/schema';
-import { respuestaError } from '../../../../../lib/utils/respuesta';
+import { errorResponse } from '../../../../lib/utils/response';
 import { SolicitudVerificacionCuerpo } from '../../../../../lib/validators/verification';
 
 export const prerender = false;
@@ -14,9 +14,9 @@ export const prerender = false;
  */
 export const POST: APIRoute = async (contexto) => {
   const usuario = contexto.locals.user;
-  if (!usuario) return respuestaError('no autenticado', 401);
+  if (!usuario) return errorResponse('no autenticado', 401);
   if (usuario.role !== 'provider' && usuario.role !== 'admin') {
-    return respuestaError('requiere rol provider', 403);
+    return errorResponse('requiere rol provider', 403);
   }
 
   const formData = await contexto.request.formData();

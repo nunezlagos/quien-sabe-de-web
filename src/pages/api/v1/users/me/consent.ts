@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { getDb } from '../../../../../database/client';
 import { users } from '../../../../../database/schema';
 import { eq } from 'drizzle-orm';
-import { respuestaError, respuestaJson } from '../../../../../lib/utils/respuesta';
+import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
 
 export const prerender = false;
 
@@ -29,19 +29,19 @@ const ConsentCuerpo = z
 export const PATCH: APIRoute = async (contexto) => {
 	const usuario = contexto.locals.user;
 	if (!usuario) {
-		return respuestaError('no autenticado', 401);
+		return errorResponse('no autenticado', 401);
 	}
 
 	let cuerpo: unknown;
 	try {
 		cuerpo = await contexto.request.json();
 	} catch {
-		return respuestaError('cuerpo JSON inválido', 400);
+		return errorResponse('cuerpo JSON inválido', 400);
 	}
 
 	const parsed = ConsentCuerpo.safeParse(cuerpo);
 	if (!parsed.success) {
-		return respuestaError('datos inválidos', 400, parsed.error.flatten());
+		return errorResponse('datos inválidos', 400, parsed.error.flatten());
 	}
 
 	const actualizacion: {
@@ -72,5 +72,5 @@ export const PATCH: APIRoute = async (contexto) => {
 		.where(eq(users.id, usuario.id))
 		.get();
 
-	return respuestaJson({ ok: true, consent: actualizado ?? null });
+	return jsonResponse({ ok: true, consent: actualizado ?? null });
 };

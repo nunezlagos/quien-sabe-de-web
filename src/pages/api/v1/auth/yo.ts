@@ -1,14 +1,14 @@
 import type { APIRoute } from 'astro';
-import { respuestaError, respuestaJson } from '../../../../lib/utils/respuesta';
+import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
 
 export const prerender = false;
 
 export const GET: APIRoute = async (contexto) => {
 	const usuario = contexto.locals.user;
 	if (!usuario) {
-		return respuestaError('no autenticado', 401);
+		return errorResponse('no autenticado', 401);
 	}
-	return respuestaJson({
+	return jsonResponse({
 		usuario: {
 			id: usuario.id,
 			nombre: usuario.name,

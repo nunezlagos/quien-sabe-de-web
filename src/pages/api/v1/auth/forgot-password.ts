@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
-import { RecuperarContrasenaCuerpo } from '../../../../lib/validators/autenticacion';
-import { respuestaError, respuestaJson } from '../../../../lib/utils/respuesta';
+import { ForgotPasswordBody } from '../../../../lib/validators/auth';
+import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
 
 export const prerender = false;
 
@@ -12,13 +12,13 @@ export const POST: APIRoute = async (contexto) => {
 	try {
 		cuerpo = await contexto.request.json();
 	} catch {
-		return respuestaError('cuerpo JSON inválido', 400);
+		return errorResponse('cuerpo JSON inválido', 400);
 	}
 
-	const parsed = RecuperarContrasenaCuerpo.safeParse(cuerpo);
+	const parsed = ForgotPasswordBody.safeParse(cuerpo);
 	if (!parsed.success) {
-		return respuestaError('datos inválidos', 400, parsed.error.flatten());
+		return errorResponse('datos inválidos', 400, parsed.error.flatten());
 	}
 
-	return respuestaJson({ ok: true });
+	return jsonResponse({ ok: true });
 };

@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import { getDb } from '../../../../database/client';
 import { trades, communes, users } from '../../../../database/schema';
 import { desc, eq } from 'drizzle-orm';
-import { respuestaError, respuestaJson } from '../../../../lib/utils/respuesta';
+import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
 
 export const prerender = false;
 
@@ -14,10 +14,10 @@ export const prerender = false;
 export const GET: APIRoute = async (contexto) => {
 	const usuario = contexto.locals.user;
 	if (!usuario) {
-		return respuestaError('no autenticado', 401);
+		return errorResponse('no autenticado', 401);
 	}
 	if (usuario.role !== 'admin') {
-		return respuestaError('requiere rol admin', 403);
+		return errorResponse('requiere rol admin', 403);
 	}
 
 	try {
@@ -43,9 +43,9 @@ export const GET: APIRoute = async (contexto) => {
 			.orderBy(desc(trades.createdAt))
 			.all();
 
-		return respuestaJson({ oficios: filas, total: filas.length });
+		return jsonResponse({ oficios: filas, total: filas.length });
 	} catch (err: any) {
 		console.error('admin/trades list failed', err);
-		return respuestaError(err?.message || 'internal_error', 500);
+		return errorResponse(err?.message || 'internal_error', 500);
 	}
 };

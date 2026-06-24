@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { destruirSesion, leerSesion } from '../../../../lib/services/auth/sesion';
 import { limpiarCookieSesion, leerCookieSesion } from '../../../../lib/utils/cookies';
-import { respuestaJson } from '../../../../lib/utils/respuesta';
+import { jsonResponse } from '../../../../lib/utils/response';
 
 export const prerender = false;
 
@@ -14,5 +14,5 @@ export const POST: APIRoute = async (contexto) => {
 		}
 	}
 	limpiarCookieSesion(contexto.cookies, contexto.locals.runtime.env.PUBLIC_SITE_URL);
-	return respuestaJson({ ok: true });
+	return jsonResponse({ ok: true });
 };

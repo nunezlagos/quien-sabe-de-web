@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { respuestaError } from '../../../../../lib/utils/respuesta';
+import { errorResponse } from '../../../../lib/utils/response';
 
 export const prerender = false;
 
@@ -14,7 +14,7 @@ const TTL_SEGUNDOS = 60 * 60 * 24;
 export const POST: APIRoute = async (contexto) => {
 	const usuario = contexto.locals.user;
 	if (!usuario) {
-		return respuestaError('no autenticado', 401);
+		return errorResponse('no autenticado', 401);
 	}
 
 	contexto.cookies.set(NOMBRE_COOKIE_JOB, '1', {

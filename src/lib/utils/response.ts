@@ -1,20 +1,16 @@
-export const successResponse = (data: any, status: number = 200) => {
-    return new Response(JSON.stringify({ 
-      success: true,
-      data 
-    }), {
-      status,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  };
-  
-  export const errorResponse = (message: string | string[], status: number = 400) => {
-    return new Response(JSON.stringify({ 
-      success: false,
-      error: Array.isArray(message) ? message.join(', ') : message,
-      details: Array.isArray(message) ? message : [message]
-    }), {
-      status,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  };
+export function jsonResponse<T>(data: T, init: ResponseInit = {}): Response {
+  const body = JSON.stringify(data);
+  return new Response(body, {
+    ...init,
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      ...(init.headers ?? {}),
+    },
+  });
+}
+
+export function errorResponse(message: string, status = 400, details?: unknown): Response {
+  const body: { error: string; details?: unknown } = { error: message };
+  if (details !== undefined) body.details = details;
+  return jsonResponse(body, { status });
+}

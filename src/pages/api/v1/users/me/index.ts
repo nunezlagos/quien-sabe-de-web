@@ -4,7 +4,7 @@ import { users } from '../../../../../database/schema';
 import { eq } from 'drizzle-orm';
 import { destruirSesion, leerSesion } from '../../../../../lib/services/auth/sesion';
 import { limpiarCookieSesion, leerCookieSesion } from '../../../../../lib/utils/cookies';
-import { respuestaError } from '../../../../../lib/utils/respuesta';
+import { errorResponse } from '../../../../lib/utils/response';
 
 export const prerender = false;
 
@@ -24,7 +24,7 @@ const CONFIRM_TEXTO = 'ELIMINAR';
 export const DELETE: APIRoute = async (contexto) => {
 	const usuario = contexto.locals.user;
 	if (!usuario) {
-		return respuestaError('no autenticado', 401);
+		return errorResponse('no autenticado', 401);
 	}
 
 	let confirmacion = '';
@@ -38,11 +38,11 @@ export const DELETE: APIRoute = async (contexto) => {
 			confirmacion = String(form.get('confirm') ?? '');
 		}
 	} catch {
-		return respuestaError('cuerpo inválido', 400);
+		return errorResponse('cuerpo inválido', 400);
 	}
 
 	if (confirmacion.trim() !== CONFIRM_TEXTO) {
-		return respuestaError(`confirmación requerida: escribe "${CONFIRM_TEXTO}"`, 400);
+		return errorResponse(`confirmación requerida: escribe "${CONFIRM_TEXTO}"`, 400);
 	}
 
 	const token = leerCookieSesion(contexto.cookies);
