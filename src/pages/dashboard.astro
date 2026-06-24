@@ -56,14 +56,20 @@ const contactHistory = myTradeIds.length > 0
       .limit(20)
       .all()
   : [];
-// TODO(REQ-20): cuando el schema exponga `email_verified_at`, renderizar aquí
-// el banner de verificación con `email={currentUser.email}` y CTA "Reenviar correo".
-// El schema actual (src/database/schema.ts) aún no incluye este campo.
 ---
 
 <BaseLayout title={`Mi panel — ${currentUser.name}`}>
   <main class="container mx-auto px-4 py-8 max-w-4xl">
-    {/* TODO(REQ-20): banner de verificación de email — ver comentario en frontmatter */}
+    {!currentUser.emailVerified ? (
+      <div class="bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-4 flex items-start gap-3 mb-6">
+        <i class="ri-mail-unread-line text-yellow-700 text-2xl flex-shrink-0"></i>
+        <div class="flex-1">
+          <h4 class="font-bold text-yellow-900 text-sm">Verifica tu email</h4>
+          <p class="text-yellow-800 text-xs mt-1">Revisa <b>{currentUser.email}</b> y haz clic en el enlace de verificación. ¿No lo recibiste?</p>
+        </div>
+        <button id="btn-resend-verification" class="text-yellow-700 hover:text-yellow-900 text-xs font-bold underline flex-shrink-0" data-email={currentUser.email}>Reenviar</button>
+      </div>
+    ) : null}
 
     <header class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 mb-6">
       <div class="flex items-center gap-4">
@@ -250,12 +256,17 @@ const contactHistory = myTradeIds.length > 0
             <dd class="font-bold text-gray-800">#{currentUser.id}</dd>
           </div>
         </dl>
-        <p class="text-xs text-gray-400 mt-6">
-          La edición de Comuna / Oficios de interés / Notificaciones llega en HU-11.4 (modal de edición).
-        </p>
-        <div class="mt-4 flex gap-3">
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="/api/v1/account/export" class="bg-white border border-gray-200 hover:border-orange-500 text-gray-700 px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1">
+            <i class="ri-download-2-line"></i> Exportar mis datos
+          </a>
+          <form method="POST" action="/api/v1/account/delete" class="contents" onsubmit="return confirm('¿Estás seguro? Esta acción eliminará tu cuenta y todos tus datos de forma permanente.')">
+            <button type="submit" class="bg-red-50 border border-red-200 hover:bg-red-100 text-red-600 px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1">
+              <i class="ri-delete-bin-6-line"></i> Eliminar cuenta
+            </button>
+          </form>
           <form method="POST" action="/api/v1/auth/cerrar-sesion" class="contents js-logout-form">
-            <button type="submit" class="bg-gray-900 hover:bg-red-600 text-white px-6 py-2.5 rounded-xl font-bold transition">
+            <button type="submit" class="bg-gray-900 hover:bg-red-600 text-white px-6 py-2.5 rounded-xl font-bold transition ml-auto">
               <i class="ri-logout-box-r-line"></i> Cerrar sesión
             </button>
           </form>
@@ -263,4 +274,30 @@ const contactHistory = myTradeIds.length > 0
       </section>
     )}
   </main>
+<script>
+  const btnResend = document.getElementById('btn-resend-verification');
+  if (btnResend) {
+    btnResend.addEventListener('click', async () => {
+      btnResend.disabled = true;
+      btnResend.textContent = 'Enviando...';
+      try {
+        const res = await fetch('/api/v1/auth/verify-email/resend', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: btnResend.dataset.email }),
+        });
+        if (res.ok) {
+          btnResend.textContent = '¡Reenviado!';
+          setTimeout(() => { btnResend.textContent = 'Reenviar'; btnResend.disabled = false; }, 3000);
+        } else {
+          btnResend.textContent = 'Error';
+          setTimeout(() => { btnResend.textContent = 'Reenviar'; btnResend.disabled = false; }, 3000);
+        }
+      } catch {
+        btnResend.textContent = 'Error';
+        setTimeout(() => { btnResend.textContent = 'Reenviar'; btnResend.disabled = false; }, 3000);
+      }
+    });
+  }
+</script>
 </BaseLayout>

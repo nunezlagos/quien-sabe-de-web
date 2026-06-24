@@ -89,4 +89,11 @@ export type Trade = typeof trades.$inferSelect;
 export type TradeNuevo = typeof trades.$inferInsert;
 export type Commune = typeof communes.$inferSelect;
 export type Review = typeof reviews.$inferSelect;
+export const favorites = sqliteTable('favorites', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  tradeId: integer('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
+  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});
+
 export type ContactEvent = typeof contactEvents.$inferSelect;
