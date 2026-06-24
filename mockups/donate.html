@@ -61,51 +61,79 @@
             </div>
 
             <div class="p-8 md:p-12">
-                <!-- Donation Options -->
-                <div class="grid md:grid-cols-3 gap-6 mb-12">
-                    <!-- Option 1 -->
-                    <div class="border-2 border-gray-100 rounded-2xl p-6 hover:border-primary hover:bg-green-50 transition cursor-pointer group text-center">
-                        <div class="text-3xl mb-2 group-hover:scale-110 transition">☕</div>
-                        <h3 class="font-bold text-gray-800 text-lg">Un Cafecito</h3>
-                        <p class="text-gray-500 text-sm mb-4">Ayuda con la energía.</p>
-                        <button class="bg-white border border-gray-200 text-gray-700 font-bold py-2 px-6 rounded-full group-hover:bg-primary group-hover:text-white group-hover:border-primary transition w-full shadow-sm">
-                            $2.000
-                        </button>
-                    </div>
+                <!-- 4 montos sugeridos + custom (HU-14.1) -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                    <button data-amount="3000" data-provider="mercadopago" class="bg-white border-2 border-orange-200 hover:border-primary p-4 rounded-2xl transition shadow-sm hover:shadow-md group">
+                        <div class="text-3xl font-extrabold text-gray-800 group-hover:text-primary">$3.000</div>
+                        <div class="text-xs text-gray-500 mt-1">Cafecito</div>
+                    </button>
+                    <button data-amount="5000" data-provider="mercadopago" class="bg-white border-2 border-orange-200 hover:border-primary p-4 rounded-2xl transition shadow-sm hover:shadow-md group">
+                        <div class="text-3xl font-extrabold text-gray-800 group-hover:text-primary">$5.000</div>
+                        <div class="text-xs text-gray-500 mt-1">Pizza</div>
+                    </button>
+                    <button data-amount="10000" data-provider="mercadopago" class="bg-white border-2 border-orange-200 hover:border-primary p-4 rounded-2xl transition shadow-sm hover:shadow-md group">
+                        <div class="text-3xl font-extrabold text-gray-800 group-hover:text-primary">$10.000</div>
+                        <div class="text-xs text-gray-500 mt-1">Servidor</div>
+                    </button>
+                    <button data-amount="25000" data-provider="mercadopago" class="bg-white border-2 border-orange-200 hover:border-primary p-4 rounded-2xl transition shadow-sm hover:shadow-md group">
+                        <div class="text-3xl font-extrabold text-gray-800 group-hover:text-primary">$25.000</div>
+                        <div class="text-xs text-gray-500 mt-1">Sponsor</div>
+                    </button>
+                </div>
 
-                    <!-- Option 2 (Featured) -->
-                    <div class="border-2 border-accent rounded-2xl p-6 bg-orange-50 relative transform md:-translate-y-4 shadow-md text-center">
-                        <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-accent text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Más Popular</div>
-                        <div class="text-3xl mb-2 animate-pulse">🍕</div>
-                        <h3 class="font-bold text-gray-800 text-lg">Una Pizza</h3>
-                        <p class="text-gray-600 text-sm mb-4">Para las noches de código.</p>
-                        <button class="bg-accent text-white font-bold py-2 px-6 rounded-full hover:bg-orange-600 transition w-full shadow-md">
-                            $5.000
-                        </button>
+                <!-- Custom amount input -->
+                <div class="mb-6">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">O ingresa otro monto</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold">$</span>
+                        <input type="number" name="custom_amount" min="1000" placeholder="Mínimo $1.000" class="w-full pl-8 pr-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-primary bg-white text-lg font-bold">
                     </div>
+                </div>
 
-                    <!-- Option 3 -->
-                    <div class="border-2 border-gray-100 rounded-2xl p-6 hover:border-primary hover:bg-green-50 transition cursor-pointer group text-center">
-                        <div class="text-3xl mb-2 group-hover:scale-110 transition">🚀</div>
-                        <h3 class="font-bold text-gray-800 text-lg">Servidor</h3>
-                        <p class="text-gray-500 text-sm mb-4">Un mes de hosting.</p>
-                        <button class="bg-white border border-gray-200 text-gray-700 font-bold py-2 px-6 rounded-full group-hover:bg-primary group-hover:text-white group-hover:border-primary transition w-full shadow-sm">
-                            $10.000
-                        </button>
+                <!-- Pasarela + recurrente (HU-14.1, HU-14.7) -->
+                <div class="space-y-4 mb-6">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Pasarela de pago</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="flex items-center gap-3 p-3 border-2 border-primary bg-orange-50 rounded-xl cursor-pointer">
+                                <input type="radio" name="provider" value="mercadopago" checked class="w-4 h-4 accent-primary">
+                                <span class="font-bold text-sm">Mercado Pago</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 border-2 border-gray-200 hover:border-primary rounded-xl cursor-pointer">
+                                <input type="radio" name="provider" value="webpay" class="w-4 h-4 accent-primary">
+                                <span class="font-bold text-sm">Webpay</span>
+                            </label>
+                        </div>
                     </div>
+                    <label class="flex items-center gap-3 p-4 bg-blue-50 border border-blue-100 rounded-xl cursor-pointer">
+                        <input type="checkbox" name="recurring" class="w-5 h-5 accent-primary">
+                        <div>
+                            <div class="font-bold text-sm text-gray-800">Hacer esta donación todos los meses</div>
+                            <div class="text-xs text-gray-600">Puedes cancelar en cualquier momento</div>
+                        </div>
+                    </label>
                 </div>
 
                 <!-- Transparency & Mission -->
                 <div class="grid md:grid-cols-2 gap-10 items-center">
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="ri-shield-check-line text-primary"></i> Transparencia
-                        </h2>
-                        <p class="text-gray-600 mb-4 leading-relaxed">
-                            Creemos en las cuentas claras. Cada peso que entra se destina a mantener el servidor, el dominio y mejorar la plataforma.
-                        </p>
-                        <a href="transparency.html" class="text-primary font-bold hover:underline flex items-center gap-1">
-                            Ver desglose de gastos <i class="ri-arrow-right-line"></i>
+                    <!-- OE3 Widget (HU-14.9) -->
+                    <div class="bg-gradient-to-br from-primary/5 to-orange-50 border border-primary/20 rounded-2xl p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <i class="ri-heart-pulse-line text-primary text-xl"></i>
+                            <h3 class="font-bold text-gray-800">¿Sabías que...</h3>
+                        </div>
+                        <p class="text-sm text-gray-700 mb-4">Nuestras donaciones ya cubren el <b class="text-primary text-xl">80%</b> de los costos operativos. Meta: llegar al 100% este año.</p>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-xs">
+                                <span class="font-bold text-gray-600">Cobertura actual</span>
+                                <span class="font-bold text-primary">80%</span>
+                            </div>
+                            <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-primary to-orange-400 rounded-full transition-all" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <a href="transparency.html" class="text-primary hover:text-primary-dark font-bold text-sm flex items-center gap-1">
+                            Ver reportes mensuales <i class="ri-arrow-right-line"></i>
                         </a>
                     </div>
                     <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100">
@@ -152,7 +180,7 @@
             </div>
             
             <div class="flex gap-8">
-                <a href="about.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Donaciones</a>
+                <a href="donate.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Donaciones</a>
                 <a href="terms.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Términos</a>
                 <a href="transparency.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Transparencia</a>
             </div>

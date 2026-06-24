@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil de Vecino - Quién Sabe</title>
     <meta name="description" content="Perfil de vecino profesional - Quién Sabe">
+    <meta property="og:title" content="{{provider.name}} - {{provider.trade}} en {{provider.commune}}">
+    <meta property="og:description" content="{{provider.bio}}">
+    <meta property="og:image" content="{{provider.photo_url}}">
+    <meta property="og:type" content="profile">
     <script src="js/tailwindcss.js"></script>
     <link href="css/remixicon.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -35,7 +39,7 @@
                 Quién<span class="text-primary">Sabe</span>
             </a>
             
-            <a href="about.html" class="hidden md:flex bg-orange-100 text-accent hover:bg-orange-200 px-4 py-2 rounded-full font-bold text-sm transition items-center gap-2">
+            <a href="donate.html" class="hidden md:flex bg-orange-100 text-accent hover:bg-orange-200 px-4 py-2 rounded-full font-bold text-sm transition items-center gap-2">
                 <i class="ri-heart-3-fill"></i> Donaciones
             </a>
         </div>
@@ -51,6 +55,12 @@
                 <a href="index.html" class="bg-white/90 backdrop-blur-sm border border-gray-200 text-gray-700 hover:text-primary hover:border-primary px-4 py-2 rounded-full text-sm font-bold transition shadow-sm flex items-center gap-2 group">
                     <i class="ri-arrow-left-line group-hover:-translate-x-1 transition-transform"></i> Volver al inicio
                 </a>
+            </div>
+
+            <!-- Hero Cover -->
+            <div class="bg-gradient-to-br from-primary to-orange-400 h-48 md:h-64 relative overflow-hidden rounded-2xl mb-4">
+                <img src="css/footer-bg.jpg" class="w-full h-full object-cover opacity-50" alt="cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -85,15 +95,15 @@
                                 <span class="text-yellow-400 text-base" id="profile-stars"></span>
                                 <span class="font-bold text-gray-800 text-xs" id="profile-rating-text"></span>
                             </div>
-                            <p class="text-[10px] text-gray-400 mt-0.5"><span id="profile-reviews-count"></span> trabajos realizados</p>
+                            <p class="text-[10px] text-gray-400 mt-0.5"><span id="profile-reviews-count"></span> reseñas recibidas</p>
                             <p class="text-[10px] text-gray-500 mt-2 font-medium hidden" id="profile-communes-container"><i class="ri-map-pin-line"></i> Atiende en: <span id="profile-communes"></span></p>
                         </div>
 
                         <div class="space-y-2">
-                            <a href="#" target="_blank" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded-lg flex items-center justify-center gap-2 transition shadow-sm hover:shadow-md transform hover:-translate-y-0.5 text-xs" id="profile-whatsapp-btn">
+                            <a href="https://wa.me/56912345678" target="_blank" data-track-kind="whatsapp" data-provider-id="{{provider.id}}" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded-lg flex items-center justify-center gap-2 transition shadow-sm hover:shadow-md transform hover:-translate-y-0.5 text-xs" id="profile-whatsapp-btn">
                                 <i class="ri-whatsapp-line text-lg"></i> Contactar
                             </a>
-                            <a href="#" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-lg flex items-center justify-center gap-2 transition shadow-sm hover:shadow-md transform hover:-translate-y-0.5 text-xs hidden" id="profile-email-btn">
+                            <a href="mailto:juan@ejemplo.cl" data-track-kind="email" data-provider-id="{{provider.id}}" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-lg flex items-center justify-center gap-2 transition shadow-sm hover:shadow-md transform hover:-translate-y-0.5 text-xs hidden" id="profile-email-btn">
                                 <i class="ri-mail-line text-lg"></i> Enviar Correo
                             </a>
                             <p class="text-[10px] text-center text-gray-400">Sin registro previo</p>
@@ -123,6 +133,30 @@
                         </h2>
                         <p class="text-gray-600 text-sm leading-relaxed" id="profile-bio"></p>
                     </section>
+
+                    <!-- Dejar Opinión (HU-09.2) - visible solo si vecino autenticado y can_review=true -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 mt-6">
+                        <h3 class="font-extrabold text-2xl text-gray-800 mb-4">¿Trabajaste con Juan? Deja tu opinión</h3>
+                        <form class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Calificación</label>
+                                <div class="flex gap-2">
+                                    <i class="ri-star-line text-3xl text-gray-300 hover:text-yellow-400 cursor-pointer"></i>
+                                    <i class="ri-star-line text-3xl text-gray-300 hover:text-yellow-400 cursor-pointer"></i>
+                                    <i class="ri-star-line text-3xl text-gray-300 hover:text-yellow-400 cursor-pointer"></i>
+                                    <i class="ri-star-line text-3xl text-gray-300 hover:text-yellow-400 cursor-pointer"></i>
+                                    <i class="ri-star-line text-3xl text-gray-300 hover:text-yellow-400 cursor-pointer"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-1">Tu comentario</label>
+                                <textarea rows="4" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition" placeholder="¿Cómo fue tu experiencia?"></textarea>
+                            </div>
+                            <button type="button" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-xl font-bold shadow-md hover:shadow-lg transition">
+                                Publicar reseña
+                            </button>
+                        </form>
+                    </div>
 
                     <!-- Services -->
                     <section class="bg-white rounded-xl shadow-sm p-5 border border-gray-100">
@@ -221,7 +255,7 @@
             </div>
             
             <div class="flex gap-8">
-                <a href="about.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Donaciones</a>
+                <a href="donate.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Donaciones</a>
                 <a href="terms.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Términos</a>
                 <a href="transparency.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Transparencia</a>
                 <a href="dashboard-admin.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform"><i class="ri-shield-keyhole-line"></i> Admin</a>
@@ -258,15 +292,9 @@
                         </p>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">Tu Nombre Completo</label>
-                            <input type="text" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">Tu RUT</label>
-                            <input type="text" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
-                        </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Tu Nombre Completo</label>
+                        <input type="text" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
                     </div>
 
                     <div>
@@ -275,7 +303,12 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">Detalle del Problema</label>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Asunto</label>
+                        <input type="text" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition" placeholder="Motivo del reporte">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Descripción</label>
                         <textarea rows="4" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition" placeholder="Describe detalladamente qué sucedió..."></textarea>
                     </div>
 
@@ -310,5 +343,25 @@
     <script src="js/utils.js"></script>
     <script src="js/loader.js"></script>
     <script src="js/profile.js"></script>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "{{provider.name}}",
+  "description": "{{provider.bio}}",
+  "image": "{{provider.photo_url}}",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "{{provider.commune}}",
+    "addressRegion": "Región Metropolitana",
+    "addressCountry": "CL"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{provider.rating_avg}}",
+    "reviewCount": "{{provider.reviews_count}}"
+  }
+}
+</script>
 </body>
 </html>

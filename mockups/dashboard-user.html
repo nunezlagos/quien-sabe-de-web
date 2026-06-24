@@ -25,7 +25,27 @@
     </nav>
 
     <main class="container mx-auto px-4 py-8 max-w-4xl">
-        
+
+        <!-- Banner: email no verificado (REQ-20) -->
+        <div id="email-verification-banner" class="bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-4 mb-6 flex items-start gap-3 animate__animated animate__fadeIn">
+            <i class="ri-mail-unread-line text-yellow-700 text-2xl flex-shrink-0 mt-0.5"></i>
+            <div class="flex-1">
+                <h4 class="font-bold text-yellow-900 text-sm">Verifica tu correo electrónico</h4>
+                <p class="text-yellow-800 text-xs mt-1">Te enviamos un enlace a <b>vecino@demo.cl</b>. Confírmalo para poder dejar reseñas y guardar favoritos.</p>
+                <div class="flex gap-3 mt-3">
+                    <button type="button" class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
+                        Reenviar correo
+                    </button>
+                    <a href="verify-email.html" class="text-yellow-700 hover:text-yellow-900 text-xs font-bold underline transition">
+                        Ya lo verifiqué
+                    </a>
+                </div>
+            </div>
+            <button type="button" class="text-yellow-700 hover:text-yellow-900 transition" aria-label="Cerrar banner">
+                <i class="ri-close-line text-xl"></i>
+            </button>
+        </div>
+
         <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 text-center mb-8 relative">
             <button id="edit-profile-btn" class="absolute top-6 right-6 text-gray-400 hover:text-primary transition bg-gray-50 p-2 rounded-full">
                 <i class="ri-edit-line text-xl"></i>
@@ -33,7 +53,7 @@
             <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400 text-3xl border border-gray-100">
                 <i class="ri-user-smile-line"></i>
             </div>
-            
+
             <h1 class="text-2xl font-extrabold text-gray-800 mb-1">¡Hola, Vecino!</h1>
             <p class="text-gray-500 font-medium text-sm">¿Qué necesitas solucionar hoy?</p>
         </div>
@@ -65,51 +85,82 @@
             </div>
         </div>
 
-        <!-- Recent Activity / Favorites -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Favorites -->
-            <div class="lg:col-span-2 bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
-                <h3 class="font-bold text-gray-800 text-lg mb-4 flex items-center gap-2"><i class="ri-heart-line text-red-500"></i> Vecinos Guardados</h3>
-                <div class="space-y-3">
-                    <!-- Item 1 -->
-                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-2xl border border-gray-100 hover:bg-white hover:shadow-sm transition cursor-pointer">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary font-bold shadow-sm border border-gray-100">J</div>
-                            <div>
-                                <h4 class="font-bold text-gray-800 text-sm">Juan Pérez</h4>
-                                <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">Gasfiter</span>
+        <!-- Tabs (HU-11.1) -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-2 mb-6 flex gap-1">
+            <button data-tab-target="historial" class="flex-1 px-4 py-2.5 rounded-xl font-bold text-sm transition bg-primary text-white shadow-sm">
+                <i class="ri-time-line"></i> Historial
+            </button>
+            <button data-tab-target="resenas" class="flex-1 px-4 py-2.5 rounded-xl font-bold text-sm transition text-gray-600 hover:bg-gray-50">
+                <i class="ri-star-smile-line"></i> Mis reseñas
+            </button>
+            <button data-tab-target="perfil" class="flex-1 px-4 py-2.5 rounded-xl font-bold text-sm transition text-gray-600 hover:bg-gray-50">
+                <i class="ri-user-settings-line"></i> Perfil
+            </button>
+        </div>
+
+        <!-- Historial panel (default active) -->
+        <div class="tab-panel" data-tab="historial">
+            <h2 class="text-xl font-extrabold text-gray-800 mb-4 px-2">Historial de contactos</h2>
+            <!-- Recent Activity / Favorites -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Favorites -->
+                <div class="lg:col-span-2 bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
+                    <h3 class="font-bold text-gray-800 text-lg mb-4 flex items-center gap-2"><i class="ri-heart-line text-red-500"></i> Vecinos Guardados</h3>
+                    <div class="space-y-3">
+                        <!-- Item 1 -->
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-2xl border border-gray-100 hover:bg-white hover:shadow-sm transition cursor-pointer">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary font-bold shadow-sm border border-gray-100">J</div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 text-sm">Juan Pérez</h4>
+                                    <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">Gasfiter</span>
+                                </div>
                             </div>
+                            <button class="w-8 h-8 rounded-full bg-green-100 text-green-600 hover:bg-green-500 hover:text-white transition flex items-center justify-center"><i class="ri-whatsapp-line"></i></button>
                         </div>
-                        <button class="w-8 h-8 rounded-full bg-green-100 text-green-600 hover:bg-green-500 hover:text-white transition flex items-center justify-center"><i class="ri-whatsapp-line"></i></button>
-                    </div>
-                    <!-- Item 2 -->
-                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-2xl border border-gray-100 hover:bg-white hover:shadow-sm transition cursor-pointer">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary font-bold shadow-sm border border-gray-100">M</div>
-                            <div>
-                                <h4 class="font-bold text-gray-800 text-sm">María González</h4>
-                                <span class="text-[10px] bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full font-bold">Electricista</span>
+                        <!-- Item 2 -->
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-2xl border border-gray-100 hover:bg-white hover:shadow-sm transition cursor-pointer">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary font-bold shadow-sm border border-gray-100">M</div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 text-sm">María González</h4>
+                                    <span class="text-[10px] bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full font-bold">Electricista</span>
+                                </div>
                             </div>
+                            <button class="w-8 h-8 rounded-full bg-green-100 text-green-600 hover:bg-green-500 hover:text-white transition flex items-center justify-center"><i class="ri-whatsapp-line"></i></button>
                         </div>
-                        <button class="w-8 h-8 rounded-full bg-green-100 text-green-600 hover:bg-green-500 hover:text-white transition flex items-center justify-center"><i class="ri-whatsapp-line"></i></button>
                     </div>
                 </div>
-            </div>
 
-            <!-- Last Viewed -->
-            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
-                <h3 class="font-bold text-gray-800 text-lg mb-4 flex items-center gap-2"><i class="ri-history-line text-gray-400"></i> Recientes</h3>
-                <ul class="space-y-3">
-                    <li class="flex items-center gap-3 text-sm text-gray-600 hover:text-primary transition cursor-pointer">
-                        <i class="ri-search-line bg-gray-100 p-1.5 rounded-lg"></i>
-                        <span>Gasfiter en Centro</span>
-                    </li>
-                    <li class="flex items-center gap-3 text-sm text-gray-600 hover:text-primary transition cursor-pointer">
-                        <i class="ri-user-line bg-gray-100 p-1.5 rounded-lg"></i>
-                        <span>Perfil de Pedro Tapia</span>
-                    </li>
-                </ul>
+                <!-- Last Viewed -->
+                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
+                    <h3 class="font-bold text-gray-800 text-lg mb-4 flex items-center gap-2"><i class="ri-history-line text-gray-400"></i> Recientes</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 text-sm text-gray-600 hover:text-primary transition cursor-pointer">
+                            <i class="ri-search-line bg-gray-100 p-1.5 rounded-lg"></i>
+                            <span>Gasfiter en Centro</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-600 hover:text-primary transition cursor-pointer">
+                            <i class="ri-user-line bg-gray-100 p-1.5 rounded-lg"></i>
+                            <span>Perfil de Pedro Tapia</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
+        </div>
+
+        <!-- Mis reseñas panel (oculto por defecto) -->
+        <div class="tab-panel hidden" data-tab="resenas">
+            <h2 class="text-xl font-extrabold text-gray-800 mb-4 px-2">Mis reseñas</h2>
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <p class="text-gray-500 text-center py-8">Aún no has dejado reseñas. <a href="index.html" class="text-primary font-bold">Buscar vecinos para reseñar</a></p>
+            </div>
+        </div>
+
+        <!-- Perfil panel (oculto por defecto) -->
+        <div class="tab-panel hidden" data-tab="perfil">
+            <h2 class="text-xl font-extrabold text-gray-800 mb-4 px-2">Editar perfil</h2>
+            <p class="text-gray-500 text-center py-8">Usa el botón "Editar" del header para modificar tus datos.</p>
         </div>
 
     </main>
@@ -133,7 +184,7 @@
             </div>
             
             <div class="flex gap-8">
-                <a href="about.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Donaciones</a>
+                <a href="donate.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Donaciones</a>
                 <a href="terms.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Términos</a>
                 <a href="transparency.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Transparencia</a>
             </div>
@@ -158,32 +209,81 @@
             </div>
             
             <form class="p-6 space-y-4">
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">Nombre</label>
-                        <input type="text" value="Vecino" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">Apellido</label>
-                        <input type="text" value="Feliz" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
-                    </div>
-                </div>
-
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-1">Correo Electrónico</label>
-                    <input type="email" value="vecino@email.com" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Nombre</label>
+                    <input type="text" value="Vecino" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
                 </div>
-
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-1">Teléfono (Opcional)</label>
-                    <input type="tel" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Comuna</label>
+                    <select class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                        <option>Santiago</option>
+                        <option>Providencia</option>
+                        <option selected>Las Condes</option>
+                        <option>Vitacura</option>
+                        <option>Ñuñoa</option>
+                        <option>La Reina</option>
+                        <option>Peñalolén</option>
+                        <option>Macul</option>
+                        <option>San Miguel</option>
+                        <option>San Joaquín</option>
+                        <option>Maipú</option>
+                        <option>Pudahuel</option>
+                        <option>Quilicura</option>
+                        <option>Recoleta</option>
+                        <option>Conchalí</option>
+                        <option>Independencia</option>
+                        <option>Quinta Normal</option>
+                        <option>Estación Central</option>
+                        <option>Cerrillos</option>
+                        <option>Maipú</option>
+                        <option>Lo Prado</option>
+                        <option>Cerro Navia</option>
+                        <option>Renca</option>
+                        <option>Colina</option>
+                        <option>Lampa</option>
+                        <option>Til Til</option>
+                        <option>Puente Alto</option>
+                        <option>San José de Maipo</option>
+                        <option>La Florida</option>
+                        <option>El Bosque</option>
+                        <option>La Cisterna</option>
+                        <option>La Granja</option>
+                        <option>Lo Espejo</option>
+                        <option>Pedro Aguirre Cerda</option>
+                        <option>San Ramón</option>
+                        <option>Huechuraba</option>
+                        <option>Lo Barnechea</option>
+                        <option>La Pintana</option>
+                        <option>San Bernardo</option>
+                        <option>Calera de Tango</option>
+                        <option>Paine</option>
+                        <option>Buin</option>
+                        <option>Alhué</option>
+                        <option>Curacaví</option>
+                        <option>Melipilla</option>
+                        <option>San Pedro</option>
+                        <option>Isla de Maipo</option>
+                        <option>El Monte</option>
+                        <option>Talagante</option>
+                        <option>Peñaflor</option>
+                        <option>Padre Hurtado</option>
+                    </select>
                 </div>
-
-                <div class="pt-2">
-                    <button type="button" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl shadow-lg shadow-primary/30 transition transform hover:-translate-y-0.5">
-                        Guardar Cambios
-                    </button>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Oficios de interés</label>
+                    <div class="flex flex-wrap gap-2 p-3 bg-gray-50 border border-gray-200 rounded-xl">
+                        <span class="bg-primary text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">Gasfiter <i class="ri-close-line cursor-pointer"></i></span>
+                        <span class="bg-primary text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">Electricista <i class="ri-close-line cursor-pointer"></i></span>
+                        <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs font-bold cursor-pointer">+ Añadir oficio</span>
+                    </div>
                 </div>
+                <label class="flex items-center justify-between p-3 bg-gray-50 rounded-xl cursor-pointer">
+                    <span class="text-sm font-bold text-gray-700">Recibir notificaciones por email</span>
+                    <input type="checkbox" checked class="w-5 h-5 accent-primary">
+                </label>
+                <button type="button" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold py-3 rounded-xl shadow-md">
+                    Guardar cambios
+                </button>
             </form>
         </div>
     </div>
@@ -218,6 +318,28 @@
         if(editProfileBtn) editProfileBtn.addEventListener('click', () => toggleModal('profile-modal', 'profile-modal-content', true));
         if(closeProfileBtn) closeProfileBtn.addEventListener('click', () => toggleModal('profile-modal', 'profile-modal-content', false));
         if(profileModal) profileModal.addEventListener('click', (e) => { if(e.target === profileModal) toggleModal('profile-modal', 'profile-modal-content', false); });
+
+        // Tabs (HU-11.1)
+        const tabButtons = document.querySelectorAll('[data-tab-target]');
+        const tabPanels = document.querySelectorAll('.tab-panel');
+        tabButtons.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const target = btn.getAttribute('data-tab-target');
+                tabButtons.forEach((b) => {
+                    b.classList.remove('bg-primary', 'text-white', 'shadow-sm');
+                    b.classList.add('text-gray-600', 'hover:bg-gray-50');
+                });
+                btn.classList.add('bg-primary', 'text-white', 'shadow-sm');
+                btn.classList.remove('text-gray-600', 'hover:bg-gray-50');
+                tabPanels.forEach((p) => {
+                    if (p.getAttribute('data-tab') === target) {
+                        p.classList.remove('hidden');
+                    } else {
+                        p.classList.add('hidden');
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>
