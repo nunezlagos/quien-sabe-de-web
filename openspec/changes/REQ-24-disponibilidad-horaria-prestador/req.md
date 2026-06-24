@@ -19,22 +19,22 @@ filtro en el buscador. Incluye zona horaria America/Santiago.
 
 ## UI pendiente
 
-No existe en ningún mockup. **Tarea explícita previa a implementación:
-diseñar mockup de la sección "Disponibilidad" en `dashboard-provider.html`
-(grid semanal de días con rangos horarios) y badge "Disponible ahora" en
-`profile.html` header.** Mientras tanto, reutilizar pattern visual del
-form de edición visto en `mockups/dashboard-provider.html:135-194` (cards
-`bg-white rounded-3xl shadow-sm border border-gray-100 p-8`).
+✅ **Mockups existentes**:
+- Sección "Mi Horario de Atención" en `mockups/dashboard-provider.html:228-352` (grid semanal con toggles + inputs time + botón "Aplicar mismo horario").
+- Toggle "Disponible" en `mockups/dashboard-provider.html:47-57` (sidebar).
+- Badge "Disponible ahora" en `mockups/profile.html:72-75`.
+- Refinar copy del label toggle: "Disponible" → "Visible para vecinos" / "En pausa" (ver HU-24.5).
 
 ## Superficie técnica
 
 ### Endpoints API
 - `GET   /api/v1/providers/:id/availability` — público
 - `PUT   /api/v1/providers/me/availability` — reemplaza arreglo [sesión]
+- `PATCH /api/v1/providers/me/availability/toggle` — toggle pausa manual con `{"enabled": boolean}` [sesión prestador]
 - `GET   /api/v1/search?available_now=true` — extensión REQ-06
 
 ### Vistas Astro
-- `/dashboard-provider` (sección Disponibilidad nueva).
+- `/dashboard-provider` (sección Disponibilidad).
 - `/p/:slug` (badge).
 
 ### Tablas Drizzle
@@ -52,6 +52,7 @@ form de edición visto en `mockups/dashboard-provider.html:135-194` (cards
 | HU-24.2 | crud-horario-prestador | Endpoints + UI dashboard | P0 |
 | HU-24.3 | indicador-disponible-ahora-publico | Cálculo + badge | P1 |
 | HU-24.4 | filtro-disponible-en-buscador | Query param en /search | P1 |
+| HU-24.5 | toggle-pausa-manual-dashboard | Toggle global "En pausa" + integración con badge y filtro | P1 |
 
 ## Tests requeridos
 

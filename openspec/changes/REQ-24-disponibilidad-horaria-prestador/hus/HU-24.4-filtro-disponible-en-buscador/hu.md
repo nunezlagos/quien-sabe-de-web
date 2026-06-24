@@ -32,6 +32,7 @@
 - [ ] Subquery SQL que filtra por rangos vigentes (con materialización o lateral join Drizzle)
 - [ ] Agregar checkbox en hero search (`src/pages/index.astro`)
 - [ ] Tests `tests/integration/search/available-now.test.ts`
+- [ ] Mockup: agregar en `mockups/index.html` (hero search, después del select comuna línea 96) checkbox `<label><input type="checkbox" name="available_now"> Disponible ahora</label>` con estilo consistente con el resto del hero-search-container.
 
 ## Definition of done
 

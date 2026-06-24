@@ -1,0 +1,10 @@
+status: planned
+created: 2026-06-09
+archived: ~
+depends_on:
+  - HU-24.2-crud-horario-prestador  # rangos semanales base
+  - HU-24.3-indicador-disponible-ahora-publico  # extiende isAvailableNow
+blocks:
+  - HU-24.4-filtro-disponible-en-buscador  # debe excluir pausados
+mockup:
+  - mockups/dashboard-provider.html  # EXTENDER con bloque "Estado" + toggle (gap detectado)

@@ -13,7 +13,7 @@
 ### Escenario: Dentro de rango → badge verde
   Dado prestador con rango lunes 09-13 y `now=lunes 10:00 America/Santiago`
   Cuando renderizo `/p/:slug`
-  Entonces aparece badge verde "Disponible ahora" en el header del perfil (mockup pendiente; insertar junto al nombre estilo `bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-[10px] font-bold` reusado de `mockups/dashboard-user.html:80`)
+  Entonces aparece badge verde "Disponible ahora" en el header del perfil, junto al nombre (estilo `bg-green-100 text-green-700 px-3 py-1 rounded-full text-[11px] font-bold` reusado de `mockups/profile.html:72-75`)
 
 ### Escenario: Fuera de rango → próxima ventana
   Dado `now=lunes 14:00` y rangos lunes 09-13 / martes 09-13

@@ -1,3 +1,9 @@
 status: planned
-created: 2026-06-09
+created: 2026-06-24
 archived: ~
+depends_on:
+  - HU-20.1-envio-email-verificacion
+  - HU-20.3-reenviar-email
+blocks: []
+mockup:
+  - mockups/dashboard-user.html  # banner insertado en línea 28

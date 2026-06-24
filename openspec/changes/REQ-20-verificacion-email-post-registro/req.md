@@ -22,14 +22,8 @@ dashboard hasta verificar.
 
 ## UI pendiente
 
-Mockup no existe. Diseñar:
-
-- `/verify-email/:token` — landing con feedback estilo `mockups/profile.html`
-  (sección error línea 153). Verde si OK, rojo si expiró.
-- Banner en `dashboard-user.html` que se inserta encima del bloque
-  "¡Hola, Vecino!" (línea 29). Reutilizar pattern de aviso visto en
-  `mockups/profile.html:120-122` (bg-blue-50, ri-information-line) pero en
-  amarillo `bg-yellow-50` con `ri-error-warning-line`.
+- **Banner en `dashboard-user.html`** ✅ Implementado (mockup línea 28) — bloque amarillo `bg-yellow-50` con icono `ri-mail-unread-line`, texto con email del usuario, botones "Reenviar correo" + "Ya lo verifiqué" + dismiss X. Ver `HU-20.4` para detalles de implementación.
+- `/verify-email/:token` — landing con feedback estilo `mockups/verify-email.html` (existente: muestra 3 estados apilados — Verificando / Éxito / Expirado). Verde si OK, rojo si expiró.
 
 ## Superficie técnica
 

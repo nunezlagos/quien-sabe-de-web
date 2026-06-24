@@ -20,7 +20,7 @@
   Entonces recibo status 422 con `{ "error": "rangos solapados día 1" }`
 
 ### Escenario: UI dashboard refleja estado
-  Cuando navego a `/dashboard-provider` sección Disponibilidad (mockup pendiente, estilo reutilizando card `bg-white rounded-3xl shadow-sm border border-gray-100 p-8` de `mockups/dashboard-provider.html:135`)
+  Cuando navego a `/dashboard-provider` sección Disponibilidad (Mockup YA EXISTE en `dashboard-provider.html:228-352`, estilo de card `p-6 rounded-2xl shadow-sm border border-gray-100`)
   Entonces veo grid semanal con 7 columnas y mis rangos pintados
 
 ### Escenario: GET público
