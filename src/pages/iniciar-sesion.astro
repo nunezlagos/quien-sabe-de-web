@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AuthButtons from '../components/auth/AuthButtons.astro';
+
+const url = Astro.url;
+const redirigir = url.searchParams.get('redirigir') ?? '/dashboard';
+const error = url.searchParams.get('error');
+
+if (Astro.locals.user) {
+  return Astro.redirect(redirigir);
+}
+---
+
+<BaseLayout title="Iniciar sesión — QuiénSabe">
+  <main class="auth-page">
+    <a href="/" class="auth-page__back">← Volver al inicio</a>
+
+    <article class="auth-card">
+      <header class="auth-card__header">
+        <div class="auth-card__icon">
+          <i class="ri-user-smile-line" aria-hidden="true"></i>
+        </div>
+        <h1 class="auth-card__title">Inicia sesión</h1>
+        <p class="auth-card__subtitle">Vuelve a conectar con tus vecinos.</p>
+      </header>
+
+      {error && (
+        <div class="auth-card__alert auth-card__alert--error" role="alert">
+          <i class="ri-error-warning-line" aria-hidden="true"></i> <span>{error}</span>
+        </div>
+      )}
+
+      <form id="form-login" class="auth-form" data-redirigir={redirigir}>
+        <div class="auth-form__field">
+          <label class="auth-form__label" for="correo">Correo</label>
+          <input
+            id="correo"
+            name="correo"
+            type="email"
+            required
+            maxlength="255"
+            autocomplete="email"
+            class="auth-form__input"
+          />
+        </div>
+
+        <div class="auth-form__field">
+          <label class="auth-form__label" for="contrasena">Contraseña</label>
+          <input
+            id="contrasena"
+            name="contrasena"
+            type="password"
+            required
+            maxlength="128"
+            autocomplete="current-password"
+            class="auth-form__input"
+          />
+          <a href="/recuperar-contrasena" class="auth-form__hint-link">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <div id="errores-campos" class="auth-card__alert auth-card__alert--error auth-card__alert--hidden" role="alert"></div>
+
+        <button type="submit" class="btn btn--primary btn--block">Iniciar sesión</button>
+      </form>
+
+      <div class="auth-card__divider"><span>O continúa con</span></div>
+
+      <AuthButtons mode="full" redirigirAcceso={redirigir} />
+
+      <p class="auth-card__legal">
+        Al iniciar sesión aceptas nuestras <a href="/terminos">normas de convivencia</a>.
+      </p>
+
+      <p class="auth-card__alt">
+        ¿No tienes cuenta? <a href="/registro">Crea una</a>
+      </p>
+    </article>
+
+    <aside class="demo-hint">
+      <h4 class="demo-hint__title">
+        <i class="ri-information-line" aria-hidden="true"></i> Usuarios demo
+      </h4>
+      <ul class="demo-hint__list">
+        <li><code>vecino@demo.cl</code> / <code>Demo1234</code></li>
+        <li><code>prestador@demo.cl</code> / <code>Demo1234</code></li>
+        <li><code>admin@demo.cl</code> / <code>Demo1234</code></li>
+      </ul>
+    </aside>
+  </main>
+</BaseLayout>
+
+<script>
+  import { inicializarFormularioLogin } from '../lib/client/auth/login';
+  inicializarFormularioLogin();
+</script>

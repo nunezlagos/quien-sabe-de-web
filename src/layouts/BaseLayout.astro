@@ -1,20 +1,21 @@
 ---
-const { title = "Quién Sabe - Connect with Neighborhood Trades" } = Astro.props;
+const { title = "QuiénSabe - Conecta con oficios de tu barrio" } = Astro.props;
 import '../styles/base.css';
+
+const usuario = Astro.locals.user;
+const enSesion = Boolean(usuario);
+const urlActual = Astro.url.pathname;
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
-    <meta name="description" content="Find plumbers, electricians, and more in your community.">
+    <meta name="description" content="Encuentra gasfíteres, electricistas y más oficios en tu comunidad.">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Nunito', sans-serif; }
-    </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans flex flex-col min-h-screen transition-all duration-300">
 
@@ -24,16 +25,31 @@ import '../styles/base.css';
                 <i class="ri-community-line text-orange-500 text-3xl"></i>
                 Quién<span class="text-orange-500">Sabe</span>
             </a>
-            
-            <div class="hidden md:flex items-center gap-4">
-                <a href="/donations" class="bg-orange-100 text-orange-600 hover:bg-orange-200 px-4 py-2 rounded-full font-bold text-sm transition flex items-center gap-2">
-                    <i class="ri-heart-3-fill"></i> Donations
-                </a>
-                <a href="/dashboard/provider" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-2 rounded-full font-bold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition duration-300 flex items-center gap-2">
-                    <i class="ri-user-add-line"></i> Offer a Service?
-                </a>
+
+            <div class="hidden md:flex items-center gap-3">
+                {enSesion && usuario ? (
+                    <>
+                        <a href="/dashboard" class={`px-4 py-2 rounded-full font-bold text-sm transition ${urlActual.startsWith('/dashboard') ? 'bg-orange-100 text-orange-700' : 'text-gray-600 hover:bg-gray-100'}`}>
+                            <i class="ri-user-line mr-1"></i> Hola, {usuario.name.split(' ')[0]}
+                        </a>
+                        <form method="POST" action="/api/v1/auth/cerrar-sesion" class="contents js-logout-form" id="form-cerrar-sesion">
+                            <button type="submit" class="text-gray-600 hover:text-red-500 px-3 py-2 rounded-full font-bold text-sm transition">
+                                <i class="ri-logout-box-r-line"></i> Cerrar sesión
+                            </button>
+                        </form>
+                    </>
+                ) : (
+                    <>
+                        <a href="/iniciar-sesion" class="text-gray-600 hover:text-orange-500 px-4 py-2 rounded-full font-bold text-sm transition">
+                            Ingresar
+                        </a>
+                        <a href="/registro" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-2 rounded-full font-bold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition duration-300">
+                            Crear cuenta
+                        </a>
+                    </>
+                )}
             </div>
-            
+
             <button class="md:hidden text-gray-600 text-2xl">
                 <i class="ri-menu-line"></i>
             </button>
@@ -44,10 +60,14 @@ import '../styles/base.css';
 
     <footer class="bg-gray-900 text-white py-12 text-center text-xs mt-auto">
         <div class="container mx-auto px-4">
-            <p class="font-bold">&copy; 2026 Quién Sabe.</p>
-            <p class="text-[10px] mt-1">Made in Chile 🇨🇱</p>
+            <p class="font-bold">&copy; 2026 QuiénSabe.</p>
+            <p class="text-[10px] mt-1">Hecho en Chile 🇨🇱</p>
         </div>
     </footer>
 
+    <script>
+        import { inicializarCerrarSesion } from '../lib/client/auth/logout';
+        inicializarCerrarSesion();
+    </script>
 </body>
 </html>

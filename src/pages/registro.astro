@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const url = Astro.url;
+const redirigir = url.searchParams.get('redirigir') ?? '/dashboard';
+
+if (Astro.locals.user) {
+  return Astro.redirect(redirigir);
+}
+---
+
+<BaseLayout title="Registro cerrado — QuiénSabe">
+  <main class="auth-page">
+    <a href="/" class="auth-page__back">← Volver al inicio</a>
+
+    <article class="auth-card auth-card--info">
+      <header class="auth-card__header">
+        <div class="auth-card__icon auth-card__icon--muted">
+          <i class="ri-lock-2-line" aria-hidden="true"></i>
+        </div>
+        <h1 class="auth-card__title">El registro está cerrado durante la demo</h1>
+        <p class="auth-card__subtitle">
+          Estamos en una fase de prueba con usuarios pre-seleccionados.
+          Pronto abriremos el registro público.
+        </p>
+      </header>
+
+      <ul class="auth-options">
+        <li class="auth-options__item">
+          <i class="ri-user-smile-line auth-options__icon" aria-hidden="true"></i>
+          <span>
+            <b>Usa uno de los usuarios demo</b>:
+            <code>vecino@demo.cl</code>,
+            <code>prestador@demo.cl</code> o
+            <code>admin@demo.cl</code>
+            (contraseña: <code>Demo1234</code>).
+          </span>
+        </li>
+        <li class="auth-options__item">
+          <i class="ri-login-box-line auth-options__icon" aria-hidden="true"></i>
+          <span>
+            Inicia sesión desde la página
+            <a href={`/iniciar-sesion?redirigir=${encodeURIComponent(redirigir)}`}>Iniciar sesión</a>.
+          </span>
+        </li>
+        <li class="auth-options__item">
+          <i class="ri-mail-send-line auth-options__icon" aria-hidden="true"></i>
+          <span>
+            Solicita acceso anticipado escribiéndonos a
+            <a href="mailto:earlyaccess@quiensabe.cl">earlyaccess@quiensabe.cl</a>.
+          </span>
+        </li>
+      </ul>
+
+      <a
+        href={`/iniciar-sesion?redirigir=${encodeURIComponent(redirigir)}`}
+        class="btn btn--primary btn--block"
+      >
+        Iniciar sesión con un usuario demo
+      </a>
+
+      <p class="auth-card__alt">
+        ¿Ya tienes cuenta?
+        <a href={`/iniciar-sesion?redirigir=${encodeURIComponent(redirigir)}`}>Inicia sesión</a>.
+      </p>
+    </article>
+  </main>
+</BaseLayout>

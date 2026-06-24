@@ -1,0 +1,118 @@
+---
+// src/components/auth/AuthButtons.astro
+// Botones OAuth visual-only + Acceso Corporativo.
+// Reusado en modal de /, vista /iniciar-sesion, dashboard-admin.
+
+interface Props {
+  mode?: 'compact' | 'full';
+  redirigirAcceso?: string;
+}
+
+const { mode = 'full', redirigirAcceso = '/dashboard' } = Astro.props;
+---
+
+<div class={`auth-buttons auth-buttons--${mode}`} data-component="auth-buttons">
+  <button
+    type="button"
+    class="auth-buttons__btn auth-buttons__btn--google"
+    data-provider="google"
+    aria-disabled="true"
+    title="Próximamente — en esta demo solo email + contraseña"
+  >
+    <i class="ri-google-fill" aria-hidden="true"></i>
+    <span class="auth-buttons__label">Continuar con Google</span>
+  </button>
+
+  <button
+    type="button"
+    class="auth-buttons__btn auth-buttons__btn--facebook"
+    data-provider="facebook"
+    aria-disabled="true"
+    title="Próximamente — en esta demo solo email + contraseña"
+  >
+    <i class="ri-facebook-fill" aria-hidden="true"></i>
+    <span class="auth-buttons__label">Continuar con Facebook</span>
+  </button>
+
+  <a href={redirigirAcceso} class="auth-buttons__btn auth-buttons__btn--corporate">
+    <i class="ri-dashboard-3-line" aria-hidden="true"></i>
+    <span class="auth-buttons__label">Acceso Corporativo / Admin</span>
+  </a>
+</div>
+
+<script>
+  import { mostrarProximamente } from '../../lib/client/auth/login';
+  document.querySelectorAll('[data-component="auth-buttons"] [data-provider]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const provider = (btn as HTMLElement).getAttribute('data-provider') ?? '';
+      mostrarProximamente(provider);
+    });
+  });
+</script>
+
+<style>
+  .auth-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3, 0.75rem);
+  }
+
+  .auth-buttons--compact {
+    gap: var(--space-2, 0.5rem);
+  }
+
+  .auth-buttons__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3, 0.75rem);
+    padding: var(--space-3-5, 0.875rem);
+    border-radius: var(--radius-xl, 0.75rem);
+    font-weight: 700;
+    transition: background-color 200ms, opacity 200ms, transform 100ms;
+    text-decoration: none;
+    width: 100%;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+
+  .auth-buttons__btn--google {
+    background: white;
+    color: var(--color-gray-700, #374151);
+    border-color: var(--color-gray-300, #d1d5db);
+  }
+  .auth-buttons__btn--google:not([aria-disabled="true"]):hover {
+    background: var(--color-gray-50, #f9fafb);
+  }
+
+  .auth-buttons__btn--facebook {
+    background: var(--color-facebook, #1877F2);
+    color: white;
+  }
+  .auth-buttons__btn--facebook:not([aria-disabled="true"]):hover {
+    background: var(--color-facebook-dark, #166fe5);
+  }
+
+  .auth-buttons__btn--corporate {
+    background: var(--color-gray-800, #1f2937);
+    color: white;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  }
+  .auth-buttons__btn--corporate:hover {
+    background: var(--color-gray-900, #111827);
+  }
+
+  .auth-buttons__btn[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .auth-buttons__btn i {
+    font-size: var(--text-xl, 1.25rem);
+  }
+
+  .auth-buttons--compact .auth-buttons__btn {
+    padding: var(--space-2, 0.5rem);
+    font-size: var(--text-sm, 0.875rem);
+  }
+</style>
