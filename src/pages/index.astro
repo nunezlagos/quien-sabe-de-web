@@ -114,7 +114,9 @@ const isSearching = Boolean(q || communeId || availableNow);
   <script>
     import { initDynamicText } from '../lib/client/home/dynamic-text';
     import { initHomeInteractions } from '../lib/client/home/home-interactions';
+    import { initFavButtons } from '../lib/client/ui/favorites';
     initDynamicText();
     initHomeInteractions();
+    initFavButtons();
   </script>
 </BaseLayout>

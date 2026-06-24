@@ -10,3 +10,8 @@
 ## Stack
 
 Astro 5 + Tailwind 4 + Drizzle ORM + Cloudflare D1/KV/R2. Docker-first dev.
+
+## Architecture
+
+- **All JS/CSS must be in their own files under `src/lib/client/` or `src/styles/`**, never inline in Astro templates. Extract `<script>` and `<style>` blocks to dedicated files and import them.
+- **Components** in `src/components/`, **pages** in `src/pages/`, **client JS** in `src/lib/client/`, **validators** in `src/lib/validators/`, **services** in `src/lib/services/`.

@@ -89,6 +89,13 @@ function renderStars(r: number): string {
       <span class="text-lg font-extrabold text-gray-800">${precio}</span>
     </div>
     <div class="flex gap-2">
+      <button
+        data-fav-toggle={trade.slug}
+        class="w-10 h-10 rounded-full bg-white border border-gray-200 text-gray-400 hover:text-red-500 hover:border-red-300 flex items-center justify-center transition shadow-sm js-fav-btn"
+        title="Guardar"
+      >
+        <i class="ri-heart-line text-lg"></i>
+      </button>
       <a
         href={`/p/${trade.slug}`}
         class="w-10 h-10 rounded-full bg-white border border-gray-200 text-gray-500 hover:text-primary hover:border-primary flex items-center justify-center transition shadow-sm"

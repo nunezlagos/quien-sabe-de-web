@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getTradesService } from '../../lib/services/trades.service';
 import { getDb } from '../../database/client';
-import { users, reviews, trades as tradesTable } from '../../database/schema';
+import { users, reviews, trades as tradesTable, portfolioImages } from '../../database/schema';
 import { eq, desc } from 'drizzle-orm';
 
 const slug = Astro.params.slug;
@@ -32,6 +32,14 @@ const estrellas = [1, 2, 3, 4, 5];
 // sólo para oficios legacy creados antes de la migración 0005.
 const whatsapp = trade.whatsapp ?? '56912345678';
 const email = provider?.email ?? '';
+
+// Portfolio images
+const portfolio = await db
+  .select({ id: portfolioImages.id, imageUrl: portfolioImages.imageUrl, caption: portfolioImages.caption })
+  .from(portfolioImages)
+  .where(eq(portfolioImages.tradeId, trade.id))
+  .orderBy(desc(portfolioImages.createdAt))
+  .all();
 
 // Other trades by same provider
 const otherTrades = provider
@@ -155,13 +163,14 @@ const otherTrades = provider
           {isLoggedIn ? (
             <button
               type="button"
-              class="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl font-bold transition shadow-sm"
+              data-fav-toggle={trade.slug}
+              class="js-fav-btn flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl font-bold transition shadow-sm"
             >
               <i class="ri-heart-fill text-xl"></i> Guardar
             </button>
           ) : (
             <a
-              href="/iniciar-sesion?redirigir=/p/{trade.slug}"
+              href={"/iniciar-sesion?redirigir=/p/" + trade.slug}
               class="flex items-center justify-center gap-2 bg-white border-2 border-orange-500 text-orange-500 hover:bg-orange-50 px-6 py-3 rounded-xl font-bold transition"
             >
               <i class="ri-user-add-line text-xl"></i> Inicia sesión para guardar
@@ -170,6 +179,19 @@ const otherTrades = provider
         </div>
       </div>
     </article>
+
+    {portfolio.length > 0 && (
+    <section class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 mb-6">
+      <h2 class="text-xl font-extrabold text-gray-800 mb-4">Galería de trabajos</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+        {portfolio.map((img) => (
+          <a href={img.imageUrl} target="_blank" class="aspect-square rounded-xl overflow-hidden bg-gray-100 hover:opacity-90 transition">
+            <img src={img.imageUrl} alt={img.caption ?? ''} class="w-full h-full object-cover" loading="lazy" />
+          </a>
+        ))}
+      </div>
+    </section>
+    )}
 
     <!-- Reviews -->
     <section class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
@@ -239,7 +261,7 @@ const otherTrades = provider
                   ))}
                 </div>
                 <span class="font-bold text-gray-800 text-sm">{r.reviewerName}</span>
-                <span class="text-[10px] text-gray-400 ml-auto">{r.createdAt.toLocaleDateString('es-CL')}</span>
+                <span class="text-[10px] text-gray-400 ml-auto">{r.createdAt?.toLocaleDateString?.('es-CL') ?? ''}</span>
               </div>
               <p class="text-gray-600 text-sm">{r.body}</p>
               {r.response && (
@@ -247,7 +269,7 @@ const otherTrades = provider
                   <p class="text-xs font-bold text-orange-700 mb-1"><i class="ri-reply-line"></i> Respuesta del prestador</p>
                   <p class="text-gray-700 text-sm">{r.response}</p>
                   {r.respondedAt && (
-                    <p class="text-[10px] text-gray-400 mt-1">{r.respondedAt.toLocaleDateString('es-CL')}</p>
+                    <p class="text-[10px] text-gray-400 mt-1">{r.respondedAt?.toLocaleDateString?.('es-CL') ?? ''}</p>
                   )}
                 </div>
               )}
@@ -289,7 +311,9 @@ const otherTrades = provider
   </main>
 <script>
   import { initContactTracking } from '../../lib/client/tracking/contact-tracker';
+  import { initFavButtons } from '../../lib/client/ui/favorites';
   initContactTracking();
+  initFavButtons();
 </script>
 
 </BaseLayout>

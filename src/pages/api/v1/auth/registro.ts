@@ -5,6 +5,10 @@ import { CorreoYaRegistradoError, crearUsuario, usuarioPublico } from '../../../
 import { crearSesion } from '../../../../lib/services/auth/sesion';
 import { establecerCookieSesion } from '../../../../lib/utils/cookies';
 import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
+import { getDb } from '../../../../lib/db';
+import { users } from '../../../../lib/schema';
+import { eq } from 'drizzle-orm';
+import { sendMail, buildVerificationEmail } from '../../../../lib/services/email/mailpit';
 import crypto from 'crypto';
 
 export const prerender = false;
@@ -36,6 +40,14 @@ export const POST: APIRoute = async (contexto) => {
 			correo: parsed.data.correo,
 			contrasenaHash: contrasenaHasheada,
 		});
+
+		const verificationToken = crypto.randomBytes(32).toString('hex');
+		const db = await getDb();
+		await db.update(users).set({ emailVerificationToken: verificationToken }).where(eq(users.id, currentUser.id)).run();
+
+		const siteUrl = contexto.locals.runtime.env.PUBLIC_SITE_URL || 'http://127.0.0.1:4323';
+		sendMail(buildVerificationEmail(currentUser.email, verificationToken, siteUrl));
+
 		const sesion = await crearSesion(contexto.locals.runtime.env, currentUser);
 		establecerCookieSesion(
 			contexto.cookies,

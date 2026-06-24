@@ -38,7 +38,13 @@ const currentPath = Astro.url.pathname;
             <div class="hidden md:flex items-center gap-3">
                 {isLoggedIn && currentUser ? (
                     <>
-                        <a href="/dashboard" class={`px-4 py-2 rounded-full font-bold text-sm transition ${currentPath.startsWith('/dashboard') ? 'bg-orange-100 text-orange-700' : 'text-gray-600 hover:bg-gray-100'}`}>
+                        <form method="POST" action="/api/v1/account/role" class="inline">
+                          <input type="hidden" name="role" value={currentUser.role === 'provider' ? 'user' : 'provider'} />
+                          <button type="submit" class="px-3 py-1.5 rounded-full font-bold text-xs transition bg-gray-100 text-gray-600 hover:bg-gray-200" title="Cambiar a {currentUser.role === 'provider' ? 'vecino' : 'prestador'}">
+                            <i class="ri-swap-line mr-1"></i> {currentUser.role === 'provider' ? 'Ver como vecino' : 'Ver como prestador'}
+                          </button>
+                        </form>
+                        <a href={currentUser.role === 'provider' ? '/dashboard-prestador' : '/dashboard'} class={`px-4 py-2 rounded-full font-bold text-sm transition ${currentPath.startsWith('/dashboard') ? 'bg-orange-100 text-orange-700' : 'text-gray-600 hover:bg-gray-100'}`}>
                             <i class="ri-user-line mr-1"></i> Hola, {currentUser.name.split(' ')[0]}
                         </a>
                         <form method="POST" action="/api/v1/auth/cerrar-sesion" class="contents js-logout-form" id="form-cerrar-sesion">

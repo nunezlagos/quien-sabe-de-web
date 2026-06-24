@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getDb } from '../database/client';
-import { trades, communes, reviews, contactEvents } from '../database/schema';
+import { trades, communes, reviews, contactEvents, favorites, users } from '../database/schema';
 import { eq, desc, avg, count, inArray } from 'drizzle-orm';
 
 const currentUser = Astro.locals.user;
@@ -56,6 +56,22 @@ const contactHistory = myTradeIds.length > 0
       .limit(20)
       .all()
   : [];
+
+const myFavorites = await db
+  .select({
+    id: trades.id,
+    name: trades.name,
+    slug: trades.slug,
+    symbol: trades.symbol,
+    basePriceClp: trades.basePriceClp,
+    userName: users.name,
+  })
+  .from(favorites)
+  .innerJoin(trades, eq(favorites.tradeId, trades.id))
+  .innerJoin(users, eq(trades.userId, users.id))
+  .where(eq(favorites.userId, currentUser.id))
+  .orderBy(desc(favorites.createdAt))
+  .all();
 ---
 
 <BaseLayout title={`Mi panel — ${currentUser.name}`}>
@@ -195,17 +211,33 @@ const contactHistory = myTradeIds.length > 0
           </div>
         )}
 
-        {/* Placeholders: HU-11.2 proveerá favoritos + recientes cuando existan los endpoints. */}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div class="lg:col-span-2 bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
             <h3 class="font-bold text-gray-800 text-lg mb-4 flex items-center gap-2">
               <i class="ri-heart-line text-red-500"></i> Vecinos Guardados
             </h3>
-            <div class="text-center py-8 text-gray-400">
-              <i class="ri-heart-line text-4xl mb-2 block opacity-30"></i>
-              <p class="text-sm font-medium">Aún no has guardado vecinos.</p>
-              <p class="text-xs mt-1">Pronto podrás marcar profesionales favoritos.</p>
-            </div>
+            {myFavorites.length > 0 ? (
+              <div class="space-y-3">
+                {myFavorites.map((fav) => (
+                  <a href={`/p/${fav.slug}`} class="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl border border-gray-100 hover:border-orange-500/50 transition">
+                    <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 font-bold text-sm flex-shrink-0">
+                      {fav.symbol?.slice(0, 2).toUpperCase() ?? 'OF'}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <h4 class="font-bold text-gray-800 text-sm truncate">{fav.name}</h4>
+                      <p class="text-xs text-gray-500">{fav.userName} · ${(fav.basePriceClp ?? 0).toLocaleString('es-CL')}</p>
+                    </div>
+                    <i class="ri-arrow-right-s-line text-gray-400 text-xl"></i>
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <div class="text-center py-8 text-gray-400">
+                <i class="ri-heart-line text-4xl mb-2 block opacity-30"></i>
+                <p class="text-sm font-medium">Aún no has guardado vecinos.</p>
+                <p class="text-xs mt-1">Haz clic en el corazón en cualquier tarjeta o perfil.</p>
+              </div>
+            )}
           </div>
 
           <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">

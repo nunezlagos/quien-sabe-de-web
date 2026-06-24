@@ -96,4 +96,30 @@ export const favorites = sqliteTable('favorites', {
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
 
+export const portfolioImages = sqliteTable('portfolio_images', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  tradeId: integer('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
+  url: text('url').notNull(),
+  caption: text('caption'),
+  sortOrder: integer('sort_order').notNull().default(0),
+  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});
+
+export const adminAuditLog = sqliteTable('admin_audit_log', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  adminId: integer('admin_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  action: text('action').notNull(),
+  entityType: text('entity_type'),
+  entityId: integer('entity_id'),
+  details: text('details'),
+  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});
+
+export const appSettings = sqliteTable('app_settings', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  key: text('key').notNull().unique(),
+  value: text('value').notNull(),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});
+
 export type ContactEvent = typeof contactEvents.$inferSelect;
