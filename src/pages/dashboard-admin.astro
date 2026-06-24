@@ -1,7 +1,7 @@
 ---
 import { getDb } from '../database/client';
 import { users, trades, communes } from '../database/schema';
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, count } from 'drizzle-orm';
 
 const SECCIONES_VALIDAS = [
 	'dashboard',
@@ -115,7 +115,7 @@ const ROLES: Record<string, string> = {
 
 const NAV: Array<{ id: SeccionId; href: string; label: string; icon: string; badge?: string }> = [
 	{ id: 'dashboard', href: '/dashboard-admin', label: 'Dashboard', icon: 'ri-dashboard-3-line' },
-	{ id: 'users', href: '/dashboard-admin?section=currentUsers', label: 'Usuarios', icon: 'ri-user-settings-line' },
+	{ id: 'users', href: '/dashboard-admin?section=users', label: 'Usuarios', icon: 'ri-user-settings-line' },
 	{ id: 'oficios', href: '/dashboard-admin?section=oficios', label: 'Oficios', icon: 'ri-briefcase-4-line' },
 	{ id: 'tickets', href: '/dashboard-admin?section=tickets', label: 'Tickets', icon: 'ri-customer-service-2-line', badge: '12' },
 	{ id: 'finanzas', href: '/dashboard-admin?section=finanzas', label: 'Finanzas', icon: 'ri-money-dollar-circle-line' },
@@ -124,10 +124,13 @@ const NAV: Array<{ id: SeccionId; href: string; label: string; icon: string; bad
 	{ id: 'auditoria', href: '/dashboard-admin?section=auditoria', label: 'Auditoría', icon: 'ri-file-shield-2-line' },
 ];
 
-const kpiUsuariosTotales = 2543;
-const kpiOficiosActivos = 856;
+const totalUsers = await db.select({ count: count() }).from(users).get();
+const totalTrades = await db.select({ count: count() }).from(trades).get();
+const verifiedTrades = await db.select({ count: count() }).from(trades).where(eq(trades.verified, true as unknown as number)).get();
+const kpiUsuariosTotales = totalUsers?.count ?? 0;
+const kpiOficiosActivos = totalTrades?.count ?? 0;
 const kpiValoracionMedia = 4.7;
-const kpiSolicitudes = 12;
+const kpiSolicitudes = verifiedTrades?.count ?? 0;
 
 const chartActividad = [40, 65, 45, 80, 95, 60, 75];
 const diasSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
@@ -352,11 +355,8 @@ const auditPlaceholder = [
 													</span>
 												</td>
 												<td class="admin-table__actions">
-													<button type="button" class="admin-icon-btn admin-icon-btn--blue" aria-label="Editar usuario" disabled>
-														<i class="ri-edit-line"></i>
-													</button>
-													<button type="button" class="admin-icon-btn admin-icon-btn--red" aria-label="Eliminar usuario" disabled>
-														<i class="ri-delete-bin-line"></i>
+													<button type="button" class="admin-icon-btn admin-icon-btn--red js-ban-user" data-user-id={u.id} data-user-name={u.name} data-current-status={u.status}>
+														{u.status === 'active' ? <i class="ri-forbid-line" title="Banear"></i> : <i class="ri-check-line" title="Desbanear"></i>}
 													</button>
 												</td>
 											</tr>
@@ -674,6 +674,27 @@ const auditPlaceholder = [
 			)}
 		</main>
 	</div>
+<script>
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.js-ban-user');
+    if (!btn) return;
+    const userId = btn.dataset.userId;
+    const userName = btn.dataset.userName;
+    const currentStatus = btn.dataset.currentStatus;
+    const action = currentStatus === 'active' ? 'ban' : 'unban';
+    const msg = action === 'ban'
+      ? `¿Banear a ${userName}? No podrá iniciar sesión.`
+      : `¿Desbanear a ${userName}?`;
+    if (!confirm(msg)) return;
+    const res = await fetch('/api/v1/admin/users', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: Number(userId), action }),
+    });
+    if (res.ok) location.reload();
+    else alert('Error al actualizar usuario');
+  });
+</script>
 </body>
 </html>
 

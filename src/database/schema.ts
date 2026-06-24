@@ -11,6 +11,9 @@ export const users = sqliteTable('users', {
   consentEmailProduct: integer('consent_email_product', { mode: 'boolean' }),
   consentAnalytics: integer('consent_analytics', { mode: 'boolean' }),
   consentProfilePublic: integer('consent_profile_public', { mode: 'boolean' }),
+  emailVerified: integer('email_verified', { mode: 'boolean' }).notNull().default(false),
+  emailVerificationToken: text('email_verification_token'),
+  sessionToken: text('session_token'),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
 
@@ -63,6 +66,8 @@ export const reviews = sqliteTable('reviews', {
   reviewerName: text('reviewer_name').notNull(),
   rating: integer('rating').notNull(),
   body: text('body').notNull(),
+  response: text('response'),
+  respondedAt: integer('responded_at', { mode: 'timestamp' }),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
 

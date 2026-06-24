@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getDb } from '../database/client';
 import { trades, reviews, contactEvents } from '../database/schema';
-import { eq, desc, avg, count, gt, and, inArray } from 'drizzle-orm';
+import { eq, desc, avg, count, gt, and, inArray, isNotNull } from 'drizzle-orm';
 
 const user = Astro.locals.user;
 if (!user) {
@@ -57,6 +57,36 @@ const contactEventsCount = myTradeIds.length > 0
   : { count: 0 };
 const contactos30d = contactEventsCount?.count ?? 0;
 
+// Reviews with response info for provider dashboard
+const myReviews = myTradeIds.length > 0 ? await db
+  .select({
+    id: reviews.id,
+    tradeId: reviews.tradeId,
+    reviewerName: reviews.reviewerName,
+    rating: reviews.rating,
+    body: reviews.body,
+    response: reviews.response,
+    respondedAt: reviews.respondedAt,
+    createdAt: reviews.createdAt,
+    tradeName: trades.name,
+    tradeSymbol: trades.symbol,
+  })
+  .from(reviews)
+  .innerJoin(trades, eq(trades.id, reviews.tradeId))
+  .where(inArray(reviews.tradeId, myTradeIds))
+  .orderBy(desc(reviews.createdAt))
+  .all() : [];
+
+const reviewsConRespuesta = myReviews.filter((r) => r.response);
+const reviewsSinRespuesta = myReviews.filter((r) => !r.response);
+
+// Rating breakdown
+const ratingBreakdown = [5, 4, 3, 2, 1].map((n) => ({
+  rating: n,
+  count: myReviews.filter((r) => r.rating === n).length,
+}));
+
+const estrellas = [1, 2, 3, 4, 5];
 const initials = user.name.slice(0, 1).toUpperCase();
 const perfilActualizado = Astro.url.searchParams.get('perfil') === 'actualizado';
 const algunVerificado = myTrades.some((t) => Boolean(t.verified));
@@ -120,12 +150,34 @@ const showVerificationBanner = totalOficios > 0 && !algunVerificado;
 
       <!-- Main Panel -->
       <div class="md:col-span-3 space-y-6">
-        <div class="flex justify-end">
+        <div class="flex justify-end gap-2">
           {myTrades.length > 0 && (
-            <a href={`/p/${myTrades[0].slug}`} class="bg-white border border-gray-200 text-gray-600 px-4 py-2 rounded-xl text-sm font-bold hover:text-orange-500 hover:border-orange-500 transition flex items-center gap-2 shadow-sm">
-              <i class="ri-eye-line"></i> Previsualizar Perfil Público
-            </a>
+            <>
+              <button id="btn-preview-profile" data-slug={myTrades[0].slug} class="bg-white border border-gray-200 text-gray-600 px-4 py-2 rounded-xl text-sm font-bold hover:text-orange-500 hover:border-orange-500 transition flex items-center gap-2 shadow-sm">
+                <i class="ri-eye-line"></i> Previsualizar Perfil
+              </button>
+              <a href={`/p/${myTrades[0].slug}`} class="bg-white border border-gray-200 text-gray-600 px-4 py-2 rounded-xl text-sm font-bold hover:text-orange-500 hover:border-orange-500 transition flex items-center gap-2 shadow-sm">
+                <i class="ri-external-link-line"></i> Ver Público
+              </a>
+            </>
           )}
+        </div>
+
+        <!-- Preview Modal -->
+        <div id="preview-modal" class="fixed inset-0 z-50 hidden bg-black/50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
+          <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-xl">
+            <div class="sticky top-0 bg-white border-b border-gray-100 p-4 flex justify-between items-center rounded-t-3xl">
+              <h3 class="font-bold text-gray-800">Vista previa del perfil público</h3>
+              <button id="close-preview" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition text-gray-500">
+                <i class="ri-close-line text-xl"></i>
+              </button>
+            </div>
+            <div id="preview-content" class="p-6">
+              <div class="flex items-center justify-center py-12">
+                <div class="animate-spin w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full"></div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Quick Stats -->
@@ -174,6 +226,25 @@ const showVerificationBanner = totalOficios > 0 && !algunVerificado;
         <!-- Edit Profile Section -->
         <section id="editar-perfil" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
           <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2"><i class="ri-user-edit-line text-orange-500"></i> Editar Perfil</h3>
+
+          <!-- Avatar upload -->
+          <form class="mb-6 p-4 bg-gray-50 rounded-2xl" action="/api/v1/providers/me/avatar" method="POST" enctype="multipart/form-data" id="form-avatar">
+            <div class="flex items-center gap-4">
+              <div class="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 text-2xl font-bold flex-shrink-0 overflow-hidden" id="avatar-preview">
+                {user.avatarUrl ? (
+                  <img src={user.avatarUrl} alt="Avatar" class="w-full h-full object-cover" />
+                ) : (
+                  initials
+                )}
+              </div>
+              <div class="flex-1">
+                <label class="block text-xs font-bold text-gray-700 mb-1">Foto de perfil</label>
+                <input type="file" name="avatar" accept="image/*" class="block w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100 transition" />
+                <p class="text-[10px] text-gray-400 mt-1">PNG, JPG. Máx 2MB.</p>
+              </div>
+              <button type="submit" class="text-xs bg-orange-500 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-orange-600 transition self-end">Subir</button>
+            </div>
+          </form>
 
           <form class="space-y-4" action="/api/v1/providers/me" method="POST" id="form-edit-profile">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -307,7 +378,61 @@ const showVerificationBanner = totalOficios > 0 && !algunVerificado;
           {totalReviews === 0 ? (
             <p class="text-sm text-gray-500 text-center py-4">Aún no tienes reseñas.</p>
           ) : (
-            <p class="text-sm text-gray-700">Tienes <b>{totalReviews}</b> reseñas en total con promedio <b>{ratingGlobal.toFixed(1)}</b>.</p>
+            <>
+              <div class="flex items-center gap-4 mb-6 p-4 bg-gray-50 rounded-2xl">
+                <div class="text-center">
+                  <span class="block text-3xl font-extrabold text-gray-800">{ratingGlobal.toFixed(1)}</span>
+                  <div class="flex justify-center text-yellow-400 text-sm">{estrellas.map((n) => <i class={n <= Math.round(ratingGlobal) ? 'ri-star-fill' : 'ri-star-line'}></i>)}</div>
+                  <span class="text-xs text-gray-500">{totalReviews} reseña{totalReviews !== 1 ? 's' : ''}</span>
+                </div>
+                <div class="flex-1 space-y-1">
+                  {ratingBreakdown.map((rb) => (
+                    <div class="flex items-center gap-2 text-xs">
+                      <span class="w-8 text-right text-gray-600 font-bold">{rb.rating}★</span>
+                      <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="h-full bg-yellow-400 rounded-full" style={`width: ${totalReviews > 0 ? (rb.count / totalReviews) * 100 : 0}%`}></div>
+                      </div>
+                      <span class="w-6 text-gray-500">{rb.count}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div class="flex gap-2 mb-4">
+                <button type="button" class="text-xs px-3 py-1.5 rounded-lg font-bold bg-orange-500 text-white" data-filter-reviews="all">Todas</button>
+                <button type="button" class="text-xs px-3 py-1.5 rounded-lg font-bold bg-gray-100 text-gray-600 hover:bg-gray-200 transition" data-filter-reviews="pending">Sin responder</button>
+                <button type="button" class="text-xs px-3 py-1.5 rounded-lg font-bold bg-gray-100 text-gray-600 hover:bg-gray-200 transition" data-filter-reviews="responded">Respondidas</button>
+              </div>
+
+              <div class="space-y-3" id="reviews-list">
+                {myReviews.map((r) => (
+                  <div class="border border-gray-100 rounded-2xl p-4" data-review-id={r.id} data-review-status={r.response ? 'responded' : 'pending'}>
+                    <div class="flex items-center gap-2 mb-2">
+                      <div class="flex text-yellow-400 text-sm">
+                        {[1,2,3,4,5].map((n) => <i class={n <= r.rating ? 'ri-star-fill' : 'ri-star-line'}></i>)}
+                      </div>
+                      <span class="font-bold text-gray-800 text-sm">{r.reviewerName}</span>
+                      <span class="text-[10px] text-gray-400 ml-auto">{r.createdAt.toLocaleDateString('es-CL')}</span>
+                    </div>
+                    <p class="text-xs text-orange-600 font-bold mb-1">En {r.tradeName} ({r.tradeSymbol})</p>
+                    <p class="text-gray-600 text-sm">{r.body}</p>
+
+                    {r.response ? (
+                      <div class="mt-3 ml-4 pl-3 border-l-2 border-green-300 bg-green-50/50 rounded-r-lg p-3">
+                        <p class="text-xs font-bold text-green-700 mb-1"><i class="ri-reply-line"></i> Tu respuesta</p>
+                        <p class="text-gray-700 text-sm">{r.response}</p>
+                        {r.respondedAt && <p class="text-[10px] text-gray-400 mt-1">{r.respondedAt.toLocaleDateString('es-CL')}</p>}
+                      </div>
+                    ) : (
+                      <form class="mt-3 ml-4 js-response-form" data-review-id={r.id}>
+                        <textarea name="response" rows="2" placeholder="Responde a esta reseña..." class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition" required></textarea>
+                        <button type="submit" class="mt-1 text-xs bg-orange-500 text-white px-3 py-1 rounded-lg font-bold hover:bg-orange-600 transition">Responder</button>
+                      </form>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </>
           )}
         </section>
 
@@ -326,5 +451,75 @@ const showVerificationBanner = totalOficios > 0 && !algunVerificado;
   <script>
     import { initProviderDashboard } from '../lib/client/dashboard/provider';
     initProviderDashboard();
+
+    // Preview modal
+    const btnPreview = document.getElementById('btn-preview-profile');
+    const modal = document.getElementById('preview-modal');
+    const closeBtn = document.getElementById('close-preview');
+    const previewContent = document.getElementById('preview-content');
+
+    if (btnPreview && modal) {
+      btnPreview.addEventListener('click', async () => {
+        modal.classList.remove('hidden');
+        previewContent.innerHTML = '<div class="flex items-center justify-center py-12"><div class="animate-spin w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full"></div></div>';
+        const slug = btnPreview.dataset.slug;
+        try {
+          const res = await fetch(`/p/${slug}?partial=1`);
+          const html = await res.text();
+          previewContent.innerHTML = html;
+        } catch {
+          previewContent.innerHTML = '<p class="text-center text-red-500 py-8">Error al cargar la vista previa.</p>';
+        }
+      });
+    }
+    if (closeBtn && modal) {
+      closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+      modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.add('hidden'); });
+    }
+
+    // Review filters
+    document.querySelectorAll('[data-filter-reviews]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-filter-reviews]').forEach((b) => {
+          b.className = 'text-xs px-3 py-1.5 rounded-lg font-bold bg-gray-100 text-gray-600 hover:bg-gray-200 transition';
+        });
+        btn.className = 'text-xs px-3 py-1.5 rounded-lg font-bold bg-orange-500 text-white';
+        const filter = btn.dataset.filterReviews;
+        document.querySelectorAll('[data-review-id]').forEach((card) => {
+          if (filter === 'all') card.style.display = '';
+          else card.style.display = card.dataset.reviewStatus === filter ? '' : 'none';
+        });
+      });
+    });
+
+    // Review response forms
+    document.querySelectorAll('.js-response-form').forEach((form) => {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const reviewId = form.dataset.reviewId;
+        const response = form.querySelector('textarea[name="response"]').value.trim();
+        if (!response) return;
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Enviando...';
+        try {
+          const res = await fetch(`/api/v1/reviews/${reviewId}/response`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ response }),
+          });
+          if (res.ok) {
+            location.reload();
+          } else {
+            const data = await res.json();
+            alert(data.error || 'Error al enviar respuesta');
+          }
+        } catch {
+          alert('Error de conexión');
+        }
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Responder';
+      });
+    });
   </script>
 </BaseLayout>
