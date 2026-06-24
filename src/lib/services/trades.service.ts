@@ -34,6 +34,7 @@ export class TradesService {
     slug: string;
     description?: string;
     basePriceClp?: number;
+    whatsapp?: string;
     communeId?: number;
     category?: 'hogar' | 'tecnologia' | 'automotriz' | 'educacion' | 'salud_belleza' | 'otros';
   }) {
@@ -44,6 +45,7 @@ export class TradesService {
       slug: data.slug,
       description: data.description,
       basePriceClp: data.basePriceClp,
+      whatsapp: data.whatsapp,
       communeId: data.communeId,
       category: data.category || 'hogar',
       verified: false,

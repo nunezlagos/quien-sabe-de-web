@@ -10,8 +10,21 @@ export const prerender = false;
 
 export const GET: APIRoute = searchTrades;
 
+const OFICIOS_CONOCIDOS = [
+  'gasfiter',
+  'electricista',
+  'jardinero',
+  'pintor',
+  'costurera',
+  'programador',
+  'maestro',
+  'otro',
+] as const;
+
 const crearTradeSchema = z.object({
   name: z.string().trim().min(3, 'El nombre debe tener al menos 3 caracteres').max(120),
+  symbol: z.enum(OFICIOS_CONOCIDOS).optional(),
+  symbol_custom: z.string().trim().max(30).optional(),
   description: z.string().trim().min(20, 'La descripción debe tener al menos 20 caracteres').max(1000),
   whatsapp: z
     .string()
@@ -42,14 +55,20 @@ export const POST: APIRoute = async (ctx) => {
     });
   }
 
-  const { name, description, whatsapp, base_price_clp } = parsed.data;
+  const { name, description, whatsapp, base_price_clp, symbol, symbol_custom } = parsed.data;
 
-  // symbol: derivamos del nombre para MVP (primer slug-word, máx 30 chars).
-  // El wizard no pide categoría explícita — se podrá refinar más adelante.
-  const primerSlug = slugify(name).split('-').filter(Boolean)[0] ?? 'servicio';
-  const symbol = primerSlug.slice(0, 30) || 'servicio';
+  // symbol: prioridad = symbol_custom (si "otro") > symbol (select) > derivado del name.
+  let symbolFinal: string;
+  if (symbol === 'otro' && symbol_custom && symbol_custom.trim().length > 0) {
+    symbolFinal = slugify(symbol_custom).slice(0, 30) || 'servicio';
+  } else if (symbol) {
+    symbolFinal = symbol;
+  } else {
+    const primerSlug = slugify(name).split('-').filter(Boolean)[0] ?? 'servicio';
+    symbolFinal = primerSlug.slice(0, 30) || 'servicio';
+  }
 
-  const baseSlug = slugify(`${symbol}-${name}`);
+  const baseSlug = slugify(`${symbolFinal}-${name}`);
   const db = getDb(ctx.locals);
 
   let slugFinal = baseSlug;
@@ -68,7 +87,7 @@ export const POST: APIRoute = async (ctx) => {
     .insert(trades)
     .values({
       userId: usuario.id,
-      symbol,
+      symbol: symbolFinal,
       name,
       slug: slugFinal,
       description,

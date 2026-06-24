@@ -1,37 +1,43 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getDb } from '../database/client';
-import { communes } from '../database/schema';
-import { asc } from 'drizzle-orm';
 
 const usuario = Astro.locals.user;
 if (!usuario) {
   return Astro.redirect('/iniciar-sesion?redirigir=/crear-oficio');
 }
 
-const db = getDb(Astro.locals);
-const communesList = await db
-  .select()
-  .from(communes)
-  .orderBy(asc(communes.name))
-  .all();
-
 const error = Astro.url.searchParams.get('error');
+
+const OFICIOS = [
+  { value: '', label: 'Selecciona tu oficio…' },
+  { value: 'gasfiter', label: 'Gasfiter' },
+  { value: 'electricista', label: 'Electricista' },
+  { value: 'jardinero', label: 'Jardinero' },
+  { value: 'maestro', label: 'Maestro' },
+  { value: 'costurera', label: 'Costurera' },
+  { value: 'otro', label: 'Otro' },
+];
 ---
 
-<BaseLayout title="Crear oficio — QuiénSabe">
-  <main class="container mx-auto px-4 py-8 max-w-2xl">
-    <a href="/dashboard" class="text-sm text-gray-500 hover:text-gray-700 mb-4 inline-block">
-      ← Volver a mi panel
-    </a>
+<BaseLayout title="Crear Nuevo Oficio — QuiénSabe">
+  <nav class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <a href="/" class="text-xl font-bold text-gray-800 flex items-center gap-2">
+        <i class="ri-community-line text-orange-500"></i>
+        Quién<span class="text-orange-500">Sabe</span>
+      </a>
+      <a href="/dashboard" class="text-sm text-gray-500 hover:text-orange-500 font-bold">Cancelar</a>
+    </div>
+  </nav>
 
-    <header class="mb-8">
-      <h1 class="text-3xl font-extrabold text-gray-800 mb-2">Publica tu oficio</h1>
-      <p class="text-gray-600">
-        Cuenta brevemente qué haces, en qué comuna trabajas y cuánto cobras.
-        Los vecinos te van a encontrar cuando busquen tu especialidad.
-      </p>
-    </header>
+  <main class="container mx-auto px-4 py-8 max-w-2xl">
+    <div class="text-center mb-8">
+      <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3 text-orange-500 text-2xl">
+        <i class="ri-briefcase-line"></i>
+      </div>
+      <h1 class="text-2xl font-extrabold text-gray-800">Ofrece tus servicios</h1>
+      <p class="text-gray-500 text-sm">Completa tu perfil profesional.</p>
+    </div>
 
     {error && (
       <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 text-sm">
@@ -39,122 +45,76 @@ const error = Astro.url.searchParams.get('error');
       </div>
     )}
 
-    <form action="/api/v1/trades" method="POST" class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 space-y-6">
-      <div>
-        <label for="name" class="block text-sm font-bold text-gray-700 mb-2">
-          Nombre del servicio <span class="text-red-500">*</span>
-        </label>
-        <input
-          id="name"
-          name="name"
-          type="text"
-          required
-          maxlength="120"
-          placeholder="ej. Gasfiter a domicilio"
-          class="w-full p-3 rounded-xl border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200"
-        />
-        <p class="text-xs text-gray-500 mt-1">Sé específico: en lugar de "Servicios", usa "Reparación de calefones".</p>
-      </div>
+    <form action="/api/v1/trades" method="POST" class="space-y-6" id="form-crear-oficio">
+      <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <h3 class="font-bold text-gray-800 text-base mb-4 border-b border-gray-100 pb-2">1. Información Básica</h3>
 
-      <div>
-        <label for="symbol" class="block text-sm font-bold text-gray-700 mb-2">
-          Categoría <span class="text-red-500">*</span>
-        </label>
-        <select
-          id="symbol"
-          name="symbol"
-          required
-          class="w-full p-3 rounded-xl border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 bg-white"
-        >
-          <option value="">Selecciona...</option>
-          <option value="gasfiter">Gasfiter</option>
-          <option value="electricista">Electricista</option>
-          <option value="jardinero">Jardinero</option>
-          <option value="pintor">Pintor</option>
-          <option value="costurera">Costurera</option>
-          <option value="programador">Programador</option>
-          <option value="cerrajero">Cerrajero</option>
-          <option value="mecanico">Mecánico</option>
-          <option value="limpieza">Limpieza</option>
-          <option value="mudanza">Mudanza</option>
-          <option value="otro">Otro</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="description" class="block text-sm font-bold text-gray-700 mb-2">
-          Descripción <span class="text-red-500">*</span>
-        </label>
-        <textarea
-          id="description"
-          name="description"
-          required
-          rows="5"
-          maxlength="1000"
-          placeholder="Cuenta brevemente qué ofreces, tu experiencia, y por qué te elegirían a ti."
-          class="w-full p-3 rounded-xl border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 resize-none"
-        ></textarea>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label for="commune_id" class="block text-sm font-bold text-gray-700 mb-2">
-            Comuna principal <span class="text-red-500">*</span>
-          </label>
-          <select
-            id="commune_id"
-            name="commune_id"
-            required
-            class="w-full p-3 rounded-xl border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 bg-white"
-          >
-            <option value="">Selecciona...</option>
-            {communesList.map((c) => (
-              <option value={c.id}>{c.name}</option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label for="base_price_clp" class="block text-sm font-bold text-gray-700 mb-2">
-            Precio base (CLP) <span class="text-red-500">*</span>
-          </label>
-          <div class="relative">
-            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold">$</span>
-            <input
-              id="base_price_clp"
-              name="base_price_clp"
-              type="number"
-              required
-              min="1000"
-              max="9999999"
-              step="1000"
-              placeholder="15000"
-              class="w-full pl-8 pr-3 py-3 rounded-xl border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200"
-            />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="name" class="block text-xs font-bold text-gray-700 mb-1">Nombre Visible</label>
+            <input id="name" name="name" type="text" required minlength="3" maxlength="120" placeholder="Ej: Juan Pérez" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition">
           </div>
-          <p class="text-xs text-gray-500 mt-1">Por visita / consulta inicial.</p>
+          <div>
+            <label for="symbol" class="block text-xs font-bold text-gray-700 mb-1">Oficio</label>
+            <select id="symbol" name="symbol" required class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition js-oficio-select">
+              {OFICIOS.map((o) => (
+                <option value={o.value}>{o.label}</option>
+              ))}
+            </select>
+          </div>
+          <div class="md:col-span-2" data-oficio-otro hidden>
+            <label for="symbol_custom" class="block text-xs font-bold text-gray-700 mb-1">Especifica tu oficio</label>
+            <input id="symbol_custom" name="symbol_custom" type="text" maxlength="30" placeholder="Ej: yesero, tapicero, soldador…" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition">
+          </div>
+          <div class="md:col-span-2">
+            <label for="description" class="block text-xs font-bold text-gray-700 mb-1">Descripción Corta (Bio)</label>
+            <textarea id="description" name="description" rows="2" required minlength="20" maxlength="1000" placeholder="Cuenta brevemente tu experiencia…" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition"></textarea>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-sm text-yellow-800 flex gap-2">
-        <i class="ri-information-line text-lg flex-shrink-0 mt-0.5"></i>
-        <p>
-          Tu oficio se publica como <b>no verificado</b>. Para obtener el badge de verificación,
-          sube tu RUT y certificaciones desde tu panel.
-        </p>
-      </div>
+      <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <h3 class="font-bold text-gray-800 text-base mb-4 border-b border-gray-100 pb-2">2. Contacto y Precios</h3>
 
-      <div class="flex gap-3 pt-4 border-t border-gray-100">
-        <a href="/dashboard" class="flex-1 text-center bg-gray-50 hover:bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-bold transition">
-          Cancelar
-        </a>
-        <button
-          type="submit"
-          class="flex-1 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-bold transition shadow-md"
-        >
-          <i class="ri-rocket-line"></i> Publicar oficio
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="whatsapp" class="block text-xs font-bold text-gray-700 mb-1">WhatsApp</label>
+            <div class="relative">
+              <span class="absolute left-3 top-2 text-gray-400 text-sm">+56 9</span>
+              <input id="whatsapp" name="whatsapp" type="tel" required inputmode="numeric" pattern="[0-9]{8}" maxlength="8" placeholder="12345678" class="w-full bg-gray-50 border border-gray-200 rounded-lg pl-14 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition">
+            </div>
+          </div>
+          <div>
+            <label for="base_price_clp" class="block text-xs font-bold text-gray-700 mb-1">Precio Base</label>
+            <div class="relative">
+              <span class="absolute left-3 top-2 text-gray-400 text-sm">$</span>
+              <input id="base_price_clp" name="base_price_clp" type="number" required min="1000" max="9999999" step="1000" placeholder="10000" class="w-full bg-gray-50 border border-gray-200 rounded-lg pl-6 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <h3 class="font-bold text-gray-800 text-base mb-4 border-b border-gray-100 pb-2">3. Verificación</h3>
+
+        <div class="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-orange-500 hover:bg-orange-50 transition cursor-pointer js-upload-cert">
+          <i class="ri-file-upload-line text-2xl text-gray-300 mb-1"></i>
+          <p class="text-xs text-gray-600 font-bold">Subir Certificado</p>
+          <p class="text-[10px] text-gray-400 mt-1">(Próximamente — HU-12.6)</p>
+        </div>
+      </section>
+
+      <div class="flex gap-3 pt-2">
+        <a href="/dashboard" class="flex-1 py-3 rounded-xl text-center font-bold text-gray-500 hover:bg-gray-100 transition text-sm flex items-center justify-center">Volver</a>
+        <button type="submit" class="flex-[2] bg-orange-500 text-white py-3 rounded-xl font-bold hover:bg-orange-600 transition shadow-md text-sm">
+          Crear Perfil
         </button>
       </div>
     </form>
   </main>
+
+  <script>
+    import { inicializarFormularioCrearOficio } from '../lib/client/trades/crear-oficio';
+    inicializarFormularioCrearOficio();
+  </script>
 </BaseLayout>

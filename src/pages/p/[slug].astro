@@ -26,7 +26,10 @@ const reviewsList = await db.select().from(reviews).where(eq(reviews.tradeId, tr
 const rating = await tradesService.getAverageRating(trade.id);
 
 const estrellas = [1, 2, 3, 4, 5];
-const whatsapp = `56912345678`;
+// whatsapp: el oficiante lo ingresa en el wizard (8 dígitos) y el endpoint
+// POST /api/v1/trades lo almacena como 569XXXXXXXX (11 dígitos). Fallback
+// sólo para oficios legacy creados antes de la migración 0005.
+const whatsapp = trade.whatsapp ?? '56912345678';
 const email = provider?.email ?? '';
 ---
 
