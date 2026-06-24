@@ -61,6 +61,7 @@ export class TradesService {
     q?: string;
     communeId?: number;
     category?: string;
+    availableNow?: boolean;
     limit?: number;
   }) {
     const conditions = [];
@@ -81,6 +82,9 @@ export class TradesService {
     if (params.category) {
       conditions.push(eq(trades.category, params.category));
     }
+    if (params.availableNow) {
+      conditions.push(eq(trades.availableNow, true));
+    }
 
     const where = conditions.length > 0 ? and(...conditions) : undefined;
     const limit = params.limit ?? 20;
@@ -95,6 +99,7 @@ export class TradesService {
         basePriceClp: trades.basePriceClp,
         imageUrl: trades.imageUrl,
         verified: trades.verified,
+        availableNow: trades.availableNow,
         status: trades.status,
         category: trades.category,
         communeId: trades.communeId,

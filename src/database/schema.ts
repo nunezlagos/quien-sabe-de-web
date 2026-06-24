@@ -40,6 +40,7 @@ export const trades = sqliteTable('trades', {
   verified: integer('verified', { mode: 'boolean' }).notNull().default(false),
   status: text('status', { enum: ['active', 'paused'] }).notNull().default('active'),
   communeId: integer('commune_id').references(() => communes.id, { onDelete: 'set null' }),
+  availableNow: integer('available_now', { mode: 'boolean' }).notNull().default(false),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
 

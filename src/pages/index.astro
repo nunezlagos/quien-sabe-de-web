@@ -19,11 +19,13 @@ const url = Astro.url;
 const q = url.searchParams.get('q') ?? '';
 const rawCommuneId = url.searchParams.get('commune_id');
 const communeId = rawCommuneId ? Number.parseInt(rawCommuneId, 10) : undefined;
+const availableNow = url.searchParams.get('available_now') === '1';
 
 const tradesService = getTradesService(Astro.locals);
 const results = await tradesService.search({
   q: q || undefined,
   communeId,
+  availableNow: availableNow || undefined,
   limit: 50,
 });
 
@@ -33,7 +35,7 @@ const communesList = await db.select({ id: communes.id, name: communes.name }).f
 const allTrades = await tradesService.search({ limit: 50 });
 const uniqueTrades = [...new Set(allTrades.map((t) => t.name).filter(Boolean))];
 const tradeOptions = uniqueTrades.map((name) => ({ name, slug: name.toLowerCase().replace(/\s+/g, '-') }));
-const isSearching = Boolean(q || communeId);
+const isSearching = Boolean(q || communeId || availableNow);
 ---
 
 <BaseLayout title="QuiénSabe — Conecta con oficios de tu barrio">

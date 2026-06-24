@@ -9,6 +9,7 @@ export function initProviderDashboard(): void {
   initTradeStatusToggle();
   initProfileForm();
   initSupportButton();
+  initAvailabilityToggles();
 }
 
 function initVisibilityToggle(): void {
@@ -85,6 +86,29 @@ function initProfileForm(): void {
         boton.textContent = 'Guardar cambios';
       }
     }
+  });
+}
+
+function initAvailabilityToggles(): void {
+  document.querySelectorAll<HTMLButtonElement>('[data-toggle-availability]').forEach((btn) => {
+    if (btn.dataset.availWired === 'true') return;
+    btn.dataset.availWired = 'true';
+    btn.addEventListener('click', async () => {
+      const tradeId = Number(btn.dataset.toggleAvailability);
+      const current = btn.dataset.availCurrent === 'true';
+      btn.disabled = true;
+      try {
+        const res = await fetch(`/api/v1/trades/${tradeId}/availability`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ availableNow: !current }),
+        });
+        if (!res.ok) throw new Error('fail');
+        window.location.reload();
+      } catch {
+        btn.disabled = false;
+      }
+    });
   });
 }
 

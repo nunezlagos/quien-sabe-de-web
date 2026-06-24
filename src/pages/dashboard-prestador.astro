@@ -24,6 +24,7 @@ const myTrades = await db
     basePriceClp: trades.basePriceClp,
     whatsapp: trades.whatsapp,
     verified: trades.verified,
+    availableNow: trades.availableNow,
     status: trades.status,
     ratingAvg: avg(reviews.rating),
     reviewCount: count(reviews.id),
@@ -257,6 +258,9 @@ const showVerificationBanner = totalOficios > 0 && !algunVerificado;
                         {t.status === 'active' ? 'Activo' : 'Pausado'}
                       </span>
                     )}
+                    <span class={`text-xs px-2 py-1 rounded-full font-bold ${t.availableNow ? 'bg-green-100 text-green-700 border border-green-200' : 'bg-gray-100 text-gray-400'}`}>
+                      <i class="ri-flashlight-fill"></i> {t.availableNow ? 'Disponible' : 'No disponible'}
+                    </span>
                     <a href={`/p/${t.slug}`} class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg font-bold transition">Ver</a>
                     <button
                       data-toggle-id={t.id}
@@ -264,6 +268,14 @@ const showVerificationBanner = totalOficios > 0 && !algunVerificado;
                       class="text-xs bg-white border border-gray-200 hover:border-orange-500 text-gray-700 px-3 py-1.5 rounded-lg font-bold transition js-toggle-status"
                     >
                       {t.status === 'active' ? 'Pausar' : 'Activar'}
+                    </button>
+                    <button
+                      data-toggle-availability={t.id}
+                      data-avail-current={t.availableNow ? 'true' : 'false'}
+                      class="text-xs bg-white border hover:border-green-500 px-3 py-1.5 rounded-lg font-bold transition"
+                      class:list={[t.availableNow ? 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100' : 'bg-gray-100 text-gray-500 border-gray-200']}
+                    >
+                      <i class="ri-flashlight-fill"></i>
                     </button>
                   </div>
                 </div>

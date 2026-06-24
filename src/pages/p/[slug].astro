@@ -72,6 +72,11 @@ const otherTrades = provider
                   <i class="ri-shield-check-fill"></i> Verificado
                 </span>
               ) : null}
+              {trade.availableNow ? (
+                <span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full border border-green-200 flex items-center gap-1">
+                  <i class="ri-flashlight-fill"></i> Disponible ahora
+                </span>
+              ) : null}
             </div>
             <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-2">{trade.name}</h1>
             <p class="text-gray-600 font-medium">

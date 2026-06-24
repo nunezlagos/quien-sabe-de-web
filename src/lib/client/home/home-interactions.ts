@@ -11,6 +11,7 @@ export function initHomeInteractions(): void {
   const searchInput = document.getElementById('search-input') as HTMLInputElement | null;
   const tradeSelect = document.getElementById('trade-select') as HTMLSelectElement | null;
   const communeSelect = document.getElementById('commune-select') as HTMLSelectElement | null;
+  const availableNowCheckbox = document.querySelector<HTMLInputElement>('input[name="available_now"]');
 
   const loginBtn = document.getElementById('loginBtn');
   const loginModal = document.getElementById('login-modal');
@@ -50,6 +51,7 @@ export function initHomeInteractions(): void {
     if (keyword) params.set('q', keyword);
     if (selectedTrade) params.set('trade', selectedTrade);
     if (selectedCommune) params.set('commune', selectedCommune);
+    if (availableNowCheckbox?.checked) params.set('available_now', '1');
     window.location.search = params.toString();
   }
 

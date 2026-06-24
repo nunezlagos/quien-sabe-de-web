@@ -68,3 +68,4 @@ docs/
 /mockup-index*.png
 /mvp-*.png
 .playwright-mcp/
+*.png
