@@ -44,6 +44,8 @@ const visitas30d = 124; // Mock MVP
 const contactos30d = 15; // Mock MVP
 
 const initials = usuario.name.slice(0, 1).toUpperCase();
+const algunVerificado = misOficios.some((t) => Boolean(t.verified));
+const showVerificationBanner = totalOficios > 0 && !algunVerificado;
 ---
 
 <BaseLayout title="Panel Proveedor — QuiénSabe">
@@ -131,14 +133,16 @@ const initials = usuario.name.slice(0, 1).toUpperCase();
         </div>
 
         <!-- Banner Verificación -->
+        {showVerificationBanner ? (
         <div class="bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-4 flex items-start gap-3">
           <i class="ri-time-line text-yellow-700 text-2xl flex-shrink-0 mt-0.5"></i>
           <div class="flex-1">
-            <h4 class="font-bold text-yellow-900 text-sm">Tu verificación está en revisión</h4>
-            <p class="text-yellow-800 text-xs mt-1">Nuestro equipo está revisando tus documentos. Te avisaremos por email en 24-48h.</p>
+            <h4 class="font-bold text-yellow-900 text-sm">Verifica tu oficio para inspirar confianza</h4>
+            <p class="text-yellow-800 text-xs mt-1">Los vecinos confían más en perfiles verificados. Sube tu RUT y obtén el sello de verificado.</p>
           </div>
-          <a href="/verificar-oficio" class="text-yellow-700 hover:text-yellow-900 text-xs font-bold underline flex-shrink-0">Ver estado</a>
+          <a href="/verificar-oficio" class="text-yellow-700 hover:text-yellow-900 text-xs font-bold underline flex-shrink-0">Verificar ahora</a>
         </div>
+        ) : null}
 
         <!-- Edit Profile Section -->
         <section id="editar-perfil" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
