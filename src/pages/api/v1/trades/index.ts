@@ -4,8 +4,11 @@ import { getDb } from '../../../../database/client';
 import { trades } from '../../../../database/schema';
 import { slugify } from '../../../../lib/utils/slug';
 import { eq, and } from 'drizzle-orm';
+import { searchTrades } from '../../../../api/v1/controllers/trades.controller';
 
 export const prerender = false;
+
+export const GET: APIRoute = searchTrades;
 
 const crearTradeSchema = z.object({
   name: z.string().trim().min(3, 'El nombre debe tener al menos 3 caracteres').max(120),
