@@ -1,10 +1,10 @@
 import type { APIRoute } from 'astro';
 import { getDb } from '../../../../database/client';
-import { trades } from '../../../../database/schema';
+import { trades, tradeCommunes } from '../../../../database/schema';
 import { slugify } from '../../../../lib/utils/slug';
 import { eq } from 'drizzle-orm';
 import { searchTrades } from '../../../../api/v1/controllers/trades.controller';
-import { CrearTradeCuerpo } from '../../../../lib/validators/trades';
+import { CreateTradeBody } from '../../../../lib/validators/trades';
 
 export const prerender = false;
 
@@ -21,7 +21,7 @@ export const POST: APIRoute = async (ctx) => {
 
   const formData = await ctx.request.formData();
   const body = Object.fromEntries(formData.entries());
-  const parsed = CrearTradeCuerpo.safeParse(body);
+  const parsed = CreateTradeBody.safeParse(body);
 
   if (!parsed.success) {
     const firstIssue = parsed.error.issues[0];
@@ -75,6 +75,15 @@ export const POST: APIRoute = async (ctx) => {
     })
     .returning()
     .get();
+
+  // Save commune coverage
+  const rawCommuneIds = formData.getAll('commune_ids') as string[];
+  const communeIds = rawCommuneIds.map(Number).filter((id) => id > 0);
+  if (communeIds.length > 0) {
+    await db.insert(tradeCommunes).values(
+      communeIds.map((communeId) => ({ tradeId: newTrade.id, communeId }))
+    ).run();
+  }
 
   return new Response(null, {
     status: 302,

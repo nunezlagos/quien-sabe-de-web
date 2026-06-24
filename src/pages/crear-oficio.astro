@@ -1,5 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getDb } from '../database/client';
+import { communes } from '../database/schema';
+import { asc } from 'drizzle-orm';
 
 const currentUser = Astro.locals.user;
 if (!currentUser) {
@@ -7,6 +10,9 @@ if (!currentUser) {
 }
 
 const error = Astro.url.searchParams.get('error');
+
+const db = getDb(Astro.locals);
+const communeList = await db.select({ id: communes.id, name: communes.name }).from(communes).orderBy(asc(communes.name)).all();
 
 const OFICIOS = [
   { value: '', label: 'Selecciona tu oficio…' },
@@ -95,7 +101,20 @@ const OFICIOS = [
       </section>
 
       <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-        <h3 class="font-bold text-gray-800 text-base mb-4 border-b border-gray-100 pb-2">3. Verificación</h3>
+        <h3 class="font-bold text-gray-800 text-base mb-4 border-b border-gray-100 pb-2">3. Cobertura de Comunas</h3>
+        <p class="text-xs text-gray-500 mb-3">¿En qué comunas atiendes?</p>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-48 overflow-y-auto border border-gray-200 rounded-xl p-2">
+          {communeList.map((c) => (
+            <label class="flex items-center gap-2 p-2 hover:bg-gray-50 rounded-lg cursor-pointer text-sm">
+              <input type="checkbox" name="commune_ids" value={c.id} class="accent-orange-500 rounded" />
+              {c.name}
+            </label>
+          ))}
+        </div>
+      </section>
+
+      <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <h3 class="font-bold text-gray-800 text-base mb-4 border-b border-gray-100 pb-2">4. Verificación</h3>
 
         <div class="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-orange-500 hover:bg-orange-50 transition cursor-pointer js-upload-cert">
           <i class="ri-file-upload-line text-2xl text-gray-300 mb-1"></i>
@@ -114,7 +133,7 @@ const OFICIOS = [
   </main>
 
   <script>
-    import { inicializarFormularioCrearOficio } from '../lib/client/trades/crear-oficio';
-    inicializarFormularioCrearOficio();
+    import { initCreateTradeForm } from '../lib/client/trades/create-trade';
+    initCreateTradeForm();
   </script>
 </BaseLayout>

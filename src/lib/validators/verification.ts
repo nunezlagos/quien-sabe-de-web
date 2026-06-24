@@ -20,7 +20,7 @@ function validateRut(rut: string): boolean {
   return expectedChar === dv;
 }
 
-export const SolicitudVerificacionCuerpo = z.object({
+export const VerificationRequest = z.object({
   rut: z
     .string()
     .trim()

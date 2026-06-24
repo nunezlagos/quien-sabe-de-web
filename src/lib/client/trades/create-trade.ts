@@ -1,14 +1,14 @@
-// src/lib/client/trades/crear-oficio.ts
+// src/lib/client/trades/create-trade.ts
 // Lógica del formulario de creación de oficios.
 // Extraído de src/pages/crear-oficio.astro (regla R2: sin JS inline).
 
-export function inicializarFormularioCrearOficio(): void {
-  inicializarOficioOtro();
-  inicializarUploadCert();
-  inicializarValidacionWhatsApp();
+export function initCreateTradeForm(): void {
+  initOtherTrade();
+  initUploadCert();
+  initWhatsAppValidation();
 }
 
-function inicializarOficioOtro(): void {
+function initOtherTrade(): void {
   const select = document.querySelector<HTMLSelectElement>('.js-oficio-select');
   const wrap = document.querySelector<HTMLElement>('[data-oficio-otro]');
   const inputCustom = document.getElementById('symbol_custom') as HTMLInputElement | null;
@@ -28,7 +28,7 @@ function inicializarOficioOtro(): void {
   select.addEventListener('change', toggle);
 }
 
-function inicializarUploadCert(): void {
+function initUploadCert(): void {
   const dropzone = document.querySelector<HTMLElement>('.js-upload-cert');
   if (!dropzone) return;
   dropzone.addEventListener('click', (e) => {
@@ -47,7 +47,7 @@ function inicializarUploadCert(): void {
   });
 }
 
-function inicializarValidacionWhatsApp(): void {
+function initWhatsAppValidation(): void {
   const input = document.getElementById('whatsapp') as HTMLInputElement | null;
   if (!input) return;
 

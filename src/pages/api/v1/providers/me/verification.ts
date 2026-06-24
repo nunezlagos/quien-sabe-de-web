@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import { getDb } from '../../../../../database/client';
 import { users } from '../../../../../database/schema';
 import { errorResponse } from '../../../../lib/utils/response';
-import { SolicitudVerificacionCuerpo } from '../../../../../lib/validators/verification';
+import { VerificationRequest } from '../../../../../lib/validators/verification';
 
 export const prerender = false;
 
@@ -21,7 +21,7 @@ export const POST: APIRoute = async (contexto) => {
 
   const formData = await contexto.request.formData();
   const body = Object.fromEntries(formData.entries());
-  const parsed = SolicitudVerificacionCuerpo.safeParse(body);
+  const parsed = VerificationRequest.safeParse(body);
 
   if (!parsed.success) {
     const firstIssue = parsed.error.issues[0];

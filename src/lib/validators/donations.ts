@@ -7,7 +7,7 @@ import * as z from 'zod';
 export const PASARELAS = ['mercadopago', 'webpay'] as const;
 export type Pasarela = (typeof PASARELAS)[number];
 
-export const DonacionCuerpo = z.object({
+export const DonationBody = z.object({
 	amount: z.coerce.number().int().min(1000, 'Monto mínimo $1.000').max(9_999_999),
 	provider: z.enum(PASARELAS).default('mercadopago'),
 	recurring: z

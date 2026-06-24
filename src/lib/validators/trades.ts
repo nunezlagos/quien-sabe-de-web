@@ -17,7 +17,7 @@ export const OFICIOS_CONOCIDOS = [
 
 export type OficioConocido = (typeof OFICIOS_CONOCIDOS)[number];
 
-export const CrearTradeCuerpo = z.object({
+export const CreateTradeBody = z.object({
 	name: z.string().trim().min(3, 'El nombre debe tener al menos 3 caracteres').max(120),
 	symbol: z.enum(OFICIOS_CONOCIDOS).optional(),
 	symbol_custom: z.string().trim().max(30, 'Máximo 30 caracteres').optional(),
