@@ -6,7 +6,7 @@
 const ENDPOINT = '/api/v1/auth/cerrar-sesion';
 const REDIRECT_AFTER = '/';
 
-export function inicializarCerrarSesion(): void {
+export function initLogout(): void {
   const forms = document.querySelectorAll<HTMLFormElement>(
     'form.js-logout-form, form[id^="form-cerrar-sesion"]'
   );

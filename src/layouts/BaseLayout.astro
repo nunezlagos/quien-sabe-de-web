@@ -2,9 +2,9 @@
 const { title = "QuiénSabe - Conecta con oficios de tu barrio", description, image } = Astro.props;
 import '../styles/base.css';
 
-const usuario = Astro.locals.user;
-const enSesion = Boolean(usuario);
-const urlActual = Astro.url.pathname;
+const currentUser = Astro.locals.user;
+const isLoggedIn = Boolean(currentUser);
+const currentPath = Astro.url.pathname;
 ---
 
 <!DOCTYPE html>
@@ -36,10 +36,10 @@ const urlActual = Astro.url.pathname;
             </a>
 
             <div class="hidden md:flex items-center gap-3">
-                {enSesion && usuario ? (
+                {isLoggedIn && currentUser ? (
                     <>
-                        <a href="/dashboard" class={`px-4 py-2 rounded-full font-bold text-sm transition ${urlActual.startsWith('/dashboard') ? 'bg-orange-100 text-orange-700' : 'text-gray-600 hover:bg-gray-100'}`}>
-                            <i class="ri-user-line mr-1"></i> Hola, {usuario.name.split(' ')[0]}
+                        <a href="/dashboard" class={`px-4 py-2 rounded-full font-bold text-sm transition ${currentPath.startsWith('/dashboard') ? 'bg-orange-100 text-orange-700' : 'text-gray-600 hover:bg-gray-100'}`}>
+                            <i class="ri-user-line mr-1"></i> Hola, {currentUser.name.split(' ')[0]}
                         </a>
                         <form method="POST" action="/api/v1/auth/cerrar-sesion" class="contents js-logout-form" id="form-cerrar-sesion">
                             <button type="submit" class="text-gray-600 hover:text-red-500 px-3 py-2 rounded-full font-bold text-sm transition">
@@ -92,9 +92,32 @@ const urlActual = Astro.url.pathname;
         </div>
     </footer>
 
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-banner" class="fixed bottom-0 left-0 right-0 z-50 bg-gray-900 text-white p-4 shadow-2xl transition-all duration-500 translate-y-0" style="display:none">
+        <div class="container mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
+            <p class="text-xs md:text-sm text-gray-300">Usamos cookies técnicas para el funcionamiento del sitio. Al navegar, aceptas su uso.</p>
+            <button id="cookie-accept" class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full font-bold text-xs transition flex-shrink-0">
+                Aceptar
+            </button>
+        </div>
+    </div>
+
     <script>
-        import { inicializarCerrarSesion } from '../lib/client/auth/logout';
-        inicializarCerrarSesion();
+        import { initLogout } from '../lib/client/auth/logout';
+        initLogout();
+
+        (function() {
+            const banner = document.getElementById('cookie-banner');
+            const acceptBtn = document.getElementById('cookie-accept');
+            if (!banner || !acceptBtn) return;
+            if (localStorage.getItem('cookie-consent') === 'accepted') return;
+            banner.style.display = 'block';
+            acceptBtn.addEventListener('click', function() {
+                localStorage.setItem('cookie-consent', 'accepted');
+                banner.classList.add('translate-y-full');
+                setTimeout(function() { banner.style.display = 'none'; }, 500);
+            });
+        })();
     </script>
 </body>
 </html>

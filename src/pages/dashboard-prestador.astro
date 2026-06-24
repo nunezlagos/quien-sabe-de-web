@@ -60,7 +60,9 @@ const showVerificationBanner = totalOficios > 0 && !algunVerificado;
         <button class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-300 transition" aria-label="Notificaciones">
           <i class="ri-notification-3-line"></i>
         </button>
-        <a href="/api/v1/auth/cerrar-sesion" class="text-sm text-red-500 hover:text-red-700 font-bold js-logout-form">Salir</a>
+        <form method="POST" action="/api/v1/auth/cerrar-sesion" class="contents js-logout-form">
+          <button type="submit" class="text-sm text-red-500 hover:text-red-700 font-bold">Salir</button>
+        </form>
       </div>
     </div>
   </nav>
