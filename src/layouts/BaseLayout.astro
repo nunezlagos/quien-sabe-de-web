@@ -40,6 +40,9 @@ const urlActual = Astro.url.pathname;
                     </>
                 ) : (
                     <>
+                        <a href="/donar" class="bg-orange-100 text-orange-500 hover:bg-orange-200 px-4 py-2 rounded-full font-bold text-sm transition flex items-center gap-2">
+                            <i class="ri-heart-3-fill"></i> Donaciones
+                        </a>
                         <a href="/iniciar-sesion" class="text-gray-600 hover:text-orange-500 px-4 py-2 rounded-full font-bold text-sm transition">
                             Ingresar
                         </a>
@@ -58,10 +61,25 @@ const urlActual = Astro.url.pathname;
 
     <slot />
 
-    <footer class="bg-gray-900 text-white py-12 text-center text-xs mt-auto">
-        <div class="container mx-auto px-4">
-            <p class="font-bold">&copy; 2026 QuiénSabe.</p>
-            <p class="text-[10px] mt-1">Hecho en Chile 🇨🇱</p>
+    <footer class="relative bg-gray-900 text-white py-12 text-center text-xs mt-12 overflow-hidden">
+        <div class="absolute inset-0 z-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-gray-900/40"></div>
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
+            <div class="text-left">
+                <h4 class="text-xl font-extrabold text-white mb-1 flex items-center gap-2">
+                    <i class="ri-community-line text-orange-500"></i> QuiénSabe
+                </h4>
+                <p class="text-gray-400 max-w-xs">Conectando barrios, un oficio a la vez. Construido con cariño para la comunidad.</p>
+            </div>
+            <div class="flex gap-8">
+                <a href="/donar" class="hover:text-orange-500 transition font-bold text-gray-300 hover:scale-105 transform">Donaciones</a>
+                <a href="/terminos" class="hover:text-orange-500 transition font-bold text-gray-300 hover:scale-105 transform">Términos</a>
+                <a href="/transparency" class="hover:text-orange-500 transition font-bold text-gray-300 hover:scale-105 transform">Transparencia</a>
+                <a href="/dashboard-admin" class="hover:text-orange-500 transition font-bold text-gray-300 hover:scale-105 transform"><i class="ri-shield-keyhole-line"></i> Admin</a>
+            </div>
+            <div class="text-right text-gray-500">
+                <p class="font-bold">&copy; 2026 Quién Sabe.</p>
+                <p class="text-[10px]">Hecho en Chile 🇨🇱</p>
+            </div>
         </div>
     </footer>
 

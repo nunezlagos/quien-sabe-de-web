@@ -1,0 +1,70 @@
+---
+// Sidebar filters — hidden by default, shown in search mode
+---
+
+<aside id="search-sidebar" class="hidden md:w-1/4 space-y-6 w-full animate-fade-in-left">
+  <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+    <h3 class="font-bold text-gray-800 mb-4 flex items-center gap-2"><i class="ri-filter-3-line text-primary"></i> Filtros</h3>
+
+    <!-- Categories -->
+    <div class="mb-6">
+      <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Oficio</h4>
+      <div class="space-y-2">
+        <label class="flex items-center gap-2 cursor-pointer hover:text-primary">
+          <input type="checkbox" class="rounded text-primary focus:ring-primary border-gray-300">
+          <span class="text-sm text-gray-600">Gasfiter</span>
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer hover:text-primary">
+          <input type="checkbox" class="rounded text-primary focus:ring-primary border-gray-300">
+          <span class="text-sm text-gray-600">Electricista</span>
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer hover:text-primary">
+          <input type="checkbox" class="rounded text-primary focus:ring-primary border-gray-300">
+          <span class="text-sm text-gray-600">Jardinero</span>
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer hover:text-primary">
+          <input type="checkbox" class="rounded text-primary focus:ring-primary border-gray-300">
+          <span class="text-sm text-gray-600">Maestro</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Price Range -->
+    <div class="mb-6">
+      <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Precio Base</h4>
+      <div class="flex items-center gap-2">
+        <input type="number" placeholder="Min" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm">
+        <span class="text-gray-400">-</span>
+        <input type="number" placeholder="Max" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm">
+      </div>
+    </div>
+
+    <!-- Rating -->
+    <div>
+      <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Valoración</h4>
+      <div class="space-y-2">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="radio" name="rating" class="text-primary focus:ring-primary border-gray-300">
+          <div class="flex text-yellow-400 text-sm">
+            <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i>
+          </div>
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="radio" name="rating" class="text-primary focus:ring-primary border-gray-300">
+          <div class="flex text-yellow-400 text-sm">
+            <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-line"></i>
+          </div>
+          <span class="text-xs text-gray-400">& más</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Promo Box -->
+  <div class="bg-gradient-to-br from-primary to-green-600 rounded-2xl p-6 text-white text-center shadow-lg">
+    <i class="ri-shield-star-line text-4xl mb-2 opacity-80"></i>
+    <h4 class="font-bold text-lg mb-1">Vecinos Verificados</h4>
+    <p class="text-xs opacity-90 mb-4">Contrata con confianza.</p>
+    <button class="bg-white text-primary text-xs font-bold px-4 py-2 rounded-full hover:bg-green-50 transition">Saber más</button>
+  </div>
+</aside>

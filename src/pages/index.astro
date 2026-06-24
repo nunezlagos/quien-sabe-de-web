@@ -1,13 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageLoader from '../components/home/PageLoader.astro';
-import SkeletonGrid from '../components/home/SkeletonGrid.astro';
+import HeroSearch from '../components/home/HeroSearch.astro';
+import TradeCard from '../components/home/TradeCard.astro';
+import TradeCardList from '../components/home/TradeCardList.astro';
+import AdBanner from '../components/home/AdBanner.astro';
+import LoginModal from '../components/home/LoginModal.astro';
+import SidebarFilters from '../components/home/SidebarFilters.astro';
 import { getTradesService } from '../lib/services/trades.service';
 import { getDb } from '../database/client';
 import { communes } from '../database/schema';
 import { asc } from 'drizzle-orm';
 
 const enSesion = Boolean(Astro.locals.user);
+const usuario = Astro.locals.user;
 
 const url = Astro.url;
 const q = url.searchParams.get('q') ?? '';
@@ -24,160 +30,88 @@ const resultados = await tradesService.search({
 const db = getDb(Astro.locals);
 const communesList = await db.select({ id: communes.id, name: communes.name }).from(communes).orderBy(asc(communes.name)).all();
 
-const oficiosPopulares = ['Gasfíter', 'Electricista', 'Jardinero', 'Maestro', 'Pintor'];
-const estaBuscando = Boolean(q || communeId);
+const allTrades = await tradesService.search({ limit: 50 });
+const uniqueTrades = [...new Set(allTrades.map((t) => t.name).filter(Boolean))];
+const tradeOptions = uniqueTrades.map((name) => ({ name, slug: name.toLowerCase().replace(/\s+/g, '-') }));
 ---
 
-<BaseLayout title="QuiénSabe — ¿Quién sabe de... en tu barrio?">
+<BaseLayout title="QuiénSabe — Conecta con oficios de tu barrio">
   <PageLoader />
 
-  <header class="bg-gradient-to-br from-orange-50 to-amber-50 py-16 md:py-24 relative overflow-hidden">
-    <div class="container mx-auto px-4 text-center relative z-10">
-      <h1 class="text-3xl md:text-5xl font-extrabold text-gray-800 mb-6 tracking-tight">
-        ¿Quién sabe de un <span class="text-orange-500">gasfíter</span>?
-      </h1>
-      <p class="text-gray-600 mb-8 text-lg max-w-2xl mx-auto font-medium">
-        Conecta con vecinos que saben hacer lo que necesitas. Rápido, confiable y de tu barrio.
-      </p>
+  <HeroSearch
+    q={q}
+    communeId={communeId}
+    communes={communesList}
+    trades={tradeOptions}
+  />
 
-      <div class="max-w-4xl mx-auto mb-4">
-        <div class="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg text-xs font-bold inline-flex items-center gap-2 shadow-sm border border-yellow-200">
-          <i class="ri-megaphone-fill"></i> ¡Oferta! Publica tu oficio GRATIS por tiempo limitado
-        </div>
+  <main class="container mx-auto px-4 py-12 flex-grow">
+    <!-- Advertisement Banner -->
+    <AdBanner />
+
+    <!-- Controls -->
+    <div class="flex justify-between items-end mb-8 border-b border-gray-200 pb-4">
+      <div>
+        <h2 class="text-2xl font-extrabold text-gray-800">
+          {q ? 'Resultados' : 'Vecinos Recomendados'}
+        </h2>
+        <p id="results-count" class="text-gray-500 text-sm mt-1 font-medium">
+          {resultados.length} vecino{resultados.length !== 1 ? 's' : ''} disponible{resultados.length !== 1 ? 's' : ''}
+        </p>
       </div>
 
-      <form id="search-form" action="/" method="GET" class="bg-white p-2 rounded-2xl shadow-xl max-w-4xl mx-auto flex flex-col md:flex-row gap-2 border border-gray-100">
-        <input
-          type="text"
-          name="q"
-          value={q}
-          placeholder="¿Qué oficio buscas? (ej. gasfíter, electricista)"
-          class="flex-grow p-3 rounded-xl bg-transparent border-none focus:ring-0 text-gray-700"
-        />
-        <select
-          name="commune_id"
-          class="md:w-56 p-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-700 focus:ring-0"
-        >
-          <option value="">Todas las comunas</option>
-          {communesList.map((c) => (
-            <option value={c.id} selected={communeId === c.id}>{c.name}</option>
-          ))}
-        </select>
-        <button
-          type="submit"
-          class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-bold transition flex items-center justify-center gap-2"
-        >
-          Buscar
+      <div class="flex gap-2 bg-white p-1 rounded-xl shadow-sm border border-gray-200">
+        <button id="grid-view-btn" class="p-2 rounded-lg bg-white shadow-sm text-primary transition">
+          <i class="ri-grid-fill text-xl"></i>
         </button>
-      </form>
-
-      {(q || communeId) && (
-        <p class="mt-4 text-sm text-gray-600">
-          {resultados.length} resultado{resultados.length !== 1 ? 's' : ''}
-          {q && <> para "<b>{q}</b>"</>}
-          {communeId && <> en la comuna seleccionada</>}
-          {' · '}
-          <a href="/" class="text-orange-500 underline">Limpiar filtros</a>
-        </p>
-      )}
-    </div>
-  </header>
-
-  <main class="container mx-auto px-4 py-12">
-    <div class="flex justify-between items-end mb-6">
-      <h2 class="text-2xl font-extrabold text-gray-800">
-        {q ? 'Resultados' : 'Vecinos recomendados'}
-      </h2>
-      {enSesion ? null : (
-        <a href="/registro" class="text-orange-500 font-bold text-sm hover:underline">
-          Crea tu cuenta para guardar favoritos →
-        </a>
-      )}
+        <button id="list-view-btn" class="p-2 rounded-lg text-gray-400 hover:text-primary transition">
+          <i class="ri-list-check text-xl"></i>
+        </button>
+      </div>
     </div>
 
-    {resultados.length === 0 ? (
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
-        <i class="ri-search-eye-line text-6xl text-gray-300 mb-4 block"></i>
-        <h3 class="text-xl font-bold text-gray-800 mb-2">Sin resultados</h3>
-        <p class="text-gray-500 mb-4">
-          {q
-            ? `No encontramos oficios que coincidan con "${q}".`
-            : 'Aún no hay oficios publicados. ¡Sé el primero!'}
-        </p>
+    <div class="flex flex-col md:flex-row gap-8 items-start">
+      <!-- Sidebar Filters -->
+      <SidebarFilters />
 
-        {q && !communeId && (
-          <div class="mb-6">
-            <p class="text-sm text-gray-500 mb-3">¿Quizás te interese alguno de estos oficios?</p>
-            <div class="flex flex-wrap justify-center gap-2">
-              {oficiosPopulares.map((oficio) => (
-                <a
-                  href={`/?q=${oficio.toLowerCase()}`}
-                  class="bg-gray-100 hover:bg-orange-100 text-gray-700 hover:text-orange-600 px-4 py-2 rounded-full text-sm font-bold transition"
-                >
-                  {oficio}
-                </a>
-              ))}
+      <!-- Grid Container -->
+      <div class="flex-grow w-full">
+        {resultados.length === 0 ? (
+          <div id="no-results" class="text-center py-20">
+            <div class="bg-gray-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-4">
+              <i class="ri-search-eye-line text-4xl text-gray-400"></i>
             </div>
+            <h3 class="text-xl font-bold text-gray-700">No encontramos resultados</h3>
+            <p class="text-gray-500 font-medium">Intenta con otro oficio o palabra clave.</p>
+          </div>
+        ) : (
+          <div id="neighbors-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {resultados.map((t) => (
+              <TradeCard trade={t} />
+            ))}
           </div>
         )}
 
-        <a
-          href={q ? '/' : '/crear-oficio'}
-          class="inline-block bg-orange-500 text-white px-6 py-2 rounded-xl font-bold hover:bg-orange-600 transition"
-        >
-          {q ? 'Ver todos los oficios' : 'Publicar mi oficio'}
-        </a>
+        {(q || communeId) && (
+          <p class="mt-4 text-sm text-gray-600 text-center">
+            {resultados.length} resultado{resultados.length !== 1 ? 's' : ''}
+            {q && <> para "<b>{q}</b>"</>}
+            {communeId && <> en la comuna seleccionada</>}
+            {' · '}
+            <a href="/" class="text-orange-500 underline">Limpiar filtros</a>
+          </p>
+        )}
       </div>
-    ) : (
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {resultados.map((t) => (
-          <article class="bg-white rounded-xl shadow-sm hover:shadow-xl transition border border-gray-200 p-5">
-            <div class="flex items-center gap-4 mb-4">
-              <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 font-bold text-xl flex-shrink-0">
-                {(t.userName ?? '?').slice(0, 2).toUpperCase()}
-              </div>
-              <div class="min-w-0 flex-1">
-                <h3 class="font-bold text-gray-800 truncate">{t.name}</h3>
-                <p class="text-sm text-gray-500 truncate">
-                  {t.userName ?? 'Vecino'} · {t.communeName ?? 'RM'}
-                </p>
-              </div>
-            </div>
-            <p class="text-gray-600 text-sm mb-4 line-clamp-3 min-h-[3.75rem]">
-              {t.description ?? 'Servicio disponible en tu barrio.'}
-            </p>
-            <div class="flex flex-wrap gap-1.5 mb-4">
-              {t.verified ? (
-                <span class="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 flex items-center gap-1">
-                  <i class="ri-shield-check-fill"></i> Verificado
-                </span>
-              ) : null}
-              <span class="text-[10px] font-bold text-gray-600 bg-gray-50 px-2 py-0.5 rounded-full">
-                {t.symbol}
-              </span>
-            </div>
-            <div class="flex justify-between items-center border-t pt-4 border-gray-100">
-              <div>
-                <span class="text-[10px] text-gray-400 uppercase font-bold block">Desde</span>
-                <span class="font-bold text-gray-800">
-                  ${(t.basePriceClp ?? 0).toLocaleString('es-CL')}
-                </span>
-              </div>
-              <a
-                href={`/p/${t.slug}`}
-                class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl text-xs font-bold transition"
-              >
-                Ver perfil
-              </a>
-            </div>
-          </article>
-        ))}
-      </div>
-    )}
+    </div>
   </main>
 
+  <!-- Login Modal -->
+  {enSesion ? null : <LoginModal />}
+
   <script>
-    import { inicializarSearchState } from '../lib/client/home/search-state';
-    inicializarSearchState();
+    import { inicializarTextoDinamico } from '../lib/client/home/dynamic-text';
+    import { inicializarHomeInteractions } from '../lib/client/home/home-interactions';
+    inicializarTextoDinamico();
+    inicializarHomeInteractions();
   </script>
 </BaseLayout>

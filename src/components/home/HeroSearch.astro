@@ -1,0 +1,79 @@
+---
+export interface Props {
+  q: string;
+  communeId?: number;
+  communes: { id: number; name: string }[];
+  trades: { name: string; slug: string }[];
+}
+
+const { q, communeId, communes, trades } = Astro.props;
+---
+
+<header id="hero-section" class="hero-pattern py-16 md:py-24 relative overflow-hidden transition-all duration-500">
+  <div class="container mx-auto px-4 text-center relative z-10">
+    <h1 class="hero-title text-3xl md:text-5xl font-extrabold text-gray-800 mb-6 animate-fade-in-down tracking-tight">
+      ¿Quién sabe de un <span id="dynamic-trade" class="text-primary inline-block min-w-[200px] text-left">Gasfiter</span>?
+    </h1>
+    <p class="hero-desc text-gray-600 mb-8 text-lg max-w-2xl mx-auto font-medium">
+      Conecta con vecinos talentosos en tu barrio. Rápido, confiable y cercano.
+    </p>
+
+    <div class="max-w-4xl mx-auto mb-4 animate-fade-in-up">
+      <div class="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg text-xs font-bold inline-flex items-center gap-2 shadow-sm border border-yellow-200">
+        <i class="ri-megaphone-fill"></i> ¡Oferta! Publica tu oficio GRATIS por tiempo limitado
+      </div>
+    </div>
+
+    <div id="hero-search-container" class="bg-white p-2 rounded-2xl shadow-xl max-w-5xl mx-auto flex flex-col md:flex-row gap-2 animate-fade-in-up border border-gray-100">
+      <div class="relative flex-1">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <i class="ri-briefcase-line text-gray-400 text-xl"></i>
+        </div>
+        <select id="trade-select" class="block w-full pl-10 pr-3 py-3 text-base border-none focus:ring-0 text-gray-700 bg-transparent rounded-xl cursor-pointer hover:bg-gray-50 transition font-semibold">
+          <option value="">Todos los oficios</option>
+          {trades.map((t) => (
+            <option value={t.name}>{t.name}</option>
+          ))}
+        </select>
+      </div>
+
+      <div class="hidden md:block w-px bg-gray-200 my-2"></div>
+
+      <div class="relative flex-1">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <i class="ri-map-pin-line text-gray-400 text-xl"></i>
+        </div>
+        <select id="commune-select" class="block w-full pl-10 pr-3 py-3 text-base border-none focus:ring-0 text-gray-700 bg-transparent rounded-xl cursor-pointer hover:bg-gray-50 transition font-semibold">
+          <option value="">Todas las comunas</option>
+          {communes.map((c) => (
+            <option value={c.name} selected={communeId === c.id}>{c.name}</option>
+          ))}
+        </select>
+      </div>
+
+      <div class="hidden md:block w-px bg-gray-200 my-2"></div>
+
+      <div class="relative flex-[1.5]">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <i class="ri-search-line text-gray-400 text-xl"></i>
+        </div>
+        <input
+          type="text"
+          id="search-input"
+          value={q}
+          class="block w-full pl-10 pr-3 py-3 text-base border-none focus:ring-0 text-gray-700 bg-transparent rounded-xl placeholder-gray-400 font-medium"
+          placeholder="Palabra clave (ej: instalación, reparación...)"
+        />
+      </div>
+
+      <label class="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-gray-50 transition rounded-xl">
+        <input type="checkbox" name="available_now" class="w-4 h-4 accent-primary rounded">
+        <span class="text-sm font-semibold text-gray-700">Disponible ahora</span>
+      </label>
+
+      <button id="search-btn" class="bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-xl font-bold transition shadow-md flex items-center justify-center gap-2">
+        Buscar
+      </button>
+    </div>
+  </div>
+</header>

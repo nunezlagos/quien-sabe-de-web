@@ -1,0 +1,91 @@
+---
+interface Trade {
+  name: string;
+  slug: string;
+  userName: string | null;
+  description: string | null;
+  symbol: string | null;
+  basePriceClp: number | null;
+  communeName: string | null;
+  verified: number | boolean;
+  rating: number | null;
+}
+
+const { trade } = Astro.props as { trade: Trade };
+const initials = (trade.userName ?? '?').slice(0, 2).toUpperCase();
+const precio = (trade.basePriceClp ?? 0).toLocaleString('es-CL');
+const rating = trade.rating ?? 0;
+
+function renderStars(r: number): string {
+  const full = Math.floor(r);
+  let s = '';
+  for (let i = 1; i <= 5; i++) {
+    if (i <= full) s += '<i class="ri-star-fill"></i>';
+    else if (i - 0.5 <= r) s += '<i class="ri-star-half-fill"></i>';
+    else s += '<i class="ri-star-line text-gray-300"></i>';
+  }
+  return s;
+}
+---
+
+<article class="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-200 flex flex-col md:flex-row animate-fade-in group h-full">
+  <div class="p-4 md:w-1/5 flex flex-col items-center justify-center bg-gray-50 border-b md:border-b-0 md:border-r border-gray-100">
+    <div class="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center text-primary font-bold text-2xl mb-2 group-hover:scale-105 transition duration-300 border border-gray-200 overflow-hidden relative">
+      <div class="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-bold text-3xl">
+        {initials}
+      </div>
+    </div>
+    {trade.verified ? (
+    <span class="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 flex items-center gap-1 mb-1">
+      <i class="ri-shield-check-fill"></i> Verificado
+    </span>
+    ) : null}
+    <div class="text-xs text-yellow-400 text-center mb-1" set:html={renderStars(rating)}>
+    </div>
+    <div class="text-[10px] text-gray-400 font-medium text-center uppercase tracking-wide"></div>
+  </div>
+
+  <div class="p-5 flex-grow flex flex-col justify-center">
+    <div class="flex flex-col sm:flex-row justify-between items-start mb-2 gap-2">
+      <h3 class="font-bold text-lg text-gray-800 leading-tight break-words group-hover:text-primary transition">{trade.name}</h3>
+      <div class="flex flex-col items-end gap-1">
+        <span class="text-primary text-[10px] font-bold uppercase bg-green-50 px-2 py-1 rounded-xl border border-green-100 tracking-wider leading-normal text-right">
+          {trade.symbol ?? 'Oficio'}
+        </span>
+        {trade.communeName ? (
+        <span class="text-xs text-gray-500 flex items-center gap-1">
+          <i class="ri-map-pin-line"></i> <span>{trade.communeName}</span>
+        </span>
+        ) : null}
+      </div>
+    </div>
+    <p class="text-gray-600 text-sm mb-3 line-clamp-2 leading-relaxed">
+      {trade.description ?? 'Servicio profesional disponible en tu barrio.'}
+    </p>
+    <div class="flex flex-wrap gap-2">
+      <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-lg font-medium whitespace-nowrap">{trade.symbol ?? 'General'}</span>
+    </div>
+  </div>
+
+  <div class="p-5 md:w-1/4 flex flex-col justify-center items-center gap-2 border-l border-gray-100 bg-gray-50/30">
+    <div class="text-center mb-1">
+      <span class="text-[10px] text-gray-400 block uppercase tracking-wide">Precio Base</span>
+      <span class="text-xl font-extrabold text-gray-800">${precio}</span>
+    </div>
+    <div class="w-full space-y-2 mt-auto">
+      <a
+        href={`/p/${trade.slug}`}
+        class="w-full bg-green-500 text-white py-2 rounded-lg font-bold hover:bg-green-600 transition text-center text-sm flex items-center justify-center gap-2 shadow-sm"
+        target="_blank"
+      >
+        <i class="ri-whatsapp-line"></i>
+      </a>
+      <a
+        href={`/p/${trade.slug}`}
+        class="w-full bg-white border border-gray-200 text-gray-600 py-2 rounded-lg font-bold hover:border-primary hover:text-primary transition text-center text-sm flex items-center justify-center gap-2 hover:bg-gray-50"
+      >
+        <i class="ri-eye-line"></i> Ver Perfil
+      </a>
+    </div>
+  </div>
+</article>

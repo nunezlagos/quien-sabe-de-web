@@ -1,8 +1,14 @@
 @import "tailwindcss";
+@theme {
+  --color-primary: #2E8B57;
+  --color-primary-dark: #1f633d;
+}
 @import "./components.css";
+@import "./global/animations.css";
 @import "./pages/login.css";
 @import "./pages/verify-email.css";
 @import "./pages/page-loader.css";
+@import "./pages/home.css";
 
 body {
   font-family: 'Nunito', sans-serif;

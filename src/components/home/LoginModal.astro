@@ -1,0 +1,41 @@
+---
+// Login/Register modal for unauthenticated users
+---
+
+<div id="login-modal" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity duration-300">
+  <div class="bg-white rounded-[2rem] shadow-2xl max-w-md w-full p-8 relative animate-zoom-in">
+    <button class="close-modal absolute top-5 right-6 text-gray-300 hover:text-gray-600 transition">
+      <i class="ri-close-circle-line text-3xl"></i>
+    </button>
+
+    <div class="text-center mb-8">
+      <div class="bg-green-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-green-100">
+        <i class="ri-user-smile-line text-3xl text-primary"></i>
+      </div>
+      <h2 class="text-2xl font-extrabold text-gray-800">¡Únete al Barrio!</h2>
+      <p class="text-gray-500 mt-2 font-medium">Regístrate para ofrecer tus servicios y llegar a más vecinos.</p>
+    </div>
+
+    <div class="space-y-4">
+      <button id="login-google-btn" class="w-full flex items-center justify-center gap-3 border border-gray-300 py-3.5 rounded-xl hover:bg-gray-50 transition font-bold text-gray-700">
+        <i class="ri-google-fill text-red-500 text-xl"></i> Continuar con Google
+      </button>
+      <button id="login-facebook-btn" class="w-full flex items-center justify-center gap-3 bg-[#1877F2] text-white py-3.5 rounded-xl hover:bg-[#166fe5] transition font-bold shadow-md hover:shadow-lg">
+        <i class="ri-facebook-fill text-xl"></i> Continuar con Facebook
+      </button>
+
+      <div class="relative py-2">
+        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-200"></div></div>
+        <div class="relative flex justify-center text-xs uppercase"><span class="bg-white px-2 text-gray-400">O ingresa a tu panel</span></div>
+      </div>
+
+      <a href="/iniciar-sesion" class="w-full flex items-center justify-center gap-3 bg-gray-800 text-white py-3.5 rounded-xl hover:bg-gray-900 transition font-bold shadow-md block text-center">
+        <i class="ri-dashboard-3-line text-xl"></i> Iniciar sesión
+      </a>
+    </div>
+
+    <p class="text-center text-xs text-gray-400 mt-6">
+      Al registrarte aceptas nuestras <a href="/terminos" class="underline hover:text-primary">normas de convivencia</a>.
+    </p>
+  </div>
+</div>
