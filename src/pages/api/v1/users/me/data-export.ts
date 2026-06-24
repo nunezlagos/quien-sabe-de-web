@@ -12,8 +12,8 @@ const TTL_SEGUNDOS = 60 * 60 * 24;
  * El envío real del ZIP se difiere a un worker / cron (no implementado en MVP).
  */
 export const POST: APIRoute = async (contexto) => {
-	const usuario = contexto.locals.user;
-	if (!usuario) {
+	const currentUser = contexto.locals.user;
+	if (!currentUser) {
 		return errorResponse('no autenticado', 401);
 	}
 

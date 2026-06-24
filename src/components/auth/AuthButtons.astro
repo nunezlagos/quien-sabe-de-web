@@ -41,11 +41,11 @@ const { mode = 'full', redirigirAcceso = '/dashboard' } = Astro.props;
 </div>
 
 <script>
-  import { mostrarProximamente } from '../../lib/client/auth/login';
+  import { showComingSoon } from '../../lib/client/auth/login';
   document.querySelectorAll('[data-component="auth-buttons"] [data-provider]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const provider = (btn as HTMLElement).getAttribute('data-provider') ?? '';
-      mostrarProximamente(provider);
+      showComingSoon(provider);
     });
   });
 </script>

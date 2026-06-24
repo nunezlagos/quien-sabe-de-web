@@ -5,7 +5,7 @@ import { desc, eq } from 'drizzle-orm';
 
 const SECCIONES_VALIDAS = [
 	'dashboard',
-	'usuarios',
+	'users',
 	'oficios',
 	'tickets',
 	'finanzas',
@@ -15,11 +15,11 @@ const SECCIONES_VALIDAS = [
 ] as const;
 type SeccionId = (typeof SECCIONES_VALIDAS)[number];
 
-const usuario = Astro.locals.user;
-if (!usuario) {
+const currentUser = Astro.locals.user;
+if (!currentUser) {
 	return Astro.redirect('/iniciar-sesion?redirigir=/dashboard-admin');
 }
-if (usuario.role !== 'admin') {
+if (currentUser.role !== 'admin') {
 	return Astro.redirect('/dashboard');
 }
 
@@ -51,7 +51,7 @@ let listaOficios: Array<{
 	communeName: string | null;
 }> = [];
 
-if (seccionActiva === 'usuarios') {
+if (seccionActiva === 'users') {
 	listaUsuarios = await db
 		.select({
 			id: users.id,
@@ -88,7 +88,7 @@ if (seccionActiva === 'oficios') {
 
 const TITULOS: Record<SeccionId, string> = {
 	dashboard: 'Resumen General',
-	usuarios: 'Usuarios',
+	users: 'Usuarios',
 	oficios: 'Oficios',
 	tickets: 'Tickets',
 	finanzas: 'Finanzas',
@@ -115,7 +115,7 @@ const ROLES: Record<string, string> = {
 
 const NAV: Array<{ id: SeccionId; href: string; label: string; icon: string; badge?: string }> = [
 	{ id: 'dashboard', href: '/dashboard-admin', label: 'Dashboard', icon: 'ri-dashboard-3-line' },
-	{ id: 'usuarios', href: '/dashboard-admin?section=usuarios', label: 'Usuarios', icon: 'ri-user-settings-line' },
+	{ id: 'users', href: '/dashboard-admin?section=currentUsers', label: 'Usuarios', icon: 'ri-user-settings-line' },
 	{ id: 'oficios', href: '/dashboard-admin?section=oficios', label: 'Oficios', icon: 'ri-briefcase-4-line' },
 	{ id: 'tickets', href: '/dashboard-admin?section=tickets', label: 'Tickets', icon: 'ri-customer-service-2-line', badge: '12' },
 	{ id: 'finanzas', href: '/dashboard-admin?section=finanzas', label: 'Finanzas', icon: 'ri-money-dollar-circle-line' },
@@ -311,8 +311,8 @@ const auditPlaceholder = [
 				</div>
 			)}
 
-			{seccionActiva === 'usuarios' && (
-				<div class="admin-section" data-section="usuarios">
+			{seccionActiva === 'users' && (
+				<div class="admin-section" data-section="users">
 					<section class="admin-panel">
 						<div class="admin-panel__head admin-panel__head--with-action">
 							<h3 class="admin-panel__title">

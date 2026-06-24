@@ -4,19 +4,19 @@
 
 import { mostrarToast } from '../ui/toast';
 
-export function mostrarProximamente(provider: string): void {
+export function showComingSoon(provider: string): void {
   const displayName = provider.charAt(0).toUpperCase() + provider.slice(1);
   mostrarToast(`Próximamente — en esta demo solo email + contraseña (${displayName} no disponible)`, 'info');
 }
 
-export function inicializarFormularioLogin(): void {
+export function initLoginForm(): void {
   const form = document.getElementById('form-login') as HTMLFormElement | null;
   const errores = document.getElementById('errores-campos');
   if (!form) return;
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    limpiarErrores(errores);
+    clearErrors(errores);
     const fd = new FormData(form);
     const cuerpo = {
       correo: String(fd.get('correo') ?? '').toLowerCase().trim(),
@@ -33,27 +33,27 @@ export function inicializarFormularioLogin(): void {
         window.location.href = redirigir;
         return;
       }
-      const mensajes = await mapearErroresLogin(resp);
-      mostrarErrores(errores, mensajes);
+      const messages = await mapLoginErrors(resp);
+      showErrors(errores, messages);
     } catch {
-      mostrarErrores(errores, ['No se pudo conectar al servidor. Intenta de nuevo.']);
+      showErrors(errores, ['No se pudo conectar al servidor. Intenta de nuevo.']);
     }
   });
 }
 
-function limpiarErrores(container: HTMLElement | null): void {
+function clearErrors(container: HTMLElement | null): void {
   if (!container) return;
   container.classList.add('auth-card__alert--hidden');
   container.innerHTML = '';
 }
 
-function mostrarErrores(container: HTMLElement | null, mensajes: string[]): void {
+function showErrors(container: HTMLElement | null, messages: string[]): void {
   if (!container) return;
   container.classList.remove('auth-card__alert--hidden');
-  container.innerHTML = mensajes.map((m) => `<div>• ${m}</div>`).join('');
+  container.innerHTML = messages.map((m) => `<div>• ${m}</div>`).join('');
 }
 
-async function mapearErroresLogin(resp: Response): Promise<string[]> {
+async function mapLoginErrors(resp: Response): Promise<string[]> {
   if (resp.status === 401) return ['Credenciales inválidas. Revisa tu correo y contraseña.'];
   if (resp.status === 403) return ['Tu cuenta está deshabilitada. Contacta a soporte.'];
   const data = await resp.json().catch(() => ({}));

@@ -13,9 +13,9 @@ export const prerender = false;
  * llega con HU-12.6 (admin reviewer).
  */
 export const POST: APIRoute = async (contexto) => {
-  const usuario = contexto.locals.user;
-  if (!usuario) return errorResponse('no autenticado', 401);
-  if (usuario.role !== 'provider' && usuario.role !== 'admin') {
+  const currentUser = contexto.locals.user;
+  if (!currentUser) return errorResponse('no autenticado', 401);
+  if (currentUser.role !== 'provider' && currentUser.role !== 'admin') {
     return errorResponse('requiere rol provider', 403);
   }
 

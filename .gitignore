@@ -67,3 +67,4 @@ docs/
 # Screenshots de pruebas
 /mockup-index*.png
 /mvp-*.png
+.playwright-mcp/

@@ -27,8 +27,8 @@ const ConsentCuerpo = z
  * sin tabla append-only `user_consents` (queda como tarea pendiente del HU).
  */
 export const PATCH: APIRoute = async (contexto) => {
-	const usuario = contexto.locals.user;
-	if (!usuario) {
+	const currentUser = contexto.locals.user;
+	if (!currentUser) {
 		return errorResponse('no autenticado', 401);
 	}
 
@@ -60,7 +60,7 @@ export const PATCH: APIRoute = async (contexto) => {
 	}
 
 	const db = getDb(contexto);
-	await db.update(users).set(actualizacion).where(eq(users.id, usuario.id));
+	await db.update(users).set(actualizacion).where(eq(users.id, currentUser.id));
 
 	const actualizado = await db
 		.select({
@@ -69,7 +69,7 @@ export const PATCH: APIRoute = async (contexto) => {
 			consentProfilePublic: users.consentProfilePublic,
 		})
 		.from(users)
-		.where(eq(users.id, usuario.id))
+		.where(eq(users.id, currentUser.id))
 		.get();
 
 	return jsonResponse({ ok: true, consent: actualizado ?? null });

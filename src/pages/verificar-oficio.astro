@@ -1,11 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const usuario = Astro.locals.user;
-if (!usuario) {
+const currentUser = Astro.locals.user;
+if (!currentUser) {
   return Astro.redirect('/iniciar-sesion?redirigir=/verificar-oficio');
 }
-if (usuario.role !== 'provider' && usuario.role !== 'admin') {
+if (currentUser.role !== 'provider' && currentUser.role !== 'admin') {
   return Astro.redirect('/dashboard');
 }
 

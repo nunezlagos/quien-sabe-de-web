@@ -30,19 +30,19 @@ export const POST: APIRoute = async (contexto) => {
 	}
 
 	try {
-		const usuario = await crearUsuario(contexto, {
+		const currentUser = await crearUsuario(contexto, {
 			nombre: parsed.data.nombre,
 			correo: parsed.data.correo,
 			contrasenaHash: contrasenaHasheada,
 		});
-		const sesion = await crearSesion(contexto.locals.runtime.env, usuario);
+		const sesion = await crearSesion(contexto.locals.runtime.env, currentUser);
 		establecerCookieSesion(
 			contexto.cookies,
 			sesion.token,
 			sesion.ttlSegundos,
 			contexto.locals.runtime.env.PUBLIC_SITE_URL,
 		);
-		return jsonResponse({ usuario: usuarioPublico(usuario) }, { status: 201 });
+		return jsonResponse({ currentUser: usuarioPublico(currentUser) }, { status: 201 });
 	} catch (err) {
 		if (err instanceof CorreoYaRegistradoError) {
 			return errorResponse('correo ya registrado', 409);

@@ -21,31 +21,31 @@ export const POST: APIRoute = async (contexto) => {
 		return errorResponse('datos inválidos', 400, parsed.error.flatten());
 	}
 
-	const usuario = await buscarUsuarioPorCorreo(contexto, parsed.data.correo);
+	const currentUser = await buscarUsuarioPorCorreo(contexto, parsed.data.correo);
 
 	let contrasenaValida = false;
-	if (usuario) {
+	if (currentUser) {
 		try {
-			contrasenaValida = await verificarContrasena(usuario.passwordHash, parsed.data.contrasena);
+			contrasenaValida = await verificarContrasena(currentUser.passwordHash, parsed.data.contrasena);
 		} catch (err) {
 			console.error('verificarContrasena falló', err);
 		}
 	}
 
-	if (!usuario || !contrasenaValida) {
+	if (!currentUser || !contrasenaValida) {
 		return errorResponse('credenciales inválidas', 401);
 	}
 
-	if (usuario.status === 'banned') {
+	if (currentUser.status === 'banned') {
 		return errorResponse('cuenta deshabilitada', 403);
 	}
 
-	const sesion = await crearSesion(contexto.locals.runtime.env, usuario);
+	const sesion = await crearSesion(contexto.locals.runtime.env, currentUser);
 	establecerCookieSesion(
 		contexto.cookies,
 		sesion.token,
 		sesion.ttlSegundos,
 		contexto.locals.runtime.env.PUBLIC_SITE_URL,
 	);
-	return jsonResponse({ usuario: usuarioPublico(usuario) });
+	return jsonResponse({ currentUser: usuarioPublico(currentUser) });
 };

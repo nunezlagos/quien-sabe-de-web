@@ -4,8 +4,8 @@ import { getDb } from '../database/client';
 import { users } from '../database/schema';
 import { eq } from 'drizzle-orm';
 
-const usuario = Astro.locals.user;
-if (!usuario) {
+const currentUser = Astro.locals.user;
+if (!currentUser) {
 	return Astro.redirect('/iniciar-sesion?redirigir=/cuenta');
 }
 
@@ -19,14 +19,14 @@ const consents = await db
 		profilePublic: users.consentProfilePublic,
 	})
 	.from(users)
-	.where(eq(users.id, usuario.id))
+	.where(eq(users.id, currentUser.id))
 	.get();
 
 const emailProductOn = consents?.emailProduct !== false;
 const analyticsOn = consents?.analytics !== false;
 const profilePublicOn = consents?.profilePublic !== false;
 
-const esPrestador = usuario.role === 'provider';
+const esPrestador = currentUser.role === 'provider';
 ---
 
 <BaseLayout title="Mis datos personales — QuiénSabe">
@@ -54,7 +54,7 @@ const esPrestador = usuario.role === 'provider';
 				<div>
 					<p class="font-bold text-sm">Solicitud recibida.</p>
 					<p class="text-xs font-medium">
-						Te enviaremos un ZIP con tus datos a <b>{usuario.email}</b> en un máximo de 24 horas.
+						Te enviaremos un ZIP con tus datos a <b>{currentUser.email}</b> en un máximo de 24 horas.
 					</p>
 				</div>
 			</div>

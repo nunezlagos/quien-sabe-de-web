@@ -12,11 +12,11 @@ export const prerender = false;
  * Requiere rol admin. Cualquier otro caso → 403.
  */
 export const GET: APIRoute = async (contexto) => {
-	const usuario = contexto.locals.user;
-	if (!usuario) {
+	const currentUser = contexto.locals.user;
+	if (!currentUser) {
 		return errorResponse('no autenticado', 401);
 	}
-	if (usuario.role !== 'admin') {
+	if (currentUser.role !== 'admin') {
 		return errorResponse('requiere rol admin', 403);
 	}
 

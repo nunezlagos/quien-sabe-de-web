@@ -3,17 +3,17 @@ import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
 
 export const prerender = false;
 
-export const GET: APIRoute = async (contexto) => {
-	const usuario = contexto.locals.user;
-	if (!usuario) {
+export const GET: APIRoute = async (ctx) => {
+	const currentUser = ctx.locals.user;
+	if (!currentUser) {
 		return errorResponse('no autenticado', 401);
 	}
 	return jsonResponse({
-		usuario: {
-			id: usuario.id,
-			nombre: usuario.name,
-			correo: usuario.email,
-			rol: usuario.role,
+		currentUser: {
+			id: currentUser.id,
+			nombre: currentUser.name,
+			correo: currentUser.email,
+			rol: currentUser.role,
 		},
 	});
 };
