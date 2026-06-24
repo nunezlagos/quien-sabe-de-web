@@ -1,4 +1,3 @@
-import { listTrades, createTrade } from '../../../../api/v1/controllers/trades.controller';
+import { searchTrades } from '../../../../api/v1/controllers/trades.controller';
 
-export const GET = listTrades;
-export const POST = createTrade;
+export const GET = searchTrades;

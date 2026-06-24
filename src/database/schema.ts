@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, real } from 'drizzle-orm/sqlite-core';
 
 export const users = sqliteTable('users', {
   id: integer('id').primaryKey({ autoIncrement: true }),
@@ -19,5 +19,51 @@ export const communes = sqliteTable('communes', {
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
 
+/**
+ * Trades = oficios (no confundir con stock trades).
+ * Modelo MVP: cada provider tiene 1..N oficios/trades que ofrece.
+ */
+export const trades = sqliteTable('trades', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  symbol: text('symbol').notNull(),
+  name: text('name').notNull(),
+  slug: text('slug').notNull().unique(),
+  category: text('category', { enum: ['hogar', 'tecnologia', 'automotriz', 'educacion', 'salud_belleza', 'otros'] }).notNull().default('hogar'),
+  description: text('description'),
+  basePriceClp: integer('base_price_clp'),
+  imageUrl: text('image_url'),
+  verified: integer('verified', { mode: 'boolean' }).notNull().default(false),
+  status: text('status', { enum: ['active', 'paused'] }).notNull().default('active'),
+  communeId: integer('commune_id').references(() => communes.id, { onDelete: 'set null' }),
+  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});
+
+/**
+ * Cobertura: en qué comunas atiende cada trade.
+ */
+export const tradeCommunes = sqliteTable('trade_communes', {
+  tradeId: integer('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
+  communeId: integer('commune_id').notNull().references(() => communes.id, { onDelete: 'cascade' }),
+}, (t) => ({
+  pk: [t.tradeId, t.communeId],
+}));
+
+/**
+ * Reviews de vecinos a providers.
+ */
+export const reviews = sqliteTable('reviews', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  tradeId: integer('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
+  reviewerName: text('reviewer_name').notNull(),
+  rating: integer('rating').notNull(),
+  body: text('body').notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});
+
 export type Usuario = typeof users.$inferSelect;
 export type UsuarioNuevo = typeof users.$inferInsert;
+export type Trade = typeof trades.$inferSelect;
+export type TradeNuevo = typeof trades.$inferInsert;
+export type Commune = typeof communes.$inferSelect;
+export type Review = typeof reviews.$inferSelect;

@@ -1,52 +1,51 @@
 import type { APIContext } from 'astro';
 import { getTradesService } from '../../../lib/services/trades.service';
-import { successResponse, errorResponse } from '../../../lib/utils/response';
-import { z } from 'zod';
-
-const createTradeSchema = z.object({
-  userId: z.number({ message: "User ID is required" }),
-  symbol: z.string({ message: "Symbol is required" }).min(1, "Symbol cannot be empty"),
-  entryPrice: z.number({ message: "Entry price is required" }).positive("Entry price must be positive"),
-  exitPrice: z.number().positive().optional(),
-  status: z.enum(['open', 'closed']).optional(),
-  imageUrl: z.string().url().optional(),
-});
+import { respuestaError, respuestaJson } from '../../../lib/utils/respuesta';
 
 export const listTrades = async (ctx: APIContext) => {
   try {
-    const service = getTradesService(ctx);
-    const trades = await service.getAllTrades();
-    return successResponse(trades);
-  } catch (error: any) {
-    return errorResponse(error.message, 500);
+    const servicio = getTradesService(ctx);
+    const trades = await servicio.getAllTrades();
+    return respuestaJson(trades);
+  } catch (err: any) {
+    console.error('listTrades failed', err);
+    return respuestaError(err.message || 'internal_error', 500);
   }
 };
 
-export const createTrade = async (ctx: APIContext) => {
+export const searchTrades = async (ctx: APIContext) => {
   try {
-    const service = getTradesService(ctx);
-    const body = await ctx.request.json();
-    
-    const result = createTradeSchema.safeParse(body);
+    const q = ctx.url.searchParams.get('q') ?? undefined;
+    const communeIdParam = ctx.url.searchParams.get('commune_id');
+    const communeId = communeIdParam ? Number.parseInt(communeIdParam, 10) : undefined;
+    const category = ctx.url.searchParams.get('category') ?? undefined;
+    const limitParam = ctx.url.searchParams.get('limit');
+    const limit = limitParam ? Number.parseInt(limitParam, 10) : 20;
 
-    if (!result.success) {
-        const errorMessages = result.error.issues.map((err: any) => `${err.path.join('.')}: ${err.message}`);
-        return errorResponse(errorMessages, 400);
-    }
+    const servicio = getTradesService(ctx);
+    const resultados = await servicio.search({ q, communeId, category, limit });
+    return respuestaJson({ resultados, total: resultados.length });
+  } catch (err: any) {
+    console.error('searchTrades failed', err);
+    return respuestaError(err.message || 'internal_error', 500);
+  }
+};
 
-    const tradeData = result.data;
+export const getTradeBySlug = async (ctx: APIContext) => {
+  try {
+    const slug = ctx.params.slug;
+    if (!slug) return respuestaError('slug requerido', 400);
 
-    const createdTrade = await service.createTrade({
-        userId: tradeData.userId,
-        symbol: tradeData.symbol,
-        entryPrice: tradeData.entryPrice,
-        exitPrice: tradeData.exitPrice,
-        status: tradeData.status,
-        imageUrl: tradeData.imageUrl
-    });
+    const servicio = getTradesService(ctx);
+    const trade = await servicio.getTradeBySlug(slug);
+    if (!trade) return respuestaError('no encontrado', 404);
 
-    return successResponse(createdTrade, 201);
-  } catch (error: any) {
-    return errorResponse(error.message, 500);
+    const reviews = await servicio.getReviewsForTrade(trade.id);
+    const rating = await servicio.getAverageRating(trade.id);
+
+    return respuestaJson({ trade, reviews, rating });
+  } catch (err: any) {
+    console.error('getTradeBySlug failed', err);
+    return respuestaError(err.message || 'internal_error', 500);
   }
 };
