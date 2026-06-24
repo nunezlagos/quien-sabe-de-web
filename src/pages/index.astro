@@ -1,67 +1,64 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const enSesion = Boolean(Astro.locals.user);
 ---
 
-<BaseLayout title="Quién Sabe - Home">
-    <header class="bg-gradient-to-br from-blue-50 to-indigo-50 py-16 md:py-24 relative overflow-hidden">
+<BaseLayout title="QuiénSabe — ¿Quién sabe de... en tu barrio?">
+    <header class="bg-gradient-to-br from-orange-50 to-amber-50 py-16 md:py-24 relative overflow-hidden">
         <div class="container mx-auto px-4 text-center relative z-10">
             <h1 class="text-3xl md:text-5xl font-extrabold text-gray-800 mb-6 tracking-tight">
-                Who knows a <span class="text-orange-500">Plumber</span>?
+                ¿Quién sabe de un <span class="text-orange-500">gasfíter</span>?
             </h1>
             <p class="text-gray-600 mb-8 text-lg max-w-2xl mx-auto font-medium">
-                Connect with talented neighbors in your hood. Fast, reliable, and local.
+                Conecta con vecinos que saben hacer lo que necesitas. Rápido, confiable y de tu barrio.
             </p>
 
-            <div class="bg-white p-2 rounded-2xl shadow-xl max-w-4xl mx-auto flex flex-col md:flex-row gap-2 border border-gray-100">
-                <input type="text" placeholder="What are you looking for? (e.g. Electrician)" class="flex-grow p-3 rounded-xl bg-transparent border-none focus:ring-0 text-gray-700">
-                <button class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-bold transition">
-                    Search
+            <form action="/" method="GET" class="bg-white p-2 rounded-2xl shadow-xl max-w-4xl mx-auto flex flex-col md:flex-row gap-2 border border-gray-100">
+                <input type="text" name="oficio" placeholder="¿Qué oficio buscas? (ej. gasfíter, electricista)" class="flex-grow p-3 rounded-xl bg-transparent border-none focus:ring-0 text-gray-700">
+                <input type="text" name="comuna" placeholder="Comuna" class="md:w-48 p-3 rounded-xl bg-transparent border border-gray-100 focus:ring-0 text-gray-700">
+                <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-bold transition">
+                    Buscar
                 </button>
-            </div>
+            </form>
         </div>
     </header>
 
     <main class="container mx-auto px-4 py-12">
-        <h2 class="text-2xl font-extrabold text-gray-800 mb-6">Recommended Neighbors</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <article class="bg-white rounded-xl shadow-sm hover:shadow-xl transition border border-gray-200 p-5">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 font-bold text-xl">
-                        JP
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-gray-800">Juan Pérez</h3>
-                        <p class="text-sm text-gray-500">Plumbing • Downtown</p>
-                    </div>
-                </div>
-                <p class="text-gray-600 text-sm mb-4">
-                    Water heater installation, leak repair, and unclogging. 10 years of experience.
-                </p>
-                <div class="flex justify-between items-center border-t pt-4 border-gray-100">
-                    <span class="font-bold text-gray-800">$15,000 <span class="text-xs text-gray-400 font-normal">/ visit</span></span>
-                    <button class="text-orange-500 font-bold text-sm hover:underline">View Profile</button>
-                </div>
-            </article>
+        <div class="flex justify-between items-end mb-6">
+            <h2 class="text-2xl font-extrabold text-gray-800">Vecinos recomendados</h2>
+            {enSesion ? null : (
+                <a href="/registro" class="text-orange-500 font-bold text-sm hover:underline">
+                    Crea tu cuenta para guardar favoritos →
+                </a>
+            )}
+        </div>
 
-            <article class="bg-white rounded-xl shadow-sm hover:shadow-xl transition border border-gray-200 p-5">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-bold text-xl">
-                        MR
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5, 6].map(() => (
+                <article class="bg-white rounded-xl shadow-sm hover:shadow-xl transition border border-gray-200 p-5">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 font-bold text-xl">
+                            JP
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-800">Juan Pérez</h3>
+                            <p class="text-sm text-gray-500">Gasfíter · Santiago Centro</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="font-bold text-gray-800">María Rodríguez</h3>
-                        <p class="text-sm text-gray-500">Electrician • Providencia</p>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Instalación de calefones, reparación de filtraciones y destapes. 10 años de experiencia.
+                    </p>
+                    <div class="flex justify-between items-center border-t pt-4 border-gray-100">
+                        <span class="font-bold text-gray-800">$15.000 <span class="text-xs text-gray-400 font-normal">/ visita</span></span>
+                        <a href="/" class="text-orange-500 font-bold text-sm hover:underline">Ver perfil</a>
                     </div>
-                </div>
-                <p class="text-gray-600 text-sm mb-4">
-                    Certified. Residential and industrial installations.
-                </p>
-                <div class="flex justify-between items-center border-t pt-4 border-gray-100">
-                    <span class="font-bold text-gray-800">$20,000 <span class="text-xs text-gray-400 font-normal">/ visit</span></span>
-                    <button class="text-orange-500 font-bold text-sm hover:underline">View Profile</button>
-                </div>
-            </article>
+                </article>
+            ))}
+        </div>
+
+        <div class="mt-12 text-center text-gray-500 text-sm">
+            <p>Próximamente: reseñas, favoritos, agenda y reseñas reales.</p>
         </div>
     </main>
 </BaseLayout>

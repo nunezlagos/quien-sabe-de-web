@@ -3,10 +3,10 @@ import * as schema from './schema';
 
 export const getDb = (context: any) => {
   let dbBinding = context?.locals?.runtime?.env?.DB || context?.locals?.DB;
-  
+
   if (!dbBinding && typeof process !== 'undefined' && process.env.DB) {
       // @ts-ignore
-      dbBinding = process.env.DB; 
+      dbBinding = process.env.DB;
   }
 
   if (!dbBinding) {

@@ -1,11 +1,11 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "7a43e7c7-cbe9-4a15-b1a7-d093272cc71e",
+  "id": "95c7280f-dcc0-4c71-ba67-44b0030a879f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "trades": {
-      "name": "trades",
+    "communes": {
+      "name": "communes",
       "columns": {
         "id": {
           "name": "id",
@@ -14,48 +14,27 @@
           "notNull": true,
           "autoincrement": true
         },
-        "user_id": {
-          "name": "user_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "symbol": {
-          "name": "symbol",
+        "name": {
+          "name": "name",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "entry_price": {
-          "name": "entry_price",
-          "type": "real",
+        "slug": {
+          "name": "slug",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "exit_price": {
-          "name": "exit_price",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "status": {
-          "name": "status",
+        "region": {
+          "name": "region",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": "'open'"
-        },
-        "image_url": {
-          "name": "image_url",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "default": "'Metropolitana'"
         },
         "created_at": {
           "name": "created_at",
@@ -65,22 +44,16 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
-      "foreignKeys": {
-        "trades_user_id_users_id_fk": {
-          "name": "trades_user_id_users_id_fk",
-          "tableFrom": "trades",
-          "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
+      "indexes": {
+        "communes_slug_unique": {
+          "name": "communes_slug_unique",
+          "columns": [
+            "slug"
           ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "isUnique": true
         }
       },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}

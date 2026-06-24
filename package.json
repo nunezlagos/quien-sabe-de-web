@@ -8,6 +8,9 @@
     "build": "astro build",
     "preview": "astro preview --host",
     "astro": "astro",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:cov": "vitest run --coverage",
     "db:generate": "drizzle-kit generate",
     "db:migrate:local": "wrangler d1 migrations apply quien-sabe-db --local",
     "db:migrate:prod": "wrangler d1 migrations apply quien-sabe-db --remote",
@@ -24,6 +27,7 @@
   },
   "devDependencies": {
     "@types/node": "^25.1.0",
-    "drizzle-kit": "^0.31.8"
+    "drizzle-kit": "^0.31.8",
+    "vitest": "^4.1.9"
   }
 }

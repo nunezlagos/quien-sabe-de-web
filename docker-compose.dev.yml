@@ -12,6 +12,8 @@ services:
       # Source code mount para hot reload (Vite watch)
       - ./src:/app/src
       - ./public:/app/public
+      - ./tests:/app/tests
+      - ./vitest.config.ts:/app/vitest.config.ts
       - ./astro.config.mjs:/app/astro.config.mjs
       - ./tsconfig.json:/app/tsconfig.json
       - ./drizzle.config.ts:/app/drizzle.config.ts
