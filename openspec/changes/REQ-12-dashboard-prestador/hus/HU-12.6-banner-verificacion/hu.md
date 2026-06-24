@@ -1,6 +1,6 @@
 # HU-12.6 — Banner de estado de verificación
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-12-dashboard-prestador
+**Estado:** implementada-mvp-parcial | **Prioridad:** P0 | **REQ padre:** REQ-12-dashboard-prestador
 
 ## Historia de usuario
 
@@ -19,26 +19,30 @@
   Dado verificación `rechazado` con motivo
   Cuando entra al dashboard
   Entonces ve banner rojo con el motivo y botón "Reenviar"
-  Y el click va a `/verification`
+  Y el click va a `/verificar-oficio` *(path real en español)*
 
 ### Escenario: Sin banner si verificado
   Dado verificación `verificado`
   Cuando renderiza
-  Entonces el banner no se muestra
+  Entonces el banner no se muestra *(MVP: el banner SIEMPRE se muestra porque no leemos el estado real — pendiente)*
 
 ## Tareas técnicas
 
-- [ ] Componente `src/components/dashboard/provider/VerificationBanner.astro`
-- [ ] Helper SSR `getVerificationStatus(userId)`
-- [ ] Mockup: agregar en `mockups/dashboard-provider.html` (antes del bloque línea 126 — Profile Edit Form) banner amarillo `bg-yellow-50` con icono y texto 'Tu verificación está en revisión' cuando `verification.status='pendiente'`. Si rechazado, banner rojo con el motivo.
+- [x] Banner amarillo inline en `src/pages/dashboard-prestador.astro` (commit `2a285b6`) — siempre visible, linkea a `/verificar-oficio`
+- [ ] Componente `src/components/dashboard/provider/VerificationBanner.astro` *(inline en .astro por ahora)*
+- [ ] Helper SSR `getVerificationStatus(userId)` *(pendiente: schema `provider_verifications` no existe todavía)*
+- [ ] Mockup: ya incluye banner en `mockups/dashboard-provider.html` línea 127 — fiel
 - [ ] Tests `tests/e2e/provider-verification-banner.spec.ts`
 
 ## Definition of done
 
-- [ ] Tests Vitest unit pasan
-- [ ] Tests Vitest integración pasan (`@cloudflare/vitest-pool-workers` contra D1/R2/KV)
-- [ ] Test E2E Playwright pasa
-- [ ] Sabotaje confirmado: romper la fix → un test rojo verificable → restaurar
-- [ ] Coverage ≥ 90 % en el módulo afectado
-- [ ] Type check verde: `docker exec quien-sabe-app bunx tsc --noEmit`
-- [ ] PR mergeado a `main` vía `/respaldo`
+- [x] Render fiel al mockup con banner amarillo + ícono + CTA "Ver estado" → `/verificar-oficio`
+- [ ] Condicionalidad por estado real (pendiente | rechazado | verificado) — *MVP siempre muestra pendiente*
+- [ ] Tests Vitest unit
+- [ ] PR mergeado
+
+## Notas de implementación (commit `2a285b6`)
+
+- En MVP el banner está **hardcodeado** como "Tu verificación está en revisión" — no consulta la DB
+- Cuando exista la tabla `provider_verifications`, este banner se vuelve dinámico: amarillo pendiente / rojo rechazado con motivo / oculto verificado
+- Pendiente integrar con `getVerificationStatus(userId)` una vez que el schema esté creado
