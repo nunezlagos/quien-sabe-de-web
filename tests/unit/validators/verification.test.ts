@@ -5,29 +5,37 @@ import { describe, it, expect } from 'vitest';
 import { SolicitudVerificacionCuerpo } from '../../../src/lib/validators/verification';
 
 describe('SolicitudVerificacionCuerpo', () => {
-	it('acepta RUT con formato 12345678-9', () => {
+	it('acepta RUT con formato 12345678-5 (módulo 11 correcto)', () => {
 		const r = SolicitudVerificacionCuerpo.safeParse({
-			rut: '12345678-9',
+			rut: '12345678-5',
 			trade: 'gasfiter',
 		});
 		expect(r.success).toBe(true);
 	});
 
-	it('acepta RUT con dígito verificador K', () => {
+	it('acepta RUT con dígito verificador 1 (módulo 11)', () => {
 		const r = SolicitudVerificacionCuerpo.safeParse({
-			rut: '11111111-K',
+			rut: '11111111-1',
 			trade: 'electricista',
 		});
 		expect(r.success).toBe(true);
-		if (r.success) expect(r.data.rut).toBe('11111111-K');
+		if (r.success) expect(r.data.rut).toBe('11111111-1');
 	});
 
-	it('acepta RUT de 7 dígitos (persona natural)', () => {
+	it('acepta RUT de 7 dígitos (persona natural) con módulo 11 correcto', () => {
 		const r = SolicitudVerificacionCuerpo.safeParse({
-			rut: '1234567-9',
+			rut: '1234567-4',
 			trade: 'jardinero',
 		});
 		expect(r.success).toBe(true);
+	});
+
+	it('rechaza RUT con dígito verificador incorrecto (módulo 11)', () => {
+		const r = SolicitudVerificacionCuerpo.safeParse({
+			rut: '12345678-9',
+			trade: 'gasfiter',
+		});
+		expect(r.success).toBe(false);
 	});
 
 	it('rechaza RUT sin guión', () => {

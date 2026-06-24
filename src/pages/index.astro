@@ -13,7 +13,7 @@ import { communes } from '../database/schema';
 import { asc } from 'drizzle-orm';
 
 const isLoggedIn = Boolean(Astro.locals.user);
-const usuario = Astro.locals.user;
+const user = Astro.locals.user;
 
 const url = Astro.url;
 const q = url.searchParams.get('q') ?? '';
@@ -21,7 +21,7 @@ const rawCommuneId = url.searchParams.get('commune_id');
 const communeId = rawCommuneId ? Number.parseInt(rawCommuneId, 10) : undefined;
 
 const tradesService = getTradesService(Astro.locals);
-const resultados = await tradesService.search({
+const results = await tradesService.search({
   q: q || undefined,
   communeId,
   limit: 50,
@@ -33,6 +33,7 @@ const communesList = await db.select({ id: communes.id, name: communes.name }).f
 const allTrades = await tradesService.search({ limit: 50 });
 const uniqueTrades = [...new Set(allTrades.map((t) => t.name).filter(Boolean))];
 const tradeOptions = uniqueTrades.map((name) => ({ name, slug: name.toLowerCase().replace(/\s+/g, '-') }));
+const isSearching = Boolean(q || communeId);
 ---
 
 <BaseLayout title="QuiénSabe — Conecta con oficios de tu barrio">
@@ -56,7 +57,7 @@ const tradeOptions = uniqueTrades.map((name) => ({ name, slug: name.toLowerCase(
           {q ? 'Resultados' : 'Vecinos Recomendados'}
         </h2>
         <p id="results-count" class="text-gray-500 text-sm mt-1 font-medium">
-          {resultados.length} vecino{resultados.length !== 1 ? 's' : ''} disponible{resultados.length !== 1 ? 's' : ''}
+          {results.length} vecino{results.length !== 1 ? 's' : ''} disponible{results.length !== 1 ? 's' : ''}
         </p>
       </div>
 
@@ -76,7 +77,7 @@ const tradeOptions = uniqueTrades.map((name) => ({ name, slug: name.toLowerCase(
 
       <!-- Grid Container -->
       <div class="flex-grow w-full">
-        {resultados.length === 0 ? (
+        {results.length === 0 ? (
           <div id="no-results" class="text-center py-20">
             <div class="bg-gray-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-4">
               <i class="ri-search-eye-line text-4xl text-gray-400"></i>
@@ -86,7 +87,7 @@ const tradeOptions = uniqueTrades.map((name) => ({ name, slug: name.toLowerCase(
           </div>
         ) : (
           <div id="neighbors-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {resultados.map((t) => (
+            {results.map((t) => (
               <TradeCard trade={t} />
             ))}
           </div>
@@ -94,7 +95,7 @@ const tradeOptions = uniqueTrades.map((name) => ({ name, slug: name.toLowerCase(
 
         {(q || communeId) && (
           <p class="mt-4 text-sm text-gray-600 text-center">
-            {resultados.length} resultado{resultados.length !== 1 ? 's' : ''}
+            {results.length} resultado{results.length !== 1 ? 's' : ''}
             {q && <> para "<b>{q}</b>"</>}
             {communeId && <> en la comuna seleccionada</>}
             {' · '}
