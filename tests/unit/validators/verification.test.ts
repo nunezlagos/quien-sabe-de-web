@@ -2,11 +2,11 @@
 // Tests para el schema de solicitud de verificación (POST /api/v1/providers/me/verification).
 
 import { describe, it, expect } from 'vitest';
-import { SolicitudVerificacionCuerpo } from '../../../src/lib/validators/verification';
+import { VerificationRequest } from '../../../src/lib/validators/verification';
 
-describe('SolicitudVerificacionCuerpo', () => {
+describe('VerificationRequest', () => {
 	it('acepta RUT con formato 12345678-5 (módulo 11 correcto)', () => {
-		const r = SolicitudVerificacionCuerpo.safeParse({
+		const r = VerificationRequest.safeParse({
 			rut: '12345678-5',
 			trade: 'gasfiter',
 		});
@@ -14,7 +14,7 @@ describe('SolicitudVerificacionCuerpo', () => {
 	});
 
 	it('acepta RUT con dígito verificador 1 (módulo 11)', () => {
-		const r = SolicitudVerificacionCuerpo.safeParse({
+		const r = VerificationRequest.safeParse({
 			rut: '11111111-1',
 			trade: 'electricista',
 		});
@@ -23,7 +23,7 @@ describe('SolicitudVerificacionCuerpo', () => {
 	});
 
 	it('acepta RUT de 7 dígitos (persona natural) con módulo 11 correcto', () => {
-		const r = SolicitudVerificacionCuerpo.safeParse({
+		const r = VerificationRequest.safeParse({
 			rut: '1234567-4',
 			trade: 'jardinero',
 		});
@@ -31,7 +31,7 @@ describe('SolicitudVerificacionCuerpo', () => {
 	});
 
 	it('rechaza RUT con dígito verificador incorrecto (módulo 11)', () => {
-		const r = SolicitudVerificacionCuerpo.safeParse({
+		const r = VerificationRequest.safeParse({
 			rut: '12345678-9',
 			trade: 'gasfiter',
 		});
@@ -39,7 +39,7 @@ describe('SolicitudVerificacionCuerpo', () => {
 	});
 
 	it('rechaza RUT sin guión', () => {
-		const r = SolicitudVerificacionCuerpo.safeParse({
+		const r = VerificationRequest.safeParse({
 			rut: '123456789',
 			trade: 'gasfiter',
 		});
@@ -47,7 +47,7 @@ describe('SolicitudVerificacionCuerpo', () => {
 	});
 
 	it('rechaza RUT con puntos', () => {
-		const r = SolicitudVerificacionCuerpo.safeParse({
+		const r = VerificationRequest.safeParse({
 			rut: '12.345.678-9',
 			trade: 'gasfiter',
 		});
@@ -55,7 +55,7 @@ describe('SolicitudVerificacionCuerpo', () => {
 	});
 
 	it('rechaza RUT con dígito verificador no numérico ni K', () => {
-		const r = SolicitudVerificacionCuerpo.safeParse({
+		const r = VerificationRequest.safeParse({
 			rut: '12345678-X',
 			trade: 'gasfiter',
 		});
@@ -63,7 +63,7 @@ describe('SolicitudVerificacionCuerpo', () => {
 	});
 
 	it('rechaza RUT vacío', () => {
-		const r = SolicitudVerificacionCuerpo.safeParse({
+		const r = VerificationRequest.safeParse({
 			rut: '',
 			trade: 'gasfiter',
 		});
@@ -71,7 +71,7 @@ describe('SolicitudVerificacionCuerpo', () => {
 	});
 
 	it('rechaza oficio vacío', () => {
-		const r = SolicitudVerificacionCuerpo.safeParse({
+		const r = VerificationRequest.safeParse({
 			rut: '12345678-9',
 			trade: '',
 		});
@@ -79,7 +79,7 @@ describe('SolicitudVerificacionCuerpo', () => {
 	});
 
 	it('rechaza oficio ausente', () => {
-		const r = SolicitudVerificacionCuerpo.safeParse({
+		const r = VerificationRequest.safeParse({
 			rut: '12345678-9',
 		});
 		expect(r.success).toBe(false);

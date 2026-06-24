@@ -3,11 +3,11 @@
 // TDD: Red → Green → Refactor → Sabotaje.
 
 import { describe, it, expect } from 'vitest';
-import { CrearTradeCuerpo, OFICIOS_CONOCIDOS } from '../../../src/lib/validators/trades';
+import { CreateTradeBody, KNOWN_TRADES } from '../../../src/lib/validators/trades';
 
-describe('CrearTradeCuerpo', () => {
+describe('CreateTradeBody', () => {
 	it('acepta un cuerpo válido con todos los campos', () => {
-		const r = CrearTradeCuerpo.safeParse({
+		const r = CreateTradeBody.safeParse({
 			name: 'Gasfiter a domicilio',
 			symbol: 'gasfiter',
 			description: 'Más de 10 años de experiencia en gasfitería residencial.',
@@ -22,7 +22,7 @@ describe('CrearTradeCuerpo', () => {
 	});
 
 	it('acepta oficio "otro" con symbol_custom', () => {
-		const r = CrearTradeCuerpo.safeParse({
+		const r = CreateTradeBody.safeParse({
 			name: 'Servicio de tapicería',
 			symbol: 'otro',
 			symbol_custom: 'tapicero',
@@ -38,7 +38,7 @@ describe('CrearTradeCuerpo', () => {
 	});
 
 	it('acepta cuerpo sin symbol (se deriva del name)', () => {
-		const r = CrearTradeCuerpo.safeParse({
+		const r = CreateTradeBody.safeParse({
 			name: 'Reparación de calefones',
 			description: 'Servicio técnico especializado en calefones.',
 			whatsapp: '87654321',
@@ -49,7 +49,7 @@ describe('CrearTradeCuerpo', () => {
 	});
 
 	it('rechaza nombre con menos de 3 caracteres', () => {
-		const r = CrearTradeCuerpo.safeParse({
+		const r = CreateTradeBody.safeParse({
 			name: 'ab',
 			description: 'Descripción válida con al menos veinte caracteres.',
 			whatsapp: '98765432',
@@ -59,7 +59,7 @@ describe('CrearTradeCuerpo', () => {
 	});
 
 	it('rechaza descripción con menos de 20 caracteres', () => {
-		const r = CrearTradeCuerpo.safeParse({
+		const r = CreateTradeBody.safeParse({
 			name: 'Gasfiter',
 			description: 'corta',
 			whatsapp: '98765432',
@@ -78,7 +78,7 @@ describe('CrearTradeCuerpo', () => {
 			{ whatsapp: '', motivo: 'vacío' },
 		];
 		for (const { whatsapp, motivo } of casos) {
-			const r = CrearTradeCuerpo.safeParse({
+			const r = CreateTradeBody.safeParse({
 				name: 'Gasfiter',
 				description: 'Descripción válida con al menos veinte caracteres.',
 				whatsapp,
@@ -89,7 +89,7 @@ describe('CrearTradeCuerpo', () => {
 	});
 
 	it('rechaza precio base menor a $1.000', () => {
-		const r = CrearTradeCuerpo.safeParse({
+		const r = CreateTradeBody.safeParse({
 			name: 'Gasfiter',
 			description: 'Descripción válida con al menos veinte caracteres.',
 			whatsapp: '98765432',
@@ -99,7 +99,7 @@ describe('CrearTradeCuerpo', () => {
 	});
 
 	it('rechaza precio base mayor a $9.999.999', () => {
-		const r = CrearTradeCuerpo.safeParse({
+		const r = CreateTradeBody.safeParse({
 			name: 'Gasfiter',
 			description: 'Descripción válida con al menos veinte caracteres.',
 			whatsapp: '98765432',
@@ -109,7 +109,7 @@ describe('CrearTradeCuerpo', () => {
 	});
 
 	it('rechaza symbol fuera del enum', () => {
-		const r = CrearTradeCuerpo.safeParse({
+		const r = CreateTradeBody.safeParse({
 			name: 'Gasfiter',
 			symbol: 'astrofisico',
 			description: 'Descripción válida con al menos veinte caracteres.',
@@ -120,8 +120,8 @@ describe('CrearTradeCuerpo', () => {
 	});
 
 	it('expone los oficios conocidos como tupla readonly', () => {
-		expect(OFICIOS_CONOCIDOS).toContain('gasfiter');
-		expect(OFICIOS_CONOCIDOS).toContain('otro');
-		expect(OFICIOS_CONOCIDOS.length).toBeGreaterThanOrEqual(6);
+		expect(KNOWN_TRADES).toContain('gasfiter');
+		expect(KNOWN_TRADES).toContain('otro');
+		expect(KNOWN_TRADES.length).toBeGreaterThanOrEqual(6);
 	});
 });

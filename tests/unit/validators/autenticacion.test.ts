@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { RegistroCuerpo, InicioSesionCuerpo } from '../../../src/lib/validators/autenticacion';
+import { RegisterBody, LoginBody } from '../../../src/lib/validators/auth';
 
-describe('RegistroCuerpo', () => {
+describe('RegisterBody', () => {
 	it('acepta un cuerpo válido', () => {
-		const resultado = RegistroCuerpo.safeParse({
+		const resultado = RegisterBody.safeParse({
 			nombre: 'Ana Pérez',
 			correo: 'ANA@EJEMPLO.CL',
 			contrasena: 'Secreta123!',
@@ -15,7 +15,7 @@ describe('RegistroCuerpo', () => {
 	});
 
 	it('rechaza contraseña muy corta', () => {
-		const r = RegistroCuerpo.safeParse({
+		const r = RegisterBody.safeParse({
 			nombre: 'Ana',
 			correo: 'ana@ejemplo.cl',
 			contrasena: 'abc',
@@ -24,7 +24,7 @@ describe('RegistroCuerpo', () => {
 	});
 
 	it('rechaza contraseña sin mayúscula', () => {
-		const r = RegistroCuerpo.safeParse({
+		const r = RegisterBody.safeParse({
 			nombre: 'Ana',
 			correo: 'ana@ejemplo.cl',
 			contrasena: 'secreta123!',
@@ -33,7 +33,7 @@ describe('RegistroCuerpo', () => {
 	});
 
 	it('rechaza contraseña sin número', () => {
-		const r = RegistroCuerpo.safeParse({
+		const r = RegisterBody.safeParse({
 			nombre: 'Ana',
 			correo: 'ana@ejemplo.cl',
 			contrasena: 'Secretas!',
@@ -42,7 +42,7 @@ describe('RegistroCuerpo', () => {
 	});
 
 	it('rechaza email inválido', () => {
-		const r = RegistroCuerpo.safeParse({
+		const r = RegisterBody.safeParse({
 			nombre: 'Ana',
 			correo: 'no-es-email',
 			contrasena: 'Secreta123!',
@@ -51,7 +51,7 @@ describe('RegistroCuerpo', () => {
 	});
 
 	it('rechaza nombre muy corto', () => {
-		const r = RegistroCuerpo.safeParse({
+		const r = RegisterBody.safeParse({
 			nombre: 'A',
 			correo: 'ana@ejemplo.cl',
 			contrasena: 'Secreta123!',
@@ -60,9 +60,9 @@ describe('RegistroCuerpo', () => {
 	});
 });
 
-describe('InicioSesionCuerpo', () => {
+describe('LoginBody', () => {
 	it('acepta cuerpo mínimo', () => {
-		const r = InicioSesionCuerpo.safeParse({
+		const r = LoginBody.safeParse({
 			correo: 'ana@ejemplo.cl',
 			contrasena: 'cualquiera',
 		});
@@ -70,7 +70,7 @@ describe('InicioSesionCuerpo', () => {
 	});
 
 	it('normaliza el correo a minúsculas', () => {
-		const r = InicioSesionCuerpo.safeParse({
+		const r = LoginBody.safeParse({
 			correo: 'Ana@Ejemplo.CL',
 			contrasena: 'x',
 		});
@@ -79,7 +79,7 @@ describe('InicioSesionCuerpo', () => {
 	});
 
 	it('rechaza email inválido', () => {
-		const r = InicioSesionCuerpo.safeParse({
+		const r = LoginBody.safeParse({
 			correo: 'no-email',
 			contrasena: 'cualquiera',
 		});
@@ -87,7 +87,7 @@ describe('InicioSesionCuerpo', () => {
 	});
 
 	it('rechaza contraseña vacía', () => {
-		const r = InicioSesionCuerpo.safeParse({
+		const r = LoginBody.safeParse({
 			correo: 'ana@ejemplo.cl',
 			contrasena: '',
 		});
