@@ -1,0 +1,8 @@
+status: planned
+created: 2026-06-24
+archived: ~
+depends_on: []
+blocks:
+  - HU-16.8-vista-faq-acordeon  # comparte componente StaticPageHero
+mockup:
+  - mockups/about.html  # a crear en esta HU (no confundir con donate.html renombrado)

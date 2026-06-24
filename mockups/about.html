@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiénes Somos - Quién Sabe</title>
+    <meta name="description" content="Conoce QuiénSabe: conecta vecinos con oficios de barrio. Nuestra misión, equipo y cómo funciona.">
+    <script src="js/tailwindcss.js"></script>
+    <link rel="stylesheet" href="css/animate.min.css"/>
+    <link href="css/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/config.js"></script>
+</head>
+<body class="bg-bg-light text-gray-800 font-sans flex flex-col min-h-screen" id="main-body">
+
+    <!-- Page Loader -->
+    <div id="page-loader" class="fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="relative">
+            <div class="text-5xl md:text-6xl font-extrabold text-gray-200 tracking-tight">Quién<span class="text-gray-200">Sabe</span></div>
+            <div class="absolute top-0 left-0 text-5xl md:text-6xl font-extrabold text-primary tracking-tight overflow-hidden animate-fill whitespace-nowrap">Quién<span class="text-primary">Sabe</span></div>
+        </div>
+        <p class="text-gray-400 text-sm mt-4 font-medium animate-pulse">Cargando barrio...</p>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-extrabold text-gray-800 flex items-center gap-2 tracking-tight">
+                <i class="ri-community-line text-primary text-3xl"></i>
+                Quién<span class="text-primary">Sabe</span>
+            </a>
+            <div class="hidden md:flex items-center gap-4">
+                <a href="donate.html" class="bg-orange-100 text-accent hover:bg-orange-200 px-4 py-2 rounded-full font-bold text-sm transition flex items-center gap-2">
+                    <i class="ri-heart-3-fill"></i> Donaciones
+                </a>
+                <a href="login.html" class="bg-gradient-to-r from-accent to-orange-500 text-white px-6 py-2 rounded-full font-bold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition duration-300 flex items-center gap-2">
+                    <i class="ri-user-add-line"></i> Iniciar sesión
+                </a>
+            </div>
+            <button class="md:hidden text-gray-600 text-2xl">
+                <i class="ri-menu-line"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-pattern py-16 md:py-20 relative overflow-hidden">
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <div class="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-1.5 rounded-full text-xs font-bold mb-6">
+                <i class="ri-seedling-line"></i> Hecho con cariño en Chile
+            </div>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-4 tracking-tight">
+                Somos <span class="text-primary">QuiénSabe</span>
+            </h1>
+            <p class="text-gray-600 mb-8 text-lg max-w-2xl mx-auto font-medium">
+                Una plataforma comunitaria para conectar vecinos con oficios de barrio.
+                Sin comisiones abusivas. Sin algoritmos oscuros. Solo personas ayudándose.
+            </p>
+            <div class="flex flex-wrap items-center justify-center gap-4">
+                <a href="donate.html" class="bg-gradient-to-r from-accent to-orange-500 text-white px-8 py-3 rounded-full font-bold shadow-md hover:shadow-lg transition flex items-center gap-2">
+                    <i class="ri-heart-3-fill"></i> Donar para mantenerlo vivo
+                </a>
+                <a href="login.html" class="bg-white text-gray-800 px-8 py-3 rounded-full font-bold border-2 border-gray-200 hover:border-primary hover:text-primary transition flex items-center gap-2">
+                    <i class="ri-login-box-line"></i> Iniciar sesión
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Misión -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="text-center mb-12">
+                <span class="inline-block bg-primary/10 text-primary px-4 py-1.5 rounded-full text-xs font-bold mb-3">Nuestra misión</span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-4">Construir barrio, un oficio a la vez</h2>
+            </div>
+            <div class="prose max-w-none text-gray-600 leading-relaxed space-y-4">
+                <p>
+                    QuiénSabe nació en 2026 como respuesta a una frustración simple: encontrar un gasfiter,
+                    electricista o jardinero de confianza en tu propia comuna es más difícil de lo que debería ser.
+                </p>
+                <p>
+                    Creemos que el barrio sigue siendo el mejor lugar para resolver problemas cotidianos.
+                    Cuando un vecino necesita ayuda, otro vecino tiene la respuesta — y muchas veces,
+                    vive a tres cuadras.
+                </p>
+                <p>
+                    Nuestra plataforma simplemente <b>ordena lo que ya existe</b>: los vecinos talentosos,
+                    sus habilidades y su disponibilidad. Sin intermediarios, sin comisiones abusivas,
+                    sin algoritmos que prioricen al que paga más.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cómo funciona -->
+    <section class="py-16 bg-bg-light">
+        <div class="container mx-auto px-4 max-w-5xl">
+            <div class="text-center mb-12">
+                <span class="inline-block bg-blue-100 text-blue-800 px-4 py-1.5 rounded-full text-xs font-bold mb-3">Cómo funciona</span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-4">3 pasos. Sin enredos.</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Paso 1 -->
+                <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 text-center">
+                    <div class="bg-primary/10 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i class="ri-search-line text-primary text-3xl"></i>
+                    </div>
+                    <div class="text-xs font-bold text-primary mb-2">PASO 1</div>
+                    <h3 class="text-xl font-extrabold text-gray-800 mb-3">Busca</h3>
+                    <p class="text-gray-600 text-sm">Encuentra vecinos talentosos por oficio y comuna. Filtra por rating, disponibilidad y precio.</p>
+                </div>
+                <!-- Paso 2 -->
+                <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 text-center">
+                    <div class="bg-primary/10 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i class="ri-chat-3-line text-primary text-3xl"></i>
+                    </div>
+                    <div class="text-xs font-bold text-primary mb-2">PASO 2</div>
+                    <h3 class="text-xl font-extrabold text-gray-800 mb-3">Contacta</h3>
+                    <p class="text-gray-600 text-sm">Escríbeles directo por WhatsApp o email. Sin formularios eternos, sin call centers.</p>
+                </div>
+                <!-- Paso 3 -->
+                <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 text-center">
+                    <div class="bg-primary/10 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i class="ri-star-smile-line text-primary text-3xl"></i>
+                    </div>
+                    <div class="text-xs font-bold text-primary mb-2">PASO 3</div>
+                    <h3 class="text-xl font-extrabold text-gray-800 mb-3">Califica</h3>
+                    <p class="text-gray-600 text-sm">Después del trabajo, deja una reseña honesta. Así ayudás al siguiente vecino.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Equipo -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4 max-w-5xl">
+            <div class="text-center mb-12">
+                <span class="inline-block bg-purple-100 text-purple-800 px-4 py-1.5 rounded-full text-xs font-bold mb-3">Equipo</span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-4">Las personas detrás</h2>
+                <p class="text-gray-600 max-w-xl mx-auto">Un equipo pequeño que cree en lo simple, lo transparente y lo hecho con cariño.</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Persona 1 -->
+                <div class="text-center">
+                    <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-primary to-orange-400 flex items-center justify-center text-white text-3xl font-extrabold mb-3 shadow-md">MR</div>
+                    <h4 class="font-bold text-gray-800">María R.</h4>
+                    <p class="text-xs text-gray-500">Fundadora · Producto</p>
+                </div>
+                <!-- Persona 2 -->
+                <div class="text-center">
+                    <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-3xl font-extrabold mb-3 shadow-md">DS</div>
+                    <h4 class="font-bold text-gray-800">Diego S.</h4>
+                    <p class="text-xs text-gray-500">Co-fundador · Ingeniería</p>
+                </div>
+                <!-- Persona 3 -->
+                <div class="text-center">
+                    <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white text-3xl font-extrabold mb-3 shadow-md">CF</div>
+                    <h4 class="font-bold text-gray-800">Camila F.</h4>
+                    <p class="text-xs text-gray-500">Comunidad</p>
+                </div>
+                <!-- Persona 4 -->
+                <div class="text-center">
+                    <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white text-3xl font-extrabold mb-3 shadow-md">JT</div>
+                    <h4 class="font-bold text-gray-800">Joaquín T.</h4>
+                    <p class="text-xs text-gray-500">Operaciones</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Transparencia (preview) -->
+    <section class="py-16 bg-bg-light">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-3xl p-10 shadow-xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
+                <div class="relative z-10">
+                    <span class="inline-block bg-white/10 px-4 py-1.5 rounded-full text-xs font-bold mb-4">
+                        <i class="ri-eye-line"></i> Transparencia radical
+                    </span>
+                    <h2 class="text-3xl font-extrabold mb-4">Cada peso que entra y sale, publicado</h2>
+                    <p class="text-gray-300 mb-6 max-w-2xl">
+                        Creemos que la confianza se construye con información, no con promesas.
+                        Por eso publicamos mensualmente todos nuestros ingresos, gastos y decisiones.
+                    </p>
+                    <a href="transparency.html" class="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-full font-bold shadow-md transition">
+                        Ver reportes mensuales <i class="ri-arrow-right-line"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4 max-w-3xl text-center">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-4">¿Te sumas al barrio?</h2>
+            <p class="text-gray-600 mb-8 max-w-xl mx-auto">
+                Ya sea buscando un oficio, ofreciendo tus servicios o simplemente donando un café,
+                cada ayuda cuenta para mantener vivo este espacio.
+            </p>
+            <div class="flex flex-wrap items-center justify-center gap-4">
+                <a href="donate.html" class="bg-gradient-to-r from-accent to-orange-500 text-white px-8 py-3 rounded-full font-bold shadow-md hover:shadow-lg transition">
+                    Donar
+                </a>
+                <a href="login.html" class="bg-white text-gray-800 px-8 py-3 rounded-full font-bold border-2 border-gray-200 hover:border-primary hover:text-primary transition">
+                    Iniciar sesión
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Banner -->
+    <footer class="relative bg-gray-900 text-white py-12 text-center text-xs mt-12 overflow-hidden">
+        <div class="absolute inset-0 z-0 opacity-25">
+            <img src="css/footer-bg.jpg" class="w-full h-full object-cover filter blur-sm grayscale">
+        </div>
+        <div class="absolute inset-0 z-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-gray-900/40"></div>
+
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
+            <div class="text-left">
+                <h4 class="text-xl font-extrabold text-white mb-1 flex items-center gap-2">
+                    <i class="ri-community-line text-primary"></i> QuiénSabe
+                </h4>
+                <p class="text-gray-400 max-w-xs">Conecta con vecinos talentosos en tu barrio.</p>
+            </div>
+            <div class="flex gap-4 text-gray-300">
+                <a href="terms.html" class="hover:text-primary transition">Términos</a>
+                <a href="privacy.html" class="hover:text-primary transition">Privacidad</a>
+                <a href="transparency.html" class="hover:text-primary transition">Transparencia</a>
+                <a href="donate.html" class="hover:text-primary transition">Donaciones</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+status: planned
+created: 2026-06-24
+archived: ~
+depends_on:
+  - HU-16.7-vista-about-institucional  # componente StaticPageHero compartido
+blocks: []
+mockup:
+  - mockups/faq.html  # a crear en esta HU

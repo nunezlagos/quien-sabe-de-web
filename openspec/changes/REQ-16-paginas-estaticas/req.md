@@ -42,6 +42,14 @@ server-side desde Markdown/MDX para edición sin redeploy.
 | HU-16.4 | privacy-ley-19628 | Privacidad cumpliendo Ley 19.628 | P0 |
 | HU-16.5 | faq-acordeon | FAQ con acordeón y búsqueda local | P1 |
 | HU-16.6 | versionado-legal | Tracking versión + re-aceptación | P2 |
+| HU-16.7 | vista-about-institucional | Mockup + vista real `/about` (cierra gap: `mockups/about.html` se renombró a `donate.html`) | P1 |
+| HU-16.8 | vista-faq-acordeon | Mockup + vista real `/faq` con acordeón y búsqueda | P2 |
+
+## Nota sobre renombramiento (2026-06-24)
+
+`mockups/about.html` originalmente tenía la landing de donaciones. Se renombró a
+`mockups/donate.html` para corregir la discrepancia de nombre. La página `/about`
+institucional queda cubierta por **HU-16.7** (mockup nuevo).
 
 ## Tests requeridos
 
