@@ -1,16 +1,10 @@
 import type { APIRoute } from 'astro';
-import { z } from 'zod';
 import { getDb } from '../../../../database/client';
 import { users } from '../../../../database/schema';
 import { respuestaError } from '../../../../lib/utils/respuesta';
+import { DonacionCuerpo } from '../../../../lib/validators/donations';
 
 export const prerender = false;
-
-const donationSchema = z.object({
-  amount: z.coerce.number().int().min(1000, 'Monto mínimo $1.000').max(9_999_999),
-  provider: z.enum(['mercadopago', 'webpay']).default('mercadopago'),
-  recurring: z.union([z.literal('on'), z.literal('true'), z.literal('1'), z.literal('')]).optional(),
-});
 
 /**
  * POST /api/v1/donations
@@ -20,7 +14,7 @@ const donationSchema = z.object({
 export const POST: APIRoute = async (contexto) => {
   const formData = await contexto.request.formData();
   const body = Object.fromEntries(formData.entries());
-  const parsed = donationSchema.safeParse(body);
+  const parsed = DonacionCuerpo.safeParse(body);
 
   if (!parsed.success) {
     const firstIssue = parsed.error.issues[0];

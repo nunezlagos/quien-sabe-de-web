@@ -1,37 +1,14 @@
 import type { APIRoute } from 'astro';
-import { z } from 'zod';
 import { getDb } from '../../../../database/client';
 import { trades } from '../../../../database/schema';
 import { slugify } from '../../../../lib/utils/slug';
 import { eq } from 'drizzle-orm';
 import { searchTrades } from '../../../../api/v1/controllers/trades.controller';
+import { CrearTradeCuerpo } from '../../../../lib/validators/trades';
 
 export const prerender = false;
 
 export const GET: APIRoute = searchTrades;
-
-const OFICIOS_CONOCIDOS = [
-  'gasfiter',
-  'electricista',
-  'jardinero',
-  'pintor',
-  'costurera',
-  'programador',
-  'maestro',
-  'otro',
-] as const;
-
-const crearTradeSchema = z.object({
-  name: z.string().trim().min(3, 'El nombre debe tener al menos 3 caracteres').max(120),
-  symbol: z.enum(OFICIOS_CONOCIDOS).optional(),
-  symbol_custom: z.string().trim().max(30).optional(),
-  description: z.string().trim().min(20, 'La descripción debe tener al menos 20 caracteres').max(1000),
-  whatsapp: z
-    .string()
-    .trim()
-    .regex(/^[0-9]{8}$/, 'WhatsApp debe tener 8 dígitos (formato 9XXXXXXXX sin el 9 inicial)'),
-  base_price_clp: z.coerce.number().int().min(1000, 'Precio mínimo $1.000 CLP').max(9_999_999),
-});
 
 export const POST: APIRoute = async (ctx) => {
   const usuario = ctx.locals.user;
@@ -44,7 +21,7 @@ export const POST: APIRoute = async (ctx) => {
 
   const formData = await ctx.request.formData();
   const body = Object.fromEntries(formData.entries());
-  const parsed = crearTradeSchema.safeParse(body);
+  const parsed = CrearTradeCuerpo.safeParse(body);
 
   if (!parsed.success) {
     const firstIssue = parsed.error.issues[0];

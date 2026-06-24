@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as z from 'zod';
 
 export const RegistroCuerpo = z.object({
 	nombre: z.string().min(2, 'mínimo 2 caracteres').max(120),

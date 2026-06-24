@@ -1,18 +1,10 @@
 import type { APIRoute } from 'astro';
-import { z } from 'zod';
 import { getDb } from '../../../../../database/client';
 import { users } from '../../../../../database/schema';
 import { respuestaError } from '../../../../../lib/utils/respuesta';
+import { SolicitudVerificacionCuerpo } from '../../../../../lib/validators/verification';
 
 export const prerender = false;
-
-const verificacionSchema = z.object({
-  rut: z
-    .string()
-    .trim()
-    .regex(/^[0-9]{7,8}-[0-9kK]$/, 'RUT inválido (formato 12345678-9)'),
-  trade: z.string().trim().min(1, 'Selecciona un oficio'),
-});
 
 /**
  * POST /api/v1/providers/me/verification
@@ -29,7 +21,7 @@ export const POST: APIRoute = async (contexto) => {
 
   const formData = await contexto.request.formData();
   const body = Object.fromEntries(formData.entries());
-  const parsed = verificacionSchema.safeParse(body);
+  const parsed = SolicitudVerificacionCuerpo.safeParse(body);
 
   if (!parsed.success) {
     const firstIssue = parsed.error.issues[0];
