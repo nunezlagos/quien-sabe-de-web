@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { getDb } from '../../../../database/client';
 import { trades } from '../../../../database/schema';
 import { slugify } from '../../../../lib/utils/slug';
-import { eq, and } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { searchTrades } from '../../../../api/v1/controllers/trades.controller';
 
 export const prerender = false;
@@ -12,9 +12,11 @@ export const GET: APIRoute = searchTrades;
 
 const crearTradeSchema = z.object({
   name: z.string().trim().min(3, 'El nombre debe tener al menos 3 caracteres').max(120),
-  symbol: z.string().trim().min(1).max(50),
   description: z.string().trim().min(20, 'La descripción debe tener al menos 20 caracteres').max(1000),
-  commune_id: z.coerce.number().int().positive(),
+  whatsapp: z
+    .string()
+    .trim()
+    .regex(/^[0-9]{8}$/, 'WhatsApp debe tener 8 dígitos (formato 9XXXXXXXX sin el 9 inicial)'),
   base_price_clp: z.coerce.number().int().min(1000, 'Precio mínimo $1.000 CLP').max(9_999_999),
 });
 
@@ -27,7 +29,6 @@ export const POST: APIRoute = async (ctx) => {
     });
   }
 
-  // Parse form data
   const formData = await ctx.request.formData();
   const body = Object.fromEntries(formData.entries());
   const parsed = crearTradeSchema.safeParse(body);
@@ -37,17 +38,20 @@ export const POST: APIRoute = async (ctx) => {
     const errorMsg = encodeURIComponent(firstIssue?.message ?? 'datos inválidos');
     return new Response(null, {
       status: 302,
-      headers: { Location: `/crear-oficio?error=${errorMsg}` },
+      headers: { Location: `/crear-oficio?paso=3&error=${errorMsg}` },
     });
   }
 
-  const { name, symbol, description, commune_id, base_price_clp } = parsed.data;
+  const { name, description, whatsapp, base_price_clp } = parsed.data;
 
-  // Generar slug único basado en nombre + symbol
+  // symbol: derivamos del nombre para MVP (primer slug-word, máx 30 chars).
+  // El wizard no pide categoría explícita — se podrá refinar más adelante.
+  const primerSlug = slugify(name).split('-').filter(Boolean)[0] ?? 'servicio';
+  const symbol = primerSlug.slice(0, 30) || 'servicio';
+
   const baseSlug = slugify(`${symbol}-${name}`);
   const db = getDb(ctx.locals);
 
-  // Verificar unicidad del slug
   let slugFinal = baseSlug;
   let suffix = 1;
   while (await db.select().from(trades).where(eq(trades.slug, slugFinal)).get()) {
@@ -55,7 +59,11 @@ export const POST: APIRoute = async (ctx) => {
     slugFinal = `${baseSlug}-${suffix}`;
   }
 
-  // Crear trade
+  // Almacenamos WhatsApp en formato E.164-like sin el '+': 569XXXXXXXX (11 dígitos).
+  // El wizard muestra "+56 9" como prefijo visual y el usuario tipea los 8 dígitos
+  // restantes; acá anteponemos "569" para tener el número completo.
+  const whatsappCompleto = `569${whatsapp}`;
+
   const nuevoTrade = await db
     .insert(trades)
     .values({
@@ -65,7 +73,7 @@ export const POST: APIRoute = async (ctx) => {
       slug: slugFinal,
       description,
       basePriceClp: base_price_clp,
-      communeId: commune_id,
+      whatsapp: whatsappCompleto,
       verified: false,
       status: 'active',
     })

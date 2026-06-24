@@ -44,10 +44,28 @@ export const onRequest = defineMiddleware(async (contexto, siguiente) => {
 	}
 
 	const pathname = contexto.url.pathname;
-	if (!contexto.locals.user && esRutaProtegida(pathname)) {
+	const usuario = contexto.locals.user;
+
+	if (!usuario && esRutaProtegida(pathname)) {
 		return contexto.redirect(`/iniciar-sesion?redirigir=${encodeURIComponent(pathname)}`);
 	}
-	if (contexto.locals.user && esRutaAuth(pathname)) {
+	if (usuario && esRutaAuth(pathname)) {
+		return contexto.redirect('/dashboard');
+	}
+
+	// Ruteo por rol desde /dashboard genérico.
+	if (usuario && pathname === '/dashboard') {
+		if (usuario.role === 'provider') {
+			return contexto.redirect('/dashboard-prestador');
+		}
+		if (usuario.role === 'admin') {
+			return contexto.redirect('/dashboard-admin');
+		}
+	}
+
+	// /dashboard-prestador exige rol provider (defensa en profundidad;
+	// la página también valida y redirige a /dashboard si el rol no coincide).
+	if (usuario && pathname === '/dashboard-prestador' && usuario.role !== 'provider') {
 		return contexto.redirect('/dashboard');
 	}
 

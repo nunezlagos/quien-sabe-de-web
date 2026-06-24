@@ -1,0 +1,1447 @@
+---
+import { getDb } from '../database/client';
+import { users, trades, communes } from '../database/schema';
+import { desc, eq } from 'drizzle-orm';
+
+const SECCIONES_VALIDAS = [
+	'dashboard',
+	'usuarios',
+	'oficios',
+	'tickets',
+	'finanzas',
+	'configuracion',
+	'analytics',
+	'auditoria',
+] as const;
+type SeccionId = (typeof SECCIONES_VALIDAS)[number];
+
+const usuario = Astro.locals.user;
+if (!usuario) {
+	return Astro.redirect('/iniciar-sesion?redirigir=/dashboard-admin');
+}
+if (usuario.role !== 'admin') {
+	return Astro.redirect('/dashboard');
+}
+
+const param = Astro.url.searchParams.get('section') ?? 'dashboard';
+const seccionActiva: SeccionId = (SECCIONES_VALIDAS as readonly string[]).includes(param)
+	? (param as SeccionId)
+	: 'dashboard';
+
+const db = getDb(Astro.locals);
+
+let listaUsuarios: Array<{
+	id: number;
+	email: string;
+	name: string;
+	role: 'user' | 'provider' | 'admin';
+	status: 'active' | 'banned';
+	createdAt: Date | null;
+}> = [];
+
+let listaOficios: Array<{
+	id: number;
+	name: string;
+	symbol: string;
+	category: string;
+	status: 'active' | 'paused';
+	userId: number;
+	userName: string | null;
+	communeId: number | null;
+	communeName: string | null;
+}> = [];
+
+if (seccionActiva === 'usuarios') {
+	listaUsuarios = await db
+		.select({
+			id: users.id,
+			email: users.email,
+			name: users.name,
+			role: users.role,
+			status: users.status,
+			createdAt: users.createdAt,
+		})
+		.from(users)
+		.orderBy(desc(users.createdAt))
+		.all();
+}
+
+if (seccionActiva === 'oficios') {
+	listaOficios = await db
+		.select({
+			id: trades.id,
+			name: trades.name,
+			symbol: trades.symbol,
+			category: trades.category,
+			status: trades.status,
+			userId: trades.userId,
+			userName: users.name,
+			communeId: trades.communeId,
+			communeName: communes.name,
+		})
+		.from(trades)
+		.leftJoin(communes, eq(trades.communeId, communes.id))
+		.leftJoin(users, eq(trades.userId, users.id))
+		.orderBy(desc(trades.createdAt))
+		.all();
+}
+
+const TITULOS: Record<SeccionId, string> = {
+	dashboard: 'Resumen General',
+	usuarios: 'Usuarios',
+	oficios: 'Oficios',
+	tickets: 'Tickets',
+	finanzas: 'Finanzas',
+	configuracion: 'Configuración',
+	analytics: 'Analytics',
+	auditoria: 'Auditoría',
+};
+const titulo = TITULOS[seccionActiva];
+
+const CATEGORIAS: Record<string, string> = {
+	hogar: 'Hogar',
+	tecnologia: 'Tecnología',
+	automotriz: 'Automotriz',
+	educacion: 'Educación',
+	salud_belleza: 'Salud/Belleza',
+	otros: 'Otros',
+};
+
+const ROLES: Record<string, string> = {
+	user: 'Usuario',
+	provider: 'Proveedor',
+	admin: 'Administrador',
+};
+
+const NAV: Array<{ id: SeccionId; href: string; label: string; icon: string; badge?: string }> = [
+	{ id: 'dashboard', href: '/dashboard-admin', label: 'Dashboard', icon: 'ri-dashboard-3-line' },
+	{ id: 'usuarios', href: '/dashboard-admin?section=usuarios', label: 'Usuarios', icon: 'ri-user-settings-line' },
+	{ id: 'oficios', href: '/dashboard-admin?section=oficios', label: 'Oficios', icon: 'ri-briefcase-4-line' },
+	{ id: 'tickets', href: '/dashboard-admin?section=tickets', label: 'Tickets', icon: 'ri-customer-service-2-line', badge: '12' },
+	{ id: 'finanzas', href: '/dashboard-admin?section=finanzas', label: 'Finanzas', icon: 'ri-money-dollar-circle-line' },
+	{ id: 'configuracion', href: '/dashboard-admin?section=configuracion', label: 'Configuración', icon: 'ri-settings-4-line' },
+	{ id: 'analytics', href: '/dashboard-admin?section=analytics', label: 'Analytics', icon: 'ri-bar-chart-2-line' },
+	{ id: 'auditoria', href: '/dashboard-admin?section=auditoria', label: 'Auditoría', icon: 'ri-file-shield-2-line' },
+];
+
+const kpiUsuariosTotales = 2543;
+const kpiOficiosActivos = 856;
+const kpiValoracionMedia = 4.7;
+const kpiSolicitudes = 12;
+
+const chartActividad = [40, 65, 45, 80, 95, 60, 75];
+const diasSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+
+const embudo = [
+	{ label: 'Visitantes únicos', value: '12,847', pct: 100, color: 'primary' },
+	{ label: 'Vieron un perfil', value: '3,402', pct: 26.5, color: 'blue' },
+	{ label: 'Contactaron', value: '1,432', pct: 11.1, color: 'orange' },
+	{ label: 'Dejaron reseña', value: '287', pct: 2.2, color: 'green' },
+];
+
+const finanzas6m = [
+	{ mes: 'Ene', donaciones: 60, gastos: 30 },
+	{ mes: 'Feb', donaciones: 70, gastos: 30 },
+	{ mes: 'Mar', donaciones: 75, gastos: 30 },
+	{ mes: 'Abr', donaciones: 80, gastos: 30 },
+	{ mes: 'May', donaciones: 85, gastos: 30 },
+	{ mes: 'Jun', donaciones: 90, gastos: 30 },
+];
+
+const topOficios = [
+	{ rank: 1, nombre: 'Gasfiter', pct: 92, count: '2,134' },
+	{ rank: 2, nombre: 'Electricista', pct: 78, count: '1,812' },
+	{ rank: 3, nombre: 'Jardinero', pct: 65, count: '1,508' },
+	{ rank: 4, nombre: 'Pintor', pct: 52, count: '1,206' },
+	{ rank: 5, nombre: 'Cerrajero', pct: 43, count: '998' },
+];
+
+const auditPlaceholder = [
+	{ fecha: '2026-06-24 14:32', admin: 'Admin', accion: 'approve_verification', accionColor: 'green', entidad: 'providers', id: '#42' },
+	{ fecha: '2026-06-24 11:15', admin: 'Admin', accion: 'hide_review', accionColor: 'red', entidad: 'reviews', id: '#128' },
+	{ fecha: '2026-06-23 18:02', admin: 'Admin', accion: 'ban_user', accionColor: 'red', entidad: 'users', id: '#87' },
+];
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Admin · QuiénSabe</title>
+	<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="admin-shell">
+
+	<aside class="admin-sidebar">
+		<div class="admin-sidebar__brand">
+			<i class="ri-shield-star-line admin-sidebar__brand-icon"></i>
+			<span class="admin-sidebar__brand-text">AdminPanel</span>
+		</div>
+
+		<nav class="admin-sidebar__nav" aria-label="Secciones de administración">
+			{NAV.map((item) => (
+				<a
+					href={item.href}
+					class={`admin-nav-link ${seccionActiva === item.id ? 'admin-nav-link--active' : ''}`}
+					aria-current={seccionActiva === item.id ? 'page' : undefined}
+				>
+					<i class={item.icon}></i>
+					<span>{item.label}</span>
+					{item.badge && (
+						<span class={`admin-nav-badge admin-nav-badge--${item.id === 'oficios' ? 'red' : 'orange'}`}>
+							{item.badge}
+						</span>
+					)}
+				</a>
+			))}
+		</nav>
+
+		<div class="admin-sidebar__footer">
+			<form method="POST" action="/api/v1/auth/cerrar-sesion" class="admin-logout-form">
+				<button type="submit" class="admin-logout-btn">
+					<i class="ri-logout-box-line"></i> Cerrar Sesión
+				</button>
+			</form>
+		</div>
+	</aside>
+
+	<div class="admin-main">
+		<header class="admin-header">
+			<h1 class="admin-header__title">{titulo}</h1>
+			<div class="admin-header__user">
+				<div class="admin-header__user-info">
+					<p class="admin-header__user-name">Admin Supremo</p>
+					<p class="admin-header__user-role">Superusuario</p>
+				</div>
+				<div class="admin-header__avatar" aria-hidden="true">A</div>
+			</div>
+		</header>
+
+		<main class="admin-content">
+			{seccionActiva === 'dashboard' && (
+				<div class="admin-section" data-section="dashboard">
+					<div class="admin-kpi-grid">
+						<article class="admin-kpi-card">
+							<i class="ri-user-fill admin-kpi-card__bg" aria-hidden="true"></i>
+							<div class="admin-kpi-card__head">
+								<div class="admin-kpi-card__icon admin-kpi-card__icon--blue">
+									<i class="ri-user-line"></i>
+								</div>
+								<span class="admin-trend admin-trend--up">+12%</span>
+							</div>
+							<h3 class="admin-kpi-card__label">Usuarios Totales</h3>
+							<p class="admin-kpi-card__value">{kpiUsuariosTotales.toLocaleString('es-CL')}</p>
+						</article>
+
+						<article class="admin-kpi-card">
+							<i class="ri-hammer-fill admin-kpi-card__bg" aria-hidden="true"></i>
+							<div class="admin-kpi-card__head">
+								<div class="admin-kpi-card__icon admin-kpi-card__icon--primary">
+									<i class="ri-hammer-line"></i>
+								</div>
+								<span class="admin-trend admin-trend--up">+5%</span>
+							</div>
+							<h3 class="admin-kpi-card__label">Oficios Activos</h3>
+							<p class="admin-kpi-card__value">{kpiOficiosActivos.toLocaleString('es-CL')}</p>
+						</article>
+
+						<article class="admin-kpi-card">
+							<i class="ri-star-fill admin-kpi-card__bg" aria-hidden="true"></i>
+							<div class="admin-kpi-card__head">
+								<div class="admin-kpi-card__icon admin-kpi-card__icon--orange">
+									<i class="ri-star-smile-line"></i>
+								</div>
+								<span class="admin-trend admin-trend--neutral">0%</span>
+							</div>
+							<h3 class="admin-kpi-card__label">Valoración Media</h3>
+							<p class="admin-kpi-card__value">{kpiValoracionMedia.toFixed(1)}</p>
+						</article>
+
+						<article class="admin-kpi-card">
+							<i class="ri-alert-fill admin-kpi-card__bg" aria-hidden="true"></i>
+							<div class="admin-kpi-card__head">
+								<div class="admin-kpi-card__icon admin-kpi-card__icon--red">
+									<i class="ri-alert-line"></i>
+								</div>
+								<span class="admin-trend admin-trend--warn">Pendientes</span>
+							</div>
+							<h3 class="admin-kpi-card__label">Solicitudes</h3>
+							<p class="admin-kpi-card__value">{kpiSolicitudes}</p>
+						</article>
+					</div>
+
+					<section class="admin-panel">
+						<div class="admin-panel__head">
+							<h3 class="admin-panel__title">Actividad por día</h3>
+							<select class="admin-select" aria-label="Rango de fechas">
+								<option>Últimos 7 días</option>
+								<option>Este Mes</option>
+							</select>
+						</div>
+						<div class="admin-bar-chart">
+							{chartActividad.map((valor, i) => (
+								<div class="admin-bar-chart__col">
+									<div
+										class={`admin-bar h-[${valor}%] ${i === 4 ? 'admin-bar--highlight' : ''}`}
+									>
+										<span class="admin-bar__tip">{valor}%</span>
+									</div>
+									<span class="admin-bar-chart__label">{diasSemana[i]}</span>
+								</div>
+							))}
+						</div>
+					</section>
+
+					<section class="admin-panel">
+						<h3 class="admin-panel__title">Embudo de conversión</h3>
+						<div class="admin-funnel">
+							{embudo.map((paso) => (
+								<div class="admin-funnel__row">
+									<div class="admin-funnel__head">
+										<span class="admin-funnel__label">{paso.label}</span>
+										<span class="admin-funnel__value">{paso.value}</span>
+									</div>
+									<div class={`admin-funnel__bar admin-funnel__bar--${paso.color} w-[${paso.pct}%]`}></div>
+								</div>
+							))}
+						</div>
+					</section>
+				</div>
+			)}
+
+			{seccionActiva === 'usuarios' && (
+				<div class="admin-section" data-section="usuarios">
+					<section class="admin-panel">
+						<div class="admin-panel__head admin-panel__head--with-action">
+							<h3 class="admin-panel__title">
+								<i class="ri-user-settings-line admin-panel__title-icon"></i> Mantenedor Usuarios
+							</h3>
+							<button type="button" class="admin-btn admin-btn--primary" disabled aria-disabled="true" title="Próximamente">
+								<i class="ri-add-line"></i> Nuevo
+							</button>
+						</div>
+						<div class="admin-table-wrap">
+							{listaUsuarios.length === 0 ? (
+								<p class="admin-empty">No hay usuarios registrados todavía.</p>
+							) : (
+								<table class="admin-table">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Email</th>
+											<th>Nombre</th>
+											<th>Rol</th>
+											<th>Estado</th>
+											<th class="text-right">Acciones</th>
+										</tr>
+									</thead>
+									<tbody>
+										{listaUsuarios.map((u) => (
+											<tr>
+												<td class="admin-table__id">#{u.id}</td>
+												<td class="admin-table__email">{u.email}</td>
+												<td class="admin-table__name">{u.name}</td>
+												<td>
+													<span class={`admin-pill admin-pill--${u.role}`}>{ROLES[u.role] ?? u.role}</span>
+												</td>
+												<td>
+													<span class={`admin-pill admin-pill--${u.status === 'active' ? 'active' : 'banned'}`}>
+														{u.status === 'active' ? 'Activo' : 'Baneado'}
+													</span>
+												</td>
+												<td class="admin-table__actions">
+													<button type="button" class="admin-icon-btn admin-icon-btn--blue" aria-label="Editar usuario" disabled>
+														<i class="ri-edit-line"></i>
+													</button>
+													<button type="button" class="admin-icon-btn admin-icon-btn--red" aria-label="Eliminar usuario" disabled>
+														<i class="ri-delete-bin-line"></i>
+													</button>
+												</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							)}
+						</div>
+					</section>
+				</div>
+			)}
+
+			{seccionActiva === 'oficios' && (
+				<div class="admin-section" data-section="oficios">
+					<section class="admin-panel">
+						<div class="admin-panel__head admin-panel__head--with-action">
+							<h3 class="admin-panel__title">
+								<i class="ri-briefcase-line admin-panel__title-icon"></i> Mantenedor Oficios
+							</h3>
+							<button type="button" class="admin-btn admin-btn--primary" disabled aria-disabled="true" title="Próximamente">
+								<i class="ri-add-line"></i> Nuevo
+							</button>
+						</div>
+						<div class="admin-table-wrap">
+							{listaOficios.length === 0 ? (
+								<p class="admin-empty">No hay oficios publicados todavía.</p>
+							) : (
+							<table class="admin-table">
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Nombre</th>
+										<th>Símbolo</th>
+										<th>Categoría</th>
+										<th>Prestador</th>
+										<th>Comuna</th>
+										<th>Estado</th>
+										<th class="text-right">Acciones</th>
+									</tr>
+								</thead>
+								<tbody>
+									{listaOficios.map((t) => (
+										<tr>
+											<td class="admin-table__id">#{t.id}</td>
+											<td class="admin-table__name">{t.name}</td>
+											<td class="admin-table__symbol">{t.symbol}</td>
+											<td>
+												<span class="admin-pill admin-pill--blue">{CATEGORIAS[t.category] ?? t.category}</span>
+											</td>
+											<td class="admin-table__provider">{t.userName ?? `Usuario #${t.userId}`}</td>
+											<td class="admin-table__commune">{t.communeName ?? '—'}</td>
+											<td>
+												<span class={`admin-pill admin-pill--${t.status === 'active' ? 'active' : 'paused'}`}>
+													{t.status === 'active' ? 'Activo' : 'Pausado'}
+												</span>
+											</td>
+											<td class="admin-table__actions">
+												<button type="button" class="admin-icon-btn admin-icon-btn--blue" aria-label="Editar oficio" disabled>
+													<i class="ri-edit-line"></i>
+												</button>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+							)}
+						</div>
+					</section>
+				</div>
+			)}
+
+			{seccionActiva === 'tickets' && (
+				<div class="admin-section" data-section="tickets">
+					<div class="admin-section__head">
+						<h2 class="admin-section__title">Cola de tickets</h2>
+						<div class="admin-section__filters">
+							<select class="admin-select" aria-label="Filtrar por estado" disabled>
+								<option>Todos los estados</option>
+							</select>
+							<select class="admin-select" aria-label="Filtrar por tipo" disabled>
+								<option>Todos los tipos</option>
+							</select>
+						</div>
+					</div>
+					<section class="admin-panel">
+						<div class="admin-table-wrap">
+							<p class="admin-empty">
+								<i class="ri-tools-line admin-empty__icon"></i>
+								El endpoint de tickets se implementará en REQ-10. Por ahora la cola está vacía.
+							</p>
+						</div>
+					</section>
+				</div>
+			)}
+
+			{seccionActiva === 'finanzas' && (
+				<div class="admin-section" data-section="finanzas">
+					<div class="admin-finance-grid">
+						<article class="admin-finance-card">
+							<h3 class="admin-finance-card__label">Donaciones (mes)</h3>
+							<p class="admin-finance-card__value">$45.000</p>
+							<span class="admin-trend admin-trend--up">+12% vs mes anterior</span>
+						</article>
+						<article class="admin-finance-card">
+							<h3 class="admin-finance-card__label">Gastos (mes)</h3>
+							<p class="admin-finance-card__value">$12.500</p>
+							<span class="admin-finance-card__hint">Hosting + dominios</span>
+						</article>
+						<article class="admin-finance-card">
+							<h3 class="admin-finance-card__label">Ratio OE3</h3>
+							<p class="admin-finance-card__value admin-finance-card__value--primary">80%</p>
+							<div class="admin-progress">
+								<div class="admin-progress__bar w-[80%]"></div>
+							</div>
+						</article>
+					</div>
+
+					<section class="admin-panel">
+						<h3 class="admin-panel__title">Donaciones vs gastos (últimos 6 meses)</h3>
+						<div class="admin-stacked-chart">
+							{finanzas6m.map((m) => (
+								<div class="admin-stacked-chart__col">
+									<div class="admin-stacked-chart__bars">
+										<div class={`admin-stacked-chart__bar admin-stacked-chart__bar--donaciones h-[${m.donaciones}%]`}></div>
+										<div class={`admin-stacked-chart__bar admin-stacked-chart__bar--gastos h-[${m.gastos}%]`}></div>
+									</div>
+									<span class="admin-stacked-chart__label">{m.mes}</span>
+								</div>
+							))}
+						</div>
+						<div class="admin-legend">
+							<span class="admin-legend__item">
+								<span class="admin-legend__swatch admin-legend__swatch--donaciones"></span> Donaciones
+							</span>
+							<span class="admin-legend__item">
+								<span class="admin-legend__swatch admin-legend__swatch--gastos"></span> Gastos
+							</span>
+						</div>
+					</section>
+				</div>
+			)}
+
+			{seccionActiva === 'configuracion' && (
+				<div class="admin-section" data-section="configuracion">
+					<h2 class="admin-section__title">Configuración global</h2>
+					<section class="admin-panel admin-panel--narrow">
+						<form class="admin-form" data-disabled="true" aria-disabled="true">
+							<div class="admin-form__field">
+								<label class="admin-form__label" for="rate-limit">Rate limit de contactos (por hora)</label>
+								<input id="rate-limit" type="number" value="10" min="1" max="100" class="admin-form__input admin-form__input--small" disabled>
+								<p class="admin-form__hint">Vecino no puede contactar más de N prestadores por hora</p>
+							</div>
+							<div class="admin-form__field">
+								<label class="admin-form__label" for="sla">SLA tickets (horas)</label>
+								<input id="sla" type="number" value="48" min="1" max="168" class="admin-form__input admin-form__input--small" disabled>
+							</div>
+							<div class="admin-form__field">
+								<label class="admin-form__label" for="terms">Versión de Términos actual</label>
+								<input id="terms" type="text" value="2026-06-15" class="admin-form__input admin-form__input--medium" disabled>
+							</div>
+							<label class="admin-form__toggle">
+								<input type="checkbox" class="admin-form__checkbox" disabled>
+								<span class="admin-form__toggle-text">Modo mantenimiento (sitio en construcción)</span>
+							</label>
+							<button type="button" class="admin-btn admin-btn--warning" disabled>
+								Guardar configuración
+							</button>
+							<p class="admin-form__note">
+								<i class="ri-information-line"></i> Las mutaciones de configuración se implementarán en HU-13.5. Esta vista es de solo lectura por ahora.
+							</p>
+						</form>
+					</section>
+				</div>
+			)}
+
+			{seccionActiva === 'analytics' && (
+				<div class="admin-section" data-section="analytics">
+					<div class="admin-kpi-grid">
+						<article class="admin-kpi-card">
+							<div class="admin-kpi-card__head">
+								<div class="admin-kpi-card__icon admin-kpi-card__icon--primary">
+									<i class="ri-eye-line"></i>
+								</div>
+								<span class="admin-trend admin-trend--up">+18%</span>
+							</div>
+							<h3 class="admin-kpi-card__label">Vistas Perfil (7d)</h3>
+							<p class="admin-kpi-card__value">12,847</p>
+						</article>
+						<article class="admin-kpi-card">
+							<div class="admin-kpi-card__head">
+								<div class="admin-kpi-card__icon admin-kpi-card__icon--blue">
+									<i class="ri-chat-3-line"></i>
+								</div>
+								<span class="admin-trend admin-trend--up">+22%</span>
+							</div>
+							<h3 class="admin-kpi-card__label">Contactos (7d)</h3>
+							<p class="admin-kpi-card__value">1,432</p>
+						</article>
+						<article class="admin-kpi-card">
+							<div class="admin-kpi-card__head">
+								<div class="admin-kpi-card__icon admin-kpi-card__icon--orange">
+									<i class="ri-search-line"></i>
+								</div>
+								<span class="admin-trend admin-trend--up">+9%</span>
+							</div>
+							<h3 class="admin-kpi-card__label">Búsquedas (7d)</h3>
+							<p class="admin-kpi-card__value">8,221</p>
+						</article>
+						<article class="admin-kpi-card">
+							<div class="admin-kpi-card__head">
+								<div class="admin-kpi-card__icon admin-kpi-card__icon--purple">
+									<i class="ri-heart-3-line"></i>
+								</div>
+								<span class="admin-trend admin-trend--up">+31%</span>
+							</div>
+							<h3 class="admin-kpi-card__label">Conversión a Contacto</h3>
+							<p class="admin-kpi-card__value">11.1%</p>
+						</article>
+					</div>
+
+					<section class="admin-panel">
+						<div class="admin-panel__head">
+							<h3 class="admin-panel__title">Actividad por día</h3>
+							<select class="admin-select" aria-label="Rango de fechas">
+								<option>Últimos 7 días</option>
+								<option>Últimos 30 días</option>
+								<option>Últimos 90 días</option>
+							</select>
+						</div>
+						<div class="admin-bar-chart admin-bar-chart--analytics">
+							{chartActividad.map((valor, i) => (
+								<div class="admin-bar-chart__col">
+									<div
+										class={`admin-bar admin-bar--analytics h-[${valor}%] ${i >= 5 ? 'admin-bar--muted' : ''}`}
+									></div>
+									<span class="admin-bar-chart__label">{diasSemana[i]}</span>
+								</div>
+							))}
+						</div>
+					</section>
+
+					<section class="admin-panel">
+						<h3 class="admin-panel__title">Embudo de conversión</h3>
+						<div class="admin-funnel">
+							{embudo.map((paso) => (
+								<div class="admin-funnel__row">
+									<div class="admin-funnel__head">
+										<span class="admin-funnel__label">{paso.label}</span>
+										<span class="admin-funnel__value">{paso.value}</span>
+									</div>
+									<div class={`admin-funnel__bar admin-funnel__bar--${paso.color} w-[${paso.pct}%]`}></div>
+								</div>
+							))}
+						</div>
+					</section>
+
+					<section class="admin-panel">
+						<h3 class="admin-panel__title">Top oficios buscados (7d)</h3>
+						<div class="admin-top-list">
+							{topOficios.map((item) => (
+								<div class="admin-top-list__row">
+									<span class="admin-top-list__rank">{item.rank}</span>
+									<span class="admin-top-list__name">{item.nombre}</span>
+									<div class="admin-top-list__bar-wrap">
+										<div class={`admin-top-list__bar w-[${item.pct}%]`}></div>
+									</div>
+									<span class="admin-top-list__count">{item.count}</span>
+								</div>
+							))}
+						</div>
+					</section>
+				</div>
+			)}
+
+			{seccionActiva === 'auditoria' && (
+				<div class="admin-section" data-section="auditoria">
+					<h2 class="admin-section__title">Registro de auditoría</h2>
+					<div class="admin-section__filters">
+						<select class="admin-select" aria-label="Filtrar por admin" disabled>
+							<option>Todos los admins</option>
+						</select>
+						<select class="admin-select" aria-label="Filtrar por entidad" disabled>
+							<option>Todas las entidades</option>
+						</select>
+					</div>
+					<section class="admin-panel">
+						<div class="admin-table-wrap">
+							<table class="admin-table">
+								<thead>
+									<tr>
+										<th>Fecha</th>
+										<th>Admin</th>
+										<th>Acción</th>
+										<th>Entidad</th>
+										<th>ID</th>
+									</tr>
+								</thead>
+								<tbody>
+									{auditPlaceholder.map((a) => (
+										<tr>
+											<td class="admin-table__date">{a.fecha}</td>
+											<td>{a.admin}</td>
+											<td>
+												<span class={`admin-pill admin-pill--${a.accionColor}`}>{a.accion}</span>
+											</td>
+											<td class="admin-table__entity">{a.entidad}</td>
+											<td class="admin-table__id">{a.id}</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+					</section>
+				</div>
+			)}
+		</main>
+	</div>
+</body>
+</html>
+
+<style>
+	/* Admin Dashboard — estilos scoped a este page (admin tiene su propio shell). */
+
+	.admin-shell {
+		font-family: 'Nunito', system-ui, -apple-system, sans-serif;
+		background-color: #f9fafb;
+		color: #1f2937;
+		display: flex;
+		height: 100vh;
+		overflow: hidden;
+		margin: 0;
+	}
+
+	/* Sidebar */
+	.admin-sidebar {
+		width: 16rem;
+		background: #ffffff;
+		border-right: 1px solid #e5e7eb;
+		display: none;
+		flex-direction: column;
+		flex-shrink: 0;
+	}
+	@media (min-width: 768px) {
+		.admin-sidebar { display: flex; }
+	}
+	.admin-sidebar__brand {
+		padding: 1.5rem;
+		border-bottom: 1px solid #f3f4f6;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+	.admin-sidebar__brand-icon {
+		font-size: 1.875rem;
+		color: #f97316;
+	}
+	.admin-sidebar__brand-text {
+		font-size: 1.25rem;
+		font-weight: 800;
+		color: #1f2937;
+	}
+	.admin-sidebar__nav {
+		flex-grow: 1;
+		padding: 1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		overflow-y: auto;
+	}
+	.admin-nav-link {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.75rem 1rem;
+		border-radius: 0.75rem;
+		text-decoration: none;
+		color: #4b5563;
+		font-weight: 600;
+		font-size: 0.875rem;
+		transition: background-color 150ms, color 150ms;
+	}
+	.admin-nav-link:hover {
+		background-color: #fff7ed;
+		color: #c2410c;
+	}
+	.admin-nav-link--active {
+		background-color: #ffedd5;
+		color: #c2410c;
+	}
+	.admin-nav-link i {
+		font-size: 1.125rem;
+	}
+	.admin-nav-link span {
+		flex-grow: 1;
+	}
+	.admin-nav-badge {
+		font-size: 0.75rem;
+		font-weight: 700;
+		padding: 0.125rem 0.5rem;
+		border-radius: 9999px;
+	}
+	.admin-nav-badge--red {
+		background-color: #fee2e2;
+		color: #dc2626;
+	}
+	.admin-nav-badge--orange {
+		background-color: #ffedd5;
+		color: #ea580c;
+	}
+	.admin-sidebar__footer {
+		padding: 1rem;
+		border-top: 1px solid #f3f4f6;
+	}
+	.admin-logout-form {
+		display: contents;
+	}
+	.admin-logout-btn {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		color: #ef4444;
+		font-weight: 700;
+		font-size: 0.875rem;
+		padding: 0.5rem 1rem;
+		background: transparent;
+		border: none;
+		cursor: pointer;
+		width: 100%;
+	}
+	.admin-logout-btn:hover {
+		color: #b91c1c;
+	}
+
+	/* Main area */
+	.admin-main {
+		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
+		overflow-y: auto;
+	}
+	.admin-header {
+		background: #ffffff;
+		border-bottom: 1px solid #e5e7eb;
+		padding: 1.5rem;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		position: sticky;
+		top: 0;
+		z-index: 10;
+	}
+	.admin-header__title {
+		font-size: 1.5rem;
+		font-weight: 700;
+		color: #1f2937;
+		margin: 0;
+	}
+	.admin-header__user {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+	.admin-header__user-info {
+		text-align: right;
+		display: none;
+	}
+	@media (min-width: 640px) {
+		.admin-header__user-info { display: block; }
+	}
+	.admin-header__user-name {
+		font-size: 0.875rem;
+		font-weight: 700;
+		color: #1f2937;
+		margin: 0;
+	}
+	.admin-header__user-role {
+		font-size: 0.75rem;
+		color: #6b7280;
+		margin: 0;
+	}
+	.admin-header__avatar {
+		width: 2.5rem;
+		height: 2.5rem;
+		border-radius: 9999px;
+		background-color: #f97316;
+		color: #ffffff;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: 700;
+	}
+
+	.admin-content {
+		padding: 1.5rem;
+	}
+	@media (min-width: 768px) {
+		.admin-content { padding: 2rem; }
+	}
+	.admin-section {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+	.admin-section__head {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 1rem;
+	}
+	.admin-section__title {
+		font-size: 1.5rem;
+		font-weight: 700;
+		color: #1f2937;
+		margin: 0;
+	}
+	.admin-section__filters {
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	/* KPIs */
+	.admin-kpi-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1.5rem;
+	}
+	@media (min-width: 768px) {
+		.admin-kpi-grid { grid-template-columns: repeat(4, 1fr); }
+	}
+	.admin-kpi-card {
+		background: #ffffff;
+		padding: 1.5rem;
+		border-radius: 1rem;
+		box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+		border: 1px solid #f3f4f6;
+		position: relative;
+		overflow: hidden;
+	}
+	.admin-kpi-card__bg {
+		position: absolute;
+		right: 0;
+		top: 0;
+		padding: 1rem;
+		opacity: 0.05;
+		font-size: 5rem;
+		pointer-events: none;
+	}
+	.admin-kpi-card__head {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		margin-bottom: 1rem;
+		position: relative;
+		z-index: 1;
+	}
+	.admin-kpi-card__icon {
+		padding: 0.75rem;
+		border-radius: 0.75rem;
+	}
+	.admin-kpi-card__icon i {
+		font-size: 1.25rem;
+	}
+	.admin-kpi-card__icon--blue { background-color: #eff6ff; color: #3b82f6; }
+	.admin-kpi-card__icon--primary { background-color: #fff7ed; color: #f97316; }
+	.admin-kpi-card__icon--orange { background-color: #fff7ed; color: #ea580c; }
+	.admin-kpi-card__icon--red { background-color: #fef2f2; color: #ef4444; }
+	.admin-kpi-card__icon--purple { background-color: #faf5ff; color: #a855f7; }
+	.admin-kpi-card__label {
+		font-size: 0.75rem;
+		font-weight: 700;
+		color: #9ca3af;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		margin: 0 0 0.25rem;
+		position: relative;
+		z-index: 1;
+	}
+	.admin-kpi-card__value {
+		font-size: 1.5rem;
+		font-weight: 800;
+		color: #1f2937;
+		margin: 0;
+		position: relative;
+		z-index: 1;
+	}
+
+	.admin-trend {
+		font-size: 0.75rem;
+		font-weight: 700;
+		padding: 0.125rem 0.5rem;
+		border-radius: 0.5rem;
+	}
+	.admin-trend--up { color: #16a34a; background-color: #f0fdf4; }
+	.admin-trend--down { color: #dc2626; background-color: #fef2f2; }
+	.admin-trend--neutral { color: #6b7280; background-color: #f9fafb; }
+	.admin-trend--warn { color: #dc2626; background-color: #fef2f2; }
+
+	/* Panel base */
+	.admin-panel {
+		background: #ffffff;
+		padding: 1.5rem 2rem;
+		border-radius: 1.5rem;
+		box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+		border: 1px solid #f3f4f6;
+	}
+	@media (min-width: 768px) {
+		.admin-panel { padding: 2rem; }
+	}
+	.admin-panel--narrow {
+		max-width: 42rem;
+	}
+	.admin-panel__head {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 1.5rem;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+	.admin-panel__head--with-action {
+		border-bottom: 1px solid #f3f4f6;
+		padding-bottom: 1rem;
+		margin-bottom: 0;
+	}
+	.admin-panel__title {
+		font-size: 1.125rem;
+		font-weight: 700;
+		color: #1f2937;
+		margin: 0;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+	.admin-panel__title-icon {
+		color: #f97316;
+		font-size: 1.125rem;
+	}
+
+	/* Selects */
+	.admin-select {
+		background-color: #f9fafb;
+		border: 1px solid #e5e7eb;
+		font-size: 0.75rem;
+		font-weight: 700;
+		padding: 0.375rem 0.75rem;
+		border-radius: 0.5rem;
+		color: #4b5563;
+	}
+	.admin-select:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+
+	/* Bar chart (dashboard & analytics) */
+	.admin-bar-chart {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		height: 12rem;
+		gap: 0.5rem;
+	}
+	.admin-bar-chart--analytics {
+		gap: 0.5rem;
+	}
+	.admin-bar-chart__col {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.5rem;
+		height: 100%;
+		justify-content: flex-end;
+	}
+	.admin-bar {
+		width: 100%;
+		background-color: #eff6ff;
+		border-top-left-radius: 0.5rem;
+		border-top-right-radius: 0.5rem;
+		position: relative;
+		transition: background-color 150ms;
+	}
+	.admin-bar:hover { background-color: #dbeafe; }
+	.admin-bar--highlight { background-color: rgba(249, 115, 22, 0.2); }
+	.admin-bar--highlight:hover { background-color: rgba(249, 115, 22, 0.3); }
+	.admin-bar--analytics { background-color: #f97316; }
+	.admin-bar--muted { background-color: rgba(249, 115, 22, 0.6); }
+	.admin-bar__tip {
+		position: absolute;
+		top: -1.5rem;
+		left: 50%;
+		transform: translateX(-50%);
+		font-size: 0.75rem;
+		font-weight: 700;
+		color: #f97316;
+		opacity: 0;
+		transition: opacity 150ms;
+		pointer-events: none;
+		white-space: nowrap;
+	}
+	.admin-bar:hover .admin-bar__tip { opacity: 1; }
+	.admin-bar-chart__label {
+		font-size: 0.75rem;
+		color: #9ca3af;
+		font-weight: 700;
+		text-transform: uppercase;
+	}
+
+	/* Funnel */
+	.admin-funnel {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+	.admin-funnel__row {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+	.admin-funnel__head {
+		display: flex;
+		justify-content: space-between;
+		font-size: 0.875rem;
+	}
+	.admin-funnel__label {
+		font-weight: 700;
+		color: #374151;
+	}
+	.admin-funnel__value {
+		color: #6b7280;
+	}
+	.admin-funnel__bar {
+		height: 0.75rem;
+		border-radius: 9999px;
+	}
+	.admin-funnel__bar--primary { background: linear-gradient(to right, #f97316, rgba(249, 115, 22, 0.4)); }
+	.admin-funnel__bar--blue { background: linear-gradient(to right, #60a5fa, rgba(96, 165, 250, 0.4)); }
+	.admin-funnel__bar--orange { background: linear-gradient(to right, #fb923c, rgba(251, 146, 60, 0.4)); }
+	.admin-funnel__bar--green { background: linear-gradient(to right, #4ade80, rgba(74, 222, 128, 0.4)); }
+
+	/* Top oficios (analytics) */
+	.admin-top-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+	.admin-top-list__row {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+	.admin-top-list__rank {
+		font-size: 0.75rem;
+		font-weight: 700;
+		color: #6b7280;
+		width: 1.5rem;
+	}
+	.admin-top-list__name {
+		font-size: 0.875rem;
+		font-weight: 700;
+		color: #374151;
+		flex: 1;
+	}
+	.admin-top-list__bar-wrap {
+		flex: 1;
+		height: 0.5rem;
+		background-color: #f3f4f6;
+		border-radius: 9999px;
+		overflow: hidden;
+	}
+	.admin-top-list__bar {
+		height: 100%;
+		background-color: #f97316;
+		border-radius: 9999px;
+	}
+	.admin-top-list__count {
+		font-size: 0.75rem;
+		color: #6b7280;
+		width: 3rem;
+		text-align: right;
+	}
+
+	/* Tables */
+	.admin-table-wrap {
+		overflow-x: auto;
+	}
+	.admin-table {
+		width: 100%;
+		text-align: left;
+		font-size: 0.875rem;
+		border-collapse: collapse;
+	}
+	.admin-table thead {
+		background-color: #f9fafb;
+		color: #9ca3af;
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		font-weight: 700;
+	}
+	.admin-table th {
+		padding: 0.75rem 1.5rem;
+		text-align: left;
+	}
+	.admin-table th.text-right { text-align: right; }
+	.admin-table td {
+		padding: 0.75rem 1.5rem;
+	}
+	.admin-table tbody tr {
+		border-top: 1px solid #f3f4f6;
+	}
+	.admin-table tbody tr:hover {
+		background-color: #f9fafb;
+	}
+	.admin-table__id {
+		font-family: ui-monospace, SFMono-Regular, monospace;
+		font-size: 0.75rem;
+		color: #6b7280;
+	}
+	.admin-table__email {
+		font-family: ui-monospace, SFMono-Regular, monospace;
+		font-size: 0.8125rem;
+	}
+	.admin-table__name {
+		font-weight: 700;
+		color: #1f2937;
+	}
+	.admin-table__symbol {
+		font-family: ui-monospace, SFMono-Regular, monospace;
+		font-size: 0.75rem;
+	}
+	.admin-table__commune {
+		font-size: 0.8125rem;
+		color: #6b7280;
+	}
+	.admin-table__date {
+		font-size: 0.75rem;
+		color: #6b7280;
+	}
+	.admin-table__entity {
+		font-family: ui-monospace, SFMono-Regular, monospace;
+		font-size: 0.8125rem;
+	}
+	.admin-table__actions {
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	.admin-icon-btn {
+		background: transparent;
+		border: none;
+		cursor: pointer;
+		font-size: 1rem;
+		padding: 0.25rem;
+	}
+	.admin-icon-btn:disabled {
+		opacity: 0.4;
+		cursor: not-allowed;
+	}
+	.admin-icon-btn--blue { color: #3b82f6; }
+	.admin-icon-btn--red { color: #ef4444; }
+	.admin-icon-btn--blue:not(:disabled):hover { color: #1d4ed8; }
+	.admin-icon-btn--red:not(:disabled):hover { color: #b91c1c; }
+
+	.admin-pill {
+		display: inline-block;
+		padding: 0.125rem 0.5rem;
+		border-radius: 9999px;
+		font-size: 0.75rem;
+		font-weight: 700;
+	}
+	.admin-pill--user { background-color: #f3f4f6; color: #374151; }
+	.admin-pill--provider { background-color: #dbeafe; color: #1d4ed8; }
+	.admin-pill--admin { background-color: #f3e8ff; color: #7e22ce; }
+	.admin-pill--active { background-color: #dcfce7; color: #15803d; }
+	.admin-pill--banned { background-color: #fee2e2; color: #b91c1c; }
+	.admin-pill--paused { background-color: #ffedd5; color: #c2410c; }
+	.admin-pill--blue { background-color: #dbeafe; color: #1d4ed8; }
+	.admin-pill--green { background-color: #dcfce7; color: #15803d; }
+	.admin-pill--red { background-color: #fee2e2; color: #b91c1c; }
+
+	.admin-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
+		font-size: 0.75rem;
+		font-weight: 700;
+		padding: 0.5rem 0.75rem;
+		border-radius: 0.5rem;
+		border: none;
+		cursor: pointer;
+		transition: background-color 150ms, transform 100ms;
+	}
+	.admin-btn--primary {
+		background-color: #f97316;
+		color: #ffffff;
+	}
+	.admin-btn--primary:not(:disabled):hover { background-color: #ea580c; }
+	.admin-btn--warning {
+		background: linear-gradient(to right, #f97316, #ea580c);
+		color: #ffffff;
+		padding: 0.75rem 1.5rem;
+		font-size: 0.875rem;
+	}
+	.admin-btn:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	.admin-empty {
+		padding: 3rem 1rem;
+		text-align: center;
+		color: #9ca3af;
+		font-size: 0.875rem;
+	}
+	.admin-empty__icon {
+		display: block;
+		font-size: 3rem;
+		margin-bottom: 0.75rem;
+		color: #d1d5db;
+	}
+
+	/* Finance */
+	.admin-finance-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1.5rem;
+	}
+	@media (min-width: 768px) {
+		.admin-finance-grid { grid-template-columns: repeat(3, 1fr); }
+	}
+	.admin-finance-card {
+		background: #ffffff;
+		padding: 1.5rem;
+		border-radius: 1rem;
+		box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+		border: 1px solid #f3f4f6;
+	}
+	.admin-finance-card__label {
+		font-size: 0.75rem;
+		font-weight: 700;
+		color: #9ca3af;
+		text-transform: uppercase;
+		margin: 0 0 0.5rem;
+	}
+	.admin-finance-card__value {
+		font-size: 1.875rem;
+		font-weight: 800;
+		color: #1f2937;
+		margin: 0;
+	}
+	.admin-finance-card__value--primary { color: #f97316; }
+	.admin-finance-card__hint {
+		font-size: 0.75rem;
+		color: #6b7280;
+	}
+
+	.admin-progress {
+		height: 0.5rem;
+		background-color: #e5e7eb;
+		border-radius: 9999px;
+		margin-top: 0.5rem;
+		overflow: hidden;
+	}
+	.admin-progress__bar {
+		height: 100%;
+		background-color: #f97316;
+		border-radius: 9999px;
+	}
+
+	.admin-stacked-chart {
+		display: flex;
+		align-items: flex-end;
+		gap: 1rem;
+		height: 12rem;
+	}
+	.admin-stacked-chart__col {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.25rem;
+		height: 100%;
+		justify-content: flex-end;
+	}
+	.admin-stacked-chart__bars {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		flex-grow: 1;
+		justify-content: flex-end;
+	}
+	.admin-stacked-chart__bar {
+		width: 100%;
+		border-top-left-radius: 0.25rem;
+		border-top-right-radius: 0.25rem;
+	}
+	.admin-stacked-chart__bar--donaciones { background-color: #60a5fa; }
+	.admin-stacked-chart__bar--gastos { background-color: #fb923c; }
+	.admin-stacked-chart__label {
+		font-size: 0.75rem;
+		color: #6b7280;
+		font-weight: 700;
+	}
+	.admin-legend {
+		display: flex;
+		gap: 1.5rem;
+		margin-top: 1rem;
+		font-size: 0.75rem;
+		color: #4b5563;
+	}
+	.admin-legend__item {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+	.admin-legend__swatch {
+		width: 0.75rem;
+		height: 0.75rem;
+		border-radius: 0.25rem;
+	}
+	.admin-legend__swatch--donaciones { background-color: #60a5fa; }
+	.admin-legend__swatch--gastos { background-color: #fb923c; }
+
+	/* Form (configuración) */
+	.admin-form {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+	.admin-form__field {
+		display: flex;
+		flex-direction: column;
+	}
+	.admin-form__label {
+		display: block;
+		font-size: 0.875rem;
+		font-weight: 700;
+		color: #374151;
+		margin-bottom: 0.25rem;
+	}
+	.admin-form__input {
+		background-color: #f9fafb;
+		border: 1px solid #e5e7eb;
+		border-radius: 0.75rem;
+		padding: 0.5rem 1rem;
+		font-size: 0.875rem;
+		font-family: inherit;
+	}
+	.admin-form__input--small { width: 8rem; }
+	.admin-form__input--medium { width: 10rem; }
+	.admin-form__input:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+	.admin-form__hint {
+		font-size: 0.75rem;
+		color: #6b7280;
+		margin: 0.25rem 0 0;
+	}
+	.admin-form__toggle {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.75rem;
+		background-color: #f9fafb;
+		border-radius: 0.75rem;
+		cursor: not-allowed;
+	}
+	.admin-form__checkbox {
+		width: 1.25rem;
+		height: 1.25rem;
+		accent-color: #f97316;
+	}
+	.admin-form__toggle-text {
+		font-size: 0.875rem;
+		font-weight: 700;
+		color: #374151;
+	}
+	.admin-form__note {
+		font-size: 0.75rem;
+		color: #6b7280;
+		margin: 0;
+		display: flex;
+		align-items: center;
+		gap: 0.375rem;
+	}
+</style>

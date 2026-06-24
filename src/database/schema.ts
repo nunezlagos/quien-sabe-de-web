@@ -36,6 +36,7 @@ export const trades = sqliteTable('trades', {
   description: text('description'),
   basePriceClp: integer('base_price_clp'),
   imageUrl: text('image_url'),
+  whatsapp: text('whatsapp'),
   verified: integer('verified', { mode: 'boolean' }).notNull().default(false),
   status: text('status', { enum: ['active', 'paused'] }).notNull().default('active'),
   communeId: integer('commune_id').references(() => communes.id, { onDelete: 'set null' }),
