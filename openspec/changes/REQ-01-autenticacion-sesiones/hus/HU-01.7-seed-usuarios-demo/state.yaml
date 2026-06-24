@@ -1,0 +1,12 @@
+status: planned
+created: 2026-06-24
+archived: ~
+depends_on:
+  - HU-02.1-catalogo-comunas  # necesita al menos 1 commune/trade para el provider demo
+blocks:
+  - HU-01.1-login-email-password  # necesita usuarios para validar
+  - HU-01.8-vista-login-standalone
+  - HU-11-dashboard-vecino  # necesita vecino@demo.cl
+  - HU-12-dashboard-prestador  # necesita prestador@demo.cl
+  - HU-13-dashboard-admin  # necesita admin@demo.cl
+  - HU-21-onboarding-prestador  # usa vecino@demo.cl como base de la demo

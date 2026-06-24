@@ -1,0 +1,10 @@
+status: planned
+created: 2026-06-24
+archived: ~
+depends_on:
+  - HU-01.1-login-email-password  # necesita endpoint funcional
+  - HU-01.7-seed-usuarios-demo  # necesita usuarios para probar login
+blocks:
+  - HU-01.9-vista-registro-standalone  # linkea desde login
+mockup:
+  - mockups/login.html  # a crear en esta HU

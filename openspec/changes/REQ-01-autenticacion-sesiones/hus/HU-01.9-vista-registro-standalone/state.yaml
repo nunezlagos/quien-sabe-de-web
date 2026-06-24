@@ -1,0 +1,8 @@
+status: planned
+created: 2026-06-24
+archived: ~
+depends_on:
+  - HU-01.8-vista-login-standalone  # link desde /registro
+blocks: []
+mockup:
+  - mockups/register.html  # a crear en esta HU
