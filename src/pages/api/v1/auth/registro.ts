@@ -5,6 +5,7 @@ import { CorreoYaRegistradoError, crearUsuario, usuarioPublico } from '../../../
 import { crearSesion } from '../../../../lib/services/auth/sesion';
 import { establecerCookieSesion } from '../../../../lib/utils/cookies';
 import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
+import crypto from 'crypto';
 
 export const prerender = false;
 
