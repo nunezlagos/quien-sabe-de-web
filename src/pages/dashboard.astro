@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getDb } from '../database/client';
-import { trades, communes, reviews } from '../database/schema';
-import { eq, desc, avg, count } from 'drizzle-orm';
+import { trades, communes, reviews, contactEvents } from '../database/schema';
+import { eq, desc, avg, count, inArray } from 'drizzle-orm';
 
 const currentUser = Astro.locals.user;
 if (!currentUser) {
@@ -37,6 +37,25 @@ const myTrades = await db
   .orderBy(desc(trades.createdAt))
   .all();
 
+// Recent reviews (all, since we don't have user_id in reviews table yet)
+const recentReviews = await db
+  .select()
+  .from(reviews)
+  .orderBy(desc(reviews.createdAt))
+  .limit(10)
+  .all();
+
+// Contact history for this user's trades (if any)
+const myTradeIds = myTrades.map((t) => t.id);
+const contactHistory = myTradeIds.length > 0
+  ? await db
+      .select()
+      .from(contactEvents)
+      .where(inArray(contactEvents.tradeId, myTradeIds))
+      .orderBy(desc(contactEvents.createdAt))
+      .limit(20)
+      .all()
+  : [];
 // TODO(REQ-20): cuando el schema exponga `email_verified_at`, renderizar aquí
 // el banner de verificación con `email={currentUser.email}` y CTA "Reenviar correo".
 // El schema actual (src/database/schema.ts) aún no incluye este campo.

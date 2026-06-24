@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getDb } from '../database/client';
-import { trades, reviews } from '../database/schema';
-import { eq, desc, avg, count } from 'drizzle-orm';
+import { trades, reviews, contactEvents } from '../database/schema';
+import { eq, desc, avg, count, gt, and, inArray } from 'drizzle-orm';
 
 const user = Astro.locals.user;
 if (!user) {
@@ -40,8 +40,21 @@ const ratingGlobal = myTrades.length > 0
   ? myTrades.reduce((acc, t) => acc + Number(t.ratingAvg || 0), 0) / myTrades.length
   : 0;
 const totalReviews = myTrades.reduce((acc, t) => acc + Number(t.reviewCount || 0), 0);
-const visitas30d = 124; // Mock MVP
-const contactos30d = 15; // Mock MVP
+
+// Real metrics from contact_events
+const myTradeIds = myTrades.map((t) => t.id);
+const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+const contactEventsCount = myTradeIds.length > 0
+  ? await db
+      .select({ count: count() })
+      .from(contactEvents)
+      .where(and(
+        gt(contactEvents.createdAt, thirtyDaysAgo),
+        inArray(contactEvents.tradeId, myTradeIds)
+      ))
+      .get()
+  : { count: 0 };
+const contactos30d = contactEventsCount?.count ?? 0;
 
 const initials = user.name.slice(0, 1).toUpperCase();
 const perfilActualizado = Astro.url.searchParams.get('perfil') === 'actualizado';
@@ -237,9 +250,13 @@ const showVerificationBanner = totalOficios > 0 && !algunVerificado;
                     )}
                   </div>
                   <div class="flex items-center gap-2">
-                    <span class={`text-xs px-2 py-1 rounded-full font-bold ${t.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
-                      {t.status === 'active' ? 'Activo' : 'Pausado'}
-                    </span>
+                    {t.status === 'active' && !t.verified ? (
+                      <span class="text-xs px-2 py-1 rounded-full font-bold bg-yellow-100 text-yellow-700">Pendiente</span>
+                    ) : (
+                      <span class={`text-xs px-2 py-1 rounded-full font-bold ${t.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
+                        {t.status === 'active' ? 'Activo' : 'Pausado'}
+                      </span>
+                    )}
                     <a href={`/p/${t.slug}`} class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg font-bold transition">Ver</a>
                     <button
                       data-toggle-id={t.id}
