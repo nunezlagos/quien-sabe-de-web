@@ -27,7 +27,7 @@
   Entonces recibo status 429 con `{ "error": "demasiadas solicitudes" }`
 
 ### Escenario: UI muestra confirmación neutra
-  Cuando completo el form `/forgot-password` (estilo `mockups/verification.html` card blanca)
+  Cuando completo el form `/forgot-password` (estilo `mockups/forgot-password.html` card blanca)
   Entonces veo mensaje "Si el email existe, recibirás instrucciones"
 
 ## Tareas técnicas
@@ -37,7 +37,7 @@
 - [ ] Persistir en KV `SESSION` con prefijo `pwreset:` TTL 1800
 - [ ] Encolar email vía servicio REQ-17 (`src/lib/services/email/send.ts`) template `password_reset`
 - [ ] Rate limiter compartido en `src/lib/middleware/rate-limit.ts` (3/hora por email, 5/hora por IP)
-- [ ] Vista Astro `src/pages/forgot-password.astro` siguiendo estilo `mockups/verification.html` (card `bg-white rounded-3xl shadow-sm border border-gray-100`)
+- [ ] Vista Astro `src/pages/forgot-password.astro` siguiendo estilo `mockups/forgot-password.html` (card `bg-white rounded-3xl shadow-sm border border-gray-100`)
 - [ ] Tests `tests/unit/auth/reset-token.test.ts`, `tests/integration/auth/forgot-password.test.ts`
 
 ## Definition of done

@@ -10,11 +10,16 @@
 
 ## Criterios de aceptación (Gherkin)
 
-### Escenario: Export devuelve JSON completo
-  Dado un user_id=42 con perfil, reseñas dejadas, favoritos, contactos
-  Cuando envío `GET /api/v1/users/me/data-export`
-  Entonces recibo status 200 con `Content-Type: application/json` y `Content-Disposition: attachment`
-  Y el JSON contiene claves: `user`, `provider_profile`, `reviews`, `contacts`, `favorites`, `consents`
+### Escenario: POST inicia job de export
+  Cuando envío `POST /api/v1/users/me/data-export`
+  Entonces recibo status 202 con `{ job_id, status: "pending" }`
+  Y se genera un job que envía un email al usuario con link de descarga cuando termina (max 24h)
+  Y el archivo ZIP contiene todos los datos del titular en formato JSON
+
+### Escenario: GET descarga archivo si job terminado
+  Cuando consulto `GET /api/v1/users/me/data-export/:job_id` con status `ready`
+  Entonces recibo status 200 con `Content-Type: application/zip` y `Content-Disposition: attachment`
+  Y el ZIP contiene `user.json`, `provider_profile.json`, `reviews.json`, `contacts.json`, `favorites.json`, `consents.json`
 
 ### Escenario: Rate limit 1 por día → 429
   Dado un export en las últimas 24h
@@ -22,7 +27,7 @@
   Entonces recibo status 429
 
 ### Escenario: Datos derivados anonimizados
-  Cuando reviso el JSON
+  Cuando reviso el JSON dentro del ZIP
   Entonces los IDs de otros usuarios no aparecen en texto plano (sólo `provider_public_slug` para favoritos)
 
 ### Escenario: Acceso registrado en data_access_log

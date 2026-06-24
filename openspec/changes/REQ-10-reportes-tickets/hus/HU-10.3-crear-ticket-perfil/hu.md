@@ -34,6 +34,7 @@
 
 - [ ] Reuso del endpoint POST /tickets
 - [ ] Componente `src/components/providers/ReportModal.astro` con tipos de reporte
+- [ ] Actualizar `mockups/dashboard-provider.html` modal `#ticket-modal` (línea 397-441): reemplazar opciones del select 'Tipo de Problema' por las válidas del enum `tickets.kind`: 'Suplantación de identidad', 'Mal servicio', 'Contenido inapropiado', 'Consulta general'.
 - [ ] Tests `tests/integration/tickets/create-from-profile.test.ts`
 
 ## Definition of done

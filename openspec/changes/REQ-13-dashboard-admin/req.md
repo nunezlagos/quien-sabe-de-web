@@ -36,6 +36,9 @@ vs costos para OE3), cola de verificaciones (REQ-03), cola de tickets
 
 ### Vistas Astro
 - `/dashboard-admin` (secciones: resumen, usuarios, oficios, verificaciones, tickets, finanzas, settings, auditoría)
+  - **Tickets:** cola de tickets (REQ-10) con filtros por estado y prioridad
+  - **Verificaciones:** cola de verificaciones pendientes (REQ-03) con acciones aprobar/rechazar
+  - **Auditoría:** log de acciones admin con filtros por usuario, fecha y tipo de acción
 
 ### Tablas Drizzle
 - Lectura/escritura sobre `users`, `trades`, `donations`, `expenses`, `settings`, `admin_audit_log`

@@ -46,6 +46,7 @@
 - [ ] Modificar `src/pages/p/[slug].astro` para usar cover como hero (referencia `mockups/verification.html:27` para estilo hero)
 - [ ] Fallback CSS gradient `bg-gradient-to-r from-primary to-primary-dark` cuando cover_r2_key es null
 - [ ] Tests `tests/integration/providers/cover-upload.test.ts`, `tests/e2e/profile-cover-render.spec.ts`
+- [ ] Actualizar `mockups/profile.html`: agregar hero section arriba del card de bio (líneas 56-117) con cover image de fondo (`bg-cover bg-center`) + fallback gradient naranja. Estructura: `<div class="hero h-48 bg-gradient-to-br from-primary to-orange-400">` con `<img src="{{cover_url}}" class="w-full h-full object-cover">`.
 
 ## Definition of done
 

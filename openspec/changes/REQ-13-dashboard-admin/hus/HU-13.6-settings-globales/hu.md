@@ -30,6 +30,7 @@
 - [ ] Zod schemas para cada clave conocida
 - [ ] Cache KV `settings:current` con invalidation
 - [ ] Tests `tests/integration/admin/settings.test.ts`
+- [ ] Reemplazar placeholder 'Configuración - Próximamente' en `mockups/dashboard-admin.html:279-285` por formulario con los settings del Gherkin: rate_limit_contact (number), ticket_sla_hours (number), legal_terms_version (string), maintenance_mode (boolean).
 
 ## Definition of done
 

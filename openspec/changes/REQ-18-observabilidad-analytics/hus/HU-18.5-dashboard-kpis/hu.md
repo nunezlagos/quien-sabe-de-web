@@ -12,7 +12,12 @@
 
 ### Escenario: Widgets renderizan los 3 OE
   Cuando admin entra a `/dashboard-admin#analytics`
-  Entonces ve widgets: p95 search vs 500 ms (OE1), precisión search vs 100% (OE2), ratio donaciones vs 80% (OE3)
+  Entonces ve 4 KPIs: Vistas Perfil (7d), Contactos (7d), Búsquedas (7d), Conversión a Contacto (%)
+  Y un gráfico "Actividad por día" (últimos 7 días)
+  Y un embudo de conversión: visitantes → vieron perfil → contactaron → dejaron reseña
+  Y un ranking "Top oficios buscados (7d)"
+
+> **Nota**: Los 3 OEs (p95 search, precisión search, ratio donaciones) se muestran como sub-widget secundario en cada card OE — ver mockup `mockups/dashboard-admin.html:288-447` para detalle.
 
 ### Escenario: Datos en cuasi-tiempo-real (≤5 min)
   Dado eventos recientes

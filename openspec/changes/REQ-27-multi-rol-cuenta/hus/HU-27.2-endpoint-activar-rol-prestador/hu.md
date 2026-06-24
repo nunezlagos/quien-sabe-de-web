@@ -12,7 +12,7 @@
 
 ### Escenario: Activación exitosa desde dashboard-user
   Dado un vecino con rol único
-  Cuando hace clic en "Crear Perfil PRO" (`mockups/dashboard-user.html:62`)
+  Cuando hace clic en "Crear Perfil PRO" (`mockups/dashboard-user.html:80-84`)
   Entonces el client llama `POST /api/v1/users/me/roles/prestador`
   Y se inserta fila `user_roles(user_id, "prestador")`
   Y redirige a `/create-trade` (REQ-21)

@@ -12,8 +12,8 @@
 
 ### Escenario: Render fiel al mockup
   Cuando navego a `/dashboard-user`
-  Entonces la sección "Vecinos Guardados" (`mockups/dashboard-user.html:71-97`) se popula desde `GET /api/v1/users/me/favorites`
-  Y cada item respeta el HTML del mockup: avatar circular con inicial (línea 77), nombre + badge oficio coloreado (línea 79-81), botón WhatsApp verde redondo (línea 83)
+  Entonces la sección "Vecinos Guardados" (`mockups/dashboard-user.html:91-117`) se popula desde `GET /api/v1/users/me/favorites`
+  Y cada item respeta el HTML del mockup: avatar circular con inicial (línea 97), nombre + badge oficio coloreado (línea 99-101), botón WhatsApp verde redondo (línea 103)
 
 ### Escenario: Lista vacía
   Cuando no tengo favoritos
@@ -29,7 +29,7 @@
 
 ### Escenario: Avatares
   Cuando el prestador tiene foto R2
-  Entonces se muestra `<img>` en vez de inicial; si no, fallback a primera letra del nombre (estilo `bg-white text-primary font-bold` del mockup línea 77)
+  Entonces se muestra `<img>` en vez de inicial; si no, fallback a primera letra del nombre (estilo `bg-white text-primary font-bold` del mockup línea 97)
 
 ## Tareas técnicas
 

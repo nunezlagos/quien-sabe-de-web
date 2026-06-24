@@ -29,6 +29,7 @@
 - [ ] Componente `src/components/dashboard/user/EditProfileModal.astro`
 - [ ] Reuso de `PATCH /api/v1/users/me/profile` (REQ-02)
 - [ ] Tests `tests/e2e/edit-profile-vecino.spec.ts`
+- [ ] Actualizar `mockups/dashboard-user.html` modal `#profile-modal` (líneas 169-209): reemplazar campos por 'Comuna' (select con 52 comunas RM), 'Recibir notificaciones por email' (toggle), 'Oficios de interés' (multi-select con tags). Mantener 'Nombre'.
 
 ## Definition of done
 

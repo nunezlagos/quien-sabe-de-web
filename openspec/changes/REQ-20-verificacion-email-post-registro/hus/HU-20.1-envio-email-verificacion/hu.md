@@ -14,7 +14,7 @@
   Cuando un nuevo usuario se registra vía REQ-02
   Entonces se genera token y se persiste KV `email_verify:<token>` TTL 86400
   Y `email_log` tiene una fila tipo `email_verify`
-  Y Mailpit recibe el correo en `localhost:8026`
+  Y Mailpit recibe el correo en `localhost:8025`
 
 ### Escenario: Email contiene link funcional
   Cuando reviso el mail en Mailpit
@@ -30,7 +30,7 @@
 - [ ] Hook en `src/pages/api/v1/auth/register.ts` (REQ-02) que invoca `sendVerificationEmail(userId, email)`
 - [ ] Servicio `src/lib/services/auth/email-verify.ts` con generación de token + persistencia KV
 - [ ] Template `verify_email` en `src/lib/services/email/templates/verify-email.ts`
-- [ ] Tests `tests/integration/auth/email-verify-send.test.ts` validando Mailpit (`localhost:8026` API)
+- [ ] Tests `tests/integration/auth/email-verify-send.test.ts` validando Mailpit (`localhost:8025` API)
 
 ## Definition of done
 

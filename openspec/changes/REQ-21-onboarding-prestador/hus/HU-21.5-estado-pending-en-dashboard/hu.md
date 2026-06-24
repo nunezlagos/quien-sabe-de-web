@@ -13,7 +13,7 @@
 ### Escenario: Banner visible mientras pending
   Dado un prestador con `providers.status="pending_verification"`
   Cuando navega a `/dashboard-provider`
-  Entonces se renderiza banner amarillo encima del form de edición (`mockups/dashboard-provider.html` antes del bloque línea 135) con texto "Tu perfil está en revisión" y botón "Ir a verificación"
+  Entonces se renderiza banner amarillo encima del form de edición (`mockups/dashboard-provider.html` antes del bloque línea 126 — Profile Edit Form) con texto "Tu perfil está en revisión" y botón "Ir a verificación"
 
 ### Escenario: Banner desaparece tras aprobación
   Dado `providers.status="approved"` (REQ-03 aprobado)

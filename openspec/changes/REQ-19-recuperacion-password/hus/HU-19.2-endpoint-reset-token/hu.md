@@ -26,7 +26,7 @@
 
 ### Escenario: Vista `/reset/:token` muestra estado de error
   Cuando el token es inválido y se carga `/reset/abc123`
-  Entonces se renderiza el estado de error reutilizando estilo de `mockups/profile.html` líneas 153-156 (`#profile-error`)
+  Entonces se renderiza el estado de error reutilizando estilo de `mockups/profile.html` líneas 166-169 (`#profile-error`)
 
 ## Tareas técnicas
 
@@ -34,7 +34,7 @@
 - [ ] Helper `getResetToken(token)` que lee KV y valida expiración
 - [ ] Función `maskEmail(email)` en `src/lib/utils/mask.ts`
 - [ ] Vista Astro `src/pages/reset/[token].astro` con SSR fetch del endpoint
-- [ ] Estilo de error idéntico al patrón `mockups/profile.html:153` (centrado, texto gris, CTA volver)
+- [ ] Estilo de error idéntico al patrón `mockups/profile.html:166` (centrado, texto gris, CTA volver)
 - [ ] Tests `tests/unit/utils/mask.test.ts`, `tests/integration/auth/reset-token-validate.test.ts`
 
 ## Definition of done

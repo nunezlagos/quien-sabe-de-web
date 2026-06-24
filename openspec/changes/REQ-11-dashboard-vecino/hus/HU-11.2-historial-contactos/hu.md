@@ -32,6 +32,7 @@
 - [ ] Endpoint `src/pages/api/v1/users/me/contacts.ts`
 - [ ] Componente `src/components/dashboard/user/ContactsHistory.astro`
 - [ ] Tests `tests/integration/users/contacts-history.test.ts`
+- [ ] Mockup: dentro del tab 'Historial' de `mockups/dashboard-user.html`, listar contactos con foto del prestador, nombre, oficio, icono del canal (WhatsApp/email/teléfono), fecha relativa, y CTA 'Dejar reseña' si `can_review=true`.
 
 ## Definition of done
 

@@ -33,6 +33,10 @@
   Cuando se elimina
   Entonces `providers.status="deleted"` y deja de aparecer en búsqueda
 
+### Escenario: UI muestra botón "Eliminar mi cuenta"
+  Cuando el titular navega a `/account-data`
+  Entonces el CTA del card final (mockup `mockups/account-data.html:132`) dice "Eliminar mi cuenta"
+
 ## Tareas técnicas
 
 - [ ] Endpoint `src/pages/api/v1/users/me/index.ts` (DELETE)

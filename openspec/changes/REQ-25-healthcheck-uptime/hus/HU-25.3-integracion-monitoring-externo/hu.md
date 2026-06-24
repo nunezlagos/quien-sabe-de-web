@@ -31,7 +31,7 @@
 
 - [ ] Configuración manual UptimeRobot (documentada en `docs/runbook.md`)
 - [ ] Discord webhook + email destino registrados en password manager del equipo
-- [ ] Página de status pública linkeada desde footer (extender footer de `mockups/dashboard-user.html:118-145`)
+- [ ] Página de status pública linkeada desde footer (extender footer de `mockups/dashboard-user.html:155-159`)
 - [ ] Tests N/A (integración externa); validar manualmente con incidente sintético
 
 ## Definition of done

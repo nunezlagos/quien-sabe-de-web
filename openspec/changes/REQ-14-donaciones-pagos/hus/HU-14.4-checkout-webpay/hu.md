@@ -30,6 +30,7 @@
 - [ ] Endpoint `src/pages/api/v1/donations/webpay/init.ts`
 - [ ] Vista `src/pages/donate/success.astro` que cierra el flujo
 - [ ] Tests `tests/integration/donations/webpay-init.test.ts`
+- [ ] Actualizar `mockups/donate.html` radio de pasarela: cuando usuario elige 'Webpay', POST a `/api/v1/donations/webpay/init` (en lugar de `/api/v1/donations/checkout` para MP).
 
 ## Definition of done
 

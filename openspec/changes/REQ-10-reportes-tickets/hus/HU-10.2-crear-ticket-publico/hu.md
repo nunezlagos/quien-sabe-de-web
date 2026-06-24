@@ -33,6 +33,7 @@
 - [ ] Endpoint `src/pages/api/v1/tickets.ts` (POST)
 - [ ] Zod schema `TicketCreate` en `src/lib/validators/tickets.ts`
 - [ ] Helper que envía email de confirmación al crear
+- [ ] Actualizar `mockups/profile.html` modal `#public-ticket-modal` (línea 238-296): (a) agregar input `name=subject` entre 'Correo' y 'Detalle' (requerido, min 5 chars); (b) renombrar label 'Detalle del Problema' → 'body'; (c) eliminar campo 'Tu RUT' (no existe en schema tickets).
 - [ ] Tests `tests/integration/tickets/create-anonymous.test.ts`
 
 ## Definition of done

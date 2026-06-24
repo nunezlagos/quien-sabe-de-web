@@ -27,7 +27,7 @@
 
 ### Escenario: Profile.html header también
   Cuando reviso `mockups/profile.html` header del perfil
-  Entonces se agrega el corazón junto al botón de contacto WhatsApp (mockup pendiente; reusar estilo `w-8 h-8 rounded-full bg-red-100 text-red-600 hover:bg-red-500 hover:text-white transition` análogo al botón WhatsApp `mockups/dashboard-user.html:83`)
+  Entonces se agrega el corazón junto al botón de contacto WhatsApp (mockup pendiente; reusar estilo `w-8 h-8 rounded-full bg-green-100 text-green-600 hover:bg-green-500 hover:text-white transition` análogo al botón WhatsApp `mockups/dashboard-user.html:83`; color canónico es green (matching WhatsApp button bg-green-100 text-green-600 hover:bg-green-500 hover:text-white) en `mockups/dashboard-user.html:103`/`114`)
 
 ### Escenario: Idempotente
   Cuando POST se llama dos veces para mismo par

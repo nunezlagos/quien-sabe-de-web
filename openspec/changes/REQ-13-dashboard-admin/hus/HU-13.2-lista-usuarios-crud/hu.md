@@ -34,6 +34,7 @@
 - [ ] Endpoint `src/pages/api/v1/admin/users/index.ts` y `[id].ts`
 - [ ] Invalidación de KV de sesiones del usuario al banear
 - [ ] Componente `src/components/admin/UsersList.astro`
+- [ ] Actualizar `mockups/dashboard-admin.html` modal `#user-modal`: select 'Estado' debe incluir opción 'Banned'. Select 'Rol' debe usar labels 'Vecino'/'Proveedor'/'Administrador' (alineado con naming interno 'vecino'/'prestador'/'admin').
 - [ ] Tests `tests/integration/admin/users-crud.test.ts`
 
 ## Definition of done

@@ -28,6 +28,7 @@
 - [ ] Tabla `admin_audit_log` en `src/database/schema.ts`
 - [ ] Helper `logAdminAction(ctx, action, entity, before, after)` en `src/lib/services/audit/admin.ts`
 - [ ] Endpoint `src/pages/api/v1/admin/audit-log.ts`
+- [ ] Actualizar `mockups/dashboard-admin.html` sidebar (después de Analytics): agregar link `<i class="ri-file-shield-2-line"></i> Auditoría` con `data-target="audit-section"`. Render del contenido con tabla (Fecha, Admin, Acción, Entidad, ID) + filtros `?actor_id=&entity=`.
 - [ ] Tests `tests/integration/admin/audit-log.test.ts`
 
 ## Definition of done

@@ -26,7 +26,8 @@ Modelo de datos basado en `mockups/js/data.js:33` `portfolio: ["url1", ...]`.
 ### Endpoints API
 - `GET    /api/v1/providers/:id/portfolio` — listado público
 - `POST   /api/v1/providers/me/portfolio` — upload imagen [sesión prestador]
-- `PATCH  /api/v1/providers/me/portfolio/:imageId` — reorder
+- `PATCH  /api/v1/providers/me/portfolio/:imageId` — actualiza caption
+- `PATCH  /api/v1/providers/me/portfolio/reorder` — actualiza orden de varias con `{"order":[id1,id2,...]}` [sesión prestador]
 - `DELETE /api/v1/providers/me/portfolio/:imageId`
 
 ### Vistas Astro

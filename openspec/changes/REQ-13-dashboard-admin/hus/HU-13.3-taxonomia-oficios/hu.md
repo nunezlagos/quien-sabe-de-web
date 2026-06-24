@@ -33,6 +33,8 @@
 - [ ] Componente `src/components/admin/TradesManager.astro` con drag-drop
 - [ ] Tests `tests/integration/admin/trades.test.ts`
 
+> **Decisión:** agregar `category TEXT` al schema `trades` (valores: 'hogar' | 'tecnologia' | 'automotriz' | 'educacion' | 'salud_belleza' | 'otros'). Actualizar endpoint POST/PATCH para aceptar `category`. Agregar índice en `category` para mejorar filtros.
+
 ## Definition of done
 
 - [ ] Tests Vitest unit pasan

@@ -13,17 +13,23 @@
 ### Escenario: Primera visita muestra banner
   Dado un visitante sin cookie `qs_consent`
   Cuando carga cualquier ruta
-  Entonces se renderiza banner sticky-bottom con 3 botones: "Aceptar todo", "Sólo necesarias", "Configurar"
+  Entonces se renderiza banner sticky-bottom con 3 botones: "Aceptar todas", "Rechazar", "Configurar"
   Y el banner sigue el estilo `bg-white shadow-lg border border-gray-100 rounded-2xl` (paleta consistente con `mockups/about.html`)
 
-### Escenario: Aceptar todo persiste decisión
-  Cuando hago clic en "Aceptar todo"
+### Escenario: Aceptar todas persiste decisión
+  Cuando hago clic en "Aceptar todas"
   Entonces se setea cookie `qs_consent` firmada con `{ analytics:true, communications:true, public_profile:true }`
   Y el banner desaparece
   Y POST `/api/v1/consent/cookies` registra elección
 
+### Escenario: Rechazar deshabilita todo lo opcional
+  Cuando hago clic en "Rechazar"
+  Entonces se setea cookie `qs_consent` firmada con `{ analytics:false, communications:false, public_profile:false }`
+  Y el banner desaparece
+  Y POST `/api/v1/consent/cookies` registra elección
+
 ### Escenario: Sólo necesarias deshabilita analytics
-  Cuando elijo "Sólo necesarias"
+  Cuando elijo "Sólo necesarias" (mismo efecto que Rechazar, expuesto por el modal Configurar)
   Entonces el cliente NO inicializa REQ-18 analytics
   Y consent.analytics=false
 
@@ -38,6 +44,7 @@
 - [ ] Endpoint `src/pages/api/v1/consent/cookies.ts` (POST público) que persiste opcionalmente si user logueado
 - [ ] Cookie firmada HMAC en `src/lib/utils/signed-cookie.ts`
 - [ ] Tests E2E `tests/e2e/cookie-banner.spec.ts`
+- [ ] Actualizar `mockups/privacy.html` cookie banner (líneas 200-202): renombrar botón 'Configurar' → abrir modal con toggles granulares por categoría (analytics, marketing, profile_public) cuando el usuario quiere control fino.
 
 ## Definition of done
 

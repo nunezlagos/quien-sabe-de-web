@@ -14,6 +14,7 @@
   Cuando se aplica la migración inicial de prestadores
   Entonces existen las tablas `providers` y `trades`
   Y `providers` tiene FK a `users.id`, `trades.id` y `communes.id`
+  Y el slug generado sigue el patrón `<nombre>-<apellido>-<oficio-slug>-<comuna-slug>` (ej. `juan-perez-gasfiter-las-condes`)
 
 ### Escenario: Seed inicial de oficios
   Cuando se aplica el seed

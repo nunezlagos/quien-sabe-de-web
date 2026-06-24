@@ -31,6 +31,7 @@
 - [ ] Reuso helper `canEditReview`
 - [ ] Componente `src/components/dashboard/user/MyReviews.astro` con CTA editar inline
 - [ ] Tests `tests/integration/users/my-reviews.test.ts`
+- [ ] Mockup: agregar tab 'Mis reseñas' en `mockups/dashboard-user.html` con lista de reseñas dejadas (avatar prestador, estrellas, body, fecha relativa) y botón 'Editar' inline cuando `editable=true` (dentro de 7 días).
 
 ## Definition of done
 

@@ -12,7 +12,7 @@
 
 ### Escenario: Perfil verificado muestra badge
   Dado un prestador con `verification.status="verificado"`
-  Cuando visito `/p/juan-gasfiter-las-condes`
+  Cuando visito `/p/juan-perez-gasfiter-las-condes`
   Entonces el HTML incluye el componente `<VerifiedBadge />`
   Y el atributo `data-verified="true"` está presente
 
@@ -22,7 +22,7 @@
   Entonces NO existe el elemento `<VerifiedBadge />` en el DOM
 
 ### Escenario: Endpoint de perfil expone `verified` boolean
-  Cuando envío `GET /api/v1/providers/juan-gasfiter-las-condes`
+  Cuando envío `GET /api/v1/providers/juan-perez-gasfiter-las-condes`
   Entonces la respuesta tiene `{ ..., verified: true }`
 
 ## Tareas técnicas

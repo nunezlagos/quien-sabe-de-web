@@ -22,7 +22,8 @@ estado de ticket, recibo de donación. Log persistente para auditoría.
 ## Superficie técnica
 
 ### Endpoints API
-- (No expone — servicio interno consumido por otros REQs)
+- (Servicio interno consumido por otros REQs)
+- `GET /api/v1/admin/email-log?limit=N` — listado paginado de emails enviados [admin]
 
 ### Servicios internos
 - `src/lib/services/email/EmailService.ts` — interfaz pública

@@ -11,8 +11,8 @@
 ## Criterios de aceptación (Gherkin)
 
 ### Escenario: GET por slug devuelve perfil completo
-  Dado un prestador con slug "juan-gasfiter-las-condes"
-  Cuando envío `GET /api/v1/providers/juan-gasfiter-las-condes`
+  Dado un prestador con slug "juan-perez-gasfiter-las-condes"
+  Cuando envío `GET /api/v1/providers/juan-perez-gasfiter-las-condes`
   Entonces recibo status 200 con `{ id, slug, trade, commune, description, photo_url, verified, rating_avg, services: [...], contact: { whatsapp_masked, phone_masked, email_masked }, reviews_count }`
 
 ### Escenario: GET por id numérico también funciona

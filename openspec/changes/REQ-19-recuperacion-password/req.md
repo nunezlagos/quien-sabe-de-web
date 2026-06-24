@@ -29,7 +29,7 @@ No existe mockup específico. Diseñar bajo el estilo visual de
 - `/reset/:token` — form nuevo password + confirmación, con indicador de
   fuerza.
 - Estado "Token inválido o expirado" reutilizando estilo de
-  `mockups/profile.html` sección `#profile-error` (línea 153-156).
+  `mockups/profile.html` sección `#profile-error` (línea 166-169).
 
 ## Superficie técnica
 

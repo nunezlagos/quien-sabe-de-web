@@ -15,9 +15,11 @@
   Entonces el browser navega a `/verification` (REQ-03)
   Y se preserva el banner "Verificación pendiente" (HU-21.5)
 
-### Escenario: Form action acorde al mockup
-  Cuando reviso `<form action>` del wizard
-  Entonces refleja el flujo equivalente al `action="dashboard-provider.html"` del mockup (`create-trade.html:50`) pero ahora apuntando a `/verification` por la nueva regla del REQ
+### Escenario: Submit redirige a /verification
+  Dado que el wizard está en paso final
+  Cuando envío el form con `fetch POST /api/v1/providers/me` y devuelve 201
+  Entonces `window.location.assign('/verification')` se ejecuta desde `src/lib/client/onboarding/navigation.ts`
+  Y NO se usa `<form action>` HTML (la implementación es JS, no form submission tradicional)
 
 ### Escenario: Error de servidor mantiene en página
   Cuando POST falla con 5xx

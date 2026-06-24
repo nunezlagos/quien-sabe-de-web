@@ -21,7 +21,7 @@
   Dado token con TTL vencido
   Cuando hago GET
   Entonces recibo status 410
-  Y vista `/verify-email/:token` muestra estado error con CTA "Reenviar" (estilo `mockups/profile.html:153-156`)
+  Y vista `/verify-email/:token` muestra estado error con CTA "Reenviar" (estilo `mockups/profile.html:166-169`)
 
 ### Escenario: Ya verificado → 200 idempotente
   Dado user con `email_verified_at` no nulo

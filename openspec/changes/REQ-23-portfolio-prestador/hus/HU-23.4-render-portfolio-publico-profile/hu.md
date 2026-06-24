@@ -12,14 +12,14 @@
 
 ### Escenario: Render SSR sustituye mock
   Cuando navego a `/p/juan-perez-gasfiter`
-  Entonces el contenedor `#profile-portfolio-container` (`mockups/profile.html:133`) se popula desde D1 vía SSR
-  Y se usa el template `portfolio-grid-template` (líneas 166-169) con grid `grid-cols-2 md:grid-cols-3 gap-3`
-  Y cada item usa `portfolio-item-template` (líneas 171-176) con la `<img class="...portfolio-img">`
+  Entonces el contenedor `#profile-portfolio-container` (`mockups/profile.html:146`) se popula desde D1 vía SSR
+  Y se usa el template `portfolio-grid-template` (`mockups/profile.html:179-182`) con grid `grid-cols-2 md:grid-cols-3 gap-3`
+  Y cada item usa `portfolio-item-template` (`mockups/profile.html:184-189`) con la `<img class="...portfolio-img">`
 
 ### Escenario: Prestador sin imágenes
   Dado prestador con 0 imágenes
   Cuando renderizo el perfil
-  Entonces la sección "Trabajos" (`mockups/profile.html:128-136`) muestra estado vacío "Aún no hay trabajos cargados"
+  Entonces la sección "Trabajos" (`mockups/profile.html:142-149`) muestra estado vacío "Aún no hay trabajos cargados"
 
 ### Escenario: URLs apuntan a R2/MinIO
   Cuando inspecciono `<img src>` en el HTML server-rendered

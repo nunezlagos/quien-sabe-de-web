@@ -36,6 +36,7 @@
 - [ ] Zod schema `ReviewCreate` en `src/lib/validators/reviews.ts`
 - [ ] Endpoint `src/pages/api/v1/providers/[id]/reviews.ts` (POST)
 - [ ] Gate `hasContactedProvider(userId, providerId)` que consulta `contact_events`
+- [ ] Mockup: agregar en `mockups/profile.html` (después de la sección 'Sobre mí') bloque 'Dejar opinión' con 5 estrellas (radio inputs) + textarea + botón 'Publicar'. Visible solo si vecino autenticado tiene `contact_event` con ese provider.
 - [ ] Tests `tests/integration/reviews/create.test.ts`
 
 ## Definition of done

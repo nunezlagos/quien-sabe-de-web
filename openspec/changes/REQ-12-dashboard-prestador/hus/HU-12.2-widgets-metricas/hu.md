@@ -13,6 +13,8 @@
 ### Escenario: GET métricas resumen
   Cuando prestador envía `GET /api/v1/providers/me/metrics`
   Entonces recibo `{ views_30d, contacts_30d, rating_avg, reviews_count, delta_vs_prev_30d: { views, contacts } }`
+  Y los 4 widgets del mockup `dashboard-provider.html` (Vistas 30d, Contactos 30d, Valoración Media, Reseñas) corresponden 1:1 a estos campos
+  Y NO se renderiza "Mensajes Nuevos" (campo `messages_new` descartado del contrato)
 
 ### Escenario: Cálculo de delta vs 30d previos
   Dado views actual=120 y views previo=100

@@ -33,6 +33,7 @@
 - [ ] Helper cliente `src/lib/client/track-contact.ts` usando `navigator.sendBeacon`
 - [ ] Atributos `data-track-kind`, `data-provider-id`, `data-href`
 - [ ] Tests `tests/e2e/contact-tracking.spec.ts` (verifica request + redirect)
+- [ ] Actualizar `mockups/profile.html` botones de contacto (líneas 93-98): reemplazar `href="#"` por URL real (wa.me/{{phone}} para WhatsApp, mailto:{{email}} para email, tel:{{phone}} para llamada). Agregar atributos `data-track-kind="whatsapp|email|call"` y `data-provider-id="{{provider.id}}"` para wire-up.
 
 ## Definition of done
 

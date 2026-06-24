@@ -38,6 +38,7 @@
 - [ ] Componente Astro `src/components/verification/Form.astro`
 - [ ] Vista `src/pages/verification.astro`
 - [ ] Tests `tests/integration/verification/form.test.ts`, `tests/e2e/verification-submit.spec.ts`
+- [ ] Refactorizar `mockups/verification.html`: reducir al alcance real de HU-03.2 (solo RUT + oficio principal + submit). Las zonas de upload 'Certificaciones' y 'Fotos de trabajos' (líneas 102-117) se dejan como placeholder con nota 'ver HU-03.3'.
 
 ## Definition of done
 

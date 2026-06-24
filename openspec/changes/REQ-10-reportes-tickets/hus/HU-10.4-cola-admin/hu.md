@@ -28,6 +28,7 @@
 
 - [ ] Endpoint `src/pages/api/v1/admin/tickets.ts`
 - [ ] Sección `src/components/admin/TicketsQueue.astro`
+- [ ] Actualizar `mockups/dashboard-admin.html` sidebar (después de 'Oficios'): agregar link `<i class="ri-customer-service-2-line"></i> Tickets` con badge de count de tickets abiertos. Render de `#tickets-section` con tabla (ID, Tipo, Solicitante, Estado, Asignado, Acción) + filtros `?status=` y `?kind=`.
 - [ ] Tests `tests/integration/admin/tickets-list.test.ts`
 
 ## Definition of done

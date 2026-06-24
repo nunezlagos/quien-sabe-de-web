@@ -31,6 +31,8 @@
 - [ ] Hidratación SSR de filtros desde `Astro.url.searchParams` en `src/pages/search.astro`
 - [ ] Tests `tests/e2e/search-url-state.spec.ts`
 
+> **Decisión arquitectónica:** la página `/search` no tiene mockup dedicado aún. Los filtros viven en `/` (mockup `index.html` con `neighbors-container` y templates grid/list inline). HU-06.5 cubre el state URL en `/search?q=...&commune=...&trade=...&available_now=...&page=...`. TODO futuro: crear `mockups/search.html`.
+
 ## Definition of done
 
 - [ ] Tests Vitest unit pasan

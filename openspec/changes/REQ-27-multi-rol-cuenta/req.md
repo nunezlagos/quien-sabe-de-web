@@ -24,10 +24,13 @@ el rol prestador mediante "Crear Perfil PRO".
 ## Superficie técnica
 
 ### Endpoints API
-- `POST   /api/v1/users/me/roles/prestador` — activa rol
-- `DELETE /api/v1/users/me/roles/:role` — desactiva (no admin)
+- `POST   /api/v1/users/me/roles/:role` — activa rol (whitelist: solo `prestador` auto-asignable) [sesión]
+- `DELETE /api/v1/users/me/roles/:role` — desactiva (no `admin`) [sesión]
 - `GET    /api/v1/users/me` — devuelve `roles: ["vecino","prestador"]` y
   `active_role`
+
+> **Nota**: El endpoint es paramétrico (`/:role`) con whitelist de roles auto-asignables.
+> `admin` NO es auto-asignable; solo puede ser asignado por otro admin.
 
 ### Vistas Astro
 - Navbar con selector (cambio actualiza cookie `active_role`).

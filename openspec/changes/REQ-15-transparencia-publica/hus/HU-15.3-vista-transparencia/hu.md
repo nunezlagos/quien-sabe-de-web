@@ -12,7 +12,8 @@
 
 ### Escenario: GET /transparency renderiza widgets
   Cuando visito `/transparency`
-  Entonces el HTML incluye widgets: total donaciones YTD, total gastos YTD, ratio, gráfico por mes
+  Entonces el HTML incluye 3 cards (Ingresos del mes, Gastos del mes, Fondo Reserva)
+  Y una tabla de historial de gastos con columnas: fecha, concepto, monto, link a comprobante
 
 ### Escenario: Datos agregados sin PII
   Cuando se renderiza

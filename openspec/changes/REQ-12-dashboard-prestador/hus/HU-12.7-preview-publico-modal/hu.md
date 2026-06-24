@@ -26,6 +26,7 @@
 
 - [ ] Componente `src/components/dashboard/provider/PreviewModal.astro`
 - [ ] Reuso de `/p/[slug]?preview=true` (REQ-04.4)
+- [ ] Mockup: actualizar `mockups/dashboard-provider.html` línea 465 — cambiar `src="profile.html?id=1&preview=true"` por `src="/p/<slug>?preview=true"` (slug real del prestador).
 - [ ] Tests `tests/e2e/provider-preview-modal.spec.ts`
 
 ## Definition of done

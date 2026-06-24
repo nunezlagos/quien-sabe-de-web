@@ -30,6 +30,7 @@
 - [ ] Componente `src/components/dashboard/provider/ReviewsSection.astro` con formulario de respuesta
 - [ ] Reuso POST response (REQ-09)
 - [ ] Tests `tests/integration/providers/reviews-received.test.ts`
+- [ ] Mockup: render del contenido de la sección 'Reseñas' en `mockups/dashboard-provider.html` (link línea 61). Lista de reseñas recibidas con avatar del vecino, estrellas, body, fecha, badge 'Oculta por moderación' si `status='hidden'`. Form de respuesta inline (textarea + botón 'Publicar respuesta') cuando `response=null`.
 
 ## Definition of done
 

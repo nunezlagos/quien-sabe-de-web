@@ -30,6 +30,7 @@
 
 - [ ] Componente `src/components/dashboard/provider/VerificationBanner.astro`
 - [ ] Helper SSR `getVerificationStatus(userId)`
+- [ ] Mockup: agregar en `mockups/dashboard-provider.html` (antes del bloque línea 126 — Profile Edit Form) banner amarillo `bg-yellow-50` con icono y texto 'Tu verificación está en revisión' cuando `verification.status='pendiente'`. Si rechazado, banner rojo con el motivo.
 - [ ] Tests `tests/e2e/provider-verification-banner.spec.ts`
 
 ## Definition of done

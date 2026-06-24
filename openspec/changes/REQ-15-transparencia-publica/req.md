@@ -27,6 +27,7 @@ de "transparencia radical" definido en `docs/avance-1/03-fundamentacion-del-proy
 - `POST   /api/v1/admin/expenses` — registrar gasto [admin]
 - `PATCH  /api/v1/admin/expenses/:id` — editar [admin]
 - `DELETE /api/v1/admin/expenses/:id` — eliminar [admin]
+- `POST   /api/v1/admin/expenses/:id/document` — genera presigned PUT para comprobante (boleta/factura) en R2 [admin]
 - `POST   /api/v1/admin/monthly-reports/generate` — disparo manual [admin]
 
 ### Vistas Astro

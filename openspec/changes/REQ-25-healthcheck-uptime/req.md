@@ -13,7 +13,7 @@ y reporte de latencia. Configuración de UptimeRobot o similar contra
 
 ## Criterios de éxito
 
-- [ ] `GET /api/v1/health` responde en < 200 ms 99% del tiempo.
+- [ ] `GET /api/v1/health` responde con p95 < 200ms.
 - [ ] Reporta latencia de cada binding y estado global `ok | degraded | down`.
 - [ ] `GET /api/v1/ready` distingue "iniciado" de "puede recibir tráfico".
 - [ ] UptimeRobot configurado con check cada 5 min y alerta < 2 fallos.
@@ -32,7 +32,11 @@ N/A — endpoint interno consumido por monitoreo.
 - Ninguna (lectura ping).
 
 ### Bindings Cloudflare
-- `D1`, `SESSION` (KV), `BUCKET` (R2)
+- `D1`, `SESSION` (KV), `BUCKET` (R2), `SES` (probe no-op en HU-25.1)
+
+### Códigos HTTP
+- `200 OK` cuando `status` es `ok` o `degraded` (servicio responde, sólo algún binding degradado).
+- `503 Service Unavailable` cuando `status` es `down` (D1 caído o múltiples bindings caídos); útil para que UptimeRobot lo distinga del 200.
 
 ## HUs hijas (plan)
 

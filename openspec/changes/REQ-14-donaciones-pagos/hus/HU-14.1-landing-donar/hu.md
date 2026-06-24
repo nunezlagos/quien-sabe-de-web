@@ -30,6 +30,11 @@
 - [ ] Componente `src/components/donations/AmountSelector.astro`
 - [ ] Componente `src/components/donations/PaymentButtons.astro`
 - [ ] Tests `tests/e2e/donate-landing.spec.ts`
+- [ ] Actualizar `mockups/donate.html` (líneas 65-95): cambiar 3 montos actuales ($2.000/$5.000/$10.000) por 4: $3.000 / $5.000 / $10.000 / $25.000 CLP.
+- [ ] Agregar input 'Otro monto' (`<input type="number" min="1000" name="custom_amount">`) con validación inline de mínimo $1.000 CLP.
+- [ ] Agregar toggle 'Hacer esta donación todos los meses' (para HU-14.7).
+- [ ] Agregar selector de pasarela 'Mercado Pago' | 'Webpay' como radio buttons.
+- [ ] Botones de monto: agregar `data-amount="5000"` y `data-provider="mercadopago|webpay"` para wire-up.
 
 ## Definition of done
 

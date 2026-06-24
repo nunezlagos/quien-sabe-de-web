@@ -30,6 +30,7 @@
 - [ ] Reuso de endpoint `/api/v1/admin/finances/summary`
 - [ ] Cache KV de 5 min
 - [ ] Tests `tests/unit/finance/ratio-oe3.test.ts`, `tests/integration/finance/ratio-endpoint.test.ts`
+- [ ] Mockup: en `mockups/donate.html` sección 'Transparencia' (líneas 99-130), agregar widget 'Ratio OE3' sourced de `GET /api/v1/public/transparency/summary`. Mostrar porcentaje + barra de progreso hacia el target 80%.
 
 ## Definition of done
 

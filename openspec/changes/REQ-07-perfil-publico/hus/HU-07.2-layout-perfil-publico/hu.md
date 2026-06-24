@@ -31,6 +31,7 @@
 - [ ] Sub-componentes `Header`, `ContactButtons`, `Description`
 - [ ] Vista `src/pages/p/[slug].astro` con SSR
 - [ ] Tests `tests/e2e/profile-render.spec.ts`
+- [ ] Agregar query `?preview=true`: si está presente y el session user es el owner del perfil, renderizar aunque `status='draft'`. Caso contrario, 404 (no exponer drafts).
 
 ## Definition of done
 

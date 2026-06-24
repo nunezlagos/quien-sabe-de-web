@@ -13,7 +13,7 @@
 ### Escenario: Adapter SMTP usado en dev
   Dado env `NODE_ENV=development` y `SMTP_HOST=mailpit`
   Cuando `EmailService.send("welcome", {name:"Ana"}, "ana@ejemplo.cl")` se invoca
-  Entonces el email aparece en Mailpit UI (`http://localhost:8026`)
+  Entonces el email aparece en Mailpit UI (`http://localhost:8025`)
 
 ### Escenario: Adapter SES usado en prod
   Dado env producción con `SES_*` configurados

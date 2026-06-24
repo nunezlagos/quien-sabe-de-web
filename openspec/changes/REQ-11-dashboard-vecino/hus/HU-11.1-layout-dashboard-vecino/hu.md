@@ -31,6 +31,7 @@
 - [ ] Componente `src/components/dashboard/user/Layout.astro`
 - [ ] Middleware redirect post-login en `src/lib/middleware/postLoginRedirect.ts`
 - [ ] Tests `tests/e2e/dashboard-user-layout.spec.ts`
+- [ ] Refactorizar `mockups/dashboard-user.html`: layout con tabs 'Historial' | 'Mis reseñas' | 'Perfil' (en lugar del grid actual de tarjetas). Cada tab es un panel con contenido lazy-loaded. El banner email (REQ-20) y la card 'Crear Perfil PRO' (REQ-27) se mantienen fuera de los tabs (sticky top).
 
 ## Definition of done
 

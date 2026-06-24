@@ -23,8 +23,8 @@
 
 ### Escenario: Render sección Recientes
   Cuando navego a `/dashboard-user`
-  Entonces la sección "Recientes" (`mockups/dashboard-user.html:100-112`) muestra mis últimas 5 vistas
-  Y cada item replica el patrón `<li class="flex items-center gap-3 text-sm text-gray-600">` (línea 103-110) con icono `ri-user-line` o `ri-search-line` según tipo
+  Entonces la sección "Recientes" (`mockups/dashboard-user.html:119-132`) muestra mis últimas 5 vistas
+  Y cada item replica el patrón `<li class="flex items-center gap-3 text-sm text-gray-600 hover:text-primary transition cursor-pointer">` (línea 123-127) con icono `ri-user-line` o `ri-search-line` según tipo
 
 ### Escenario: Trim a 50 por usuario
   Cuando cron mensual corre

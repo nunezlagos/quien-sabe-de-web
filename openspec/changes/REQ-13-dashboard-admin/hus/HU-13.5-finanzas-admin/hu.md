@@ -29,6 +29,7 @@
 - [ ] Componente `src/components/admin/FinancesPanel.astro`
 - [ ] Cálculo `computeRatio(donations, expenses)` en `src/lib/services/finance/ratio.ts`
 - [ ] Tests `tests/unit/finance/ratio.test.ts`, `tests/integration/admin/finances.test.ts`
+- [ ] Reemplazar placeholder 'Sección Finanzas - Próximamente' en `mockups/dashboard-admin.html:271-277` por panel real: total donaciones CLP (período), total gastos CLP, ratio OE3 con barra de progreso al 80%, gráfico 'donaciones vs gastos' por mes.
 
 ## Definition of done
 

@@ -12,7 +12,7 @@
 
 ### Escenario: Grid refleja fotos actuales
   Cuando navego a `/dashboard-provider`
-  Entonces la sección "Galería de Trabajos" (`mockups/dashboard-provider.html:148-187`) muestra mis fotos reales
+  Entonces la sección "Galería de Trabajos" (`mockups/dashboard-provider.html:151-187`) muestra mis fotos reales
   Y el counter superior derecha conserva "Máx. 5 fotos" (línea 155)
 
 ### Escenario: Slots vacíos visibles cuando < 5

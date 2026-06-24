@@ -24,6 +24,8 @@
   Cuando consulta
   Entonces 403
 
+> **Nota de contrato vs mockup:** Los 4 KPIs del mockup (Usuarios Totales, Oficios Activos, Valoración Media, Solicitudes) son ilustrativos; el endpoint devuelve el contrato definido en HU-13.4 (`signups_30d`, `contacts_30d`, `ratio_donations_costs`, `p95_ms_search`, `precision_search`).
+
 ## Tareas técnicas
 
 - [ ] Endpoint `src/pages/api/v1/admin/analytics/kpis.ts`

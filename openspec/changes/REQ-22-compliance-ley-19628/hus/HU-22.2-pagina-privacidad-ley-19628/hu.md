@@ -17,7 +17,7 @@
 
 ### Escenario: Secciones requeridas
   Cuando reviso el documento
-  Entonces aparecen: Datos recolectados, Finalidades, Responsable, Derechos ARCO+P, Plazo de conservación, Transferencias, Contacto del DPO
+  Entonces aparecen las 6 secciones del mockup `mockups/privacy.html`: Datos recolectados, Cómo los usamos, Tus derechos ARCO, Cómo ejercerlos, Cookies, Contacto DPO
 
 ### Escenario: Estilo idéntico a terms
   Cuando comparo con `mockups/terms.html`
