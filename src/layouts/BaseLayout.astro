@@ -1,5 +1,5 @@
 ---
-const { title = "QuiénSabe - Conecta con oficios de tu barrio" } = Astro.props;
+const { title = "QuiénSabe - Conecta con oficios de tu barrio", description, image } = Astro.props;
 import '../styles/base.css';
 
 const usuario = Astro.locals.user;
@@ -16,6 +16,15 @@ const urlActual = Astro.url.pathname;
     <meta name="description" content="Encuentra gasfíteres, electricistas y más oficios en tu comunidad.">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <meta property="og:title" content={title} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="QuiénSabe" />
+    {description ? <meta property="og:description" content={description} /> : null}
+    {image ? <meta property="og:image" content={image} /> : null}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    {description ? <meta name="twitter:description" content={description} /> : null}
+    {image ? <meta name="twitter:image" content={image} /> : null}
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans flex flex-col min-h-screen transition-all duration-300">
 

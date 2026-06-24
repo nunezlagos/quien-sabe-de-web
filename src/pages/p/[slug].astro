@@ -8,7 +8,7 @@ import { eq, desc } from 'drizzle-orm';
 const slug = Astro.params.slug;
 if (!slug) return Astro.redirect('/');
 
-const enSesion = Boolean(Astro.locals.user);
+const isLoggedIn = Boolean(Astro.locals.user);
 
 const tradesService = getTradesService(Astro.locals);
 const trade = await tradesService.getTradeBySlug(slug);
@@ -33,7 +33,7 @@ const whatsapp = trade.whatsapp ?? '56912345678';
 const email = provider?.email ?? '';
 ---
 
-<BaseLayout title={`${trade.name} — QuiénSabe`}>
+<BaseLayout title={`${trade.name} — QuiénSabe`} description={trade.description?.slice(0, 200) ?? `Servicio de ${trade.symbol ?? 'oficio'} en tu barrio`}>
   <main class="container mx-auto px-4 py-8 max-w-4xl">
     <!-- Breadcrumb -->
     <nav class="text-sm text-gray-500 mb-6">
@@ -136,7 +136,7 @@ const email = provider?.email ?? '';
           >
             <i class="ri-mail-line text-xl"></i> Email
           </a>
-          {enSesion ? (
+          {isLoggedIn ? (
             <button
               type="button"
               class="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl font-bold transition shadow-sm"
@@ -170,7 +170,7 @@ const email = provider?.email ?? '';
         <div class="text-center py-8 text-gray-500">
           <i class="ri-chat-smile-2-line text-5xl text-gray-300 mb-3 block"></i>
           <p>Aún no hay reseñas para este oficio.</p>
-          {enSesion && (
+          {isLoggedIn && (
             <p class="text-sm mt-2">
               ¿Trabajaste con {provider?.name ?? 'este vecino'}?
               <a href="#" class="text-orange-500 font-bold ml-1">Sé el primero en dejar una reseña</a>
