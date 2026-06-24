@@ -8,6 +8,9 @@ export const users = sqliteTable('users', {
   role: text('role', { enum: ['user', 'provider', 'admin'] }).notNull().default('user'),
   status: text('status', { enum: ['active', 'banned'] }).notNull().default('active'),
   avatarUrl: text('avatar_url'),
+  consentEmailProduct: integer('consent_email_product', { mode: 'boolean' }),
+  consentAnalytics: integer('consent_analytics', { mode: 'boolean' }),
+  consentProfilePublic: integer('consent_profile_public', { mode: 'boolean' }),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
 

@@ -1,6 +1,6 @@
 /* src/styles/pages/login.css
    Estilos compartidos por las vistas de autenticación
-   (/iniciar-sesion, /registro). */
+   (/iniciar-sesion, /registro, /recuperar-contrasena, /restablecer-contrasena). */
 
 .auth-page {
   display: flex;
@@ -225,4 +225,104 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
+}
+
+/* Variantes del icono del card (success / danger / compact) */
+.auth-card__icon--success {
+  background: #f0fdf4;
+  border-color: #dcfce7;
+}
+.auth-card__icon--success i { color: #16a34a; }
+
+.auth-card__icon--danger {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+.auth-card__icon--danger i { color: #dc2626; }
+
+.auth-card__icon--compact {
+  width: 4rem;
+  height: 4rem;
+}
+.auth-card__icon--compact i {
+  font-size: var(--space-6);
+}
+
+/* Password field con toggle show/hide */
+.auth-password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.auth-password-field .auth-form__input {
+  padding-right: 3rem;
+  width: 100%;
+}
+.auth-password-field__toggle {
+  position: absolute;
+  right: var(--space-2);
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--color-gray-700);
+  cursor: pointer;
+  font-size: var(--space-5);
+  padding: var(--space-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+}
+.auth-password-field__toggle:hover { color: var(--color-primary); }
+.auth-password-field__toggle:focus {
+  outline: none;
+  color: var(--color-primary);
+  background: var(--color-gray-100);
+}
+
+/* Panel de requisitos de contraseña */
+.auth-requirements {
+  background: var(--color-gray-50);
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4);
+}
+.auth-requirements__title {
+  font-size: var(--space-3);
+  font-weight: 700;
+  color: var(--color-gray-700);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-2);
+}
+.auth-requirements__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--space-4);
+}
+.auth-requirements__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.auth-requirements__item i {
+  font-size: var(--space-5);
+  flex-shrink: 0;
+}
+.auth-requirements__item--ok { color: var(--color-gray-700); }
+.auth-requirements__item--ok i { color: #16a34a; }
+.auth-requirements__item--fail { color: var(--color-gray-400); }
+.auth-requirements__item--fail i { color: #f87171; }
+
+/* Texto auxiliar bajo el card de éxito/error */
+.auth-card__note {
+  text-align: center;
+  font-size: var(--space-3);
+  color: var(--color-gray-400);
+  margin-top: var(--space-4);
 }

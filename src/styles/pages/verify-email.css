@@ -1,0 +1,74 @@
+/* src/styles/pages/verify-email.css
+   Estilos para /verificar-email (3 estados condicionales según ?status=). */
+
+.verify-email__spinner {
+  border: 4px solid #eaeff2;
+  border-top: 4px solid var(--color-primary);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  animation: verify-email-spin 1s linear infinite;
+}
+
+@keyframes verify-email-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.verify-email__state {
+  text-align: center;
+}
+
+.verify-email__icon-circle {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-4);
+}
+
+.verify-email__icon-circle--success {
+  background: #f0fdf4;
+  border: 4px solid #dcfce7;
+}
+.verify-email__icon-circle--success i {
+  font-size: var(--space-8);
+  color: #22c55e;
+}
+
+.verify-email__icon-circle--expired {
+  background: var(--color-yellow-50);
+  border: 4px solid var(--color-yellow-100);
+}
+.verify-email__icon-circle--expired i {
+  font-size: var(--space-8);
+  color: var(--color-yellow-600);
+}
+
+.verify-email__title {
+  font-size: var(--space-6);
+  font-weight: 800;
+  color: var(--color-gray-900);
+  margin-bottom: var(--space-2);
+}
+
+.verify-email__message {
+  color: var(--color-gray-700);
+  font-size: var(--space-4);
+  font-weight: 500;
+  margin-bottom: var(--space-6);
+}
+
+.verify-email__contact {
+  font-size: var(--space-3);
+  color: #9ca3af;
+  margin-top: var(--space-4);
+}
+.verify-email__contact a {
+  color: var(--color-primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+.verify-email__contact a:hover { text-decoration: underline; }

@@ -1,0 +1,270 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getDb } from '../database/client';
+import { users } from '../database/schema';
+import { eq } from 'drizzle-orm';
+
+const usuario = Astro.locals.user;
+if (!usuario) {
+	return Astro.redirect('/iniciar-sesion?redirigir=/cuenta');
+}
+
+const exportSolicitado = Astro.url.searchParams.get('export') === 'requested';
+
+const db = getDb(Astro.locals);
+const consents = await db
+	.select({
+		emailProduct: users.consentEmailProduct,
+		analytics: users.consentAnalytics,
+		profilePublic: users.consentProfilePublic,
+	})
+	.from(users)
+	.where(eq(users.id, usuario.id))
+	.get();
+
+const emailProductOn = consents?.emailProduct !== false;
+const analyticsOn = consents?.analytics !== false;
+const profilePublicOn = consents?.profilePublic !== false;
+
+const esPrestador = usuario.role === 'provider';
+---
+
+<BaseLayout title="Mis datos personales — QuiénSabe">
+	<main class="container mx-auto px-4 py-8 max-w-4xl">
+		<nav class="text-sm text-gray-500 font-medium mb-6 flex items-center gap-2">
+			<a href="/dashboard" class="hover:text-orange-500 transition">Mi cuenta</a>
+			<i class="ri-arrow-right-s-line"></i>
+			<span class="text-gray-800 font-bold">Datos personales</span>
+		</nav>
+
+		<div class="mb-8">
+			<h1 class="text-2xl font-extrabold text-gray-800 mb-1">Mis Datos Personales</h1>
+			<p class="text-gray-500 font-medium text-sm">
+				Ejerce tus derechos según la Ley 19.628 desde un solo lugar.
+			</p>
+		</div>
+
+		{exportSolicitado && (
+			<div
+				id="export-toast"
+				class="bg-blue-50 border border-blue-200 text-blue-700 rounded-2xl p-4 mb-6 flex items-start gap-3"
+				role="status"
+			>
+				<i class="ri-mail-send-line text-xl mt-0.5"></i>
+				<div>
+					<p class="font-bold text-sm">Solicitud recibida.</p>
+					<p class="text-xs font-medium">
+						Te enviaremos un ZIP con tus datos a <b>{usuario.email}</b> en un máximo de 24 horas.
+					</p>
+				</div>
+			</div>
+		)}
+
+		<div class="space-y-6">
+			<!-- Card 1: Descargar datos -->
+			<section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+				<form method="POST" action="/api/v1/users/me/data-export" class="flex flex-col md:flex-row items-start gap-4">
+					<div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500 text-2xl shrink-0">
+						<i class="ri-download-cloud-2-line" aria-hidden="true"></i>
+					</div>
+					<div class="flex-grow">
+						<h2 class="font-bold text-gray-800 text-lg mb-1">Descargar mis datos</h2>
+						<p class="text-sm text-gray-500 font-medium leading-relaxed">
+							Recibirás un archivo ZIP con todos tus datos: perfil, mensajes, reseñas y configuraciones.
+							Te llegará al correo en un máximo de 24 horas.
+						</p>
+					</div>
+					<button
+						type="submit"
+						class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-xl shadow-md transition w-full md:w-auto shrink-0"
+					>
+						Solicitar descarga
+					</button>
+				</form>
+			</section>
+
+			<!-- Card 2: Consentimientos -->
+			<section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+				<div class="flex items-start gap-4 mb-6">
+					<div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-500 text-2xl shrink-0">
+						<i class="ri-toggle-line" aria-hidden="true"></i>
+					</div>
+					<div>
+						<h2 class="font-bold text-gray-800 text-lg mb-1">Consentimientos</h2>
+						<p class="text-sm text-gray-500 font-medium">
+							Decide qué autorizas y qué no. Puedes cambiar esto cuando quieras.
+						</p>
+					</div>
+				</div>
+
+				<div class="space-y-3">
+					<label class="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100 cursor-pointer hover:bg-white hover:shadow-sm transition">
+						<div class="flex items-center gap-3">
+							<i class="ri-mail-send-line text-orange-500 text-xl" aria-hidden="true"></i>
+							<div>
+								<h4 class="font-bold text-gray-800 text-sm">Recibir emails de comunicaciones del producto</h4>
+								<p class="text-xs text-gray-500 font-medium">Novedades, mejoras y avisos importantes.</p>
+							</div>
+						</div>
+						<div class="relative inline-flex items-center">
+							<input
+								type="checkbox"
+								class="sr-only peer js-consent-toggle"
+								data-consent-key="consent_email_product"
+								checked={emailProductOn}
+							/>
+							<div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+						</div>
+					</label>
+
+					<label class="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100 cursor-pointer hover:bg-white hover:shadow-sm transition">
+						<div class="flex items-center gap-3">
+							<i class="ri-bar-chart-2-line text-orange-500 text-xl" aria-hidden="true"></i>
+							<div>
+								<h4 class="font-bold text-gray-800 text-sm">Analytics y métricas anónimas</h4>
+								<p class="text-xs text-gray-500 font-medium">Ayuda a mejorar la plataforma sin identificarte.</p>
+							</div>
+						</div>
+						<div class="relative inline-flex items-center">
+							<input
+								type="checkbox"
+								class="sr-only peer js-consent-toggle"
+								data-consent-key="consent_analytics"
+								checked={analyticsOn}
+							/>
+							<div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+						</div>
+					</label>
+
+					<label class={`flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100 cursor-pointer hover:bg-white hover:shadow-sm transition ${esPrestador ? '' : 'opacity-60'}`}>
+						<div class="flex items-center gap-3">
+							<i class="ri-eye-line text-orange-500 text-xl" aria-hidden="true"></i>
+							<div>
+								<h4 class="font-bold text-gray-800 text-sm">
+									Perfil público visible en el buscador
+									{esPrestador ? (
+										<span class="text-[10px] bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-bold ml-1">Solo prestador</span>
+									) : (
+										<span class="text-[10px] bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full font-bold ml-1">Solo prestador</span>
+									)}
+								</h4>
+								<p class="text-xs text-gray-500 font-medium">
+									{esPrestador
+										? 'Si lo desactivas, tu perfil deja de aparecer en búsquedas.'
+										: 'Tu rol actual no tiene perfil público. Se activará si te conviertes en prestador.'}
+								</p>
+							</div>
+						</div>
+						<div class="relative inline-flex items-center">
+							<input
+								type="checkbox"
+								class="sr-only peer js-consent-toggle"
+								data-consent-key="consent_profile_public"
+								checked={profilePublicOn}
+								disabled={!esPrestador}
+							/>
+							<div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+						</div>
+					</label>
+				</div>
+			</section>
+
+			<!-- Card 3: Eliminar cuenta -->
+			<section class="bg-white p-6 rounded-2xl shadow-sm border-2 border-red-100">
+				<div class="flex flex-col md:flex-row items-start gap-4">
+					<div class="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center text-red-500 text-2xl shrink-0">
+						<i class="ri-delete-bin-line" aria-hidden="true"></i>
+					</div>
+					<div class="flex-grow">
+						<h2 class="font-bold text-gray-800 text-lg mb-1">Eliminar mi cuenta</h2>
+						<p class="text-sm text-gray-500 font-medium leading-relaxed">
+							Acción irreversible. Tus reseñas se anonimizan y tus datos se eliminan en 30 días,
+							según los plazos legales de retención.
+						</p>
+					</div>
+					<button
+						type="button"
+						id="open-delete-btn"
+						class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-xl shadow-md transition w-full md:w-auto shrink-0"
+					>
+						Eliminar mi cuenta
+					</button>
+				</div>
+			</section>
+		</div>
+	</main>
+
+	<!-- Modal de confirmación de eliminación -->
+	<div
+		id="delete-modal"
+		class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center backdrop-blur-sm opacity-0 transition-opacity duration-300 p-4"
+		role="dialog"
+		aria-modal="true"
+		aria-labelledby="delete-modal-title"
+	>
+		<div
+			id="delete-modal-content"
+			class="bg-white rounded-3xl shadow-2xl w-full max-w-md transform scale-95 transition-transform duration-300"
+		>
+			<div class="p-6 border-b border-gray-100 flex justify-between items-center bg-red-50 rounded-t-3xl">
+				<h3 id="delete-modal-title" class="font-bold text-gray-800 text-lg flex items-center gap-2">
+					<i class="ri-alert-line text-red-500" aria-hidden="true"></i> Confirmar eliminación
+				</h3>
+				<button
+					id="close-delete-btn"
+					type="button"
+					class="text-gray-400 hover:text-gray-600 transition"
+					aria-label="Cerrar"
+				>
+					<i class="ri-close-line text-2xl" aria-hidden="true"></i>
+				</button>
+			</div>
+
+			<form id="form-eliminar" class="p-6 space-y-4">
+				<div class="bg-yellow-50 p-4 rounded-xl border border-yellow-100">
+					<p class="text-sm text-yellow-700 font-medium leading-relaxed">
+						<i class="ri-information-line" aria-hidden="true"></i>
+						Esta acción es irreversible. Perderás acceso a tu perfil, mensajes y servicios publicados.
+					</p>
+				</div>
+
+				<div>
+					<label for="delete-confirm-input" class="block text-xs font-bold text-gray-700 mb-1">
+						Para confirmar, escribe <span class="text-red-500 font-extrabold">ELIMINAR</span>
+					</label>
+					<input
+						id="delete-confirm-input"
+						name="confirm"
+						type="text"
+						placeholder="ELIMINAR"
+						autocomplete="off"
+						class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500/50 transition"
+					/>
+				</div>
+
+				<div class="flex gap-2 pt-2">
+					<button
+						type="button"
+						id="cancel-delete-btn"
+						class="flex-1 bg-white border border-gray-200 text-gray-600 hover:border-orange-500 hover:text-orange-500 font-bold py-3 rounded-xl transition"
+					>
+						Cancelar
+					</button>
+					<button
+						type="submit"
+						id="confirm-delete-btn"
+						disabled
+						class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-xl shadow-md transition opacity-50 cursor-not-allowed"
+					>
+						Eliminar definitivamente
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</BaseLayout>
+
+<script>
+	import { inicializarAccionesCuenta } from '../lib/client/auth/account-actions';
+	inicializarAccionesCuenta();
+</script>

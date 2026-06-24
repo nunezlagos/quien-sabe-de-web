@@ -1,0 +1,180 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const categorias = [
+  {
+    id: 'general',
+    titulo: 'General',
+    icono: 'ri-information-line',
+    colorFondo: 'bg-orange-100',
+    colorIcono: 'text-orange-500',
+    preguntas: [
+      {
+        q: '¿Qué es QuiénSabe?',
+        a: 'QuiénSabe es una plataforma comunitaria chilena que conecta vecinos con oficios de barrio. Buscamos gasfíter, electricistas, jardineros y más, todos verificados y reseñados por la comunidad.',
+      },
+      {
+        q: '¿Tiene costo usar QuiénSabe?',
+        a: 'Para los vecinos que buscan un oficio, el uso es <b>totalmente gratuito</b>. Los prestadores tampoco pagan comisiones por contactarles. Nos sostenemos con donaciones voluntarias de la comunidad.',
+      },
+      {
+        q: '¿Está disponible solo en la Región Metropolitana?',
+        a: 'Sí, en esta primera versión cubrimos las 52 comunas de la Región Metropolitana. Próximamente esperamos expandirnos a otras regiones.',
+      },
+      {
+        q: '¿Cómo contacto a soporte?',
+        a: 'Escríbenos a <a href="mailto:soporte@quiensabe.cl" class="text-orange-500 font-bold underline">soporte@quiensabe.cl</a> o usa el formulario de "Reportar" en el perfil de cualquier prestador.',
+      },
+    ],
+  },
+  {
+    id: 'vecinos',
+    titulo: 'Para vecinos',
+    icono: 'ri-user-search-line',
+    colorFondo: 'bg-blue-100',
+    colorIcono: 'text-blue-600',
+    preguntas: [
+      {
+        q: '¿Cómo busco un oficio?',
+        a: 'En la página principal, escribe el oficio que necesitas (ej: "gasfiter"), tu comuna y presiona buscar. Puedes filtrar por rating, precio y disponibilidad inmediata.',
+      },
+      {
+        q: '¿Cómo contacto a un prestador?',
+        a: 'Desde el perfil del prestador, haz click en el botón de WhatsApp o email. Se abrirá directamente tu app con un mensaje pre-armado.',
+      },
+      {
+        q: '¿Cómo califico después del trabajo?',
+        a: 'Después de contactar a un prestador, te aparecerá una invitación para dejar una reseña (1 a 5 estrellas + comentario). Puedes editarla hasta 7 días después.',
+      },
+      {
+        q: '¿Puedo guardar prestadores como favoritos?',
+        a: 'Sí. En cada tarjeta o perfil, haz click en el ícono de corazón (<i class="ri-heart-line"></i>). Los verás en tu panel como "Vecinos guardados".',
+      },
+    ],
+  },
+  {
+    id: 'prestadores',
+    titulo: 'Para prestadores',
+    icono: 'ri-tools-line',
+    colorFondo: 'bg-orange-100',
+    colorIcono: 'text-orange-600',
+    preguntas: [
+      {
+        q: '¿Cómo me registro como prestador?',
+        a: 'Primero regístrate como vecino, luego desde tu panel haz click en "Crear Perfil PRO". Completa el wizard con tu oficio, comunas que cubres y datos de contacto.',
+      },
+      {
+        q: '¿Qué es la verificación?',
+        a: 'Es un proceso donde subes tu RUT y opcionalmente certificaciones o fotos de trabajos. Un administrador revisa y te da el badge "Verificado" en tu perfil. No es obligatorio publicar, pero aumenta la confianza.',
+      },
+      {
+        q: '¿QuiénSabe me cobra comisión?',
+        a: '<b>No.</b> No cobramos comisión por contacto, por mensaje o por trabajo concretado. El contacto entre tú y el vecino es directo. La plataforma se sostiene con donaciones.',
+      },
+      {
+        q: '¿Puedo pausar mi disponibilidad?',
+        a: 'Sí. En el sidebar de tu panel hay un toggle "Estado". Si lo apagas, tu perfil sigue visible pero aparece como "En pausa" y no aparece en búsquedas con filtro "Disponible ahora".',
+      },
+    ],
+  },
+  {
+    id: 'donaciones',
+    titulo: 'Donaciones y transparencia',
+    icono: 'ri-heart-3-line',
+    colorFondo: 'bg-pink-100',
+    colorIcono: 'text-pink-600',
+    preguntas: [
+      {
+        q: '¿Para qué se usan las donaciones?',
+        a: 'Cubrimos costos de infraestructura (hosting, base de datos, emails) y un pequeño fondo para mantención. Publicamos cada gasto en <a href="/transparency" class="text-orange-500 font-bold underline">/transparency</a>.',
+      },
+      {
+        q: '¿Puedo donar de forma anónima?',
+        a: 'Sí. Al donar puedes elegir si quieres aparecer públicamente en la lista de donantes o mantenerte anónimo.',
+      },
+      {
+        q: '¿Aceptan pagos recurrentes?',
+        a: 'Sí, puedes configurar una donación mensual desde la página de donaciones. Puedes cancelar en cualquier momento.',
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout title="Preguntas frecuentes - QuiénSabe">
+
+  <header class="bg-gradient-to-br from-orange-50 to-amber-50 py-12 md:py-16 relative overflow-hidden">
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <div class="inline-flex items-center gap-2 bg-white border border-gray-200 px-4 py-1.5 rounded-full text-xs font-bold mb-4">
+        <i class="ri-question-line text-orange-500"></i> Centro de ayuda
+      </div>
+      <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-3 tracking-tight">
+        Preguntas frecuentes
+      </h1>
+      <p class="text-gray-600 mb-6 max-w-xl mx-auto">
+        Encuentra respuestas rápidas. Si no, escríbenos.
+      </p>
+
+      <div class="max-w-xl mx-auto relative">
+        <i class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl"></i>
+        <input
+          id="faq-search"
+          type="search"
+          placeholder="Busca una pregunta..."
+          class="w-full pl-12 pr-4 py-3.5 rounded-2xl border-2 border-gray-200 focus:border-orange-500 focus:ring-orange-500 shadow-sm"
+        />
+      </div>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 py-12 max-w-3xl flex-grow">
+
+    {categorias.map((cat) => (
+      <section class="faq-category mb-10" data-category={cat.id}>
+        <h2 class="text-2xl font-extrabold text-gray-800 mb-4 flex items-center gap-2">
+          <span class={`${cat.colorFondo} ${cat.colorIcono} w-9 h-9 rounded-lg flex items-center justify-center`}>
+            <i class={cat.icono}></i>
+          </span>
+          {cat.titulo}
+        </h2>
+        <div class="space-y-3">
+          {cat.preguntas.map((p, idx) => (
+            <details class="faq-item bg-white rounded-2xl shadow-sm border border-gray-100 group" data-faq={`${cat.id}-${idx + 1}`}>
+              <summary class="cursor-pointer p-5 font-bold text-gray-800 flex items-center justify-between list-none">
+                <span>{p.q}</span>
+                <i class="ri-arrow-down-s-line text-2xl text-gray-400 transition-transform group-open:rotate-180"></i>
+              </summary>
+              <div class="px-5 pb-5 text-gray-600 text-sm leading-relaxed" set:html={p.a} />
+            </details>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    <div id="faq-no-matches" class="hidden text-center py-12 bg-white rounded-2xl border border-gray-100">
+      <i class="ri-search-eye-line text-5xl text-gray-300"></i>
+      <p class="text-gray-500 mt-3 font-medium">No encontramos preguntas para tu búsqueda.</p>
+      <p class="text-sm text-gray-400 mt-1">
+        Intenta con otra palabra o escríbenos a <a href="mailto:soporte@quiensabe.cl" class="text-orange-500 underline">soporte@quiensabe.cl</a>.
+      </p>
+    </div>
+
+    <div class="mt-12 text-center bg-gradient-to-br from-orange-50 to-amber-50 rounded-3xl p-8 border border-orange-100">
+      <h3 class="text-xl font-extrabold text-gray-800 mb-2">¿No encontraste tu respuesta?</h3>
+      <p class="text-gray-600 text-sm mb-4">Escríbenos y te respondemos en menos de 24h.</p>
+      <a
+        href="mailto:soporte@quiensabe.cl"
+        class="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-full font-bold shadow-md hover:shadow-lg transition"
+      >
+        <i class="ri-mail-send-line"></i> Contactar soporte
+      </a>
+    </div>
+
+  </main>
+
+  <script>
+    import { inicializarBusquedaFaq } from '../lib/client/faq/search';
+    inicializarBusquedaFaq();
+  </script>
+
+</BaseLayout>

@@ -3,7 +3,7 @@ import { leerSesion } from './lib/services/auth/sesion';
 import { leerCookieSesion, limpiarCookieSesion } from './lib/utils/cookies';
 import { buscarUsuarioPorId } from './lib/services/auth/usuarios';
 
-const RUTAS_PROTEGIDAS = ['/dashboard', '/dashboard-admin', '/dashboard-prestador', '/dashboard-user'];
+const RUTAS_PROTEGIDAS = ['/dashboard', '/dashboard-admin', '/dashboard-prestador', '/dashboard-user', '/cuenta'];
 const RUTAS_AUTH = ['/registro', '/iniciar-sesion'];
 
 function esRutaProtegida(pathname: string): boolean {

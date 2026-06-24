@@ -1,0 +1,132 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const url = Astro.url;
+const token = url.searchParams.get('token');
+const tokenValido = Boolean(token && token.length > 0);
+---
+
+<BaseLayout title="Restablecer contraseña — QuiénSabe">
+  <main class="auth-page">
+    <a href="/iniciar-sesion" class="auth-page__back">← Volver a iniciar sesión</a>
+
+    {tokenValido ? (
+      <article class="auth-card">
+        <header class="auth-card__header">
+          <div class="auth-card__icon">
+            <i class="ri-shield-keyhole-line" aria-hidden="true"></i>
+          </div>
+          <h1 class="auth-card__title">Crear nueva contraseña</h1>
+          <p class="auth-card__subtitle">
+            Define una contraseña fuerte para tu cuenta.
+          </p>
+        </header>
+
+        <form id="form-restablecer" class="auth-form" novalidate>
+          <div class="auth-form__field">
+            <label class="auth-form__label" for="nueva-contrasena">Nueva contraseña</label>
+            <div class="auth-password-field">
+              <input
+                id="nueva-contrasena"
+                name="nueva-contrasena"
+                type="password"
+                required
+                maxlength="128"
+                autocomplete="new-password"
+                class="auth-form__input"
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                class="auth-password-field__toggle"
+                data-target="nueva-contrasena"
+                aria-label="Mostrar contraseña"
+                aria-pressed="false"
+              >
+                <i class="ri-eye-line" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="auth-form__field">
+            <label class="auth-form__label" for="confirmar-contrasena">Confirmar contraseña</label>
+            <div class="auth-password-field">
+              <input
+                id="confirmar-contrasena"
+                name="confirmar-contrasena"
+                type="password"
+                required
+                maxlength="128"
+                autocomplete="new-password"
+                class="auth-form__input"
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                class="auth-password-field__toggle"
+                data-target="confirmar-contrasena"
+                aria-label="Mostrar contraseña"
+                aria-pressed="false"
+              >
+                <i class="ri-eye-line" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="auth-requirements" aria-live="polite">
+            <p class="auth-requirements__title">Requisitos</p>
+            <ul class="auth-requirements__list">
+              <li class="auth-requirements__item auth-requirements__item--fail" data-requirement="length">
+                <i class="ri-close-circle-line" aria-hidden="true"></i>
+                <span>Mínimo 8 caracteres</span>
+              </li>
+              <li class="auth-requirements__item auth-requirements__item--fail" data-requirement="upper">
+                <i class="ri-close-circle-line" aria-hidden="true"></i>
+                <span>Al menos una mayúscula</span>
+              </li>
+              <li class="auth-requirements__item auth-requirements__item--fail" data-requirement="number">
+                <i class="ri-close-circle-line" aria-hidden="true"></i>
+                <span>Al menos un número</span>
+              </li>
+            </ul>
+          </div>
+
+          <div
+            id="errores-campos"
+            class="auth-card__alert auth-card__alert--error auth-card__alert--hidden"
+            role="alert"
+          ></div>
+
+          <button type="submit" class="btn btn--primary btn--block">
+            Guardar y entrar
+          </button>
+        </form>
+      </article>
+    ) : (
+      <article class="auth-card">
+        <header class="auth-card__header">
+          <div class="auth-card__icon auth-card__icon--danger">
+            <i class="ri-error-warning-line" aria-hidden="true"></i>
+          </div>
+          <h1 class="auth-card__title">Este enlace expiró</h1>
+          <p class="auth-card__subtitle">
+            El enlace de recuperación ya no es válido. Solicita uno nuevo para continuar.
+          </p>
+        </header>
+
+        <a href="/recuperar-contrasena" class="btn btn--primary btn--block">
+          Solicitar nuevo enlace
+        </a>
+
+        <p class="auth-card__alt">
+          <a href="/iniciar-sesion">Volver a iniciar sesión</a>
+        </p>
+      </article>
+    )}
+  </main>
+</BaseLayout>
+
+<script>
+  import { inicializarFormularioRestablecer } from '../lib/client/auth/restablecer';
+  inicializarFormularioRestablecer();
+</script>
