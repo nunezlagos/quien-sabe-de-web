@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getTradesService } from '../../lib/services/trades.service';
 import { getDb } from '../../database/client';
-import { users, reviews } from '../../database/schema';
+import { users, reviews, trades as tradesTable } from '../../database/schema';
 import { eq, desc } from 'drizzle-orm';
 
 const slug = Astro.params.slug;
@@ -32,6 +32,16 @@ const estrellas = [1, 2, 3, 4, 5];
 // sólo para oficios legacy creados antes de la migración 0005.
 const whatsapp = trade.whatsapp ?? '56912345678';
 const email = provider?.email ?? '';
+
+// Other trades by same provider
+const otherTrades = provider
+  ? await db
+      .select({ id: tradesTable.id, name: tradesTable.name, slug: tradesTable.slug, symbol: tradesTable.symbol, basePriceClp: tradesTable.basePriceClp, verified: tradesTable.verified })
+      .from(tradesTable)
+      .where(eq(tradesTable.userId, provider.id))
+      .all()
+      .then((rows) => rows.filter((t) => t.slug !== slug))
+  : [];
 ---
 
 <BaseLayout title={`${trade.name} — QuiénSabe`} description={trade.description?.slice(0, 200) ?? `Servicio de ${trade.symbol ?? 'oficio'} en tu barrio`}>
@@ -231,6 +241,29 @@ const email = provider?.email ?? '';
         </div>
       )}
     </section>
+
+    {otherTrades.length > 0 ? (
+    <section class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 mt-6">
+      <h2 class="text-xl font-extrabold text-gray-800 mb-4">Otros servicios de {provider?.name?.split(' ')[0] ?? 'este profesional'}</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {otherTrades.map((ot) => (
+          <a
+            href={`/p/${ot.slug}`}
+            class="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100 hover:border-orange-500/50 hover:shadow-sm transition"
+          >
+            <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 font-bold text-sm flex-shrink-0">
+              {ot.symbol?.slice(0, 2).toUpperCase() ?? 'OF'}
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="font-bold text-gray-800 text-sm truncate">{ot.name}</h3>
+              <p class="text-xs text-gray-500">{ot.symbol} {ot.verified ? '· Verificado' : ''}</p>
+            </div>
+            <i class="ri-arrow-right-s-line text-gray-400 text-xl"></i>
+          </a>
+        ))}
+      </div>
+    </section>
+    ) : null}
 
     <!-- Volver -->
     <div class="mt-8 text-center">
