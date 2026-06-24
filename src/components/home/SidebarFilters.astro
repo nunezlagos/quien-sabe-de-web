@@ -1,8 +1,9 @@
 ---
-// Sidebar filters — hidden by default, shown in search mode
+const { visible = false } = Astro.props;
+const hiddenClass = visible ? '' : 'hidden';
 ---
 
-<aside id="search-sidebar" class="hidden md:w-1/4 space-y-6 w-full animate-fade-in-left">
+<aside id="search-sidebar" class="{hiddenClass} md:w-1/4 space-y-6 w-full animate-fade-in-left">
   <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
     <h3 class="font-bold text-gray-800 mb-4 flex items-center gap-2"><i class="ri-filter-3-line text-primary"></i> Filtros</h3>
 
