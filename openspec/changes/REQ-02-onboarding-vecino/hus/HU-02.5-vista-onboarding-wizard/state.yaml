@@ -1,0 +1,11 @@
+status: planned
+created: 2026-06-24
+archived: ~
+depends_on:
+  - HU-01.7-seed-usuarios-demo  # necesita usuarios demo
+  - HU-02.1-catalogo-comunas  # dropdown del paso 1
+  - HU-01.2-sesion-kv-middleware  # sesión requerida
+  - HU-02.3-preferencias-vecino  # endpoint de preferencias
+blocks: []
+mockup:
+  - mockups/onboarding.html  # a crear en esta HU
