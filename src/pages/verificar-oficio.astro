@@ -1,0 +1,137 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const usuario = Astro.locals.user;
+if (!usuario) {
+  return Astro.redirect('/iniciar-sesion?redirigir=/verificar-oficio');
+}
+if (usuario.role !== 'provider' && usuario.role !== 'admin') {
+  return Astro.redirect('/dashboard');
+}
+
+const error = Astro.url.searchParams.get('error');
+const ok = Astro.url.searchParams.get('ok');
+const tradeRecibido = Astro.url.searchParams.get('trade');
+const rutRecibido = Astro.url.searchParams.get('rut');
+
+const OFICIOS_VERIFICABLES = [
+  { value: '', label: 'Selecciona tu oficio…' },
+  { value: 'gasfiter', label: 'Gasfiter' },
+  { value: 'electricista', label: 'Electricista' },
+  { value: 'maestro', label: 'Maestro' },
+  { value: 'jardinero', label: 'Jardinero' },
+  { value: 'programador', label: 'Programador' },
+  { value: 'pintor', label: 'Pintor' },
+  { value: 'costurera', label: 'Costurera' },
+];
+---
+
+<BaseLayout title="Verificación de Oficio — QuiénSaba">
+  <nav class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <a href="/" class="text-xl font-bold text-gray-800 flex items-center gap-2">
+        <i class="ri-community-line text-orange-500"></i>
+        Quién<span class="text-orange-500">Sabe</span>
+      </a>
+      <a href="/dashboard-prestador" class="text-sm font-bold text-gray-500 hover:text-orange-500 transition">Volver</a>
+    </div>
+  </nav>
+
+  <header class="bg-orange-500 text-white py-16 text-center relative overflow-hidden">
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-10"></div>
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="inline-block p-4 rounded-full bg-white/10 backdrop-blur-md mb-4 border border-white/20">
+        <i class="ri-shield-check-fill text-5xl text-white"></i>
+      </div>
+      <h1 class="text-3xl md:text-5xl font-extrabold mb-4">Verifica tu Oficio</h1>
+      <p class="text-lg text-orange-100 max-w-2xl mx-auto">Genera confianza en tu comunidad. Destaca tu perfil con el sello de verificado y consigue más clientes.</p>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 py-12 max-w-4xl">
+    <div class="bg-blue-50 border border-blue-100 rounded-2xl p-6 mb-12 flex items-start gap-4">
+      <i class="ri-heart-line text-3xl text-blue-500"></i>
+      <div>
+        <h3 class="font-bold text-blue-800 text-lg mb-1">Tu trabajo vale</h3>
+        <p class="text-blue-700 text-sm">Sabemos que eres un profesional, tengas o no una empresa formal. La verificación es solo una herramienta para que tus vecinos te conozcan mejor y confíen en tu talento.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 relative">
+      <div class="hidden md:block absolute top-12 left-0 w-full h-1 bg-gray-200 -z-10"></div>
+
+      <div class="bg-white p-8 rounded-3xl shadow-sm text-center border border-gray-100 relative">
+        <div class="w-12 h-12 bg-gray-800 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 border-4 border-white shadow-lg">1</div>
+        <h3 class="font-bold text-gray-800 text-lg mb-2">Regístrate</h3>
+        <p class="text-sm text-gray-500">Crea tu perfil con tus datos básicos y cuéntanos qué oficios realizas.</p>
+      </div>
+
+      <div class="bg-white p-8 rounded-3xl shadow-sm text-center border border-gray-100 relative">
+        <div class="w-12 h-12 bg-orange-400 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 border-4 border-white shadow-lg">2</div>
+        <h3 class="font-bold text-gray-800 text-lg mb-2">Sube documentos</h3>
+        <p class="text-sm text-gray-500">Tu RUT, certificaciones y fotos de trabajos.</p>
+      </div>
+
+      <div class="bg-white p-8 rounded-3xl shadow-sm text-center border border-gray-100 relative">
+        <div class="w-12 h-12 bg-green-400 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 border-4 border-white shadow-lg">3</div>
+        <h3 class="font-bold text-gray-800 text-lg mb-2">¡Listo!</h3>
+        <p class="text-sm text-gray-500">Revisaremos tu perfil y te otorgaremos el sello de verificado.</p>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+      <div class="bg-gray-50 p-6 border-b border-gray-100">
+        <h2 class="font-bold text-xl text-gray-800">Solicitud de Verificación</h2>
+        <p class="text-sm text-gray-500">Completa lo que puedas. No es necesario tener todo.</p>
+      </div>
+
+      {error && (
+        <div class="bg-red-50 border border-red-200 text-red-700 px-6 py-3 text-sm">
+          {error}
+        </div>
+      )}
+
+      {ok && (
+        <div class="bg-green-50 border border-green-200 text-green-800 px-6 py-4 text-sm flex items-start gap-3">
+          <i class="ri-checkbox-circle-fill text-2xl flex-shrink-0"></i>
+          <div>
+            <p class="font-bold">¡Solicitud enviada!</p>
+            <p class="text-green-700 mt-1">Recibimos tu verificación para <b>{tradeRecibido}</b> con RUT <b>{rutRecibido}</b>. Te avisaremos por email en 24-48h. Próximamente: subir documentos.</p>
+          </div>
+        </div>
+      )}
+
+      <form action="/api/v1/providers/me/verification" method="POST" class="space-y-6 p-8">
+        <div>
+          <label for="rut" class="block text-sm font-bold text-gray-700 mb-2">Tu RUT <span class="text-red-500">*</span></label>
+          <input id="rut" name="rut" type="text" required placeholder="12345678-9" pattern="[0-9]+-[0-9kK]" maxlength="12" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition">
+          <p class="text-xs text-gray-500 mt-1">Formato: 12345678-9 (sin puntos, con guión).</p>
+        </div>
+
+        <div>
+          <label for="trade" class="block text-sm font-bold text-gray-700 mb-2">Oficio principal a verificar <span class="text-red-500">*</span></label>
+          <select id="trade" name="trade" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition">
+            {OFICIOS_VERIFICABLES.map((o) => (
+              <option value={o.value}>{o.label}</option>
+            ))}
+          </select>
+        </div>
+
+        <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800 flex gap-2">
+          <i class="ri-information-line text-xl flex-shrink-0"></i>
+          <p><b>Próximo paso:</b> tras enviar este formulario, te pediremos que subas tus documentos (cédula, certificaciones) y fotos de trabajos realizados en la siguiente pantalla.</p>
+        </div>
+
+        <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3.5 rounded-xl shadow-md hover:shadow-lg transition">
+          Continuar a subir documentos →
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <footer class="bg-gray-900 text-white py-8 text-center text-xs mt-12">
+    <div class="container mx-auto px-4">
+      <p class="text-gray-500">&copy; 2026 Quién Sabe. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+</BaseLayout>
