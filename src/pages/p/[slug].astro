@@ -1,0 +1,203 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getTradesService } from '../../lib/services/trades.service';
+import { getDb } from '../../database/client';
+import { users, reviews } from '../../database/schema';
+import { eq, desc } from 'drizzle-orm';
+
+const slug = Astro.params.slug;
+if (!slug) return Astro.redirect('/');
+
+const enSesion = Boolean(Astro.locals.user);
+
+const tradesService = getTradesService(Astro.locals);
+const trade = await tradesService.getTradeBySlug(slug);
+if (!trade) {
+  return new Response('Perfil no encontrado', { status: 404 });
+}
+
+const db = getDb(Astro.locals);
+
+// Provider info
+const provider = await db.select().from(users).where(eq(users.id, trade.userId)).get();
+
+// Reviews + rating
+const reviewsList = await db.select().from(reviews).where(eq(reviews.tradeId, trade.id)).orderBy(desc(reviews.createdAt)).all();
+const rating = await tradesService.getAverageRating(trade.id);
+
+const estrellas = [1, 2, 3, 4, 5];
+const whatsapp = `56912345678`;
+const email = provider?.email ?? '';
+---
+
+<BaseLayout title={`${trade.name} — QuiénSabe`}>
+  <main class="container mx-auto px-4 py-8 max-w-4xl">
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-500 mb-6">
+      <a href="/" class="hover:text-orange-500">Inicio</a>
+      <span class="mx-2">/</span>
+      <a href={`/?q=${trade.symbol}`} class="hover:text-orange-500">{trade.symbol}</a>
+      <span class="mx-2">/</span>
+      <span class="text-gray-700">{trade.name}</span>
+    </nav>
+
+    <!-- Header card -->
+    <article class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+      <header class="bg-gradient-to-br from-orange-50 to-amber-50 p-8">
+        <div class="flex items-start gap-6">
+          <div class="w-24 h-24 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 font-extrabold text-3xl shadow-md flex-shrink-0">
+            {(provider?.name ?? '?').slice(0, 2).toUpperCase()}
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-2 flex-wrap">
+              <span class="text-xs uppercase tracking-wide font-bold text-orange-600 bg-orange-100 px-2 py-1 rounded-full">
+                {trade.symbol}
+              </span>
+              {trade.verified ? (
+                <span class="text-xs font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded-full border border-blue-100 flex items-center gap-1">
+                  <i class="ri-shield-check-fill"></i> Verificado
+                </span>
+              ) : null}
+            </div>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-2">{trade.name}</h1>
+            <p class="text-gray-600 font-medium">
+              {provider?.name ?? 'Vecino anónimo'} · {trade.communeId ? `Comuna ID ${trade.communeId}` : 'Región Metropolitana'}
+            </p>
+
+            {/* Rating */}
+            {rating.count > 0 ? (
+              <div class="flex items-center gap-2 mt-3">
+                <div class="flex">
+                  {estrellas.map((n) => (
+                    <i class={`text-xl ${n <= Math.round(rating.avg) ? 'ri-star-fill text-yellow-400' : 'ri-star-line text-gray-300'}`}></i>
+                  ))}
+                </div>
+                <span class="font-bold text-gray-800">{rating.avg.toFixed(1)}</span>
+                <span class="text-gray-500 text-sm">({rating.count} reseña{rating.count !== 1 ? 's' : ''})</span>
+              </div>
+            ) : (
+              <p class="text-sm text-gray-500 mt-3">
+                <i class="ri-star-line"></i> Aún sin reseñas
+              </p>
+            )}
+          </div>
+        </div>
+      </header>
+
+      <!-- Descripción -->
+      <div class="p-8 border-t border-gray-100">
+        <h2 class="text-xl font-extrabold text-gray-800 mb-3">Sobre este oficio</h2>
+        <p class="text-gray-600 leading-relaxed mb-6 whitespace-pre-line">
+          {trade.description ?? 'Servicio profesional disponible en tu barrio.'}
+        </p>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div class="bg-gray-50 rounded-2xl p-4">
+            <span class="text-xs text-gray-400 uppercase font-bold block">Precio base</span>
+            <span class="text-2xl font-extrabold text-gray-800">
+              ${(trade.basePriceClp ?? 0).toLocaleString('es-CL')}
+            </span>
+          </div>
+          <div class="bg-gray-50 rounded-2xl p-4">
+            <span class="text-xs text-gray-400 uppercase font-bold block">Categoría</span>
+            <span class="text-lg font-bold text-gray-800 capitalize">{trade.category}</span>
+          </div>
+          <div class="bg-gray-50 rounded-2xl p-4">
+            <span class="text-xs text-gray-400 uppercase font-bold block">Estado</span>
+            <span class={`text-lg font-bold ${trade.status === 'active' ? 'text-green-600' : 'text-orange-600'}`}>
+              {trade.status === 'active' ? 'Disponible' : 'En pausa'}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Acciones de contacto -->
+      <div class="p-8 border-t border-gray-100 bg-gray-50">
+        <h2 class="text-xl font-extrabold text-gray-800 mb-4">Contactar</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <a
+            href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(`Hola, te encontré en QuiénSabe por tu servicio de ${trade.name}.`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-track-kind="whatsapp"
+            data-provider-id={trade.userId}
+            class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-bold transition shadow-sm"
+          >
+            <i class="ri-whatsapp-line text-xl"></i> WhatsApp
+          </a>
+          <a
+            href={`mailto:${email}?subject=${encodeURIComponent(`Consulta por ${trade.name} — QuiénSabe`)}`}
+            data-track-kind="email"
+            data-provider-id={trade.userId}
+            class="flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-bold transition shadow-sm"
+          >
+            <i class="ri-mail-line text-xl"></i> Email
+          </a>
+          {enSesion ? (
+            <button
+              type="button"
+              class="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl font-bold transition shadow-sm"
+            >
+              <i class="ri-heart-fill text-xl"></i> Guardar
+            </button>
+          ) : (
+            <a
+              href="/iniciar-sesion?redirigir=/p/{trade.slug}"
+              class="flex items-center justify-center gap-2 bg-white border-2 border-orange-500 text-orange-500 hover:bg-orange-50 px-6 py-3 rounded-xl font-bold transition"
+            >
+              <i class="ri-user-add-line text-xl"></i> Inicia sesión para guardar
+            </a>
+          )}
+        </div>
+      </div>
+    </article>
+
+    <!-- Reviews -->
+    <section class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-extrabold text-gray-800">Reseñas</h2>
+        {rating.count > 0 && (
+          <span class="text-sm text-gray-500">
+            <b class="text-gray-800">{rating.avg.toFixed(1)}</b> · {rating.count} reseña{rating.count !== 1 ? 's' : ''}
+          </span>
+        )}
+      </div>
+
+      {reviewsList.length === 0 ? (
+        <div class="text-center py-8 text-gray-500">
+          <i class="ri-chat-smile-2-line text-5xl text-gray-300 mb-3 block"></i>
+          <p>Aún no hay reseñas para este oficio.</p>
+          {enSesion && (
+            <p class="text-sm mt-2">
+              ¿Trabajaste con {provider?.name ?? 'este vecino'}?
+              <a href="#" class="text-orange-500 font-bold ml-1">Sé el primero en dejar una reseña</a>
+            </p>
+          )}
+        </div>
+      ) : (
+        <div class="space-y-4">
+          {reviewsList.map((r) => (
+            <div class="border border-gray-100 rounded-2xl p-4">
+              <div class="flex items-center gap-2 mb-2">
+                <div class="flex">
+                  {estrellas.map((n) => (
+                    <i class={`${n <= r.rating ? 'ri-star-fill text-yellow-400' : 'ri-star-line text-gray-300'}`}></i>
+                  ))}
+                </div>
+                <span class="font-bold text-gray-800 text-sm">{r.reviewerName}</span>
+              </div>
+              <p class="text-gray-600 text-sm">{r.body}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+
+    <!-- Volver -->
+    <div class="mt-8 text-center">
+      <a href="/" class="text-orange-500 font-bold hover:underline">
+        ← Volver a la búsqueda
+      </a>
+    </div>
+  </main>
+</BaseLayout>

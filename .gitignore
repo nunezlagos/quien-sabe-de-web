@@ -63,3 +63,7 @@ docs/
 
 # openspec/ SÍ se versiona: es el contrato de requerimientos del equipo.
 
+
+# Screenshots de pruebas
+/mockup-index*.png
+/mvp-*.png

@@ -1,0 +1,137 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link " Quién Sabe" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e5]: 
+        - text: Quién
+        - generic [ref=e6]: Sabe
+      - generic [ref=e7]:
+        - link " Hola, Juan" [ref=e8] [cursor=pointer]:
+          - /url: /dashboard
+          - generic [ref=e9]: 
+          - text: Hola, Juan
+        - button " Cerrar sesión" [ref=e11]:
+          - generic [ref=e12]: 
+          - text: Cerrar sesión
+      - text: 
+  - main [ref=e13]:
+    - link "← Volver a mi panel" [ref=e14] [cursor=pointer]:
+      - /url: /dashboard
+    - generic [ref=e15]:
+      - heading "Publica tu oficio" [level=1] [ref=e16]
+      - paragraph [ref=e17]: Cuenta brevemente qué haces, en qué comuna trabajas y cuánto cobras. Los vecinos te van a encontrar cuando busquen tu especialidad.
+    - generic [ref=e18]:
+      - generic [ref=e19]:
+        - generic [ref=e20]: Nombre del servicio *
+        - textbox "Nombre del servicio *" [ref=e21]:
+          - /placeholder: ej. Gasfiter a domicilio
+        - paragraph [ref=e22]: "Sé específico: en lugar de \"Servicios\", usa \"Reparación de calefones\"."
+      - generic [ref=e23]:
+        - generic [ref=e24]: Categoría *
+        - combobox "Categoría *" [ref=e25]:
+          - option "Selecciona..." [selected]
+          - option "Gasfiter"
+          - option "Electricista"
+          - option "Jardinero"
+          - option "Pintor"
+          - option "Costurera"
+          - option "Programador"
+          - option "Cerrajero"
+          - option "Mecánico"
+          - option "Limpieza"
+          - option "Mudanza"
+          - option "Otro"
+      - generic [ref=e26]:
+        - generic [ref=e27]: Descripción *
+        - textbox "Descripción *" [ref=e28]:
+          - /placeholder: Cuenta brevemente qué ofreces, tu experiencia, y por qué te elegirían a ti.
+      - generic [ref=e29]:
+        - generic [ref=e30]:
+          - generic [ref=e31]: Comuna principal *
+          - combobox "Comuna principal *" [ref=e32]:
+            - option "Selecciona..." [selected]
+            - option "Alhué"
+            - option "Buin"
+            - option "Calera de Tango"
+            - option "Cerrillos"
+            - option "Cerro Navia"
+            - option "Colina"
+            - option "Conchalí"
+            - option "Curacaví"
+            - option "El Bosque"
+            - option "El Monte"
+            - option "Estación Central"
+            - option "Huechuraba"
+            - option "Independencia"
+            - option "Isla de Maipo"
+            - option "La Cisterna"
+            - option "La Florida"
+            - option "La Granja"
+            - option "La Pintana"
+            - option "La Reina"
+            - option "Lampa"
+            - option "Las Condes"
+            - option "Lo Barnechea"
+            - option "Lo Espejo"
+            - option "Lo Prado"
+            - option "Macul"
+            - option "Maipú"
+            - option "María Pinto"
+            - option "Melipilla"
+            - option "Padre Hurtado"
+            - option "Paine"
+            - option "Pedro Aguirre Cerda"
+            - option "Peñaflor"
+            - option "Peñalolén"
+            - option "Pirque"
+            - option "Providencia"
+            - option "Pudahuel"
+            - option "Puente Alto"
+            - option "Quilicura"
+            - option "Quinta Normal"
+            - option "Recoleta"
+            - option "Renca"
+            - option "San Bernardo"
+            - option "San Joaquín"
+            - option "San José de Maipo"
+            - option "San Miguel"
+            - option "San Pedro"
+            - option "San Ramón"
+            - option "Santiago"
+            - option "Talagante"
+            - option "Tiltil"
+            - option "Vitacura"
+            - option "Ñuñoa"
+        - generic [ref=e33]:
+          - generic [ref=e34]: Precio base (CLP) *
+          - generic [ref=e35]:
+            - generic [ref=e36]: $
+            - spinbutton "Precio base (CLP) *" [ref=e37]
+          - paragraph [ref=e38]: Por visita / consulta inicial.
+      - generic [ref=e39]:
+        - generic [ref=e40]: 
+        - paragraph [ref=e41]: Tu oficio se publica como no verificado. Para obtener el badge de verificación, sube tu RUT y certificaciones desde tu panel.
+      - generic [ref=e42]:
+        - link "Cancelar" [ref=e43] [cursor=pointer]:
+          - /url: /dashboard
+        - button " Publicar oficio" [ref=e44]:
+          - generic [ref=e45]: 
+          - text: Publicar oficio
+  - contentinfo [ref=e46]:
+    - generic [ref=e47]:
+      - paragraph [ref=e48]: © 2026 QuiénSabe.
+      - paragraph [ref=e49]: Hecho en Chile 🇨🇱
+  - generic [ref=e52]:
+    - button "Menu" [ref=e53]:
+      - img [ref=e55]
+      - generic: Menu
+    - button "Inspect" [ref=e59]:
+      - img [ref=e61]
+      - generic: Inspect
+    - button "Audit" [ref=e63]:
+      - img [ref=e65]
+      - generic: Audit
+    - button "Settings" [ref=e68]:
+      - img [ref=e70]
+      - generic: Settings

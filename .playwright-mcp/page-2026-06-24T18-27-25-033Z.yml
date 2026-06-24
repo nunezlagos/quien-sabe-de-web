@@ -1,0 +1,90 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link " Quién Sabe" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e5]: 
+        - text: Quién
+        - generic [ref=e6]: Sabe
+      - generic [ref=e7]:
+        - link " Hola, Juan" [ref=e8] [cursor=pointer]:
+          - /url: /dashboard
+          - generic [ref=e9]: 
+          - text: Hola, Juan
+        - button " Cerrar sesión" [ref=e11]:
+          - generic [ref=e12]: 
+          - text: Cerrar sesión
+      - text: 
+  - main [ref=e13]:
+    - navigation [ref=e14]:
+      - link "Inicio" [ref=e15] [cursor=pointer]:
+        - /url: /
+      - text: /
+      - link "gasfiter" [ref=e16] [cursor=pointer]:
+        - /url: /?q=gasfiter
+      - text: / Destape de cañerias 24h
+    - article [ref=e17]:
+      - generic [ref=e19]:
+        - generic [ref=e20]: JU
+        - generic [ref=e21]:
+          - generic [ref=e23]: gasfiter
+          - heading "Destape de cañerias 24h" [level=1] [ref=e24]
+          - paragraph [ref=e25]: Juan Pérez · Comuna ID 22
+          - paragraph [ref=e26]:
+            - generic [ref=e27]: 
+            - text: Aún sin reseñas
+      - generic [ref=e28]:
+        - heading "Sobre este oficio" [level=2] [ref=e29]
+        - paragraph [ref=e30]: Servicio de destape de canerias y desagues. Atencion 24 horas en toda la RM. Presupuesto sin compromiso, trabajo garantizado con factura.
+        - generic [ref=e31]:
+          - generic [ref=e32]:
+            - generic [ref=e33]: Precio base
+            - text: $18.000
+          - generic [ref=e34]:
+            - generic [ref=e35]: Categoría
+            - text: hogar
+          - generic [ref=e36]:
+            - generic [ref=e37]: Estado
+            - text: Disponible
+      - generic [ref=e38]:
+        - heading "Contactar" [level=2] [ref=e39]
+        - generic [ref=e40]:
+          - link " WhatsApp" [ref=e41] [cursor=pointer]:
+            - /url: https://wa.me/56912345678?text=Hola%2C%20te%20encontr%C3%A9%20en%20Qui%C3%A9nSabe%20por%20tu%20servicio%20de%20Destape%20de%20ca%C3%B1erias%2024h.
+            - generic [ref=e42]: 
+            - text: WhatsApp
+          - link " Email" [ref=e43] [cursor=pointer]:
+            - /url: mailto:prestador@demo.cl?subject=Consulta%20por%20Destape%20de%20ca%C3%B1erias%2024h%20%E2%80%94%20Qui%C3%A9nSabe
+            - generic [ref=e44]: 
+            - text: Email
+          - button " Guardar" [ref=e45]:
+            - generic [ref=e46]: 
+            - text: Guardar
+    - generic [ref=e47]:
+      - heading "Reseñas" [level=2] [ref=e49]
+      - generic [ref=e50]:
+        - generic [ref=e51]: 
+        - paragraph [ref=e52]: Aún no hay reseñas para este oficio.
+        - paragraph [ref=e53]:
+          - text: ¿Trabajaste con Juan Pérez?
+          - link "Sé el primero en dejar una reseña" [ref=e54] [cursor=pointer]:
+            - /url: "#"
+    - link "← Volver a la búsqueda" [ref=e56] [cursor=pointer]:
+      - /url: /
+  - contentinfo [ref=e57]:
+    - generic [ref=e58]:
+      - paragraph [ref=e59]: © 2026 QuiénSabe.
+      - paragraph [ref=e60]: Hecho en Chile 🇨🇱
+  - generic [ref=e63]:
+    - button "Menu" [ref=e64]:
+      - img [ref=e66]
+      - generic: Menu
+    - button "Inspect" [ref=e70]:
+      - img [ref=e72]
+      - generic: Inspect
+    - button "Audit" [ref=e74]:
+      - img [ref=e76]
+      - generic: Audit
+    - button "Settings" [ref=e79]:
+      - img [ref=e81]
+      - generic: Settings

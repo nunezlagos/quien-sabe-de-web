@@ -1,0 +1,87 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link " Quién Sabe" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e5]: 
+        - text: Quién
+        - generic [ref=e6]: Sabe
+      - generic [ref=e7]:
+        - link "Ingresar" [ref=e8] [cursor=pointer]:
+          - /url: /iniciar-sesion
+        - link "Crear cuenta" [ref=e9] [cursor=pointer]:
+          - /url: /registro
+      - text: 
+  - main [ref=e10]:
+    - link "← Volver al inicio" [ref=e11] [cursor=pointer]:
+      - /url: /
+    - article [ref=e12]:
+      - generic [ref=e13]:
+        - generic [ref=e15]: 
+        - heading "Inicia sesión" [level=1] [ref=e16]
+        - paragraph [ref=e17]: Vuelve a conectar con tus vecinos.
+      - generic [ref=e18]:
+        - generic [ref=e19]:
+          - generic [ref=e20]: Correo
+          - textbox "Correo" [ref=e21]
+        - generic [ref=e22]:
+          - generic [ref=e23]: Contraseña
+          - textbox "Contraseña" [ref=e24]
+          - link "¿Olvidaste tu contraseña?" [ref=e25] [cursor=pointer]:
+            - /url: /recuperar-contrasena
+        - button "Iniciar sesión" [ref=e26] [cursor=pointer]
+      - generic [ref=e28]: O continúa con
+      - generic [ref=e29]:
+        - button "Continuar con Google" [disabled] [ref=e30]:
+          - generic [ref=e31]: 
+          - generic [ref=e32]: Continuar con Google
+        - button "Continuar con Facebook" [disabled] [ref=e33]:
+          - generic [ref=e34]: 
+          - generic [ref=e35]: Continuar con Facebook
+        - link "Acceso Corporativo / Admin" [ref=e36] [cursor=pointer]:
+          - /url: /dashboard
+          - generic [ref=e37]: 
+          - generic [ref=e38]: Acceso Corporativo / Admin
+      - paragraph [ref=e39]:
+        - text: Al iniciar sesión aceptas nuestras
+        - link "normas de convivencia" [ref=e40] [cursor=pointer]:
+          - /url: /terminos
+        - text: .
+      - paragraph [ref=e41]:
+        - text: ¿No tienes cuenta?
+        - link "Crea una" [ref=e42] [cursor=pointer]:
+          - /url: /registro
+    - complementary [ref=e43]:
+      - heading "Usuarios demo" [level=4] [ref=e44]:
+        - generic [ref=e45]: 
+        - text: Usuarios demo
+      - list [ref=e46]:
+        - listitem [ref=e47]:
+          - code [ref=e48]: vecino@demo.cl
+          - text: /
+          - code [ref=e49]: Demo1234
+        - listitem [ref=e50]:
+          - code [ref=e51]: prestador@demo.cl
+          - text: /
+          - code [ref=e52]: Demo1234
+        - listitem [ref=e53]:
+          - code [ref=e54]: admin@demo.cl
+          - text: /
+          - code [ref=e55]: Demo1234
+  - contentinfo [ref=e56]:
+    - generic [ref=e57]:
+      - paragraph [ref=e58]: © 2026 QuiénSabe.
+      - paragraph [ref=e59]: Hecho en Chile 🇨🇱
+  - generic [ref=e62]:
+    - button "Menu" [ref=e63]:
+      - img [ref=e65]
+      - generic: Menu
+    - button "Inspect" [ref=e69]:
+      - img [ref=e71]
+      - generic: Inspect
+    - button "Audit" [ref=e73]:
+      - img [ref=e75]
+      - generic: Audit
+    - button "Settings" [ref=e78]:
+      - img [ref=e80]
+      - generic: Settings

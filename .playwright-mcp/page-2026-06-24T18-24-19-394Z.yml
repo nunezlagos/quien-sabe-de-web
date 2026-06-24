@@ -1,0 +1,80 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link " Quién Sabe" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e5]: 
+        - text: Quién
+        - generic [ref=e6]: Sabe
+      - generic [ref=e7]:
+        - link " Hola, Juan" [ref=e8] [cursor=pointer]:
+          - /url: /dashboard
+          - generic [ref=e9]: 
+          - text: Hola, Juan
+        - button " Cerrar sesión" [ref=e11]:
+          - generic [ref=e12]: 
+          - text: Cerrar sesión
+      - text: 
+  - main [ref=e13]:
+    - generic [ref=e15]:
+      - generic [ref=e16]: J
+      - generic [ref=e17]:
+        - heading "Hola, Juan Pérez" [level=1] [ref=e18]
+        - paragraph [ref=e19]: prestador@demo.cl
+      - generic [ref=e20]:
+        - generic [ref=e21]: provider
+        - generic [ref=e22]: ● Activo
+    - navigation [ref=e23]:
+      - link " Mis oficios (2)" [ref=e24] [cursor=pointer]:
+        - /url: /dashboard?tab=oficios
+        - generic [ref=e25]: 
+        - text: Mis oficios (2)
+      - link " Mi perfil" [ref=e26] [cursor=pointer]:
+        - /url: /dashboard?tab=perfil
+        - generic [ref=e27]: 
+        - text: Mi perfil
+    - generic [ref=e29]:
+      - article [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]:
+            - text: gasfiter
+            - generic [ref=e33]:
+              - generic [ref=e34]: 
+              - text: Verificado
+          - generic [ref=e35]: Activo
+        - heading "Gasfiter a domicilio" [level=3] [ref=e36]
+        - paragraph [ref=e37]: Las Condes · $15.000
+        - paragraph [ref=e38]:
+          - generic [ref=e39]: 
+          - text: 4.7 · 3 reseñas
+        - generic [ref=e40]:
+          - link "Ver público" [ref=e41] [cursor=pointer]:
+            - /url: /p/juan-perez-gasfiter-las-condes
+          - link "Editar" [ref=e42] [cursor=pointer]:
+            - /url: /dashboard/oficio/1
+      - article [ref=e43]:
+        - generic [ref=e44]:
+          - generic [ref=e45]:
+            - text: electricista
+            - generic [ref=e46]:
+              - generic [ref=e47]: 
+              - text: Verificado
+          - generic [ref=e48]: Activo
+        - heading "Electricista residencial" [level=3] [ref=e49]
+        - paragraph [ref=e50]: Providencia · $20.000
+        - paragraph [ref=e51]:
+          - generic [ref=e52]: 
+          - text: 5.0 · 1 reseñas
+        - generic [ref=e53]:
+          - link "Ver público" [ref=e54] [cursor=pointer]:
+            - /url: /p/juan-perez-electricista
+          - link "Editar" [ref=e55] [cursor=pointer]:
+            - /url: /dashboard/oficio/2
+      - link " Publicar otro oficio" [ref=e56] [cursor=pointer]:
+        - /url: /crear-oficio
+        - generic [ref=e57]: 
+        - generic [ref=e58]: Publicar otro oficio
+  - contentinfo [ref=e59]:
+    - generic [ref=e60]:
+      - paragraph [ref=e61]: © 2026 QuiénSabe.
+      - paragraph [ref=e62]: Hecho en Chile 🇨🇱

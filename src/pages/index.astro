@@ -1,64 +1,148 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getTradesService } from '../lib/services/trades.service';
+import { getDb } from '../database/client';
+import { communes } from '../database/schema';
+import { asc } from 'drizzle-orm';
 
 const enSesion = Boolean(Astro.locals.user);
+
+const url = Astro.url;
+const q = url.searchParams.get('q') ?? '';
+const communeIdParam = url.searchParams.get('commune_id');
+const communeId = communeIdParam ? Number.parseInt(communeIdParam, 10) : undefined;
+
+const tradesService = getTradesService(Astro.locals);
+const resultados = await tradesService.search({
+  q: q || undefined,
+  communeId,
+  limit: 50,
+});
+
+const db = getDb(Astro.locals);
+const communesList = await db.select({ id: communes.id, name: communes.name }).from(communes).orderBy(asc(communes.name)).all();
 ---
 
 <BaseLayout title="QuiénSabe — ¿Quién sabe de... en tu barrio?">
-    <header class="bg-gradient-to-br from-orange-50 to-amber-50 py-16 md:py-24 relative overflow-hidden">
-        <div class="container mx-auto px-4 text-center relative z-10">
-            <h1 class="text-3xl md:text-5xl font-extrabold text-gray-800 mb-6 tracking-tight">
-                ¿Quién sabe de un <span class="text-orange-500">gasfíter</span>?
-            </h1>
-            <p class="text-gray-600 mb-8 text-lg max-w-2xl mx-auto font-medium">
-                Conecta con vecinos que saben hacer lo que necesitas. Rápido, confiable y de tu barrio.
+  <header class="bg-gradient-to-br from-orange-50 to-amber-50 py-16 md:py-24 relative overflow-hidden">
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <h1 class="text-3xl md:text-5xl font-extrabold text-gray-800 mb-6 tracking-tight">
+        ¿Quién sabe de un <span class="text-orange-500">gasfíter</span>?
+      </h1>
+      <p class="text-gray-600 mb-8 text-lg max-w-2xl mx-auto font-medium">
+        Conecta con vecinos que saben hacer lo que necesitas. Rápido, confiable y de tu barrio.
+      </p>
+
+      <form action="/" method="GET" class="bg-white p-2 rounded-2xl shadow-xl max-w-4xl mx-auto flex flex-col md:flex-row gap-2 border border-gray-100">
+        <input
+          type="text"
+          name="q"
+          value={q}
+          placeholder="¿Qué oficio buscas? (ej. gasfíter, electricista)"
+          class="flex-grow p-3 rounded-xl bg-transparent border-none focus:ring-0 text-gray-700"
+        />
+        <select
+          name="commune_id"
+          class="md:w-56 p-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-700 focus:ring-0"
+        >
+          <option value="">Todas las comunas</option>
+          {communesList.map((c) => (
+            <option value={c.id} selected={communeId === c.id}>{c.name}</option>
+          ))}
+        </select>
+        <button
+          type="submit"
+          class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-bold transition"
+        >
+          Buscar
+        </button>
+      </form>
+
+      {(q || communeId) && (
+        <p class="mt-4 text-sm text-gray-600">
+          {resultados.length} resultado{resultados.length !== 1 ? 's' : ''}
+          {q && <> para "<b>{q}</b>"</>}
+          {communeId && <> en la comuna seleccionada</>}
+          {' · '}
+          <a href="/" class="text-orange-500 underline">Limpiar filtros</a>
+        </p>
+      )}
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 py-12">
+    <div class="flex justify-between items-end mb-6">
+      <h2 class="text-2xl font-extrabold text-gray-800">
+        {q ? 'Resultados' : 'Vecinos recomendados'}
+      </h2>
+      {enSesion ? null : (
+        <a href="/registro" class="text-orange-500 font-bold text-sm hover:underline">
+          Crea tu cuenta para guardar favoritos →
+        </a>
+      )}
+    </div>
+
+    {resultados.length === 0 ? (
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
+        <i class="ri-search-eye-line text-6xl text-gray-300 mb-4 block"></i>
+        <h3 class="text-xl font-bold text-gray-800 mb-2">Sin resultados</h3>
+        <p class="text-gray-500 mb-4">
+          {q
+            ? `No encontramos oficios que coincidan con "${q}".`
+            : 'Aún no hay oficios publicados. ¡Sé el primero!'}
+        </p>
+        <a
+          href={q ? '/' : '/crear-oficio'}
+          class="inline-block bg-orange-500 text-white px-6 py-2 rounded-xl font-bold hover:bg-orange-600 transition"
+        >
+          {q ? 'Ver todos los oficios' : 'Publicar mi oficio'}
+        </a>
+      </div>
+    ) : (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {resultados.map((t) => (
+          <article class="bg-white rounded-xl shadow-sm hover:shadow-xl transition border border-gray-200 p-5">
+            <div class="flex items-center gap-4 mb-4">
+              <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 font-bold text-xl flex-shrink-0">
+                {(t.userName ?? '?').slice(0, 2).toUpperCase()}
+              </div>
+              <div class="min-w-0 flex-1">
+                <h3 class="font-bold text-gray-800 truncate">{t.name}</h3>
+                <p class="text-sm text-gray-500 truncate">
+                  {t.userName ?? 'Vecino'} · {t.communeName ?? 'RM'}
+                </p>
+              </div>
+            </div>
+            <p class="text-gray-600 text-sm mb-4 line-clamp-3 min-h-[3.75rem]">
+              {t.description ?? 'Servicio disponible en tu barrio.'}
             </p>
-
-            <form action="/" method="GET" class="bg-white p-2 rounded-2xl shadow-xl max-w-4xl mx-auto flex flex-col md:flex-row gap-2 border border-gray-100">
-                <input type="text" name="oficio" placeholder="¿Qué oficio buscas? (ej. gasfíter, electricista)" class="flex-grow p-3 rounded-xl bg-transparent border-none focus:ring-0 text-gray-700">
-                <input type="text" name="comuna" placeholder="Comuna" class="md:w-48 p-3 rounded-xl bg-transparent border border-gray-100 focus:ring-0 text-gray-700">
-                <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-bold transition">
-                    Buscar
-                </button>
-            </form>
-        </div>
-    </header>
-
-    <main class="container mx-auto px-4 py-12">
-        <div class="flex justify-between items-end mb-6">
-            <h2 class="text-2xl font-extrabold text-gray-800">Vecinos recomendados</h2>
-            {enSesion ? null : (
-                <a href="/registro" class="text-orange-500 font-bold text-sm hover:underline">
-                    Crea tu cuenta para guardar favoritos →
-                </a>
-            )}
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3, 4, 5, 6].map(() => (
-                <article class="bg-white rounded-xl shadow-sm hover:shadow-xl transition border border-gray-200 p-5">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 font-bold text-xl">
-                            JP
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-gray-800">Juan Pérez</h3>
-                            <p class="text-sm text-gray-500">Gasfíter · Santiago Centro</p>
-                        </div>
-                    </div>
-                    <p class="text-gray-600 text-sm mb-4">
-                        Instalación de calefones, reparación de filtraciones y destapes. 10 años de experiencia.
-                    </p>
-                    <div class="flex justify-between items-center border-t pt-4 border-gray-100">
-                        <span class="font-bold text-gray-800">$15.000 <span class="text-xs text-gray-400 font-normal">/ visita</span></span>
-                        <a href="/" class="text-orange-500 font-bold text-sm hover:underline">Ver perfil</a>
-                    </div>
-                </article>
-            ))}
-        </div>
-
-        <div class="mt-12 text-center text-gray-500 text-sm">
-            <p>Próximamente: reseñas, favoritos, agenda y reseñas reales.</p>
-        </div>
-    </main>
+            <div class="flex flex-wrap gap-1.5 mb-4">
+              {t.verified ? (
+                <span class="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 flex items-center gap-1">
+                  <i class="ri-shield-check-fill"></i> Verificado
+                </span>
+              ) : null}
+              <span class="text-[10px] font-bold text-gray-600 bg-gray-50 px-2 py-0.5 rounded-full">
+                {t.symbol}
+              </span>
+            </div>
+            <div class="flex justify-between items-center border-t pt-4 border-gray-100">
+              <div>
+                <span class="text-[10px] text-gray-400 uppercase font-bold block">Desde</span>
+                <span class="font-bold text-gray-800">
+                  ${(t.basePriceClp ?? 0).toLocaleString('es-CL')}
+                </span>
+              </div>
+              <a
+                href={`/p/${t.slug}`}
+                class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl text-xs font-bold transition"
+              >
+                Ver perfil
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    )}
+  </main>
 </BaseLayout>
