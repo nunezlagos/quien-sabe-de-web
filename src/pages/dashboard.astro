@@ -4,8 +4,8 @@ import { getDb } from '../database/client';
 import { trades, communes, reviews } from '../database/schema';
 import { eq, desc, avg, count } from 'drizzle-orm';
 
-const usuario = Astro.locals.user;
-if (!usuario) {
+const currentUser = Astro.locals.user;
+if (!currentUser) {
   return Astro.redirect('/iniciar-sesion?redirigir=/dashboard');
 }
 
@@ -15,7 +15,7 @@ const tab = (['historial', 'resenas', 'perfil'] as const).find((t) => t === tabP
 
 const db = getDb(Astro.locals);
 
-const misOficios = await db
+const myTrades = await db
   .select({
     id: trades.id,
     slug: trades.slug,
@@ -32,32 +32,32 @@ const misOficios = await db
   .from(trades)
   .leftJoin(communes, eq(trades.communeId, communes.id))
   .leftJoin(reviews, eq(reviews.tradeId, trades.id))
-  .where(eq(trades.userId, usuario.id))
+  .where(eq(trades.userId, currentUser.id))
   .groupBy(trades.id)
   .orderBy(desc(trades.createdAt))
   .all();
 
 // TODO(REQ-20): cuando el schema exponga `email_verified_at`, renderizar aquí
-// el banner de verificación con `email={usuario.email}` y CTA "Reenviar correo".
+// el banner de verificación con `email={currentUser.email}` y CTA "Reenviar correo".
 // El schema actual (src/database/schema.ts) aún no incluye este campo.
 ---
 
-<BaseLayout title={`Mi panel — ${usuario.name}`}>
+<BaseLayout title={`Mi panel — ${currentUser.name}`}>
   <main class="container mx-auto px-4 py-8 max-w-4xl">
     {/* TODO(REQ-20): banner de verificación de email — ver comentario en frontmatter */}
 
     <header class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 mb-6">
       <div class="flex items-center gap-4">
         <div class="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 font-extrabold text-2xl flex-shrink-0">
-          {usuario.name.slice(0, 1).toUpperCase()}
+          {currentUser.name.slice(0, 1).toUpperCase()}
         </div>
         <div class="flex-1">
-          <h1 class="text-2xl font-extrabold text-gray-800">Hola, {usuario.name}</h1>
-          <p class="text-sm text-gray-500">{usuario.email}</p>
+          <h1 class="text-2xl font-extrabold text-gray-800">Hola, {currentUser.name}</h1>
+          <p class="text-sm text-gray-500">{currentUser.email}</p>
         </div>
         <div class="flex gap-2">
-          <span class={`px-3 py-1 rounded-full text-xs font-bold ${usuario.role === 'admin' ? 'bg-purple-100 text-purple-700' : usuario.role === 'provider' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
-            {usuario.role}
+          <span class={`px-3 py-1 rounded-full text-xs font-bold ${currentUser.role === 'admin' ? 'bg-purple-100 text-purple-700' : currentUser.role === 'provider' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
+            {currentUser.role}
           </span>
           <span class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">
             ● Activo
@@ -122,11 +122,11 @@ const misOficios = await db
           </div>
         </div>
 
-        {misOficios.length > 0 && (
+        {myTrades.length > 0 && (
           <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
             <div class="flex items-center justify-between mb-4">
               <h3 class="font-bold text-gray-800 text-lg flex items-center gap-2">
-                <i class="ri-briefcase-line text-orange-500"></i> Mis oficios publicados ({misOficios.length})
+                <i class="ri-briefcase-line text-orange-500"></i> Mis oficios publicados ({myTrades.length})
               </h3>
               <a
                 href="/crear-oficio"
@@ -136,7 +136,7 @@ const misOficios = await db
               </a>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {misOficios.map((t) => (
+              {myTrades.map((t) => (
                 <article class="bg-gray-50 rounded-2xl border border-gray-100 p-4">
                   <div class="flex justify-between items-start mb-2">
                     <span class="text-xs uppercase tracking-wide font-bold text-orange-600 bg-orange-100 px-2 py-1 rounded-full">
@@ -216,19 +216,19 @@ const misOficios = await db
         <dl class="space-y-4">
           <div class="flex justify-between border-b border-gray-100 pb-3">
             <dt class="text-gray-500">Nombre</dt>
-            <dd class="font-bold text-gray-800">{usuario.name}</dd>
+            <dd class="font-bold text-gray-800">{currentUser.name}</dd>
           </div>
           <div class="flex justify-between border-b border-gray-100 pb-3">
             <dt class="text-gray-500">Email</dt>
-            <dd class="font-bold text-gray-800">{usuario.email}</dd>
+            <dd class="font-bold text-gray-800">{currentUser.email}</dd>
           </div>
           <div class="flex justify-between border-b border-gray-100 pb-3">
             <dt class="text-gray-500">Rol</dt>
-            <dd class="font-bold text-gray-800 capitalize">{usuario.role}</dd>
+            <dd class="font-bold text-gray-800 capitalize">{currentUser.role}</dd>
           </div>
           <div class="flex justify-between border-b border-gray-100 pb-3">
             <dt class="text-gray-500">ID</dt>
-            <dd class="font-bold text-gray-800">#{usuario.id}</dd>
+            <dd class="font-bold text-gray-800">#{currentUser.id}</dd>
           </div>
         </dl>
         <p class="text-xs text-gray-400 mt-6">
