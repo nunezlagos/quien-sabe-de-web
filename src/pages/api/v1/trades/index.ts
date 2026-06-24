@@ -78,6 +78,6 @@ export const POST: APIRoute = async (ctx) => {
 
   return new Response(null, {
     status: 302,
-    headers: { Location: `/p/${nuevoTrade.slug}` },
+    headers: { Location: `/verificar-oficio?slug=${nuevoTrade.slug}&ok=1` },
   });
 };
