@@ -161,13 +161,22 @@ const otherTrades = provider
             <i class="ri-mail-line text-xl"></i> Email
           </a>
           {isLoggedIn ? (
-            <button
-              type="button"
-              data-fav-toggle={trade.slug}
-              class="js-fav-btn flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl font-bold transition shadow-sm"
-            >
-              <i class="ri-heart-fill text-xl"></i> Guardar
-            </button>
+            <>
+              <button
+                type="button"
+                data-fav-toggle={trade.slug}
+                class="js-fav-btn flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl font-bold transition shadow-sm"
+              >
+                <i class="ri-heart-fill text-xl"></i> Guardar
+              </button>
+              <button
+                type="button"
+                id="btn-report"
+                class="flex items-center justify-center gap-2 bg-white border-2 border-red-400 text-red-500 hover:bg-red-50 px-6 py-3 rounded-xl font-bold transition shadow-sm"
+              >
+                <i class="ri-error-warning-line text-xl"></i> Reportar
+              </button>
+            </>
           ) : (
             <a
               href={"/iniciar-sesion?redirigir=/p/" + trade.slug}
@@ -179,6 +188,38 @@ const otherTrades = provider
         </div>
       </div>
     </article>
+
+    <!-- Report Modal -->
+    {isLoggedIn && (
+    <div id="report-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center">
+      <div id="report-modal-overlay" class="absolute inset-0 bg-black/60"></div>
+      <div class="relative bg-white rounded-3xl shadow-2xl p-6 w-full max-w-md mx-4 z-10">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-extrabold text-gray-800">Reportar</h3>
+          <button id="report-modal-close" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+        </div>
+        <form id="report-form" data-provider-id={trade.id}>
+          <div class="mb-4">
+            <label class="block text-xs font-bold text-gray-600 mb-1">Tipo de reporte</label>
+            <select name="kind" class="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm" required>
+              <option value="suplantacion">Suplantación de identidad</option>
+              <option value="mal_servicio">Mal servicio</option>
+              <option value="contenido">Contenido inapropiado</option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label class="block text-xs font-bold text-gray-600 mb-1">Asunto</label>
+            <input name="subject" type="text" class="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm" placeholder="Breve resumen" required minlength={5} maxlength={150} />
+          </div>
+          <div class="mb-4">
+            <label class="block text-xs font-bold text-gray-600 mb-1">Detalle</label>
+            <textarea name="body" rows="4" class="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm" placeholder="Describe el problema..." required minlength={1} maxlength={5000}></textarea>
+          </div>
+          <button type="submit" class="w-full bg-red-500 text-white py-3 rounded-xl font-bold hover:bg-red-600 transition">Enviar Reporte</button>
+        </form>
+      </div>
+    </div>
+    )}
 
     {portfolio.length > 0 && (
     <section class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 mb-6">
@@ -312,8 +353,10 @@ const otherTrades = provider
 <script>
   import { initContactTracking } from '../../lib/client/tracking/contact-tracker';
   import { initFavButtons } from '../../lib/client/ui/favorites';
+  import { initReportModal } from '../../lib/client/ui/report-modal';
   initContactTracking();
   initFavButtons();
+  initReportModal();
 </script>
 
 </BaseLayout>

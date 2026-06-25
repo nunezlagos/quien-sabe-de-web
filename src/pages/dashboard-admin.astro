@@ -1,7 +1,7 @@
 ---
 import { getDb } from '../database/client';
-import { users, trades, communes } from '../database/schema';
-import { desc, eq, count } from 'drizzle-orm';
+import { users, trades, communes, tickets, ticketMessages } from '../database/schema';
+import { desc, eq, count, and, sql } from 'drizzle-orm';
 
 const SECCIONES_VALIDAS = [
 	'dashboard',
@@ -86,6 +86,40 @@ if (seccionActiva === 'oficios') {
 		.all();
 }
 
+let listaTickets: any[] = [];
+let openTicketCount = 0;
+
+if (seccionActiva === 'tickets') {
+  const filterStatus = Astro.url.searchParams.get('status') || '';
+  const filterKind = Astro.url.searchParams.get('kind') || '';
+  const conditions: any[] = [];
+  if (filterStatus) conditions.push(eq(tickets.status, filterStatus as any));
+  if (filterKind) conditions.push(eq(tickets.kind, filterKind as any));
+
+  listaTickets = await db
+    .select({
+      id: tickets.id,
+      kind: tickets.kind,
+      status: tickets.status,
+      subject: tickets.subject,
+      contactEmail: tickets.contactEmail,
+      createdByUserId: tickets.createdByUserId,
+      assigneeAdminId: tickets.assigneeAdminId,
+      targetProviderId: tickets.targetProviderId,
+      createdAt: tickets.createdAt,
+      msgCount: count(ticketMessages.id),
+    })
+    .from(tickets)
+    .leftJoin(ticketMessages, eq(ticketMessages.ticketId, tickets.id))
+    .where(conditions.length > 0 ? and(...conditions) : undefined)
+    .groupBy(tickets.id)
+    .orderBy(desc(tickets.createdAt))
+    .all();
+
+  const openResult = await db.select({ c: count() }).from(tickets).where(eq(tickets.status, 'abierto')).get();
+  openTicketCount = openResult?.c ?? 0;
+}
+
 const TITULOS: Record<SeccionId, string> = {
 	dashboard: 'Resumen General',
 	users: 'Usuarios',
@@ -117,7 +151,7 @@ const NAV: Array<{ id: SeccionId; href: string; label: string; icon: string; bad
 	{ id: 'dashboard', href: '/dashboard-admin', label: 'Dashboard', icon: 'ri-dashboard-3-line' },
 	{ id: 'users', href: '/dashboard-admin?section=users', label: 'Usuarios', icon: 'ri-user-settings-line' },
 	{ id: 'oficios', href: '/dashboard-admin?section=oficios', label: 'Oficios', icon: 'ri-briefcase-4-line' },
-	{ id: 'tickets', href: '/dashboard-admin?section=tickets', label: 'Tickets', icon: 'ri-customer-service-2-line', badge: '12' },
+	{ id: 'tickets', href: '/dashboard-admin?section=tickets', label: 'Tickets', icon: 'ri-customer-service-2-line', badge: String(openTicketCount) },
 	{ id: 'finanzas', href: '/dashboard-admin?section=finanzas', label: 'Finanzas', icon: 'ri-money-dollar-circle-line' },
 	{ id: 'configuracion', href: '/dashboard-admin?section=configuracion', label: 'Configuración', icon: 'ri-settings-4-line' },
 	{ id: 'analytics', href: '/dashboard-admin?section=analytics', label: 'Analytics', icon: 'ri-bar-chart-2-line' },
@@ -433,21 +467,73 @@ const auditPlaceholder = [
 				<div class="admin-section" data-section="tickets">
 					<div class="admin-section__head">
 						<h2 class="admin-section__title">Cola de tickets</h2>
-						<div class="admin-section__filters">
-							<select class="admin-select" aria-label="Filtrar por estado" disabled>
-								<option>Todos los estados</option>
+						<form class="admin-section__filters" id="ticket-filters" action="/dashboard-admin?section=tickets" method="GET">
+							<input type="hidden" name="section" value="tickets" />
+							<select class="admin-select" name="status" onchange="document.getElementById('ticket-filters').submit()">
+								<option value="">Todos los estados</option>
+								<option value="abierto" selected={Astro.url.searchParams.get('status') === 'abierto'}>Abierto</option>
+								<option value="en_revision" selected={Astro.url.searchParams.get('status') === 'en_revision'}>En revisión</option>
+								<option value="cerrado" selected={Astro.url.searchParams.get('status') === 'cerrado'}>Cerrado</option>
 							</select>
-							<select class="admin-select" aria-label="Filtrar por tipo" disabled>
-								<option>Todos los tipos</option>
+							<select class="admin-select" name="kind" onchange="document.getElementById('ticket-filters').submit()">
+								<option value="">Todos los tipos</option>
+								<option value="suplantacion" selected={Astro.url.searchParams.get('kind') === 'suplantacion'}>Suplantación</option>
+								<option value="mal_servicio" selected={Astro.url.searchParams.get('kind') === 'mal_servicio'}>Mal servicio</option>
+								<option value="contenido" selected={Astro.url.searchParams.get('kind') === 'contenido'}>Contenido</option>
+								<option value="consulta" selected={Astro.url.searchParams.get('kind') === 'consulta'}>Consulta</option>
 							</select>
-						</div>
+						</form>
 					</div>
 					<section class="admin-panel">
 						<div class="admin-table-wrap">
-							<p class="admin-empty">
-								<i class="ri-tools-line admin-empty__icon"></i>
-								El endpoint de tickets se implementará en REQ-10. Por ahora la cola está vacía.
-							</p>
+							{listaTickets.length === 0 ? (
+								<p class="admin-empty"><i class="ri-inbox-line admin-empty__icon"></i> No hay tickets con esos filtros.</p>
+							) : (
+							<table class="admin-table">
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Tipo</th>
+										<th>Asunto</th>
+										<th>Estado</th>
+										<th>Contacto</th>
+										<th>Mensajes</th>
+										<th>Asignado</th>
+										<th>Creado</th>
+										<th class="text-right">Acción</th>
+									</tr>
+								</thead>
+								<tbody>
+									{listaTickets.map((t) => (
+										<tr class={t.status === 'abierto' ? 'admin-row--warn' : ''}>
+											<td class="admin-table__id">#{t.id}</td>
+											<td><span class="admin-pill admin-pill--{t.kind === 'suplantacion' ? 'red' : t.kind === 'consulta' ? 'blue' : 'orange'}">{t.kind}</span></td>
+											<td class="admin-table__name" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{t.subject}</td>
+											<td><span class={`admin-pill admin-pill--${t.status === 'abierto' ? 'orange' : t.status === 'en_revision' ? 'blue' : 'green'}`}>{t.status}</span></td>
+											<td class="admin-table__email">{t.contactEmail ?? `User#${t.createdByUserId}`}</td>
+											<td class="admin-table__count">{t.msgCount}</td>
+											<td class="admin-table__assignee">{t.assigneeAdminId ? `Admin#${t.assigneeAdminId}` : '—'}</td>
+											<td class="admin-table__date">{t.createdAt?.toLocaleDateString?.('es-CL') ?? ''}</td>
+											<td class="admin-table__actions">
+												<button type="button" class="admin-icon-btn admin-icon-btn--blue js-ticket-view" data-ticket-id={t.id} title="Ver ticket">
+													<i class="ri-eye-line"></i>
+												</button>
+												{t.status === 'abierto' && (
+												<button type="button" class="admin-icon-btn admin-icon-btn--blue js-ticket-assign" data-ticket-id={t.id} title="Tomar ticket">
+													<i class="ri-hand"></i>
+												</button>
+												)}
+												{t.status !== 'cerrado' && (
+												<button type="button" class="admin-icon-btn admin-icon-btn--green js-ticket-close" data-ticket-id={t.id} title="Cerrar ticket">
+													<i class="ri-check-line"></i>
+												</button>
+												)}
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+							)}
 						</div>
 					</section>
 				</div>
@@ -677,7 +763,9 @@ const auditPlaceholder = [
 	</div>
 <script>
   import { initBanButtons } from '../../lib/client/admin/ban-user';
+  import { initTicketActions } from '../../lib/client/admin/tickets';
   initBanButtons();
+  initTicketActions();
 </script>
 </body>
 </html>
