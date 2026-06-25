@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quién Sabe - Conecta con Oficios de tu Barrio</title>
+    <meta name="description" content="Encuentra gasfíter, electricistas y más en tu comunidad.">
+    <!-- Tailwind CSS -->
+    <script src="js/tailwindcss.js"></script>
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="css/animate.min.css"/>
+    <!-- Remix Icon CDN -->
+    <link href="css/remixicon.css" rel="stylesheet">
+    <!-- Google Fonts: Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="js/config.js"></script>
+</head>
+<body class="bg-bg-light text-gray-800 font-sans flex flex-col min-h-screen transition-all duration-300" id="main-body">
+
+    <!-- Page Loader -->
+    <div id="page-loader" class="fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="relative">
+            <div class="text-5xl md:text-6xl font-extrabold text-gray-200 tracking-tight">
+                Quién<span class="text-gray-200">Sabe</span>
+            </div>
+            <div class="absolute top-0 left-0 text-5xl md:text-6xl font-extrabold text-primary tracking-tight overflow-hidden animate-fill whitespace-nowrap">
+                Quién<span class="text-primary">Sabe</span>
+            </div>
+        </div>
+        <p class="text-gray-400 text-sm mt-4 font-medium animate-pulse">Cargando barrio...</p>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-extrabold text-gray-800 flex items-center gap-2 tracking-tight">
+                <i class="ri-community-line text-primary text-3xl"></i>
+                Quién<span class="text-primary">Sabe</span>
+            </a>
+            
+            <div class="hidden md:flex items-center gap-4">
+                <a href="donate.html" class="bg-orange-100 text-accent hover:bg-orange-200 px-4 py-2 rounded-full font-bold text-sm transition flex items-center gap-2">
+                    <i class="ri-heart-3-fill"></i> Donaciones
+                </a>
+                <button id="loginBtn" class="bg-gradient-to-r from-accent to-orange-500 text-white px-6 py-2 rounded-full font-bold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition duration-300 animate__animated animate__pulse animate__infinite animate__slow flex items-center gap-2">
+                    <i class="ri-user-add-line"></i> ¿Ofreces un servicio? ¡Inscríbete!
+                </button>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-gray-600 text-2xl">
+                <i class="ri-menu-line"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-pattern py-16 md:py-24 relative overflow-hidden transition-all duration-500" id="hero-section">
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h1 class="hero-title text-3xl md:text-5xl font-extrabold text-gray-800 mb-6 animate__animated animate__fadeInDown tracking-tight">
+                ¿Quién sabe de un <span id="dynamic-trade" class="text-primary inline-block min-w-[200px] text-left">Gasfiter</span>?
+            </h1>
+            <p class="hero-desc text-gray-600 mb-8 text-lg max-w-2xl mx-auto font-medium">
+                Conecta con vecinos talentosos en tu barrio. Rápido, confiable y cercano.
+            </p>
+
+            <!-- Search Box -->
+            <div class="max-w-4xl mx-auto mb-4 animate__animated animate__fadeInUp">
+                <div class="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg text-xs font-bold inline-flex items-center gap-2 shadow-sm border border-yellow-200">
+                    <i class="ri-megaphone-fill"></i> ¡Oferta! Publica tu oficio GRATIS por tiempo limitado
+                </div>
+            </div>
+
+            <div id="hero-search-container" class="search-container bg-white p-2 rounded-2xl shadow-xl max-w-5xl mx-auto flex flex-col md:flex-row gap-2 animate__animated animate__fadeInUp border border-gray-100">
+                <div class="relative flex-1">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="ri-briefcase-line text-gray-400 text-xl"></i>
+                    </div>
+                    <select id="trade-select" class="block w-full pl-10 pr-3 py-3 text-base border-none focus:ring-0 text-gray-700 bg-transparent rounded-xl cursor-pointer hover:bg-gray-50 transition font-semibold">
+                        <option value="">Todos los oficios</option>
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+                
+                <div class="hidden md:block w-px bg-gray-200 my-2"></div>
+
+                <div class="relative flex-1">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="ri-map-pin-line text-gray-400 text-xl"></i>
+                    </div>
+                    <select id="commune-select" class="block w-full pl-10 pr-3 py-3 text-base border-none focus:ring-0 text-gray-700 bg-transparent rounded-xl cursor-pointer hover:bg-gray-50 transition font-semibold">
+                        <option value="">Todas las comunas</option>
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+
+                <div class="hidden md:block w-px bg-gray-200 my-2"></div>
+
+                <div class="relative flex-[1.5]">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="ri-search-line text-gray-400 text-xl"></i>
+                    </div>
+                    <input type="text" id="search-input" class="block w-full pl-10 pr-3 py-3 text-base border-none focus:ring-0 text-gray-700 bg-transparent rounded-xl placeholder-gray-400 font-medium" placeholder="Palabra clave (ej: instalación, reparación...)">
+                </div>
+
+                <label class="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-gray-50 transition rounded-xl">
+                    <input type="checkbox" name="available_now" class="w-4 h-4 accent-primary rounded">
+                    <span class="text-sm font-semibold text-gray-700">Disponible ahora</span>
+                </label>
+
+                <button id="search-btn" class="bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-xl font-bold transition shadow-md flex items-center justify-center gap-2">
+                    Buscar
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12 flex-grow">
+        
+        <!-- Advertisement Banner (Subtle) -->
+        <div class="mb-12 bg-gradient-to-r from-indigo-50 to-blue-50 rounded-2xl p-6 flex items-center justify-between border border-indigo-100 shadow-sm relative overflow-hidden group cursor-pointer hover:shadow-md transition">
+            <div class="absolute top-0 right-0 bg-gray-200 text-[10px] px-2 py-0.5 text-gray-500 rounded-bl-lg font-bold">PUBLICIDAD</div>
+            <div class="relative z-10 flex items-center gap-4">
+                <div class="bg-white p-3 rounded-full shadow-sm">
+                    <i class="ri-store-3-line text-indigo-500 text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-800 text-sm md:text-base">¿Tienes una ferretería o negocio local?</h3>
+                    <p class="text-xs md:text-sm text-gray-600">Apoya a tu comunidad y destaca aquí. <span class="text-indigo-600 font-bold underline">Contáctanos</span></p>
+                </div>
+            </div>
+            <div class="hidden md:block">
+                <i class="ri-arrow-right-line text-indigo-300 group-hover:text-indigo-500 transition text-2xl"></i>
+            </div>
+            <!-- Decorative circle -->
+            <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-indigo-100 rounded-full opacity-50"></div>
+        </div>
+
+        <!-- Controls -->
+        <div class="flex justify-between items-end mb-8 border-b border-gray-200 pb-4">
+            <div>
+                <h2 class="text-2xl font-extrabold text-gray-800">Vecinos Recomendados</h2>
+                <p id="results-count" class="text-gray-500 text-sm mt-1 font-medium">Cargando...</p>
+            </div>
+            
+            <div class="flex gap-2 bg-white p-1 rounded-xl shadow-sm border border-gray-200">
+                <button id="grid-view-btn" class="p-2 rounded-lg text-gray-400 hover:text-primary transition">
+                    <i class="ri-grid-fill text-xl"></i>
+                </button>
+                <button id="list-view-btn" class="p-2 rounded-lg text-gray-400 hover:text-primary transition">
+                    <i class="ri-list-check text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-8 items-start">
+            
+            <!-- Sidebar Filters (Hidden by default, shown in search mode) -->
+            <aside id="search-sidebar" class="hidden md:w-1/4 space-y-6 w-full animate__animated animate__fadeInLeft">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-gray-800 mb-4 flex items-center gap-2"><i class="ri-filter-3-line text-primary"></i> Filtros</h3>
+                    
+                    <!-- Categories -->
+                    <div class="mb-6">
+                        <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Oficio</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 cursor-pointer hover:text-primary">
+                                <input type="checkbox" class="rounded text-primary focus:ring-primary border-gray-300">
+                                <span class="text-sm text-gray-600">Gasfiter</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer hover:text-primary">
+                                <input type="checkbox" class="rounded text-primary focus:ring-primary border-gray-300">
+                                <span class="text-sm text-gray-600">Electricista</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer hover:text-primary">
+                                <input type="checkbox" class="rounded text-primary focus:ring-primary border-gray-300">
+                                <span class="text-sm text-gray-600">Jardinero</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer hover:text-primary">
+                                <input type="checkbox" class="rounded text-primary focus:ring-primary border-gray-300">
+                                <span class="text-sm text-gray-600">Maestro</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Price Range -->
+                    <div class="mb-6">
+                        <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Precio Base</h4>
+                        <div class="flex items-center gap-2">
+                            <input type="number" placeholder="Min" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm">
+                            <span class="text-gray-400">-</span>
+                            <input type="number" placeholder="Max" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm">
+                        </div>
+                    </div>
+
+                    <!-- Rating -->
+                    <div>
+                        <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Valoración</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="rating" class="text-primary focus:ring-primary border-gray-300">
+                                <div class="flex text-yellow-400 text-sm">
+                                    <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="rating" class="text-primary focus:ring-primary border-gray-300">
+                                <div class="flex text-yellow-400 text-sm">
+                                    <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-line"></i>
+                                </div>
+                                <span class="text-xs text-gray-400">& más</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Promo Box -->
+                <div class="bg-gradient-to-br from-primary to-green-600 rounded-2xl p-6 text-white text-center shadow-lg">
+                    <i class="ri-shield-star-line text-4xl mb-2 opacity-80"></i>
+                    <h4 class="font-bold text-lg mb-1">Vecinos Verificados</h4>
+                    <p class="text-xs opacity-90 mb-4">Contrata con confianza.</p>
+                    <button class="bg-white text-primary text-xs font-bold px-4 py-2 rounded-full hover:bg-green-50 transition">Saber más</button>
+                </div>
+            </aside>
+
+            <!-- Grid Container -->
+            <div class="flex-grow w-full">
+                <div id="neighbors-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Cards injected via JS -->
+                </div>
+
+                <!-- No Results -->
+                <div id="no-results" class="hidden text-center py-20">
+                    <div class="bg-gray-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-4">
+                        <i class="ri-search-eye-line text-4xl text-gray-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-700">No encontramos resultados</h3>
+                    <p class="text-gray-500 font-medium">Intenta con otro oficio o palabra clave.</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Banner -->
+    <footer class="relative bg-gray-900 text-white py-12 text-center text-xs mt-12 overflow-hidden">
+        <!-- Background Image with Blur -->
+        <div class="absolute inset-0 z-0 opacity-25">
+            <img src="css/footer-bg.jpg" class="w-full h-full object-cover filter blur-sm grayscale">
+        </div>
+        
+        <!-- Gradient Overlay -->
+        <div class="absolute inset-0 z-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-gray-900/40"></div>
+
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
+            <div class="text-left">
+                <h4 class="text-xl font-extrabold text-white mb-1 flex items-center gap-2">
+                    <i class="ri-community-line text-primary"></i> QuiénSabe
+                </h4>
+                <p class="text-gray-400 max-w-xs">Conectando barrios, un oficio a la vez. Construido con cariño para la comunidad.</p>
+            </div>
+            
+            <div class="flex gap-8">
+                <a href="donate.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Donaciones</a>
+                <a href="terms.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Términos</a>
+                <a href="transparency.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Transparencia</a>
+                <a href="dashboard-admin.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform"><i class="ri-shield-keyhole-line"></i> Admin</a>
+            </div>
+            
+            <div class="text-right text-gray-500">
+                <p class="font-bold">&copy; 2026 Quién Sabe.</p>
+                <p class="text-[10px]">Hecho en Chile 🇨🇱</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal (Hidden) -->
+    <div id="login-modal" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity duration-300">
+        <div class="bg-white rounded-[2rem] shadow-2xl max-w-md w-full p-8 relative animate__animated animate__zoomIn">
+            <button class="close-modal absolute top-5 right-6 text-gray-300 hover:text-gray-600 transition">
+                <i class="ri-close-circle-line text-3xl"></i>
+            </button>
+            
+            <div class="text-center mb-8">
+                <div class="bg-green-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-green-100">
+                    <i class="ri-user-smile-line text-3xl text-primary"></i>
+                </div>
+                <h2 class="text-2xl font-extrabold text-gray-800">¡Únete al Barrio!</h2>
+                <p class="text-gray-500 mt-2 font-medium">Regístrate para ofrecer tus servicios y llegar a más vecinos.</p>
+            </div>
+
+            <div class="space-y-4">
+                <button id="login-google-btn" class="w-full flex items-center justify-center gap-3 border border-gray-300 py-3.5 rounded-xl hover:bg-gray-50 transition font-bold text-gray-700">
+                    <i class="ri-google-fill text-red-500 text-xl"></i> Continuar con Google
+                </button>
+                <button id="login-facebook-btn" class="w-full flex items-center justify-center gap-3 bg-[#1877F2] text-white py-3.5 rounded-xl hover:bg-[#166fe5] transition font-bold shadow-md hover:shadow-lg">
+                    <i class="ri-facebook-fill text-xl"></i> Continuar con Facebook
+                </button>
+                
+                <div class="relative py-2">
+                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-200"></div></div>
+                    <div class="relative flex justify-center text-xs uppercase"><span class="bg-white px-2 text-gray-400">O ingresa a tu panel</span></div>
+                </div>
+
+                <a href="dashboard-admin.html" class="w-full flex items-center justify-center gap-3 bg-gray-800 text-white py-3.5 rounded-xl hover:bg-gray-900 transition font-bold shadow-md">
+                    <i class="ri-dashboard-3-line text-xl"></i> Acceso Corporativo / Admin
+                </a>
+            </div>
+
+            <p class="text-center text-xs text-gray-400 mt-6">
+                Al registrarte aceptas nuestras <a href="terms.html" class="underline hover:text-primary">normas de convivencia</a>.
+            </p>
+        </div>
+    </div>
+
+    <!-- Accessibility Button Removed -->
+
+    <!-- Templates -->
+    <template id="grid-card-template">
+        <article class="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 flex flex-col h-full animate__animated animate__fadeIn group relative">
+            
+            <div class="p-5 flex flex-col flex-grow relative pt-6">
+                <!-- Header -->
+                <div class="flex justify-between items-start mb-4 relative z-10">
+                    <div class="flex items-end gap-3">
+                        <div class="w-16 h-16 rounded-full bg-white border-4 border-white flex items-center justify-center text-primary font-bold text-xl shadow-md group-hover:scale-105 transition overflow-hidden relative avatar-container">
+                            <img class="w-full h-full object-cover avatar-img hidden" alt="">
+                            <div class="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-bold text-3xl avatar-initial hidden"></div>
+                        </div>
+                        <div class="mb-1">
+                            <h3 class="font-bold text-gray-800 text-lg leading-tight break-words mb-1 group-hover:text-primary transition neighbor-name"></h3>
+                            <div class="neighbor-trade"></div>
+                            <div class="flex flex-col gap-1 items-start mt-1">
+                                <span class="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 flex items-center gap-1 verified-badge hidden">
+                                    <i class="ri-shield-check-fill"></i> Verificado
+                                </span>
+                            </div>
+                            <span class="text-[9px] text-gray-500 flex items-center gap-1 neighbor-communes hidden mt-1"><i class="ri-map-pin-line"></i> <span></span></span>
+                        </div>
+                    </div>
+                    <div class="text-right mt-6">
+                        <div class="text-xs text-yellow-400 drop-shadow-sm neighbor-rating"></div>
+                    </div>
+                </div>
+
+                <!-- Bio -->
+                <div class="mb-4 flex-grow">
+                    <p class="text-gray-500 text-sm line-clamp-3 leading-relaxed neighbor-bio"></p>
+                </div>
+
+                <!-- Services Tags -->
+                <div class="flex flex-wrap gap-1.5 mb-4 min-h-[32px] services-container">
+                    <!-- Services injected here -->
+                </div>
+            </div>
+
+            <!-- Footer: Price & Minimal Buttons -->
+            <div class="px-5 py-4 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between mt-auto">
+                <div>
+                    <span class="text-[10px] text-gray-400 uppercase font-bold block">Desde</span>
+                    <span class="text-lg font-extrabold text-gray-800 neighbor-price"></span>
+                </div>
+                
+                <div class="flex gap-2">
+                    <a href="#" class="w-10 h-10 rounded-full bg-white border border-gray-200 text-gray-500 hover:text-primary hover:border-primary flex items-center justify-center transition shadow-sm profile-link" title="Ver Detalles">
+                        <i class="ri-eye-line text-lg"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-500 hover:text-white flex items-center justify-center transition shadow-sm hover:shadow-md hover:scale-110 email-link hidden" title="Enviar Correo">
+                        <i class="ri-mail-line text-xl"></i>
+                    </a>
+                    <a href="#" target="_blank" class="w-10 h-10 rounded-full bg-green-500 text-white hover:bg-green-600 flex items-center justify-center transition shadow-md hover:shadow-lg hover:scale-110 whatsapp-link" title="Contactar por WhatsApp">
+                        <i class="ri-whatsapp-line text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </article>
+    </template>
+
+    <template id="list-card-template">
+        <article class="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-200 flex flex-col md:flex-row animate__animated animate__fadeIn group h-full">
+            <!-- Image/Avatar Section -->
+            <div class="p-4 md:w-1/5 flex flex-col items-center justify-center bg-gray-50 border-b md:border-b-0 md:border-r border-gray-100">
+                 <div class="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center text-primary font-bold text-2xl mb-2 group-hover:scale-105 transition duration-300 border border-gray-200 overflow-hidden relative avatar-container">
+                    <img class="w-full h-full object-cover avatar-img hidden" alt="">
+                    <div class="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-bold text-3xl avatar-initial hidden"></div>
+                </div>
+                <div class="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 flex items-center gap-1 mb-1 verified-badge hidden">
+                    <i class="ri-shield-check-fill"></i> Verificado
+                </div>
+                <div class="text-xs text-yellow-400 text-center mb-1 neighbor-rating"></div>
+                <div class="text-[10px] text-gray-400 font-medium text-center uppercase tracking-wide neighbor-reviews-count"></div>
+            </div>
+
+            <!-- Content Section -->
+            <div class="p-5 flex-grow flex flex-col justify-center">
+                <div class="flex flex-col sm:flex-row justify-between items-start mb-2 gap-2">
+                    <h3 class="font-bold text-lg text-gray-800 leading-tight break-words group-hover:text-primary transition neighbor-name"></h3>
+                    <div class="flex flex-col items-end gap-1">
+                        <span class="text-primary text-[10px] font-bold uppercase bg-green-50 px-2 py-1 rounded-xl border border-green-100 tracking-wider neighbor-trade leading-normal text-right"></span>
+                        <span class="text-xs text-gray-500 flex items-center gap-1 neighbor-communes hidden"><i class="ri-map-pin-line"></i> <span></span></span>
+                    </div>
+                </div>
+                
+                <p class="text-gray-600 text-sm mb-3 line-clamp-2 leading-relaxed neighbor-bio"></p>
+
+                <div class="flex flex-wrap gap-2 services-container">
+                    <!-- Services injected here -->
+                </div>
+            </div>
+
+            <!-- Price & Action Section -->
+            <div class="p-5 md:w-1/4 flex flex-col justify-center items-center gap-2 border-l border-gray-100 bg-gray-50/30">
+                <div class="text-center mb-1">
+                    <span class="text-[10px] text-gray-400 block uppercase tracking-wide">Precio Base</span>
+                    <span class="text-xl font-extrabold text-gray-800 neighbor-price"></span>
+                </div>
+                
+                <div class="w-full space-y-2 mt-auto">
+                    <a href="#" target="_blank" class="w-full bg-green-500 text-white py-2 rounded-lg font-bold hover:bg-green-600 transition text-center text-sm flex items-center justify-center gap-2 shadow-sm whatsapp-link">
+                        <i class="ri-whatsapp-line"></i>
+                    </a>
+                    <a href="#" class="w-full bg-blue-500 text-white py-2 rounded-lg font-bold hover:bg-blue-600 transition text-center text-sm flex items-center justify-center gap-2 shadow-sm email-link hidden">
+                        <i class="ri-mail-line"></i> Enviar Correo
+                    </a>
+                    <a href="#" class="w-full bg-white border border-gray-200 text-gray-600 py-2 rounded-lg font-bold hover:border-primary hover:text-primary transition text-center text-sm flex items-center justify-center gap-2 hover:bg-gray-50 profile-link">
+                        <i class="ri-eye-line"></i> Ver Perfil
+                    </a>
+                </div>
+            </div>
+        </article>
+    </template>
+
+    <template id="ad-banner-template">
+        <div class="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 flex items-center justify-between shadow-sm animate__animated animate__fadeIn">
+            <div class="flex items-center gap-4">
+                <div class="bg-yellow-100 p-3 rounded-full text-yellow-600"><i class="ri-megaphone-fill"></i></div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm">Espacio Publicitario</h4>
+                    <p class="text-xs text-gray-600">¡Tu negocio podría estar aquí!</p>
+                </div>
+            </div>
+            <button class="text-xs bg-yellow-400 text-yellow-900 font-bold px-3 py-1 rounded hover:bg-yellow-500 transition">Ver Info</button>
+        </div>
+    </template>
+
+    <script src="js/data.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/loader.js"></script>
+    <script src="js/home.js"></script>
+</body>
+</html>

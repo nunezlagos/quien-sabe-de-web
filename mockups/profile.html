@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Vecino - Quién Sabe</title>
+    <meta name="description" content="Perfil de vecino profesional - Quién Sabe">
+    <meta property="og:title" content="{{provider.name}} - {{provider.trade}} en {{provider.commune}}">
+    <meta property="og:description" content="{{provider.bio}}">
+    <meta property="og:image" content="{{provider.photo_url}}">
+    <meta property="og:type" content="profile">
+    <script src="js/tailwindcss.js"></script>
+    <link href="css/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/animate.min.css"/>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/config.js"></script>
+</head>
+<body class="bg-bg-light text-gray-800 font-sans transition-all duration-300" id="main-body">
+
+    <!-- Page Loader -->
+    <div id="page-loader" class="fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="relative">
+            <div class="text-5xl md:text-6xl font-extrabold text-gray-200 tracking-tight">
+                Quién<span class="text-gray-200">Sabe</span>
+            </div>
+            <div class="absolute top-0 left-0 text-5xl md:text-6xl font-extrabold text-primary tracking-tight overflow-hidden animate-fill whitespace-nowrap">
+                Quién<span class="text-primary">Sabe</span>
+            </div>
+        </div>
+        <p class="text-gray-400 text-sm mt-4 font-medium animate-pulse">Cargando barrio...</p>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                <i class="ri-community-line text-primary"></i>
+                Quién<span class="text-primary">Sabe</span>
+            </a>
+            
+            <a href="donate.html" class="hidden md:flex bg-orange-100 text-accent hover:bg-orange-200 px-4 py-2 rounded-full font-bold text-sm transition items-center gap-2">
+                <i class="ri-heart-3-fill"></i> Donaciones
+            </a>
+        </div>
+    </nav>
+
+    <!-- Profile Landing Container -->
+    <div id="profile-container" class="pb-20 hidden pt-6">
+        <!-- Main Content Area -->
+        <div class="container mx-auto max-w-5xl px-4 relative z-10 pb-12">
+            
+            <!-- Back Button & Breadcrumb -->
+            <div class="mb-4 flex items-center gap-2 animate__animated animate__fadeIn">
+                <a href="index.html" class="bg-white/90 backdrop-blur-sm border border-gray-200 text-gray-700 hover:text-primary hover:border-primary px-4 py-2 rounded-full text-sm font-bold transition shadow-sm flex items-center gap-2 group">
+                    <i class="ri-arrow-left-line group-hover:-translate-x-1 transition-transform"></i> Volver al inicio
+                </a>
+            </div>
+
+            <!-- Hero Cover -->
+            <div class="bg-gradient-to-br from-primary to-orange-400 h-48 md:h-64 relative overflow-hidden rounded-2xl mb-4">
+                <img src="css/footer-bg.jpg" class="w-full h-full object-cover opacity-50" alt="cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            
+                <!-- Bio & Description Sidebar -->
+                <div class="md:col-span-1 space-y-4 h-fit">
+                    <div class="bg-white rounded-xl shadow-lg p-4 border border-gray-100 text-center md:text-left relative overflow-hidden">
+                        <div class="flex flex-col items-center text-center mb-3 relative z-10">
+                            <div class="w-24 h-24 rounded-full bg-white p-1 shadow-md mb-3 overflow-hidden group cursor-pointer relative" id="profile-avatar-container">
+                                <!-- Avatar injected here -->
+                            </div>
+                            <div id="profile-verified-badge" class="hidden text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 items-center gap-1 mb-2">
+                                <i class="ri-shield-check-fill"></i> Verificado
+                            </div>
+                            <h1 class="text-xl font-extrabold text-gray-800 leading-tight break-words px-2" id="profile-name"></h1>
+                            <span class="text-primary bg-green-50 px-3 py-1.5 rounded-xl text-xs font-bold mt-2 uppercase tracking-wide border border-green-100 inline-block leading-normal" id="profile-trade"></span>
+
+                            <!-- Badge Disponibilidad -->
+                            <span id="profile-availability" class="inline-flex items-center gap-1.5 mt-2 bg-green-100 text-green-700 px-3 py-1 rounded-full text-[11px] font-bold">
+                                <span class="availability-dot relative inline-block w-2 h-2 rounded-full bg-green-500"></span>
+                                Disponible ahora
+                            </span>
+                            <!-- Variante alternativa (no disponible):
+                            <span class="inline-flex items-center gap-1.5 mt-2 bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-[11px] font-bold">
+                                <i class="ri-time-line"></i>
+                                Próx. disponibilidad: lunes 9:00
+                            </span>
+                            -->
+
+                            
+                            <div class="flex items-center gap-1 mt-2 text-gray-600">
+                                <span class="text-yellow-400 text-base" id="profile-stars"></span>
+                                <span class="font-bold text-gray-800 text-xs" id="profile-rating-text"></span>
+                            </div>
+                            <p class="text-[10px] text-gray-400 mt-0.5"><span id="profile-reviews-count"></span> reseñas recibidas</p>
+                            <p class="text-[10px] text-gray-500 mt-2 font-medium hidden" id="profile-communes-container"><i class="ri-map-pin-line"></i> Atiende en: <span id="profile-communes"></span></p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <a href="https://wa.me/56912345678" target="_blank" data-track-kind="whatsapp" data-provider-id="{{provider.id}}" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded-lg flex items-center justify-center gap-2 transition shadow-sm hover:shadow-md transform hover:-translate-y-0.5 text-xs" id="profile-whatsapp-btn">
+                                <i class="ri-whatsapp-line text-lg"></i> Contactar
+                            </a>
+                            <a href="mailto:juan@ejemplo.cl" data-track-kind="email" data-provider-id="{{provider.id}}" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-lg flex items-center justify-center gap-2 transition shadow-sm hover:shadow-md transform hover:-translate-y-0.5 text-xs hidden" id="profile-email-btn">
+                                <i class="ri-mail-line text-lg"></i> Enviar Correo
+                            </a>
+                            <p class="text-[10px] text-center text-gray-400">Sin registro previo</p>
+                            <button id="report-btn" class="w-full bg-white border border-gray-200 text-gray-400 font-bold py-2 rounded-lg flex items-center justify-center gap-2 transition hover:bg-gray-50 hover:text-red-500 text-xs mt-2 group">
+                                <i class="ri-flag-line group-hover:text-red-500 transition"></i> Reportar / Ayuda
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar Ad -->
+                    <div class="bg-orange-50 rounded-xl p-3 border border-orange-100 text-center relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-orange-200 text-[9px] px-1.5 py-0.5 text-orange-800 rounded-bl-md">Publicidad</div>
+                        <i class="ri-restaurant-2-line text-2xl text-orange-400 mb-1 block"></i>
+                        <h4 class="font-bold text-gray-800 text-xs mb-0.5">Pizzería del Barrio</h4>
+                        <p class="text-[10px] text-gray-600 mb-2">¡Masa madre a 2 cuadras!</p>
+                        <button class="text-[10px] bg-orange-500 text-white px-2 py-0.5 rounded hover:bg-orange-600 transition">Ver Promo</button>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="md:col-span-2 space-y-4">
+                    
+                    <!-- Bio -->
+                    <section class="bg-white rounded-xl shadow-sm p-5 border border-gray-100">
+                        <h2 class="text-base font-bold text-gray-800 mb-2 flex items-center gap-2">
+                            <i class="ri-user-line text-primary"></i> Sobre mí
+                        </h2>
+                        <p class="text-gray-600 text-sm leading-relaxed" id="profile-bio"></p>
+                    </section>
+
+                    <!-- Dejar Opinión (HU-09.2) - visible solo si vecino autenticado y can_review=true -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 mt-6">
+                        <h3 class="font-extrabold text-2xl text-gray-800 mb-4">¿Trabajaste con Juan? Deja tu opinión</h3>
+                        <form class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Calificación</label>
+                                <div class="flex gap-2">
+                                    <i class="ri-star-line text-3xl text-gray-300 hover:text-yellow-400 cursor-pointer"></i>
+                                    <i class="ri-star-line text-3xl text-gray-300 hover:text-yellow-400 cursor-pointer"></i>
+                                    <i class="ri-star-line text-3xl text-gray-300 hover:text-yellow-400 cursor-pointer"></i>
+                                    <i class="ri-star-line text-3xl text-gray-300 hover:text-yellow-400 cursor-pointer"></i>
+                                    <i class="ri-star-line text-3xl text-gray-300 hover:text-yellow-400 cursor-pointer"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-1">Tu comentario</label>
+                                <textarea rows="4" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition" placeholder="¿Cómo fue tu experiencia?"></textarea>
+                            </div>
+                            <button type="button" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-xl font-bold shadow-md hover:shadow-lg transition">
+                                Publicar reseña
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Services -->
+                    <section class="bg-white rounded-xl shadow-sm p-5 border border-gray-100">
+                        <h2 class="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
+                            <i class="ri-list-check text-primary"></i> Servicios y Precios
+                        </h2>
+                        <div class="bg-blue-50 p-3 rounded-lg mb-3 flex gap-2 items-start">
+                            <i class="ri-information-line text-blue-500 mt-0.5 text-xs"></i>
+                            <p class="text-[10px] text-blue-700">Precios referenciales. Coordina con el vecino.</p>
+                        </div>
+                        <ul class="space-y-1" id="profile-services-list">
+                            <!-- Services injected here -->
+                        </ul>
+                    </section>
+
+                    <!-- Portfolio -->
+                    <section class="bg-white rounded-xl shadow-sm p-5 border border-gray-100">
+                        <h2 class="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
+                            <i class="ri-image-line text-primary"></i> Trabajos
+                        </h2>
+                        <div id="profile-portfolio-container">
+                            <!-- Portfolio injected here -->
+                        </div>
+                    </section>
+
+                    <!-- Reviews -->
+                    <section class="bg-white rounded-xl shadow-sm p-5 border border-gray-100">
+                        <h2 class="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
+                            <i class="ri-star-line text-primary"></i> Opiniones
+                        </h2>
+                        <div id="profile-reviews-container">
+                            <!-- Reviews injected here -->
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error State -->
+    <div id="profile-error" class="hidden text-center py-20">
+        <h2 class="text-2xl font-bold text-gray-700">Vecino no encontrado</h2>
+        <a href="index.html" class="text-primary hover:underline mt-4 inline-block">Volver al inicio</a>
+    </div>
+
+    <!-- Templates -->
+    <template id="service-item-template">
+        <li class="flex justify-between items-center py-3 border-b border-gray-100 last:border-0">
+            <span class="text-gray-700 font-medium service-name"></span>
+            <span class="text-primary font-bold service-price"></span>
+        </li>
+    </template>
+
+    <template id="portfolio-grid-template">
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6 portfolio-grid">
+        </div>
+    </template>
+
+    <template id="portfolio-item-template">
+        <div class="relative w-full h-40 rounded-xl overflow-hidden shadow-sm group">
+            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 portfolio-img">
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
+        </div>
+    </template>
+
+    <template id="review-item-template">
+        <div class="bg-gray-50 p-4 rounded-xl mb-4 last:mb-0">
+            <div class="flex justify-between items-center mb-2">
+                <span class="font-bold text-gray-800 review-user"></span>
+                <div class="text-xs review-stars"></div>
+            </div>
+            <p class="text-gray-600 text-sm review-comment"></p>
+        </div>
+    </template>
+
+    <template id="empty-state-template">
+        <p class="text-gray-400 text-xs italic mb-6 empty-message"></p>
+    </template>
+
+    <!-- Footer Banner -->
+    <footer class="relative bg-gray-900 text-white py-12 text-center text-xs mt-12 overflow-hidden">
+        <!-- Background Image with Blur -->
+        <div class="absolute inset-0 z-0 opacity-25">
+            <img src="css/footer-bg.jpg" class="w-full h-full object-cover filter blur-sm grayscale">
+        </div>
+        
+        <!-- Gradient Overlay -->
+        <div class="absolute inset-0 z-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-gray-900/40"></div>
+
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
+            <div class="text-left">
+                <h4 class="text-xl font-extrabold text-white mb-1 flex items-center gap-2">
+                    <i class="ri-community-line text-primary"></i> QuiénSabe
+                </h4>
+                <p class="text-gray-400 max-w-xs">Conectando barrios, un oficio a la vez. Construido con cariño para la comunidad.</p>
+            </div>
+            
+            <div class="flex gap-8">
+                <a href="donate.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Donaciones</a>
+                <a href="terms.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Términos</a>
+                <a href="transparency.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Transparencia</a>
+                <a href="dashboard-admin.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform"><i class="ri-shield-keyhole-line"></i> Admin</a>
+            </div>
+            
+            <div class="text-right text-gray-500">
+                <p class="font-bold">&copy; 2026 Quién Sabe.</p>
+                <p class="text-[10px]">Hecho en Chile 🇨🇱</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Public Ticket Modal -->
+    <div id="public-ticket-modal" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg mx-4 transform scale-95 transition-transform duration-300 relative overflow-hidden" id="public-ticket-content">
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-400 to-orange-500"></div>
+            
+            <div class="p-8">
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h3 class="font-extrabold text-2xl text-gray-800 mb-1">Reportar / Ayuda</h3>
+                        <p class="text-sm text-gray-500">¿Hubo algún problema con este vecino?</p>
+                    </div>
+                    <button id="close-public-ticket" class="bg-gray-100 hover:bg-gray-200 text-gray-500 rounded-full p-2 transition">
+                        <i class="ri-close-line text-xl"></i>
+                    </button>
+                </div>
+
+                <form class="space-y-4">
+                    <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-100 mb-4">
+                        <p class="text-xs text-yellow-700 font-medium flex gap-2">
+                            <i class="ri-information-line text-lg"></i>
+                            Recuerda que todos nuestros vecinos son profesionales. Tratemos de resolver los conflictos con respeto y diálogo.
+                        </p>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Tu Nombre Completo</label>
+                        <input type="text" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Correo de Contacto</label>
+                        <input type="email" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Asunto</label>
+                        <input type="text" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition" placeholder="Motivo del reporte">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Descripción</label>
+                        <textarea rows="4" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition" placeholder="Describe detalladamente qué sucedió..."></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Evidencia (Fotos/Capturas)</label>
+                        <div class="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:bg-gray-50 transition cursor-pointer">
+                            <i class="ri-image-add-line text-3xl text-gray-300 mb-2"></i>
+                            <p class="text-xs text-gray-400 font-bold">Arrastra archivos o haz clic aquí</p>
+                        </div>
+                    </div>
+
+                    <button type="button" class="w-full bg-gray-800 hover:bg-black text-white font-bold py-4 rounded-xl shadow-lg transition transform hover:-translate-y-0.5 mt-2">
+                        Enviar Reporte
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes availabilityPulse {
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+        .availability-dot {
+            animation: availabilityPulse 1.5s infinite;
+        }
+    </style>
+
+    <script src="js/data.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/loader.js"></script>
+    <script src="js/profile.js"></script>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "{{provider.name}}",
+  "description": "{{provider.bio}}",
+  "image": "{{provider.photo_url}}",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "{{provider.commune}}",
+    "addressRegion": "Región Metropolitana",
+    "addressCountry": "CL"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{provider.rating_avg}}",
+    "reviewCount": "{{provider.reviews_count}}"
+  }
+}
+</script>
+</body>
+</html>

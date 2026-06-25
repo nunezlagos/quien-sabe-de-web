@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preguntas Frecuentes - Quién Sabe</title>
+    <meta name="description" content="Preguntas frecuentes sobre QuiénSabe: cómo funciona, registro, vecinos, prestadores y donaciones.">
+    <script src="js/tailwindcss.js"></script>
+    <link rel="stylesheet" href="css/animate.min.css"/>
+    <link href="css/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/config.js"></script>
+</head>
+<body class="bg-bg-light text-gray-800 font-sans flex flex-col min-h-screen" id="main-body">
+
+    <!-- Page Loader -->
+    <div id="page-loader" class="fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="relative">
+            <div class="text-5xl md:text-6xl font-extrabold text-gray-200 tracking-tight">Quién<span class="text-gray-200">Sabe</span></div>
+            <div class="absolute top-0 left-0 text-5xl md:text-6xl font-extrabold text-primary tracking-tight overflow-hidden animate-fill whitespace-nowrap">Quién<span class="text-primary">Sabe</span></div>
+        </div>
+        <p class="text-gray-400 text-sm mt-4 font-medium animate-pulse">Cargando barrio...</p>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-extrabold text-gray-800 flex items-center gap-2 tracking-tight">
+                <i class="ri-community-line text-primary text-3xl"></i>
+                Quién<span class="text-primary">Sabe</span>
+            </a>
+            <div class="hidden md:flex items-center gap-4">
+                <a href="donate.html" class="bg-orange-100 text-accent hover:bg-orange-200 px-4 py-2 rounded-full font-bold text-sm transition flex items-center gap-2">
+                    <i class="ri-heart-3-fill"></i> Donaciones
+                </a>
+                <a href="login.html" class="bg-gradient-to-r from-accent to-orange-500 text-white px-6 py-2 rounded-full font-bold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition duration-300 flex items-center gap-2">
+                    <i class="ri-user-add-line"></i> Iniciar sesión
+                </a>
+            </div>
+            <button class="md:hidden text-gray-600 text-2xl">
+                <i class="ri-menu-line"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-gradient-to-br from-primary/5 via-orange-50 to-bg-light py-12 md:py-16 relative overflow-hidden">
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <div class="inline-flex items-center gap-2 bg-white border border-gray-200 px-4 py-1.5 rounded-full text-xs font-bold mb-4">
+                <i class="ri-question-line text-primary"></i> Centro de ayuda
+            </div>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-3 tracking-tight">
+                Preguntas frecuentes
+            </h1>
+            <p class="text-gray-600 mb-6 max-w-xl mx-auto">
+                Encuentra respuestas rápidas. Si no, escríbenos.
+            </p>
+
+            <!-- Buscador -->
+            <div class="max-w-xl mx-auto relative">
+                <i class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl"></i>
+                <input id="faq-search" type="search" placeholder="Busca una pregunta..."
+                       class="w-full pl-12 pr-4 py-3.5 rounded-2xl border-2 border-gray-200 focus:border-primary focus:ring-primary shadow-sm">
+            </div>
+        </div>
+    </header>
+
+    <!-- FAQ por categoría -->
+    <main class="container mx-auto px-4 py-12 max-w-3xl flex-grow">
+
+        <!-- Categoría: General -->
+        <section class="faq-category mb-10" data-category="general">
+            <h2 class="text-2xl font-extrabold text-gray-800 mb-4 flex items-center gap-2">
+                <span class="bg-primary/10 text-primary w-9 h-9 rounded-lg flex items-center justify-center">
+                    <i class="ri-information-line"></i>
+                </span>
+                General
+            </h2>
+            <div class="space-y-3">
+                <details class="faq-item bg-white rounded-2xl shadow-sm border border-gray-100 group" data-faq="general-1">
+                    <summary class="cursor-pointer p-5 font-bold text-gray-800 flex items-center justify-between list-none">
+                        <span>¿Qué es QuiénSabe?</span>
+                        <i class="ri-arrow-down-s-line text-2xl text-gray-400 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
+                        QuiénSabe es una plataforma comunitaria chilena que conecta vecinos con oficios de barrio.
+                        Buscamos gasfíter, electricistas, jardineros y más, todos verificados y reseñados por la comunidad.
+                    </div>
+                </details>
+                <details class="faq-item bg-white rounded-2xl shadow-sm border border-gray-100 group" data-faq="general-2">
+                    <summary class="cursor-pointer p-5 font-bold text-gray-800 flex items-center justify-between list-none">
+                        <span>¿Tiene costo usar QuiénSabe?</span>
+                        <i class="ri-arrow-down-s-line text-2xl text-gray-400 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
+                        Para los vecinos que buscan un oficio, el uso es <b>totalmente gratuito</b>.
+                        Los prestadores tampoco pagan comisiones por contactarles.
+                        Nos sostenemos con donaciones voluntarias de la comunidad.
+                    </div>
+                </details>
+                <details class="faq-item bg-white rounded-2xl shadow-sm border border-gray-100 group" data-faq="general-3">
+                    <summary class="cursor-pointer p-5 font-bold text-gray-800 flex items-center justify-between list-none">
+                        <span>¿Está disponible solo en la Región Metropolitana?</span>
+                        <i class="ri-arrow-down-s-line text-2xl text-gray-400 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
+                        Sí, en esta primera versión cubrimos las 52 comunas de la Región Metropolitana.
+                        Próximamente esperamos expandirnos a otras regiones.
+                    </div>
+                </details>
+                <details class="faq-item bg-white rounded-2xl shadow-sm border border-gray-100 group" data-faq="general-4">
+                    <summary class="cursor-pointer p-5 font-bold text-gray-800 flex items-center justify-between list-none">
+                        <span>¿Cómo contacto a soporte?</span>
+                        <i class="ri-arrow-down-s-line text-2xl text-gray-400 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
+                        Escríbenos a <a href="mailto:soporte@quiensabe.cl" class="text-primary font-bold underline">soporte@quiensabe.cl</a>
+                        o usa el formulario de "Reportar" en el perfil de cualquier prestador.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Categoría: Para vecinos -->
+        <section class="faq-category mb-10" data-category="vecinos">
+            <h2 class="text-2xl font-extrabold text-gray-800 mb-4 flex items-center gap-2">
+                <span class="bg-blue-100 text-blue-600 w-9 h-9 rounded-lg flex items-center justify-center">
+                    <i class="ri-user-search-line"></i>
+                </span>
+                Para vecinos
+            </h2>
+            <div class="space-y-3">
+                <details class="faq-item bg-white rounded-2xl shadow-sm border border-gray-100 group" data-faq="vecinos-1">
+                    <summary class="cursor-pointer p-5 font-bold text-gray-800 flex items-center justify-between list-none">
+                        <span>¿Cómo busco un oficio?</span>
+                        <i class="ri-arrow-down-s-line text-2xl text-gray-400 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
+                        En la página principal, escribe el oficio que necesitas (ej: "gasfiter"), tu comuna y presiona buscar.
+                        Puedes filtrar por rating, precio y disponibilidad inmediata.
+                    </div>
+                </details>
+                <details class="faq-item bg-white rounded-2xl shadow-sm border border-gray-100 group" data-faq="vecinos-2">
+                    <summary class="cursor-pointer p-5 font-bold text-gray-800 flex items-center justify-between list-none">
+                        <span>¿Cómo contacto a un prestador?</span>
+                        <i class="ri-arrow-down-s-line text-2xl text-gray-400 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
+                        Desde el perfil del prestador, haz click en el botón de WhatsApp o email.
+                        Se abrirá directamente tu app con un mensaje pre-armado.
+                    </div>
+                </details>
+                <details class="faq-item bg-white rounded-2xl shadow-sm border border-gray-100 group" data-faq="vecinos-3">
+                    <summary class="cursor-pointer p-5 font-bold text-gray-800 flex items-center justify-between list-none">
+                        <span>¿Cómo califico después del trabajo?</span>
+                        <i class="ri-arrow-down-s-line text-2xl text-gray-400 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
+                        Después de contactar a un prestador, te aparecerá una invitación para dejar una reseña
+                        (1 a 5 estrellas + comentario). Puedes editarla hasta 7 días después.
+                    </div>
+                </details>
+                <details class="faq-item bg-white rounded-2xl shadow-sm border border-gray-100 group" data-faq="vecinos-4">
+                    <summary class="cursor-pointer p-5 font-bold text-gray-800 flex items-center justify-between list-none">
+                        <span>¿Puedo guardar prestadores como favoritos?</span>
+                        <i class="ri-arrow-down-s-line text-2xl text-gray-400 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
+                        Sí. En cada tarjeta o perfil, haz click en el ícono de corazón
+                        (<i class="ri-heart-line"></i>). Los verás en tu panel como "Vecinos guardados".
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Categoría: Para prestadores -->
+        <section class="faq-category mb-10" data-category="prestadores">
+            <h2 class="text-2xl font-extrabold text-gray-800 mb-4 flex items-center gap-2">
+                <span class="bg-orange-100 text-orange-600 w-9 h-9 rounded-lg flex items-center justify-center">
+                    <i class="ri-tools-line"></i>
+                </span>
+                Para prestadores
+            </h2>
+            <div class="space-y-3">
+                <details class="faq-item bg-white rounded-2xl shadow-sm border border-gray-100 group" data-faq="prestadores-1">
+                    <summary class="cursor-pointer p-5 font-bold text-gray-800 flex items-center justify-between list-none">
+                        <span>¿Cómo me registro como prestador?</span>
+                        <i class="ri-arrow-down-s-line text-2xl text-gray-400 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
+                        Primero regístrate como vecino, luego desde tu panel haz click en "Crear Perfil PRO".
+                        Completa el wizard con tu oficio, comunas que cubres y datos de contacto.
+                    </div>
+                </details>
+                <details class="faq-item bg-white rounded-2xl shadow-sm border border-gray-100 group" data-faq="prestadores-2">
+                    <summary class="cursor-pointer p-5 font-bold text-gray-800 flex items-center justify-between list-none">
+                        <span>¿Qué es la verificación?</span>
+                        <i class="ri-arrow-down-s-line text-2xl text-gray-400 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
+                        Es un proceso donde subes tu RUT y opcionalmente certificaciones o fotos de trabajos.
+                        Un administrador revisa y te da el badge "Verificado" en tu perfil.
+                        No es obligatorio publicar, pero aumenta la confianza.
+                    </div>
+                </details>
+                <details class="faq-item bg-white rounded-2xl shadow-sm border border-gray-100 group" data-faq="prestadores-3">
+                    <summary class="cursor-pointer p-5 font-bold text-gray-800 flex items-center justify-between list-none">
+                        <span>¿QuiénSabe me cobra comisión?</span>
+                        <i class="ri-arrow-down-s-line text-2xl text-gray-400 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
+                        <b>No.</b> No cobramos comisión por contacto, por mensaje o por trabajo concretado.
+                        El contacto entre tú y el vecino es directo. La plataforma se sostiene con donaciones.
+                    </div>
+                </details>
+                <details class="faq-item bg-white rounded-2xl shadow-sm border border-gray-100 group" data-faq="prestadores-4">
+                    <summary class="cursor-pointer p-5 font-bold text-gray-800 flex items-center justify-between list-none">
+                        <span>¿Puedo pausar mi disponibilidad?</span>
+                        <i class="ri-arrow-down-s-line text-2xl text-gray-400 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
+                        Sí. En el sidebar de tu panel hay un toggle "Estado".
+                        Si lo apagas, tu perfil sigue visible pero aparece como "En pausa" y no aparece en búsquedas con filtro "Disponible ahora".
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Categoría: Donaciones -->
+        <section class="faq-category mb-10" data-category="donaciones">
+            <h2 class="text-2xl font-extrabold text-gray-800 mb-4 flex items-center gap-2">
+                <span class="bg-pink-100 text-pink-600 w-9 h-9 rounded-lg flex items-center justify-center">
+                    <i class="ri-heart-3-line"></i>
+                </span>
+                Donaciones y transparencia
+            </h2>
+            <div class="space-y-3">
+                <details class="faq-item bg-white rounded-2xl shadow-sm border border-gray-100 group" data-faq="donaciones-1">
+                    <summary class="cursor-pointer p-5 font-bold text-gray-800 flex items-center justify-between list-none">
+                        <span>¿Para qué se usan las donaciones?</span>
+                        <i class="ri-arrow-down-s-line text-2xl text-gray-400 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
+                        Cubrimos costos de infraestructura (hosting, base de datos, emails) y un pequeño fondo para mantención.
+                        Publicamos cada gasto en <a href="transparency.html" class="text-primary font-bold underline">/transparency</a>.
+                    </div>
+                </details>
+                <details class="faq-item bg-white rounded-2xl shadow-sm border border-gray-100 group" data-faq="donaciones-2">
+                    <summary class="cursor-pointer p-5 font-bold text-gray-800 flex items-center justify-between list-none">
+                        <span>¿Puedo donar de forma anónima?</span>
+                        <i class="ri-arrow-down-s-line text-2xl text-gray-400 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
+                        Sí. Al donar puedes elegir si quieres aparecer públicamente en la lista de donantes
+                        o mantenerte anónimo.
+                    </div>
+                </details>
+                <details class="faq-item bg-white rounded-2xl shadow-sm border border-gray-100 group" data-faq="donaciones-3">
+                    <summary class="cursor-pointer p-5 font-bold text-gray-800 flex items-center justify-between list-none">
+                        <span>¿Aceptan pagos recurrentes?</span>
+                        <i class="ri-arrow-down-s-line text-2xl text-gray-400 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
+                        Sí, puedes configurar una donación mensual desde la página de donaciones.
+                        Puedes cancelar en cualquier momento.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Mensaje "sin matches" (oculto por defecto) -->
+        <div id="faq-no-matches" class="hidden text-center py-12 bg-white rounded-2xl border border-gray-100">
+            <i class="ri-search-eye-line text-5xl text-gray-300"></i>
+            <p class="text-gray-500 mt-3 font-medium">No encontramos preguntas para tu búsqueda.</p>
+            <p class="text-sm text-gray-400 mt-1">Intenta con otra palabra o escríbenos a <a href="mailto:soporte@quiensabe.cl" class="text-primary underline">soporte@quiensabe.cl</a>.</p>
+        </div>
+
+        <!-- CTA final -->
+        <div class="mt-12 text-center bg-gradient-to-br from-primary/5 to-orange-50 rounded-3xl p-8 border border-primary/10">
+            <h3 class="text-xl font-extrabold text-gray-800 mb-2">¿No encontraste tu respuesta?</h3>
+            <p class="text-gray-600 text-sm mb-4">Escríbenos y te respondemos en menos de 24h.</p>
+            <a href="mailto:soporte@quiensabe.cl" class="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-full font-bold shadow-md hover:shadow-lg transition">
+                <i class="ri-mail-send-line"></i> Contactar soporte
+            </a>
+        </div>
+
+    </main>
+
+    <!-- Footer Banner -->
+    <footer class="relative bg-gray-900 text-white py-12 text-center text-xs mt-12 overflow-hidden">
+        <div class="absolute inset-0 z-0 opacity-25">
+            <img src="css/footer-bg.jpg" class="w-full h-full object-cover filter blur-sm grayscale">
+        </div>
+        <div class="absolute inset-0 z-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-gray-900/40"></div>
+
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
+            <div class="text-left">
+                <h4 class="text-xl font-extrabold text-white mb-1 flex items-center gap-2">
+                    <i class="ri-community-line text-primary"></i> QuiénSabe
+                </h4>
+                <p class="text-gray-400 max-w-xs">Conecta con vecinos talentosos en tu barrio.</p>
+            </div>
+            <div class="flex gap-4 text-gray-300">
+                <a href="terms.html" class="hover:text-primary transition">Términos</a>
+                <a href="privacy.html" class="hover:text-primary transition">Privacidad</a>
+                <a href="transparency.html" class="hover:text-primary transition">Transparencia</a>
+                <a href="donate.html" class="hover:text-primary transition">Donaciones</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donaciones - Quién Sabe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- Google Fonts: Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2E8B57',
+                        'primary-dark': '#1f633d',
+                        accent: '#FF7F50',
+                        'bg-light': '#eaeff2',
+                    },
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-bg-light text-gray-800 font-sans flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                <i class="ri-community-line text-primary"></i>
+                Quién<span class="text-primary">Sabe</span>
+            </a>
+            <div class="flex items-center gap-6">
+                <a href="index.html" class="text-gray-600 hover:text-primary transition font-bold">Volver al Inicio</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="container mx-auto px-4 py-16 max-w-4xl flex-grow">
+        
+        <div class="bg-white rounded-[2rem] shadow-xl overflow-hidden border border-gray-100">
+            <!-- Hero Banner inside card -->
+            <div class="bg-gray-900 text-white p-10 md:p-16 text-center relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+                <div class="relative z-10">
+                    <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg animate-bounce">
+                        <i class="ri-heart-3-fill text-4xl"></i>
+                    </div>
+                    <h1 class="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight">Mantengamos vivo el barrio</h1>
+                    <p class="text-lg text-gray-300 max-w-xl mx-auto font-medium">
+                        "Quién Sabe" es 100% gratuito y libre de comisiones. Solo existimos gracias a la generosidad de vecinos como tú.
+                    </p>
+                </div>
+            </div>
+
+            <div class="p-8 md:p-12">
+                <!-- 4 montos sugeridos + custom (HU-14.1) -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                    <button data-amount="3000" data-provider="mercadopago" class="bg-white border-2 border-orange-200 hover:border-primary p-4 rounded-2xl transition shadow-sm hover:shadow-md group">
+                        <div class="text-3xl font-extrabold text-gray-800 group-hover:text-primary">$3.000</div>
+                        <div class="text-xs text-gray-500 mt-1">Cafecito</div>
+                    </button>
+                    <button data-amount="5000" data-provider="mercadopago" class="bg-white border-2 border-orange-200 hover:border-primary p-4 rounded-2xl transition shadow-sm hover:shadow-md group">
+                        <div class="text-3xl font-extrabold text-gray-800 group-hover:text-primary">$5.000</div>
+                        <div class="text-xs text-gray-500 mt-1">Pizza</div>
+                    </button>
+                    <button data-amount="10000" data-provider="mercadopago" class="bg-white border-2 border-orange-200 hover:border-primary p-4 rounded-2xl transition shadow-sm hover:shadow-md group">
+                        <div class="text-3xl font-extrabold text-gray-800 group-hover:text-primary">$10.000</div>
+                        <div class="text-xs text-gray-500 mt-1">Servidor</div>
+                    </button>
+                    <button data-amount="25000" data-provider="mercadopago" class="bg-white border-2 border-orange-200 hover:border-primary p-4 rounded-2xl transition shadow-sm hover:shadow-md group">
+                        <div class="text-3xl font-extrabold text-gray-800 group-hover:text-primary">$25.000</div>
+                        <div class="text-xs text-gray-500 mt-1">Sponsor</div>
+                    </button>
+                </div>
+
+                <!-- Custom amount input -->
+                <div class="mb-6">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">O ingresa otro monto</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold">$</span>
+                        <input type="number" name="custom_amount" min="1000" placeholder="Mínimo $1.000" class="w-full pl-8 pr-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-primary bg-white text-lg font-bold">
+                    </div>
+                </div>
+
+                <!-- Pasarela + recurrente (HU-14.1, HU-14.7) -->
+                <div class="space-y-4 mb-6">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Pasarela de pago</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="flex items-center gap-3 p-3 border-2 border-primary bg-orange-50 rounded-xl cursor-pointer">
+                                <input type="radio" name="provider" value="mercadopago" checked class="w-4 h-4 accent-primary">
+                                <span class="font-bold text-sm">Mercado Pago</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 border-2 border-gray-200 hover:border-primary rounded-xl cursor-pointer">
+                                <input type="radio" name="provider" value="webpay" class="w-4 h-4 accent-primary">
+                                <span class="font-bold text-sm">Webpay</span>
+                            </label>
+                        </div>
+                    </div>
+                    <label class="flex items-center gap-3 p-4 bg-blue-50 border border-blue-100 rounded-xl cursor-pointer">
+                        <input type="checkbox" name="recurring" class="w-5 h-5 accent-primary">
+                        <div>
+                            <div class="font-bold text-sm text-gray-800">Hacer esta donación todos los meses</div>
+                            <div class="text-xs text-gray-600">Puedes cancelar en cualquier momento</div>
+                        </div>
+                    </label>
+                </div>
+
+                <!-- Transparency & Mission -->
+                <div class="grid md:grid-cols-2 gap-10 items-center">
+                    <!-- OE3 Widget (HU-14.9) -->
+                    <div class="bg-gradient-to-br from-primary/5 to-orange-50 border border-primary/20 rounded-2xl p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <i class="ri-heart-pulse-line text-primary text-xl"></i>
+                            <h3 class="font-bold text-gray-800">¿Sabías que...</h3>
+                        </div>
+                        <p class="text-sm text-gray-700 mb-4">Nuestras donaciones ya cubren el <b class="text-primary text-xl">80%</b> de los costos operativos. Meta: llegar al 100% este año.</p>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-xs">
+                                <span class="font-bold text-gray-600">Cobertura actual</span>
+                                <span class="font-bold text-primary">80%</span>
+                            </div>
+                            <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-primary to-orange-400 rounded-full transition-all" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <a href="transparency.html" class="text-primary hover:text-primary-dark font-bold text-sm flex items-center gap-1">
+                            Ver reportes mensuales <i class="ri-arrow-right-line"></i>
+                        </a>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="ri-lightbulb-flash-line text-yellow-500"></i> ¿Por qué donar?
+                        </h2>
+                        <ul class="space-y-3 text-gray-600">
+                            <li class="flex items-start gap-2">
+                                <i class="ri-checkbox-circle-fill text-primary mt-1"></i>
+                                <span>Sin publicidad invasiva.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="ri-checkbox-circle-fill text-primary mt-1"></i>
+                                <span>Datos privados y seguros.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="ri-checkbox-circle-fill text-primary mt-1"></i>
+                                <span>Apoyo real a la economía local.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Banner -->
+    <footer class="relative bg-gray-900 text-white py-12 text-center text-xs mt-12 overflow-hidden">
+        <!-- Background Image with Blur -->
+        <div class="absolute inset-0 z-0 opacity-25">
+            <img src="https://images.unsplash.com/photo-1581094794329-cd11965d15eb?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover filter blur-sm grayscale">
+        </div>
+        
+        <!-- Gradient Overlay -->
+        <div class="absolute inset-0 z-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-gray-900/40"></div>
+
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
+            <div class="text-left">
+                <h4 class="text-xl font-extrabold text-white mb-1 flex items-center gap-2">
+                    <i class="ri-community-line text-primary"></i> QuiénSabe
+                </h4>
+                <p class="text-gray-400 max-w-xs">Conectando barrios, un oficio a la vez. Construido con cariño para la comunidad.</p>
+            </div>
+            
+            <div class="flex gap-8">
+                <a href="donate.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Donaciones</a>
+                <a href="terms.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Términos</a>
+                <a href="transparency.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Transparencia</a>
+            </div>
+            
+            <div class="text-right text-gray-500">
+                <p class="font-bold">&copy; 2026 Quién Sabe.</p>
+                <p class="text-[10px]">Hecho en Chile 🇨🇱</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

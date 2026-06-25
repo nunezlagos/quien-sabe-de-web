@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Quién Sabe</title>
+    <script src="js/tailwindcss.js"></script>
+    <link href="css/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/config.js"></script>
+</head>
+<body class="bg-bg-light font-sans flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
+        <div class="p-6 border-b border-gray-100 flex items-center gap-2">
+            <i class="ri-shield-star-line text-3xl text-primary"></i>
+            <span class="text-xl font-extrabold text-gray-800">AdminPanel</span>
+        </div>
+
+        <nav class="flex-grow p-4 space-y-2 overflow-y-auto" id="sidebar-nav">
+            <a href="#" data-target="dashboard-section" class="nav-link active flex items-center gap-3 px-4 py-3 rounded-xl transition">
+                <i class="ri-dashboard-3-line"></i> Dashboard
+            </a>
+            <a href="#" data-target="users-section" class="nav-link inactive flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition">
+                <i class="ri-user-settings-line"></i> Usuarios
+            </a>
+            <a href="#" data-target="trades-section" class="nav-link inactive flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition">
+                <i class="ri-briefcase-4-line"></i> Oficios
+                <span class="ml-auto bg-red-100 text-red-600 text-xs font-bold px-2 py-0.5 rounded-full">3</span>
+            </a>
+            <a href="#" data-target="tickets-section" class="nav-link inactive flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition">
+                <i class="ri-customer-service-2-line"></i> Tickets
+                <span class="ml-auto bg-orange-100 text-orange-600 text-xs font-bold px-2 py-0.5 rounded-full">12</span>
+            </a>
+            <a href="#" data-target="finances-section" class="nav-link inactive flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition">
+                <i class="ri-money-dollar-circle-line"></i> Finanzas
+            </a>
+            <a href="#" data-target="settings-section" class="nav-link inactive flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition">
+                <i class="ri-settings-4-line"></i> Configuración
+            </a>
+            <a href="#" data-target="analytics-section" class="nav-link inactive flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition">
+                <i class="ri-bar-chart-2-line"></i> Analytics
+            </a>
+            <a href="#" data-target="audit-section" class="nav-link inactive flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition">
+                <i class="ri-file-shield-2-line"></i> Auditoría
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-gray-100">
+            <a href="index.html" class="flex items-center gap-2 text-red-500 hover:text-red-700 font-bold px-4 py-2">
+                <i class="ri-logout-box-line"></i> Cerrar Sesión
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-grow flex flex-col overflow-y-auto">
+        <!-- Header -->
+        <header class="bg-white border-b border-gray-200 p-6 flex justify-between items-center sticky top-0 z-10">
+            <h1 class="text-2xl font-bold text-gray-800" id="page-title">Resumen General</h1>
+            <div class="flex items-center gap-4">
+                <div class="text-right hidden sm:block">
+                    <p class="text-sm font-bold text-gray-800">Admin Supremo</p>
+                    <p class="text-xs text-gray-500">Superusuario</p>
+                </div>
+                <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold">A</div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <main class="p-6 md:p-8 space-y-8 relative">
+            
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="content-section animate__animated animate__fadeIn">
+                <!-- KPIs -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                        <div class="absolute right-0 top-0 p-4 opacity-5"><i class="ri-user-fill text-8xl"></i></div>
+                        <div class="flex justify-between items-start mb-4 relative z-10">
+                            <div class="bg-blue-50 p-3 rounded-xl text-blue-500"><i class="ri-user-line text-xl"></i></div>
+                            <span class="text-green-500 text-xs font-bold bg-green-50 px-2 py-1 rounded-lg">+12%</span>
+                        </div>
+                        <h3 class="text-gray-400 text-xs font-bold uppercase relative z-10">Usuarios Totales</h3>
+                        <p class="text-2xl font-extrabold text-gray-800 relative z-10">2,543</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                        <div class="absolute right-0 top-0 p-4 opacity-5"><i class="ri-hammer-fill text-8xl"></i></div>
+                        <div class="flex justify-between items-start mb-4 relative z-10">
+                            <div class="bg-green-50 p-3 rounded-xl text-primary"><i class="ri-hammer-line text-xl"></i></div>
+                            <span class="text-green-500 text-xs font-bold bg-green-50 px-2 py-1 rounded-lg">+5%</span>
+                        </div>
+                        <h3 class="text-gray-400 text-xs font-bold uppercase relative z-10">Oficios Activos</h3>
+                        <p class="text-2xl font-extrabold text-gray-800 relative z-10">856</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                        <div class="absolute right-0 top-0 p-4 opacity-5"><i class="ri-star-fill text-8xl"></i></div>
+                        <div class="flex justify-between items-start mb-4 relative z-10">
+                            <div class="bg-orange-50 p-3 rounded-xl text-orange-500"><i class="ri-star-smile-line text-xl"></i></div>
+                            <span class="text-gray-400 text-xs font-bold bg-gray-50 px-2 py-1 rounded-lg">0%</span>
+                        </div>
+                        <h3 class="text-gray-400 text-xs font-bold uppercase relative z-10">Valoración Media</h3>
+                        <p class="text-2xl font-extrabold text-gray-800 relative z-10">4.7</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                        <div class="absolute right-0 top-0 p-4 opacity-5"><i class="ri-alert-fill text-8xl"></i></div>
+                        <div class="flex justify-between items-start mb-4 relative z-10">
+                            <div class="bg-red-50 p-3 rounded-xl text-red-500"><i class="ri-alert-line text-xl"></i></div>
+                            <span class="text-red-500 text-xs font-bold bg-red-50 px-2 py-1 rounded-lg">Pendientes</span>
+                        </div>
+                        <h3 class="text-gray-400 text-xs font-bold uppercase relative z-10">Solicitudes</h3>
+                        <p class="text-2xl font-extrabold text-gray-800 relative z-10">12</p>
+                    </div>
+                </div>
+
+                <!-- Chart Section -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-gray-800 text-lg">Visitas Semanales</h3>
+                        <select class="bg-gray-50 border border-gray-200 text-xs rounded-lg px-3 py-1 text-gray-600 focus:outline-none">
+                            <option>Últimos 7 días</option>
+                            <option>Este Mes</option>
+                        </select>
+                    </div>
+                    <!-- Simple CSS Bar Chart -->
+                    <div class="flex items-end justify-between h-48 gap-2">
+                        <div class="w-full bg-blue-50 rounded-t-lg relative group h-[40%] hover:bg-blue-100 transition-all">
+                            <span class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-bold text-blue-500 opacity-0 group-hover:opacity-100 transition">40%</span>
+                        </div>
+                        <div class="w-full bg-blue-50 rounded-t-lg relative group h-[65%] hover:bg-blue-100 transition-all">
+                            <span class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-bold text-blue-500 opacity-0 group-hover:opacity-100 transition">65%</span>
+                        </div>
+                        <div class="w-full bg-blue-50 rounded-t-lg relative group h-[45%] hover:bg-blue-100 transition-all">
+                            <span class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-bold text-blue-500 opacity-0 group-hover:opacity-100 transition">45%</span>
+                        </div>
+                        <div class="w-full bg-blue-50 rounded-t-lg relative group h-[80%] hover:bg-blue-100 transition-all">
+                            <span class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-bold text-blue-500 opacity-0 group-hover:opacity-100 transition">80%</span>
+                        </div>
+                        <div class="w-full bg-primary/20 rounded-t-lg relative group h-[95%] hover:bg-primary/30 transition-all">
+                            <span class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-bold text-primary opacity-0 group-hover:opacity-100 transition">95%</span>
+                        </div>
+                        <div class="w-full bg-blue-50 rounded-t-lg relative group h-[60%] hover:bg-blue-100 transition-all">
+                            <span class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-bold text-blue-500 opacity-0 group-hover:opacity-100 transition">60%</span>
+                        </div>
+                        <div class="w-full bg-blue-50 rounded-t-lg relative group h-[75%] hover:bg-blue-100 transition-all">
+                            <span class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-bold text-blue-500 opacity-0 group-hover:opacity-100 transition">75%</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between mt-2 text-xs text-gray-400 font-bold uppercase">
+                        <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Section -->
+            <div id="users-section" class="content-section hidden animate__animated animate__fadeIn">
+                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                        <h3 class="font-bold text-gray-800 text-lg"><i class="ri-user-settings-line mr-2 text-primary"></i> Mantenedor Usuarios</h3>
+                        <button class="bg-primary text-white text-xs font-bold px-3 py-2 rounded-lg hover:bg-primary-dark transition" onclick="toggleModal('user-modal', 'user-modal-content', true)"><i class="ri-add-line"></i> Nuevo</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-gray-50 text-gray-400 text-xs uppercase font-bold">
+                                <tr>
+                                    <th class="px-6 py-3">Nombre</th>
+                                    <th class="px-6 py-3">Rol</th>
+                                    <th class="px-6 py-3">Estado</th>
+                                    <th class="px-6 py-3">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-3 font-medium text-gray-700">Juan Pérez</td>
+                                    <td class="px-6 py-3">Proveedor</td>
+                                    <td class="px-6 py-3"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs font-bold">Activo</span></td>
+                                    <td class="px-6 py-3 flex gap-2">
+                                        <button class="text-blue-500 hover:text-blue-700"><i class="ri-edit-line"></i></button>
+                                        <button class="text-red-500 hover:text-red-700"><i class="ri-delete-bin-line"></i></button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-3 font-medium text-gray-700">Maria Silva</td>
+                                    <td class="px-6 py-3">Usuario</td>
+                                    <td class="px-6 py-3"><span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs font-bold">Inactivo</span></td>
+                                    <td class="px-6 py-3 flex gap-2">
+                                        <button class="text-blue-500 hover:text-blue-700"><i class="ri-edit-line"></i></button>
+                                        <button class="text-red-500 hover:text-red-700"><i class="ri-delete-bin-line"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trades Section -->
+            <div id="trades-section" class="content-section hidden space-y-8 animate__animated animate__fadeIn">
+                <!-- Gestión de Oficios (Tipos) -->
+                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                        <h3 class="font-bold text-gray-800 text-lg"><i class="ri-briefcase-line mr-2 text-primary"></i> Mantenedor Oficios</h3>
+                        <button class="bg-primary text-white text-xs font-bold px-3 py-2 rounded-lg hover:bg-primary-dark transition" onclick="toggleModal('trade-modal', 'trade-modal-content', true)"><i class="ri-add-line"></i> Nuevo</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-gray-50 text-gray-400 text-xs uppercase font-bold">
+                                <tr>
+                                    <th class="px-6 py-3">Nombre</th>
+                                    <th class="px-6 py-3">Categoría</th>
+                                    <th class="px-6 py-3">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-3 font-medium text-gray-700">Gasfiter</td>
+                                    <td class="px-6 py-3">Hogar</td>
+                                    <td class="px-6 py-3 flex gap-2">
+                                        <button class="text-blue-500 hover:text-blue-700"><i class="ri-edit-line"></i></button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-3 font-medium text-gray-700">Programador</td>
+                                    <td class="px-6 py-3">Tecnología</td>
+                                    <td class="px-6 py-3 flex gap-2">
+                                        <button class="text-blue-500 hover:text-blue-700"><i class="ri-edit-line"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Solicitudes Pendientes (Full Width) -->
+                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-orange-50">
+                        <h3 class="font-bold text-gray-800 text-lg flex items-center gap-2"><i class="ri-notification-badge-line text-orange-500"></i> Solicitudes de Aprobación</h3>
+                        <span class="bg-white text-orange-500 text-xs font-bold px-3 py-1 rounded-full border border-orange-200">12 Pendientes</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-white text-gray-400 text-xs uppercase font-bold border-b border-gray-100">
+                                <tr>
+                                    <th class="px-6 py-4">Usuario</th>
+                                    <th class="px-6 py-4">Oficio Solicitado</th>
+                                    <th class="px-6 py-4">Documentos</th>
+                                    <th class="px-6 py-4">Fecha</th>
+                                    <th class="px-6 py-4">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100 text-sm">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold text-gray-500">R</div>
+                                            <div>
+                                                <p class="font-bold text-gray-800">Roberto Gómez</p>
+                                                <p class="text-xs text-gray-500">roberto@gmail.com</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4"><span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-bold">Gasfiter</span></td>
+                                    <td class="px-6 py-4"><a href="#" class="text-primary hover:underline text-xs flex items-center gap-1"><i class="ri-file-text-line"></i> Certificado SEC</a></td>
+                                    <td class="px-6 py-4 text-gray-500">Hoy, 10:30</td>
+                                    <td class="px-6 py-4 flex gap-2">
+                                        <button class="bg-green-500 text-white px-3 py-1.5 rounded-lg hover:bg-green-600 transition font-bold text-xs flex items-center gap-1"><i class="ri-check-line"></i> Aprobar</button>
+                                        <button class="bg-red-100 text-red-500 px-3 py-1.5 rounded-lg hover:bg-red-200 transition font-bold text-xs flex items-center gap-1"><i class="ri-close-line"></i> Rechazar</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tickets Section (HU-10.4) -->
+            <div id="tickets-section" class="content-section hidden animate__animated animate__fadeIn">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Cola de tickets</h2>
+                    <div class="flex gap-2">
+                        <select class="bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs font-bold">
+                            <option>Todos los estados</option>
+                            <option>Abierto</option>
+                            <option>En revisión</option>
+                            <option>Cerrado</option>
+                        </select>
+                        <select class="bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs font-bold">
+                            <option>Todos los tipos</option>
+                            <option>Suplantación</option>
+                            <option>Mal servicio</option>
+                            <option>Contenido</option>
+                            <option>Consulta</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50 text-xs uppercase text-gray-500">
+                            <tr>
+                                <th class="px-4 py-3 text-left">ID</th>
+                                <th class="px-4 py-3 text-left">Tipo</th>
+                                <th class="px-4 py-3 text-left">Solicitante</th>
+                                <th class="px-4 py-3 text-left">Estado</th>
+                                <th class="px-4 py-3 text-left">Asignado</th>
+                                <th class="px-4 py-3 text-right">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-t border-gray-100 hover:bg-gray-50">
+                                <td class="px-4 py-3 font-mono text-xs">#1234</td>
+                                <td class="px-4 py-3"><span class="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs">Suplantación</span></td>
+                                <td class="px-4 py-3">María C. <span class="text-gray-400 text-xs">maria@ejemplo.cl</span></td>
+                                <td class="px-4 py-3"><span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full text-xs">En revisión</span></td>
+                                <td class="px-4 py-3">Admin</td>
+                                <td class="px-4 py-3 text-right">
+                                    <button class="text-primary hover:text-primary-dark text-xs font-bold">Ver</button>
+                                </td>
+                            </tr>
+                            <tr class="border-t border-gray-100 hover:bg-gray-50">
+                                <td class="px-4 py-3 font-mono text-xs">#1235</td>
+                                <td class="px-4 py-3"><span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full text-xs">Mal servicio</span></td>
+                                <td class="px-4 py-3">Pedro R. <span class="text-gray-400 text-xs">pedro@ejemplo.cl</span></td>
+                                <td class="px-4 py-3"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">Abierto</span></td>
+                                <td class="px-4 py-3 text-gray-400">—</td>
+                                <td class="px-4 py-3 text-right">
+                                    <button class="text-primary hover:text-primary-dark text-xs font-bold">Asignarme</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Placeholders for other sections -->
+            <div id="finances-section" class="content-section hidden animate__animated animate__fadeIn">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-gray-400 text-xs font-bold uppercase">Donaciones (mes)</h3>
+                        <p class="text-3xl font-extrabold text-gray-800 mt-2">$45.000</p>
+                        <span class="text-green-500 text-xs font-bold">+12% vs mes anterior</span>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-gray-400 text-xs font-bold uppercase">Gastos (mes)</h3>
+                        <p class="text-3xl font-extrabold text-gray-800 mt-2">$12.500</p>
+                        <span class="text-gray-500 text-xs">Hosting + dominios</span>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-gray-400 text-xs font-bold uppercase">Ratio OE3</h3>
+                        <p class="text-3xl font-extrabold text-primary mt-2">80%</p>
+                        <div class="h-2 bg-gray-200 rounded-full mt-2 overflow-hidden">
+                            <div class="h-full bg-primary rounded-full" style="width: 80%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                    <h3 class="font-bold text-gray-800 text-lg mb-4">Donaciones vs gastos (últimos 6 meses)</h3>
+                    <div class="flex items-end gap-4 h-48">
+                        <div class="flex-1 flex flex-col items-center gap-1">
+                            <div class="w-full flex flex-col gap-1">
+                                <div class="bg-blue-400 rounded-t" style="height: 60%"></div>
+                                <div class="bg-orange-400 rounded-t" style="height: 30%"></div>
+                            </div>
+                            <span class="text-xs text-gray-500 font-bold">Ene</span>
+                        </div>
+                        <div class="flex-1 flex flex-col items-center gap-1">
+                            <div class="w-full flex flex-col gap-1">
+                                <div class="bg-blue-400 rounded-t" style="height: 70%"></div>
+                                <div class="bg-orange-400 rounded-t" style="height: 30%"></div>
+                            </div>
+                            <span class="text-xs text-gray-500 font-bold">Feb</span>
+                        </div>
+                        <div class="flex-1 flex flex-col items-center gap-1">
+                            <div class="w-full flex flex-col gap-1">
+                                <div class="bg-blue-400 rounded-t" style="height: 75%"></div>
+                                <div class="bg-orange-400 rounded-t" style="height: 30%"></div>
+                            </div>
+                            <span class="text-xs text-gray-500 font-bold">Mar</span>
+                        </div>
+                        <div class="flex-1 flex flex-col items-center gap-1">
+                            <div class="w-full flex flex-col gap-1">
+                                <div class="bg-blue-400 rounded-t" style="height: 80%"></div>
+                                <div class="bg-orange-400 rounded-t" style="height: 30%"></div>
+                            </div>
+                            <span class="text-xs text-gray-500 font-bold">Abr</span>
+                        </div>
+                        <div class="flex-1 flex flex-col items-center gap-1">
+                            <div class="w-full flex flex-col gap-1">
+                                <div class="bg-blue-400 rounded-t" style="height: 85%"></div>
+                                <div class="bg-orange-400 rounded-t" style="height: 30%"></div>
+                            </div>
+                            <span class="text-xs text-gray-500 font-bold">May</span>
+                        </div>
+                        <div class="flex-1 flex flex-col items-center gap-1">
+                            <div class="w-full flex flex-col gap-1">
+                                <div class="bg-blue-400 rounded-t" style="height: 90%"></div>
+                                <div class="bg-orange-400 rounded-t" style="height: 30%"></div>
+                            </div>
+                            <span class="text-xs text-gray-500 font-bold">Jun</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="settings-section" class="content-section hidden animate__animated animate__fadeIn">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Configuración global</h2>
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 max-w-2xl">
+                    <form class="space-y-5">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Rate limit de contactos (por hora)</label>
+                            <input type="number" value="10" min="1" max="100" class="w-32 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm">
+                            <p class="text-xs text-gray-500 mt-1">Vecino no puede contactar más de N prestadores por hora</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">SLA tickets (horas)</label>
+                            <input type="number" value="48" min="1" max="168" class="w-32 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Versión de Términos actual</label>
+                            <input type="text" value="2026-06-15" class="w-40 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm">
+                        </div>
+                        <label class="flex items-center gap-3 cursor-pointer p-3 bg-gray-50 rounded-xl">
+                            <input type="checkbox" class="w-5 h-5 accent-primary">
+                            <span class="text-sm font-bold text-gray-700">Modo mantenimiento (sitio en construcción)</span>
+                        </label>
+                        <button type="button" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-xl font-bold shadow-md">
+                            Guardar configuración
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Analytics Section (REQ-18) -->
+            <div id="analytics-section" class="content-section hidden animate__animated animate__fadeIn">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="bg-primary/10 p-3 rounded-xl text-primary"><i class="ri-eye-line text-xl"></i></div>
+                            <span class="text-green-500 text-xs font-bold bg-green-50 px-2 py-1 rounded-lg">+18%</span>
+                        </div>
+                        <h3 class="text-gray-400 text-xs font-bold uppercase">Vistas Perfil (7d)</h3>
+                        <p class="text-2xl font-extrabold text-gray-800">12,847</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="bg-blue-50 p-3 rounded-xl text-blue-500"><i class="ri-chat-3-line text-xl"></i></div>
+                            <span class="text-green-500 text-xs font-bold bg-green-50 px-2 py-1 rounded-lg">+22%</span>
+                        </div>
+                        <h3 class="text-gray-400 text-xs font-bold uppercase">Contactos (7d)</h3>
+                        <p class="text-2xl font-extrabold text-gray-800">1,432</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="bg-orange-50 p-3 rounded-xl text-orange-500"><i class="ri-search-line text-xl"></i></div>
+                            <span class="text-green-500 text-xs font-bold bg-green-50 px-2 py-1 rounded-lg">+9%</span>
+                        </div>
+                        <h3 class="text-gray-400 text-xs font-bold uppercase">Búsquedas (7d)</h3>
+                        <p class="text-2xl font-extrabold text-gray-800">8,221</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="bg-purple-50 p-3 rounded-xl text-purple-500"><i class="ri-heart-3-line text-xl"></i></div>
+                            <span class="text-green-500 text-xs font-bold bg-green-50 px-2 py-1 rounded-lg">+31%</span>
+                        </div>
+                        <h3 class="text-gray-400 text-xs font-bold uppercase">Conversión a Contacto</h3>
+                        <p class="text-2xl font-extrabold text-gray-800">11.1%</p>
+                    </div>
+                </div>
+
+                <!-- Gráfico de actividad semanal -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-extrabold text-gray-800 text-lg">Actividad por día</h3>
+                        <select class="text-xs bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 font-bold">
+                            <option>Últimos 7 días</option>
+                            <option>Últimos 30 días</option>
+                            <option>Últimos 90 días</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end gap-2 h-48">
+                        <div class="flex-1 flex flex-col items-center gap-2">
+                            <div class="w-full bg-primary rounded-t-lg" style="height: 60%"></div>
+                            <span class="text-xs text-gray-500 font-bold">Lun</span>
+                        </div>
+                        <div class="flex-1 flex flex-col items-center gap-2">
+                            <div class="w-full bg-primary rounded-t-lg" style="height: 75%"></div>
+                            <span class="text-xs text-gray-500 font-bold">Mar</span>
+                        </div>
+                        <div class="flex-1 flex flex-col items-center gap-2">
+                            <div class="w-full bg-primary rounded-t-lg" style="height: 85%"></div>
+                            <span class="text-xs text-gray-500 font-bold">Mié</span>
+                        </div>
+                        <div class="flex-1 flex flex-col items-center gap-2">
+                            <div class="w-full bg-primary rounded-t-lg" style="height: 70%"></div>
+                            <span class="text-xs text-gray-500 font-bold">Jue</span>
+                        </div>
+                        <div class="flex-1 flex flex-col items-center gap-2">
+                            <div class="w-full bg-primary rounded-t-lg" style="height: 95%"></div>
+                            <span class="text-xs text-gray-500 font-bold">Vie</span>
+                        </div>
+                        <div class="flex-1 flex flex-col items-center gap-2">
+                            <div class="w-full bg-primary/60 rounded-t-lg" style="height: 50%"></div>
+                            <span class="text-xs text-gray-500 font-bold">Sáb</span>
+                        </div>
+                        <div class="flex-1 flex flex-col items-center gap-2">
+                            <div class="w-full bg-primary/60 rounded-t-lg" style="height: 40%"></div>
+                            <span class="text-xs text-gray-500 font-bold">Dom</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Embudo conversión -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
+                    <h3 class="font-extrabold text-gray-800 text-lg mb-4">Embudo de conversión</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="font-bold text-gray-700">Visitantes únicos</span>
+                                <span class="text-gray-500">12,847</span>
+                            </div>
+                            <div class="h-3 bg-gradient-to-r from-primary to-primary/40 rounded-full" style="width: 100%"></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="font-bold text-gray-700">Vieron un perfil</span>
+                                <span class="text-gray-500">3,402 <span class="text-green-500 text-xs">(26.5%)</span></span>
+                            </div>
+                            <div class="h-3 bg-gradient-to-r from-blue-400 to-blue-400/40 rounded-full" style="width: 26.5%"></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="font-bold text-gray-700">Contactaron</span>
+                                <span class="text-gray-500">1,432 <span class="text-green-500 text-xs">(11.1%)</span></span>
+                            </div>
+                            <div class="h-3 bg-gradient-to-r from-orange-400 to-orange-400/40 rounded-full" style="width: 11.1%"></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="font-bold text-gray-700">Dejaron reseña</span>
+                                <span class="text-gray-500">287 <span class="text-green-500 text-xs">(2.2%)</span></span>
+                            </div>
+                            <div class="h-3 bg-gradient-to-r from-green-400 to-green-400/40 rounded-full" style="width: 2.2%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top oficios -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                    <h3 class="font-extrabold text-gray-800 text-lg mb-4">Top oficios buscados (7d)</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs font-bold text-gray-500 w-6">1</span>
+                            <span class="text-sm font-bold text-gray-700 flex-1">Gasfiter</span>
+                            <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-primary rounded-full" style="width: 92%"></div>
+                            </div>
+                            <span class="text-xs text-gray-500 w-12 text-right">2,134</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs font-bold text-gray-500 w-6">2</span>
+                            <span class="text-sm font-bold text-gray-700 flex-1">Electricista</span>
+                            <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-primary rounded-full" style="width: 78%"></div>
+                            </div>
+                            <span class="text-xs text-gray-500 w-12 text-right">1,812</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs font-bold text-gray-500 w-6">3</span>
+                            <span class="text-sm font-bold text-gray-700 flex-1">Jardinero</span>
+                            <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-primary rounded-full" style="width: 65%"></div>
+                            </div>
+                            <span class="text-xs text-gray-500 w-12 text-right">1,508</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs font-bold text-gray-500 w-6">4</span>
+                            <span class="text-sm font-bold text-gray-700 flex-1">Pintor</span>
+                            <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-primary rounded-full" style="width: 52%"></div>
+                            </div>
+                            <span class="text-xs text-gray-500 w-12 text-right">1,206</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs font-bold text-gray-500 w-6">5</span>
+                            <span class="text-sm font-bold text-gray-700 flex-1">Cerrajero</span>
+                            <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-primary rounded-full" style="width: 43%"></div>
+                            </div>
+                            <span class="text-xs text-gray-500 w-12 text-right">998</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audit Section (HU-13.7) -->
+            <div id="audit-section" class="content-section hidden animate__animated animate__fadeIn">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Registro de auditoría</h2>
+                <div class="flex gap-2 mb-6">
+                    <select class="bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs font-bold">
+                        <option>Todos los admins</option>
+                        <option>Admin Supremo</option>
+                    </select>
+                    <select class="bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs font-bold">
+                        <option>Todas las entidades</option>
+                        <option>users</option>
+                        <option>providers</option>
+                        <option>tickets</option>
+                        <option>donations</option>
+                    </select>
+                </div>
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50 text-xs uppercase text-gray-500">
+                            <tr>
+                                <th class="px-4 py-3 text-left">Fecha</th>
+                                <th class="px-4 py-3 text-left">Admin</th>
+                                <th class="px-4 py-3 text-left">Acción</th>
+                                <th class="px-4 py-3 text-left">Entidad</th>
+                                <th class="px-4 py-3 text-left">ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-t border-gray-100">
+                                <td class="px-4 py-3 text-xs text-gray-500">2026-06-24 14:32</td>
+                                <td class="px-4 py-3">Admin</td>
+                                <td class="px-4 py-3"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs">approve_verification</span></td>
+                                <td class="px-4 py-3">providers</td>
+                                <td class="px-4 py-3 font-mono text-xs">#42</td>
+                            </tr>
+                            <tr class="border-t border-gray-100">
+                                <td class="px-4 py-3 text-xs text-gray-500">2026-06-24 11:15</td>
+                                <td class="px-4 py-3">Admin</td>
+                                <td class="px-4 py-3"><span class="bg-red-100 text-red-700 px-2 py-0.5 rounded text-xs">hide_review</span></td>
+                                <td class="px-4 py-3">reviews</td>
+                                <td class="px-4 py-3 font-mono text-xs">#128</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- User Modal -->
+    <div id="user-modal" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg mx-4 transform scale-95 transition-transform duration-300" id="user-modal-content">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50 rounded-t-3xl">
+                <h3 class="font-bold text-gray-800 text-lg flex items-center gap-2">
+                    <i class="ri-user-add-line text-primary"></i> <span id="user-modal-title">Nuevo Usuario</span>
+                </h3>
+                <button id="close-user-btn" class="text-gray-400 hover:text-gray-600 transition">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+            
+            <form class="p-6 space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Nombre</label>
+                        <input type="text" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Apellido</label>
+                        <input type="text" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Correo Electrónico</label>
+                    <input type="email" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Rol</label>
+                        <select class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                            <option>Usuario</option>
+                            <option>Proveedor</option>
+                            <option>Administrador</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Estado</label>
+                        <select class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                            <option>Activo</option>
+                            <option>Inactivo</option>
+                            <option>Suspendido</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button type="button" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl shadow-lg shadow-primary/30 transition transform hover:-translate-y-0.5">
+                        Guardar Usuario
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Trade Modal -->
+    <div id="trade-modal" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg mx-4 transform scale-95 transition-transform duration-300" id="trade-modal-content">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50 rounded-t-3xl">
+                <h3 class="font-bold text-gray-800 text-lg flex items-center gap-2">
+                    <i class="ri-briefcase-line text-primary"></i> <span id="trade-modal-title">Nuevo Oficio</span>
+                </h3>
+                <button id="close-trade-btn" class="text-gray-400 hover:text-gray-600 transition">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+            
+            <form class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Nombre del Oficio</label>
+                    <input type="text" placeholder="Ej: Gasfiter, Electricista" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Categoría</label>
+                    <select class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition">
+                        <option>Hogar</option>
+                        <option>Tecnología</option>
+                        <option>Automotriz</option>
+                        <option>Educación</option>
+                        <option>Salud/Belleza</option>
+                        <option>Otros</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Descripción Corta</label>
+                    <textarea rows="3" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition"></textarea>
+                </div>
+
+                <div class="pt-2">
+                    <button type="button" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl shadow-lg shadow-primary/30 transition transform hover:-translate-y-0.5">
+                        Guardar Oficio
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/dashboard-admin.js"></script>
+</body>
+</html>

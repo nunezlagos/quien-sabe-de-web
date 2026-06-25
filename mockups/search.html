@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Búsqueda: gasfiter en Las Condes - Quién Sabe</title>
+    <meta name="description" content="Resultados de búsqueda de gasfiter disponibles en Las Condes.">
+    <!-- Tailwind CSS -->
+    <script src="js/tailwindcss.js"></script>
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="css/animate.min.css"/>
+    <!-- Remix Icon CDN -->
+    <link href="css/remixicon.css" rel="stylesheet">
+    <!-- Google Fonts: Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="js/config.js"></script>
+</head>
+<body class="bg-bg-light text-gray-800 font-sans flex flex-col min-h-screen transition-all duration-300 search-mode" id="main-body">
+
+    <!-- Page Loader -->
+    <div id="page-loader" class="fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="relative">
+            <div class="text-5xl md:text-6xl font-extrabold text-gray-200 tracking-tight">
+                Quién<span class="text-gray-200">Sabe</span>
+            </div>
+            <div class="absolute top-0 left-0 text-5xl md:text-6xl font-extrabold text-primary tracking-tight overflow-hidden animate-fill whitespace-nowrap">
+                Quién<span class="text-primary">Sabe</span>
+            </div>
+        </div>
+        <p class="text-gray-400 text-sm mt-4 font-medium animate-pulse">Buscando vecinos en tu barrio...</p>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-extrabold text-gray-800 flex items-center gap-2 tracking-tight">
+                <i class="ri-community-line text-primary text-3xl"></i>
+                Quién<span class="text-primary">Sabe</span>
+            </a>
+
+            <div class="hidden md:flex items-center gap-4">
+                <a href="donate.html" class="bg-orange-100 text-accent hover:bg-orange-200 px-4 py-2 rounded-full font-bold text-sm transition flex items-center gap-2">
+                    <i class="ri-heart-3-fill"></i> Donaciones
+                </a>
+                <button id="loginBtn" class="bg-gradient-to-r from-accent to-orange-500 text-white px-6 py-2 rounded-full font-bold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition duration-300 animate__animated animate__pulse animate__infinite animate__slow flex items-center gap-2">
+                    <i class="ri-user-add-line"></i> ¿Ofreces un servicio? ¡Inscríbete!
+                </button>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-gray-600 text-2xl">
+                <i class="ri-menu-line"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section (search-mode: compact via style.css) -->
+    <header class="hero-pattern py-16 md:py-24 relative overflow-hidden transition-all duration-500" id="hero-section">
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h1 class="hero-title text-3xl md:text-5xl font-extrabold text-gray-800 mb-6 animate__animated animate__fadeInDown tracking-tight">
+                Resultados para: <span id="dynamic-trade" class="text-primary">"gasfiter"</span> en <span class="text-primary">Las Condes</span>
+            </h1>
+            <p class="hero-desc text-gray-600 mb-8 text-lg max-w-2xl mx-auto font-medium">
+                Conecta con vecinos talentosos en tu barrio. Rápido, confiable y cercano.
+            </p>
+
+            <!-- Search Box (pre-populated from URL state: ?q=gasfiter&commune=las-condes&available_now=true&page=1) -->
+            <div id="hero-search-container" class="search-container bg-white p-2 rounded-2xl shadow-xl max-w-5xl mx-auto flex flex-col md:flex-row gap-2 animate__animated animate__fadeInUp border border-gray-100">
+                <div class="relative flex-1">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="ri-briefcase-line text-gray-400 text-xl"></i>
+                    </div>
+                    <select id="trade-select" class="block w-full pl-10 pr-3 py-3 text-base border-none focus:ring-0 text-gray-700 bg-transparent rounded-xl cursor-pointer hover:bg-gray-50 transition font-semibold">
+                        <option value="">Todos los oficios</option>
+                        <option value="gasfiter" selected>Gasfiter</option>
+                        <option value="electricista">Electricista</option>
+                        <option value="jardinero">Jardinero</option>
+                        <option value="maestro">Maestro</option>
+                    </select>
+                </div>
+
+                <div class="hidden md:block w-px bg-gray-200 my-2"></div>
+
+                <div class="relative flex-1">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="ri-map-pin-line text-gray-400 text-xl"></i>
+                    </div>
+                    <select id="commune-select" class="block w-full pl-10 pr-3 py-3 text-base border-none focus:ring-0 text-gray-700 bg-transparent rounded-xl cursor-pointer hover:bg-gray-50 transition font-semibold">
+                        <option value="">Todas las comunas</option>
+                        <option value="las-condes" selected>Las Condes</option>
+                        <option value="providencia">Providencia</option>
+                        <option value="vitacura">Vitacura</option>
+                        <option value="lo-barnechea">Lo Barnechea</option>
+                        <option value="nunoa">Ñuñoa</option>
+                    </select>
+                </div>
+
+                <div class="hidden md:block w-px bg-gray-200 my-2"></div>
+
+                <div class="relative flex-[1.5]">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="ri-search-line text-gray-400 text-xl"></i>
+                    </div>
+                    <input type="text" id="search-input" value="gasfiter" class="block w-full pl-10 pr-3 py-3 text-base border-none focus:ring-0 text-gray-700 bg-transparent rounded-xl placeholder-gray-400 font-medium" placeholder="Palabra clave (ej: instalación, reparación...)">
+                </div>
+
+                <label class="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-gray-50 transition rounded-xl">
+                    <input type="checkbox" name="available_now" checked class="w-4 h-4 accent-primary rounded">
+                    <span class="text-sm font-semibold text-gray-700">Disponible ahora</span>
+                </label>
+
+                <button id="search-btn" class="bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-xl font-bold transition shadow-md flex items-center justify-center gap-2">
+                    <i class="ri-search-line"></i> Buscar
+                </button>
+            </div>
+
+            <!-- URL State Indicator (HU-06.5) -->
+            <div class="mt-4 inline-flex items-center gap-2 bg-white/70 backdrop-blur border border-gray-200 px-4 py-2 rounded-full text-xs font-mono text-gray-500 shadow-sm">
+                <i class="ri-link text-primary"></i>
+                <span class="font-bold text-gray-600">URL:</span>
+                <code id="url-state">?q=gasfiter&amp;commune=las-condes&amp;available_now=true&amp;page=1</code>
+                <button class="ml-2 text-gray-400 hover:text-primary" title="Copiar URL compartible">
+                    <i class="ri-file-copy-line"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Active Filters Bar (chips) -->
+    <section class="container mx-auto px-4 mt-8">
+        <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs text-gray-500 font-bold uppercase tracking-wider mr-1">
+                <i class="ri-filter-fill"></i> Filtros activos:
+            </span>
+
+            <span class="inline-flex items-center gap-1.5 bg-green-50 text-primary border border-green-200 px-3 py-1.5 rounded-full text-sm font-semibold animate__animated animate__fadeIn">
+                <i class="ri-search-line"></i> "gasfiter"
+                <button class="hover:text-red-500 transition ml-0.5" title="Quitar filtro">
+                    <i class="ri-close-line text-base"></i>
+                </button>
+            </span>
+
+            <span class="inline-flex items-center gap-1.5 bg-green-50 text-primary border border-green-200 px-3 py-1.5 rounded-full text-sm font-semibold animate__animated animate__fadeIn">
+                <i class="ri-map-pin-line"></i> Las Condes
+                <button class="hover:text-red-500 transition ml-0.5" title="Quitar filtro">
+                    <i class="ri-close-line text-base"></i>
+                </button>
+            </span>
+
+            <span class="inline-flex items-center gap-1.5 bg-green-50 text-primary border border-green-200 px-3 py-1.5 rounded-full text-sm font-semibold animate__animated animate__fadeIn">
+                <i class="ri-checkbox-circle-fill"></i> Disponible ahora
+                <button class="hover:text-red-500 transition ml-0.5" title="Quitar filtro">
+                    <i class="ri-close-line text-base"></i>
+                </button>
+            </span>
+
+            <button class="text-xs text-gray-400 hover:text-red-500 font-bold ml-2 underline transition">
+                Limpiar todo
+            </button>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 flex-grow">
+
+        <!-- Controls: title + count + sort + view toggle -->
+        <div class="flex flex-col md:flex-row justify-between items-stretch md:items-end gap-4 mb-8 border-b border-gray-200 pb-4">
+            <div>
+                <h2 class="text-2xl font-extrabold text-gray-800">Gasfiter en Las Condes</h2>
+                <p id="results-count" class="text-gray-500 text-sm mt-1 font-medium">
+                    <span class="font-bold text-primary">12</span> vecinos encontrados
+                    <span class="text-gray-400">·</span>
+                    Página <span class="font-bold">1</span> de <span class="font-bold">12</span>
+                </p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+                <!-- Sort selector -->
+                <div class="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-3 py-2 shadow-sm">
+                    <i class="ri-sort-desc text-gray-400"></i>
+                    <span class="text-xs text-gray-500 font-bold uppercase tracking-wider">Ordenar:</span>
+                    <select id="sort-select" class="border-none focus:ring-0 text-sm font-semibold text-gray-700 bg-transparent cursor-pointer pr-1">
+                        <option value="relevance" selected>Más relevantes</option>
+                        <option value="rating">Mejor valorados</option>
+                        <option value="price_asc">Menor precio</option>
+                        <option value="available">Disponible ahora</option>
+                    </select>
+                </div>
+
+                <!-- Toggle grid/list -->
+                <div class="flex gap-1 bg-white p-1 rounded-xl shadow-sm border border-gray-200">
+                    <button id="grid-view-btn" class="p-2 rounded-lg text-primary bg-green-50 transition" title="Vista grilla">
+                        <i class="ri-grid-fill text-xl"></i>
+                    </button>
+                    <button id="list-view-btn" class="p-2 rounded-lg text-gray-400 hover:text-primary transition" title="Vista lista">
+                        <i class="ri-list-check text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-8 items-start">
+
+            <!-- Sidebar Filters -->
+            <aside id="search-sidebar" class="md:w-1/4 w-full space-y-6 animate__animated animate__fadeInLeft">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 sticky top-24">
+                    <h3 class="font-bold text-gray-800 mb-5 flex items-center gap-2 pb-3 border-b border-gray-100">
+                        <i class="ri-filter-3-line text-primary"></i> Refinar búsqueda
+                    </h3>
+
+                    <!-- Categoría -->
+                    <div class="mb-6">
+                        <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-1">
+                            <i class="ri-price-tag-3-line"></i> Categoría
+                        </h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 cursor-pointer hover:text-primary group">
+                                <input type="checkbox" class="rounded text-primary focus:ring-primary border-gray-300">
+                                <span class="text-sm text-gray-600 group-hover:text-primary">Hogar</span>
+                                <span class="ml-auto text-xs text-gray-400 font-bold">(85)</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer hover:text-primary group">
+                                <input type="checkbox" class="rounded text-primary focus:ring-primary border-gray-300">
+                                <span class="text-sm text-gray-600 group-hover:text-primary">Tecnología</span>
+                                <span class="ml-auto text-xs text-gray-400 font-bold">(42)</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer hover:text-primary group">
+                                <input type="checkbox" class="rounded text-primary focus:ring-primary border-gray-300">
+                                <span class="text-sm text-gray-600 group-hover:text-primary">Automotriz</span>
+                                <span class="ml-auto text-xs text-gray-400 font-bold">(28)</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer hover:text-primary group">
+                                <input type="checkbox" class="rounded text-primary focus:ring-primary border-gray-300">
+                                <span class="text-sm text-gray-600 group-hover:text-primary">Educación</span>
+                                <span class="ml-auto text-xs text-gray-400 font-bold">(15)</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer hover:text-primary group">
+                                <input type="checkbox" class="rounded text-primary focus:ring-primary border-gray-300">
+                                <span class="text-sm text-gray-600 group-hover:text-primary">Salud</span>
+                                <span class="ml-auto text-xs text-gray-400 font-bold">(19)</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer hover:text-primary group">
+                                <input type="checkbox" class="rounded text-primary focus:ring-primary border-gray-300">
+                                <span class="text-sm text-gray-600 group-hover:text-primary">Otros</span>
+                                <span class="ml-auto text-xs text-gray-400 font-bold">(31)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Precio (range) -->
+                    <div class="mb-6 pb-6 border-b border-gray-100">
+                        <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-1">
+                            <i class="ri-money-dollar-circle-line"></i> Precio
+                        </h4>
+                        <div class="flex items-center gap-2 mb-3">
+                            <input type="number" id="price-min" placeholder="Min" value="10000" min="0" step="1000" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary">
+                            <span class="text-gray-400 font-bold">—</span>
+                            <input type="number" id="price-max" placeholder="Max" value="80000" min="0" step="1000" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary">
+                        </div>
+                        <input type="range" id="price-range" min="0" max="100000" step="5000" value="80000" class="w-full accent-primary">
+                        <div class="flex justify-between text-[10px] text-gray-400 mt-1 font-bold">
+                            <span>$0</span>
+                            <span>$100.000</span>
+                        </div>
+                    </div>
+
+                    <!-- Rating mínimo -->
+                    <div class="mb-6 pb-6 border-b border-gray-100">
+                        <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-1">
+                            <i class="ri-star-smile-line"></i> Rating mínimo
+                        </h4>
+                        <div class="flex items-center gap-1 mb-3" id="rating-stars">
+                            <i class="ri-star-fill text-yellow-400 text-2xl cursor-pointer hover:scale-110 transition"></i>
+                            <i class="ri-star-fill text-yellow-400 text-2xl cursor-pointer hover:scale-110 transition"></i>
+                            <i class="ri-star-fill text-yellow-400 text-2xl cursor-pointer hover:scale-110 transition"></i>
+                            <i class="ri-star-fill text-yellow-400 text-2xl cursor-pointer hover:scale-110 transition"></i>
+                            <i class="ri-star-line text-gray-300 text-2xl cursor-pointer hover:scale-110 transition"></i>
+                            <span class="text-xs text-gray-500 ml-2 font-bold">4+ estrellas</span>
+                        </div>
+                        <input type="range" id="rating-min" min="1" max="5" step="1" value="4" class="w-full accent-primary">
+                        <div class="flex justify-between text-[10px] text-gray-400 mt-1 font-bold">
+                            <span>1★</span>
+                            <span>5★</span>
+                        </div>
+                    </div>
+
+                    <!-- Disponible ahora -->
+                    <div class="mb-4">
+                        <label class="flex items-center gap-3 cursor-pointer p-3 bg-green-50 border border-green-200 rounded-xl hover:bg-green-100 transition">
+                            <input type="checkbox" id="filter-available" checked class="w-4 h-4 accent-primary rounded">
+                            <span class="text-sm font-semibold text-gray-700 flex items-center gap-1.5">
+                                <i class="ri-checkbox-circle-fill text-primary"></i>
+                                Disponible ahora
+                            </span>
+                        </label>
+                    </div>
+
+                    <!-- Verificado -->
+                    <div class="mb-6">
+                        <label class="flex items-center gap-3 cursor-pointer p-3 bg-blue-50 border border-blue-100 rounded-xl hover:bg-blue-100 transition">
+                            <input type="checkbox" id="filter-verified" class="w-4 h-4 accent-blue-500 rounded">
+                            <span class="text-sm font-semibold text-gray-700 flex items-center gap-1.5">
+                                <i class="ri-shield-check-fill text-blue-500"></i>
+                                Solo verificados
+                            </span>
+                        </label>
+                    </div>
+
+                    <button class="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary-dark transition shadow-md flex items-center justify-center gap-2">
+                        <i class="ri-check-double-line"></i>
+                        Aplicar filtros
+                    </button>
+
+                    <button class="w-full mt-2 bg-white border border-gray-200 text-gray-600 py-2.5 rounded-xl font-bold hover:border-primary hover:text-primary transition text-sm">
+                        Restablecer
+                    </button>
+                </div>
+
+                <!-- Promo Box -->
+                <div class="bg-gradient-to-br from-primary to-green-600 rounded-2xl p-6 text-white text-center shadow-lg">
+                    <i class="ri-shield-star-line text-4xl mb-2 opacity-80"></i>
+                    <h4 class="font-bold text-lg mb-1">Vecinos Verificados</h4>
+                    <p class="text-xs opacity-90 mb-4">Contrata con confianza y respaldo del barrio.</p>
+                    <button class="bg-white text-primary text-xs font-bold px-4 py-2 rounded-full hover:bg-green-50 transition">Saber más</button>
+                </div>
+            </aside>
+
+            <!-- Grid Container (8 cards hardcoded — mockup estático) -->
+            <div class="flex-grow w-full">
+                <div id="neighbors-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                    <!-- Card 1 -->
+                    <article class="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 flex flex-col h-full animate__animated animate__fadeIn group relative">
+                        <div class="absolute top-3 right-3 z-10 bg-green-100 text-primary text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 border border-green-200">
+                            <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
+                            Disponible
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow relative pt-6">
+                            <div class="flex justify-between items-start mb-4 relative z-10">
+                                <div class="flex items-end gap-3">
+                                    <div class="w-16 h-16 rounded-full bg-white border-4 border-white flex items-center justify-center text-primary font-bold text-xl shadow-md group-hover:scale-105 transition overflow-hidden relative">
+                                        <div class="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-bold text-3xl">CM</div>
+                                    </div>
+                                    <div class="mb-1">
+                                        <h3 class="font-bold text-gray-800 text-lg leading-tight break-words mb-1 group-hover:text-primary transition">Carlos Muñoz</h3>
+                                        <span class="text-xs text-primary font-bold uppercase bg-green-50 px-2 py-0.5 rounded border border-green-100">Gasfiter</span>
+                                        <div class="flex flex-col gap-1 items-start mt-1">
+                                            <span class="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 flex items-center gap-1">
+                                                <i class="ri-shield-check-fill"></i> Verificado
+                                            </span>
+                                        </div>
+                                        <span class="text-[9px] text-gray-500 flex items-center gap-1 mt-1"><i class="ri-map-pin-line"></i> Las Condes</span>
+                                    </div>
+                                </div>
+                                <div class="text-right mt-6">
+                                    <div class="text-xs text-yellow-400 drop-shadow-sm">
+                                        <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i>
+                                    </div>
+                                    <span class="text-[10px] text-gray-400 font-bold">4.9 (47)</span>
+                                </div>
+                            </div>
+                            <div class="mb-4 flex-grow">
+                                <p class="text-gray-500 text-sm line-clamp-3 leading-relaxed">Especialista en detección de fugas, cambio de cañerías y reparaciones de artefactos sanitarios. 15 años de experiencia en Las Condes.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 mb-4 min-h-[32px]">
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">Fugas</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">Cañerías</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">24/7</span>
+                            </div>
+                        </div>
+                        <div class="px-5 py-4 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between mt-auto">
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase font-bold block">Desde</span>
+                                <span class="text-lg font-extrabold text-gray-800">$15.000</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="#" class="w-10 h-10 rounded-full bg-white border border-gray-200 text-gray-500 hover:text-primary hover:border-primary flex items-center justify-center transition shadow-sm" title="Ver Detalles">
+                                    <i class="ri-eye-line text-lg"></i>
+                                </a>
+                                <a href="#" target="_blank" class="w-10 h-10 rounded-full bg-green-500 text-white hover:bg-green-600 flex items-center justify-center transition shadow-md hover:shadow-lg hover:scale-110" title="Contactar por WhatsApp">
+                                    <i class="ri-whatsapp-line text-xl"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 2 -->
+                    <article class="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 flex flex-col h-full animate__animated animate__fadeIn group relative">
+                        <div class="absolute top-3 right-3 z-10 bg-green-100 text-primary text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 border border-green-200">
+                            <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
+                            Disponible
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow relative pt-6">
+                            <div class="flex justify-between items-start mb-4 relative z-10">
+                                <div class="flex items-end gap-3">
+                                    <div class="w-16 h-16 rounded-full bg-white border-4 border-white flex items-center justify-center text-primary font-bold text-xl shadow-md group-hover:scale-105 transition overflow-hidden relative">
+                                        <div class="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-bold text-3xl">MS</div>
+                                    </div>
+                                    <div class="mb-1">
+                                        <h3 class="font-bold text-gray-800 text-lg leading-tight break-words mb-1 group-hover:text-primary transition">Miguel Sepúlveda</h3>
+                                        <span class="text-xs text-primary font-bold uppercase bg-green-50 px-2 py-0.5 rounded border border-green-100">Gasfiter</span>
+                                        <div class="flex flex-col gap-1 items-start mt-1">
+                                            <span class="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 flex items-center gap-1">
+                                                <i class="ri-shield-check-fill"></i> Verificado
+                                            </span>
+                                        </div>
+                                        <span class="text-[9px] text-gray-500 flex items-center gap-1 mt-1"><i class="ri-map-pin-line"></i> Las Condes</span>
+                                    </div>
+                                </div>
+                                <div class="text-right mt-6">
+                                    <div class="text-xs text-yellow-400 drop-shadow-sm">
+                                        <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i>
+                                    </div>
+                                    <span class="text-[10px] text-gray-400 font-bold">4.8 (32)</span>
+                                </div>
+                            </div>
+                            <div class="mb-4 flex-grow">
+                                <p class="text-gray-500 text-sm line-clamp-3 leading-relaxed">Instalación de calefont, termos eléctricos y mantención preventiva. Trabajo garantizado con boleta.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 mb-4 min-h-[32px]">
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">Calefont</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">Termos</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">Boleta</span>
+                            </div>
+                        </div>
+                        <div class="px-5 py-4 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between mt-auto">
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase font-bold block">Desde</span>
+                                <span class="text-lg font-extrabold text-gray-800">$18.000</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="#" class="w-10 h-10 rounded-full bg-white border border-gray-200 text-gray-500 hover:text-primary hover:border-primary flex items-center justify-center transition shadow-sm" title="Ver Detalles">
+                                    <i class="ri-eye-line text-lg"></i>
+                                </a>
+                                <a href="#" target="_blank" class="w-10 h-10 rounded-full bg-green-500 text-white hover:bg-green-600 flex items-center justify-center transition shadow-md hover:shadow-lg hover:scale-110" title="Contactar por WhatsApp">
+                                    <i class="ri-whatsapp-line text-xl"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 3 -->
+                    <article class="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 flex flex-col h-full animate__animated animate__fadeIn group relative">
+                        <div class="absolute top-3 right-3 z-10 bg-green-100 text-primary text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 border border-green-200">
+                            <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
+                            Disponible
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow relative pt-6">
+                            <div class="flex justify-between items-start mb-4 relative z-10">
+                                <div class="flex items-end gap-3">
+                                    <div class="w-16 h-16 rounded-full bg-white border-4 border-white flex items-center justify-center text-primary font-bold text-xl shadow-md group-hover:scale-105 transition overflow-hidden relative">
+                                        <div class="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-bold text-3xl">RF</div>
+                                    </div>
+                                    <div class="mb-1">
+                                        <h3 class="font-bold text-gray-800 text-lg leading-tight break-words mb-1 group-hover:text-primary transition">Roberto Fuentes</h3>
+                                        <span class="text-xs text-primary font-bold uppercase bg-green-50 px-2 py-0.5 rounded border border-green-100">Maestro Gasfiter</span>
+                                        <div class="flex flex-col gap-1 items-start mt-1"></div>
+                                        <span class="text-[9px] text-gray-500 flex items-center gap-1 mt-1"><i class="ri-map-pin-line"></i> Las Condes</span>
+                                    </div>
+                                </div>
+                                <div class="text-right mt-6">
+                                    <div class="text-xs text-yellow-400 drop-shadow-sm">
+                                        <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-half-fill"></i>
+                                    </div>
+                                    <span class="text-[10px] text-gray-400 font-bold">4.7 (28)</span>
+                                </div>
+                            </div>
+                            <div class="mb-4 flex-grow">
+                                <p class="text-gray-500 text-sm line-clamp-3 leading-relaxed">Maestro gasfiter con 25 años en el rubro. Atiende emergencias y proyectos residenciales completos.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 mb-4 min-h-[32px]">
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">Emergencias</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">Residencial</span>
+                            </div>
+                        </div>
+                        <div class="px-5 py-4 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between mt-auto">
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase font-bold block">Desde</span>
+                                <span class="text-lg font-extrabold text-gray-800">$12.000</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="#" class="w-10 h-10 rounded-full bg-white border border-gray-200 text-gray-500 hover:text-primary hover:border-primary flex items-center justify-center transition shadow-sm" title="Ver Detalles">
+                                    <i class="ri-eye-line text-lg"></i>
+                                </a>
+                                <a href="#" target="_blank" class="w-10 h-10 rounded-full bg-green-500 text-white hover:bg-green-600 flex items-center justify-center transition shadow-md hover:shadow-lg hover:scale-110" title="Contactar por WhatsApp">
+                                    <i class="ri-whatsapp-line text-xl"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 4 -->
+                    <article class="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 flex flex-col h-full animate__animated animate__fadeIn group relative">
+                        <div class="absolute top-3 right-3 z-10 bg-green-100 text-primary text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 border border-green-200">
+                            <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
+                            Disponible
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow relative pt-6">
+                            <div class="flex justify-between items-start mb-4 relative z-10">
+                                <div class="flex items-end gap-3">
+                                    <div class="w-16 h-16 rounded-full bg-white border-4 border-white flex items-center justify-center text-primary font-bold text-xl shadow-md group-hover:scale-105 transition overflow-hidden relative">
+                                        <div class="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-bold text-3xl">AV</div>
+                                    </div>
+                                    <div class="mb-1">
+                                        <h3 class="font-bold text-gray-800 text-lg leading-tight break-words mb-1 group-hover:text-primary transition">Andrés Vidal</h3>
+                                        <span class="text-xs text-primary font-bold uppercase bg-green-50 px-2 py-0.5 rounded border border-green-100">Gasfiter</span>
+                                        <div class="flex flex-col gap-1 items-start mt-1">
+                                            <span class="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 flex items-center gap-1">
+                                                <i class="ri-shield-check-fill"></i> Verificado
+                                            </span>
+                                        </div>
+                                        <span class="text-[9px] text-gray-500 flex items-center gap-1 mt-1"><i class="ri-map-pin-line"></i> Providencia</span>
+                                    </div>
+                                </div>
+                                <div class="text-right mt-6">
+                                    <div class="text-xs text-yellow-400 drop-shadow-sm">
+                                        <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-half-fill"></i>
+                                    </div>
+                                    <span class="text-[10px] text-gray-400 font-bold">4.6 (19)</span>
+                                </div>
+                            </div>
+                            <div class="mb-4 flex-grow">
+                                <p class="text-gray-500 text-sm line-clamp-3 leading-relaxed">Reparaciones de gas natural, certificaciones SEC y mantención de calderas. Atiende Las Condes y Providencia.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 mb-4 min-h-[32px]">
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">Gas Natural</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">SEC</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">Calderas</span>
+                            </div>
+                        </div>
+                        <div class="px-5 py-4 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between mt-auto">
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase font-bold block">Desde</span>
+                                <span class="text-lg font-extrabold text-gray-800">$20.000</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="#" class="w-10 h-10 rounded-full bg-white border border-gray-200 text-gray-500 hover:text-primary hover:border-primary flex items-center justify-center transition shadow-sm" title="Ver Detalles">
+                                    <i class="ri-eye-line text-lg"></i>
+                                </a>
+                                <a href="#" target="_blank" class="w-10 h-10 rounded-full bg-green-500 text-white hover:bg-green-600 flex items-center justify-center transition shadow-md hover:shadow-lg hover:scale-110" title="Contactar por WhatsApp">
+                                    <i class="ri-whatsapp-line text-xl"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 5 -->
+                    <article class="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 flex flex-col h-full animate__animated animate__fadeIn group relative">
+                        <div class="absolute top-3 right-3 z-10 bg-green-100 text-primary text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 border border-green-200">
+                            <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
+                            Disponible
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow relative pt-6">
+                            <div class="flex justify-between items-start mb-4 relative z-10">
+                                <div class="flex items-end gap-3">
+                                    <div class="w-16 h-16 rounded-full bg-white border-4 border-white flex items-center justify-center text-primary font-bold text-xl shadow-md group-hover:scale-105 transition overflow-hidden relative">
+                                        <div class="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-bold text-3xl">LT</div>
+                                    </div>
+                                    <div class="mb-1">
+                                        <h3 class="font-bold text-gray-800 text-lg leading-tight break-words mb-1 group-hover:text-primary transition">Luis Tapia</h3>
+                                        <span class="text-xs text-primary font-bold uppercase bg-green-50 px-2 py-0.5 rounded border border-green-100">Gasfiter Certificado</span>
+                                        <div class="flex flex-col gap-1 items-start mt-1">
+                                            <span class="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 flex items-center gap-1">
+                                                <i class="ri-shield-check-fill"></i> Verificado
+                                            </span>
+                                        </div>
+                                        <span class="text-[9px] text-gray-500 flex items-center gap-1 mt-1"><i class="ri-map-pin-line"></i> Las Condes</span>
+                                    </div>
+                                </div>
+                                <div class="text-right mt-6">
+                                    <div class="text-xs text-yellow-400 drop-shadow-sm">
+                                        <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i>
+                                    </div>
+                                    <span class="text-[10px] text-gray-400 font-bold">4.9 (61)</span>
+                                </div>
+                            </div>
+                            <div class="mb-4 flex-grow">
+                                <p class="text-gray-500 text-sm line-clamp-3 leading-relaxed">Certificado SEC clase 1. Trabajos garantizados por escrito. Presupuesto sin costo y respuesta en menos de 1 hora.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 mb-4 min-h-[32px]">
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">SEC</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">Garantía</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">1h respuesta</span>
+                            </div>
+                        </div>
+                        <div class="px-5 py-4 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between mt-auto">
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase font-bold block">Desde</span>
+                                <span class="text-lg font-extrabold text-gray-800">$22.000</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="#" class="w-10 h-10 rounded-full bg-white border border-gray-200 text-gray-500 hover:text-primary hover:border-primary flex items-center justify-center transition shadow-sm" title="Ver Detalles">
+                                    <i class="ri-eye-line text-lg"></i>
+                                </a>
+                                <a href="#" target="_blank" class="w-10 h-10 rounded-full bg-green-500 text-white hover:bg-green-600 flex items-center justify-center transition shadow-md hover:shadow-lg hover:scale-110" title="Contactar por WhatsApp">
+                                    <i class="ri-whatsapp-line text-xl"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 6 -->
+                    <article class="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 flex flex-col h-full animate__animated animate__fadeIn group relative">
+                        <div class="absolute top-3 right-3 z-10 bg-gray-100 text-gray-500 text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 border border-gray-200">
+                            <i class="ri-time-line"></i> Mañana 09:00
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow relative pt-6">
+                            <div class="flex justify-between items-start mb-4 relative z-10">
+                                <div class="flex items-end gap-3">
+                                    <div class="w-16 h-16 rounded-full bg-white border-4 border-white flex items-center justify-center text-primary font-bold text-xl shadow-md group-hover:scale-105 transition overflow-hidden relative">
+                                        <div class="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-bold text-3xl">JP</div>
+                                    </div>
+                                    <div class="mb-1">
+                                        <h3 class="font-bold text-gray-800 text-lg leading-tight break-words mb-1 group-hover:text-primary transition">Jorge Pizarro</h3>
+                                        <span class="text-xs text-primary font-bold uppercase bg-green-50 px-2 py-0.5 rounded border border-green-100">Maestro Gasfiter</span>
+                                        <div class="flex flex-col gap-1 items-start mt-1">
+                                            <span class="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 flex items-center gap-1">
+                                                <i class="ri-shield-check-fill"></i> Verificado
+                                            </span>
+                                        </div>
+                                        <span class="text-[9px] text-gray-500 flex items-center gap-1 mt-1"><i class="ri-map-pin-line"></i> Vitacura</span>
+                                    </div>
+                                </div>
+                                <div class="text-right mt-6">
+                                    <div class="text-xs text-yellow-400 drop-shadow-sm">
+                                        <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-half-fill"></i>
+                                    </div>
+                                    <span class="text-[10px] text-gray-400 font-bold">4.5 (22)</span>
+                                </div>
+                            </div>
+                            <div class="mb-4 flex-grow">
+                                <p class="text-gray-500 text-sm line-clamp-3 leading-relaxed">Maestro con taller propio. Presupuesto detallado y materiales incluidos en cada trabajo.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 mb-4 min-h-[32px]">
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">Taller propio</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">Presupuesto</span>
+                            </div>
+                        </div>
+                        <div class="px-5 py-4 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between mt-auto">
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase font-bold block">Desde</span>
+                                <span class="text-lg font-extrabold text-gray-800">$16.000</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="#" class="w-10 h-10 rounded-full bg-white border border-gray-200 text-gray-500 hover:text-primary hover:border-primary flex items-center justify-center transition shadow-sm" title="Ver Detalles">
+                                    <i class="ri-eye-line text-lg"></i>
+                                </a>
+                                <a href="#" target="_blank" class="w-10 h-10 rounded-full bg-green-500 text-white hover:bg-green-600 flex items-center justify-center transition shadow-md hover:shadow-lg hover:scale-110" title="Contactar por WhatsApp">
+                                    <i class="ri-whatsapp-line text-xl"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 7 -->
+                    <article class="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 flex flex-col h-full animate__animated animate__fadeIn group relative">
+                        <div class="absolute top-3 right-3 z-10 bg-green-100 text-primary text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 border border-green-200">
+                            <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
+                            Disponible
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow relative pt-6">
+                            <div class="flex justify-between items-start mb-4 relative z-10">
+                                <div class="flex items-end gap-3">
+                                    <div class="w-16 h-16 rounded-full bg-white border-4 border-white flex items-center justify-center text-primary font-bold text-xl shadow-md group-hover:scale-105 transition overflow-hidden relative">
+                                        <div class="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-bold text-3xl">PC</div>
+                                    </div>
+                                    <div class="mb-1">
+                                        <h3 class="font-bold text-gray-800 text-lg leading-tight break-words mb-1 group-hover:text-primary transition">Pedro Contreras</h3>
+                                        <span class="text-xs text-primary font-bold uppercase bg-green-50 px-2 py-0.5 rounded border border-green-100">Gasfiter</span>
+                                        <div class="flex flex-col gap-1 items-start mt-1"></div>
+                                        <span class="text-[9px] text-gray-500 flex items-center gap-1 mt-1"><i class="ri-map-pin-line"></i> Las Condes</span>
+                                    </div>
+                                </div>
+                                <div class="text-right mt-6">
+                                    <div class="text-xs text-yellow-400 drop-shadow-sm">
+                                        <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-line"></i>
+                                    </div>
+                                    <span class="text-[10px] text-gray-400 font-bold">4.4 (15)</span>
+                                </div>
+                            </div>
+                            <div class="mb-4 flex-grow">
+                                <p class="text-gray-500 text-sm line-clamp-3 leading-relaxed">Cambio de llaves, destape de alcantarillado y pequeñas reparaciones. Atención rápida los 7 días.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 mb-4 min-h-[32px]">
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">Llaves</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">Destape</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">7 días</span>
+                            </div>
+                        </div>
+                        <div class="px-5 py-4 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between mt-auto">
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase font-bold block">Desde</span>
+                                <span class="text-lg font-extrabold text-gray-800">$14.000</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="#" class="w-10 h-10 rounded-full bg-white border border-gray-200 text-gray-500 hover:text-primary hover:border-primary flex items-center justify-center transition shadow-sm" title="Ver Detalles">
+                                    <i class="ri-eye-line text-lg"></i>
+                                </a>
+                                <a href="#" target="_blank" class="w-10 h-10 rounded-full bg-green-500 text-white hover:bg-green-600 flex items-center justify-center transition shadow-md hover:shadow-lg hover:scale-110" title="Contactar por WhatsApp">
+                                    <i class="ri-whatsapp-line text-xl"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 8 -->
+                    <article class="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 flex flex-col h-full animate__animated animate__fadeIn group relative">
+                        <div class="absolute top-3 right-3 z-10 bg-green-100 text-primary text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 border border-green-200">
+                            <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
+                            Disponible
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow relative pt-6">
+                            <div class="flex justify-between items-start mb-4 relative z-10">
+                                <div class="flex items-end gap-3">
+                                    <div class="w-16 h-16 rounded-full bg-white border-4 border-white flex items-center justify-center text-primary font-bold text-xl shadow-md group-hover:scale-105 transition overflow-hidden relative">
+                                        <div class="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-bold text-3xl">FR</div>
+                                    </div>
+                                    <div class="mb-1">
+                                        <h3 class="font-bold text-gray-800 text-lg leading-tight break-words mb-1 group-hover:text-primary transition">Felipe Rojas</h3>
+                                        <span class="text-xs text-primary font-bold uppercase bg-green-50 px-2 py-0.5 rounded border border-green-100">Gasfiter Premium</span>
+                                        <div class="flex flex-col gap-1 items-start mt-1">
+                                            <span class="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 flex items-center gap-1">
+                                                <i class="ri-shield-check-fill"></i> Verificado
+                                            </span>
+                                        </div>
+                                        <span class="text-[9px] text-gray-500 flex items-center gap-1 mt-1"><i class="ri-map-pin-line"></i> Las Condes</span>
+                                    </div>
+                                </div>
+                                <div class="text-right mt-6">
+                                    <div class="text-xs text-yellow-400 drop-shadow-sm">
+                                        <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i>
+                                    </div>
+                                    <span class="text-[10px] text-gray-400 font-bold">5.0 (12)</span>
+                                </div>
+                            </div>
+                            <div class="mb-4 flex-grow">
+                                <p class="text-gray-500 text-sm line-clamp-3 leading-relaxed">Servicio premium para edificios y住宅 exclusivo. Trabajos con planos y permisos al día.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 mb-4 min-h-[32px]">
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">Edificios</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-semibold">Permisos</span>
+                            </div>
+                        </div>
+                        <div class="px-5 py-4 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between mt-auto">
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase font-bold block">Desde</span>
+                                <span class="text-lg font-extrabold text-gray-800">$25.000</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="#" class="w-10 h-10 rounded-full bg-white border border-gray-200 text-gray-500 hover:text-primary hover:border-primary flex items-center justify-center transition shadow-sm" title="Ver Detalles">
+                                    <i class="ri-eye-line text-lg"></i>
+                                </a>
+                                <a href="#" target="_blank" class="w-10 h-10 rounded-full bg-green-500 text-white hover:bg-green-600 flex items-center justify-center transition shadow-md hover:shadow-lg hover:scale-110" title="Contactar por WhatsApp">
+                                    <i class="ri-whatsapp-line text-xl"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+
+                <!-- Pagination -->
+                <nav class="mt-12 mb-4 flex items-center justify-center gap-1 flex-wrap" aria-label="Paginación">
+                    <button class="px-4 py-2 rounded-lg border border-gray-200 bg-white text-sm font-bold text-gray-300 cursor-not-allowed flex items-center gap-1" disabled>
+                        <i class="ri-arrow-left-s-line text-lg"></i> Anterior
+                    </button>
+
+                    <button aria-current="page" class="w-10 h-10 rounded-lg bg-primary text-white font-bold text-sm shadow-sm">1</button>
+                    <a href="#" class="w-10 h-10 rounded-lg bg-white border border-gray-200 text-gray-700 font-bold text-sm hover:text-primary hover:border-primary flex items-center justify-center transition">2</a>
+                    <a href="#" class="w-10 h-10 rounded-lg bg-white border border-gray-200 text-gray-700 font-bold text-sm hover:text-primary hover:border-primary flex items-center justify-center transition">3</a>
+
+                    <span class="px-2 text-gray-400 font-bold select-none">…</span>
+
+                    <a href="#" class="w-10 h-10 rounded-lg bg-white border border-gray-200 text-gray-700 font-bold text-sm hover:text-primary hover:border-primary flex items-center justify-center transition">12</a>
+
+                    <a href="#" class="px-4 py-2 rounded-lg border border-gray-200 bg-white text-sm font-bold text-gray-700 hover:text-primary hover:border-primary transition flex items-center gap-1">
+                        Siguiente <i class="ri-arrow-right-s-line text-lg"></i>
+                    </a>
+                </nav>
+
+                <!-- Pagination info / per-page selector -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500 font-bold">
+                    <span>Mostrando <span class="text-gray-700">1–8</span> de <span class="text-gray-700">12</span> resultados</span>
+                    <div class="flex items-center gap-2">
+                        <span>Por página:</span>
+                        <select class="bg-white border border-gray-200 rounded-lg px-2 py-1 text-xs font-bold text-gray-700 cursor-pointer">
+                            <option>8</option>
+                            <option>16</option>
+                            <option>24</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Banner -->
+    <footer class="relative bg-gray-900 text-white py-12 text-center text-xs mt-12 overflow-hidden">
+        <!-- Background Image with Blur -->
+        <div class="absolute inset-0 z-0 opacity-25">
+            <img src="css/footer-bg.jpg" class="w-full h-full object-cover filter blur-sm grayscale">
+        </div>
+
+        <!-- Gradient Overlay -->
+        <div class="absolute inset-0 z-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-gray-900/40"></div>
+
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
+            <div class="text-left">
+                <h4 class="text-xl font-extrabold text-white mb-1 flex items-center gap-2">
+                    <i class="ri-community-line text-primary"></i> QuiénSabe
+                </h4>
+                <p class="text-gray-400 max-w-xs">Conectando barrios, un oficio a la vez. Construido con cariño para la comunidad.</p>
+            </div>
+
+            <div class="flex gap-8">
+                <a href="donate.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Donaciones</a>
+                <a href="terms.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Términos</a>
+                <a href="transparency.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform">Transparencia</a>
+                <a href="dashboard-admin.html" class="hover:text-primary transition font-bold text-gray-300 hover:scale-105 transform"><i class="ri-shield-keyhole-line"></i> Admin</a>
+            </div>
+
+            <div class="text-right text-gray-500">
+                <p class="font-bold">&copy; 2026 Quién Sabe.</p>
+                <p class="text-[10px]">Hecho en Chile 🇨🇱</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts (mismos que index.html — sin lógica nueva) -->
+    <script src="js/data.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/loader.js"></script>
+</body>
+</html>
