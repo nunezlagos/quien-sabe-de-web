@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, real, index, uniqueIndex } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, real, index, uniqueIndex, primaryKey } from 'drizzle-orm/sqlite-core';
 
 export const users = sqliteTable('users', {
   id: integer('id').primaryKey({ autoIncrement: true }),
@@ -138,6 +138,29 @@ export const donations = sqliteTable('donations', {
 });
 
 export type Donation = typeof donations.$inferSelect;
+
+export const userRoles = sqliteTable('user_roles', {
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  role: text('role', { enum: ['user', 'provider', 'admin'] }).notNull(),
+  grantedAt: integer('granted_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+  grantedBy: integer('granted_by').references(() => users.id, { onDelete: 'set null' }),
+}, (t) => ({
+  pk: primaryKey({ columns: [t.userId, t.role] }),
+}));
+
+export const eventsLog = sqliteTable('events_log', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  event: text('event', { enum: ['signup', 'search', 'contact', 'review', 'donation', 'ticket_open'] }).notNull(),
+  actorRole: text('actor_role', { enum: ['anonymous', 'user', 'provider', 'admin'] }).notNull(),
+  propsJson: text('props_json').notNull().default('{}'),
+  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+}, (t) => ({
+  byEvent: index('idx_events_log_event').on(t.event),
+  byEventCreatedDesc: index('idx_events_log_event_created').on(t.event, t.createdAt),
+}));
+
+export type UserRole = typeof userRoles.$inferSelect;
+export type EventLog = typeof eventsLog.$inferSelect;
 
 export const providerAvailability = sqliteTable('provider_availability', {
   id: integer('id').primaryKey({ autoIncrement: true }),
