@@ -20,35 +20,56 @@ function stars(rating: number): string {
 }
 ---
 
-<div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
-  <h3 class="font-bold text-gray-800 text-lg mb-4 flex items-center gap-2">
-    <i class="ri-star-smile-line text-yellow-500"></i> Mis reseñas ({reviews.length})
+<div class="card-widget">
+  <h3 class="font-bold text-slate-800 text-base mb-5 flex items-center gap-2">
+    <i class="ri-star-smile-fill text-yellow-500"></i> Mis reseñas ({reviews.length})
   </h3>
 
   {reviews.length > 0 ? (
     <div class="space-y-4">
       {reviews.map((r) => (
-        <article class="bg-gray-50 rounded-2xl border border-gray-100 p-4">
+        <article class="bg-gradient-to-br from-slate-50 to-warm-50 rounded-xl border border-slate-200 p-4 hover:border-green-200 hover:shadow-md transition-all duration-200">
           <div class="flex items-center justify-between mb-2">
-            <a href={`/p/${r.tradeSlug}`} class="font-bold text-gray-800 text-sm hover:text-orange-600 transition">
+            <a href={`/p/${r.tradeSlug}`} class="font-bold text-slate-800 text-sm hover:text-green-primary transition font-display">
               {r.tradeName}
             </a>
-            <time class="text-xs text-gray-400">
+            <time class="text-xs text-slate-400">
               {new Date(r.createdAt).toLocaleDateString('es-CL', { day: 'numeric', month: 'short', year: 'numeric' })}
             </time>
           </div>
           <div class="text-yellow-500 text-sm mb-2">{stars(r.rating)}</div>
-          <p class="text-sm text-gray-700 leading-relaxed">{r.body}</p>
+          <p class="text-sm text-slate-600 leading-relaxed">{r.body}</p>
         </article>
       ))}
     </div>
   ) : (
-    <div class="text-center py-8 text-gray-400">
-      <i class="ri-star-smile-line text-4xl mb-2 block opacity-30"></i>
+    <div class="text-center py-10 text-slate-400">
+      <div class="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-3">
+        <i class="ri-star-smile-line text-3xl text-slate-300"></i>
+      </div>
       <p class="text-sm font-medium">Aún no has dejado reseñas.</p>
-      <p class="text-xs mt-1">
-        <a href="/" class="text-orange-500 font-bold hover:text-orange-600">Buscar vecinos para reseñar</a>
+      <p class="text-xs mt-1 text-slate-400">
+        <a href="/" class="text-green-primary font-bold hover:text-green-dark transition">Buscar vecinos para reseñar</a>
       </p>
     </div>
   )}
 </div>
+
+<style>
+  .card-widget {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    padding: 1.5rem;
+    transition: box-shadow 300ms ease;
+  }
+
+  .card-widget:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  }
+
+  .font-display {
+    font-family: 'Nunito', sans-serif;
+  }
+</style>

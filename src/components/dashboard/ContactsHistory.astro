@@ -15,10 +15,10 @@ export interface Props {
 const { events } = Astro.props;
 
 const iconMap: Record<string, string> = {
-  whatsapp: 'ri-whatsapp-line',
-  email: 'ri-mail-line',
-  phone: 'ri-phone-line',
-  profile: 'ri-user-line',
+  whatsapp: 'ri-whatsapp-fill',
+  email: 'ri-mail-fill',
+  phone: 'ri-phone-fill',
+  profile: 'ri-user-fill',
 };
 
 const labelMap: Record<string, string> = {
@@ -27,39 +27,67 @@ const labelMap: Record<string, string> = {
   phone: 'Teléfono',
   profile: 'Perfil',
 };
+
+const bgMap: Record<string, string> = {
+  whatsapp: 'bg-green-100 text-green-600',
+  email: 'bg-blue-100 text-blue-600',
+  phone: 'bg-purple-100 text-purple-600',
+  profile: 'bg-slate-100 text-slate-600',
+};
 ---
 
-<div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
-  <h3 class="font-bold text-gray-800 text-lg mb-4 flex items-center gap-2">
-    <i class="ri-chat-1-line text-orange-500"></i> Historial de contactos
+<div class="card-widget">
+  <h3 class="font-bold text-slate-800 text-base mb-5 flex items-center gap-2">
+    <i class="ri-chat-1-fill text-primary"></i> Historial de contactos
   </h3>
 
   {events.length > 0 ? (
     <div class="space-y-3">
       {events.map((ev) => (
-        <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl border border-gray-100">
-          <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 text-lg flex-shrink-0">
+        <div class="flex items-center gap-3 p-3 bg-gradient-to-br from-slate-50 to-warm-50 rounded-xl border border-slate-200 hover:border-green-200 hover:shadow-sm transition-all duration-200">
+          <div class={`w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 ${bgMap[ev.eventType] || 'bg-slate-100 text-slate-600'}`}>
             <i class={iconMap[ev.eventType] || 'ri-question-line'}></i>
           </div>
           <div class="flex-1 min-w-0">
-            <a href={`/p/${ev.tradeSlug}`} class="font-bold text-gray-800 text-sm hover:text-orange-600 transition truncate block">
+            <a href={`/p/${ev.tradeSlug}`} class="font-bold text-slate-800 text-sm hover:text-green-primary transition font-display truncate block">
               {ev.tradeName}
             </a>
-            <p class="text-xs text-gray-500">
+            <p class="text-xs text-slate-500">
               Contacto vía {labelMap[ev.eventType] || ev.eventType}
             </p>
           </div>
-          <time class="text-xs text-gray-400 flex-shrink-0">
+          <time class="text-xs text-slate-400 flex-shrink-0">
             {new Date(ev.createdAt).toLocaleDateString('es-CL', { day: 'numeric', month: 'short' })}
           </time>
         </div>
       ))}
     </div>
   ) : (
-    <div class="text-center py-8 text-gray-400">
-      <i class="ri-chat-1-line text-4xl mb-2 block opacity-30"></i>
+    <div class="text-center py-10 text-slate-400">
+      <div class="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-3">
+        <i class="ri-chat-1-line text-3xl text-slate-300"></i>
+      </div>
       <p class="text-sm font-medium">Aún no has contactado a ningún vecino.</p>
-      <p class="text-xs mt-1">Cuando contactes a un oficio aparecerá aquí.</p>
+      <p class="text-xs mt-1 text-slate-400">Cuando contactes a un oficio aparecerá aquí.</p>
     </div>
   )}
 </div>
+
+<style>
+  .card-widget {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    padding: 1.5rem;
+    transition: box-shadow 300ms ease;
+  }
+
+  .card-widget:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  }
+
+  .font-display {
+    font-family: 'Nunito', sans-serif;
+  }
+</style>
