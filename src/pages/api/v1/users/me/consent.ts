@@ -1,76 +1,42 @@
 import type { APIRoute } from 'astro';
-import { z } from 'zod';
-import { getDb } from '../../../../../database/client';
-import { users } from '../../../../../database/schema';
+import { getDb } from '../../../../database/client';
+import { users } from '../../../../database/schema';
 import { eq } from 'drizzle-orm';
+import { z } from 'zod/v4';
 import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
 
-export const prerender = false;
+const consentSchema = z.object({
+  consentEmailProduct: z.boolean().optional(),
+  consentAnalytics: z.boolean().optional(),
+  consentProfilePublic: z.boolean().optional(),
+});
 
-const ConsentCuerpo = z
-	.object({
-		consent_email_product: z.boolean().optional(),
-		consent_analytics: z.boolean().optional(),
-		consent_profile_public: z.boolean().optional(),
-	})
-	.refine(
-		(obj) =>
-			obj.consent_email_product !== undefined ||
-			obj.consent_analytics !== undefined ||
-			obj.consent_profile_public !== undefined,
-		{ message: 'debes enviar al menos un consentimiento' },
-	);
+export const GET: APIRoute = async ({ locals }) => {
+  const user = (locals as any).user;
+  if (!user) return errorResponse('No autorizado', 401);
 
-/**
- * HU-22.5 — PATCH /api/v1/users/me/consent
- * Actualiza los flags granulares del titular. MVP: sólo escribe en `users`,
- * sin tabla append-only `user_consents` (queda como tarea pendiente del HU).
- */
-export const PATCH: APIRoute = async (contexto) => {
-	const currentUser = contexto.locals.user;
-	if (!currentUser) {
-		return errorResponse('no autenticado', 401);
-	}
+  const db = getDb(locals);
+  const u = await db.select({
+    consentEmailProduct: users.consentEmailProduct,
+    consentAnalytics: users.consentAnalytics,
+    consentProfilePublic: users.consentProfilePublic,
+  }).from(users).where(eq(users.id, user.id)).get();
 
-	let cuerpo: unknown;
-	try {
-		cuerpo = await contexto.request.json();
-	} catch {
-		return errorResponse('cuerpo JSON inválido', 400);
-	}
+  return jsonResponse(u || {});
+};
 
-	const parsed = ConsentCuerpo.safeParse(cuerpo);
-	if (!parsed.success) {
-		return errorResponse('datos inválidos', 400, parsed.error.flatten());
-	}
+export const PATCH: APIRoute = async ({ request, locals }) => {
+  const user = (locals as any).user;
+  if (!user) return errorResponse('No autorizado', 401);
 
-	const actualizacion: {
-		consentEmailProduct?: boolean;
-		consentAnalytics?: boolean;
-		consentProfilePublic?: boolean;
-	} = {};
-	if (parsed.data.consent_email_product !== undefined) {
-		actualizacion.consentEmailProduct = parsed.data.consent_email_product;
-	}
-	if (parsed.data.consent_analytics !== undefined) {
-		actualizacion.consentAnalytics = parsed.data.consent_analytics;
-	}
-	if (parsed.data.consent_profile_public !== undefined) {
-		actualizacion.consentProfilePublic = parsed.data.consent_profile_public;
-	}
+  let body: any;
+  try { body = await request.json(); } catch { return errorResponse('JSON inválido', 400); }
 
-	const db = getDb(contexto);
-	await db.update(users).set(actualizacion).where(eq(users.id, currentUser.id));
+  const parsed = consentSchema.safeParse(body);
+  if (!parsed.success) return errorResponse(parsed.error.issues.map(i => i.message).join(', '), 422);
 
-	const actualizado = await db
-		.select({
-			consentEmailProduct: users.consentEmailProduct,
-			consentAnalytics: users.consentAnalytics,
-			consentProfilePublic: users.consentProfilePublic,
-		})
-		.from(users)
-		.where(eq(users.id, currentUser.id))
-		.get();
+  const db = getDb(locals);
+  await db.update(users).set(parsed.data).where(eq(users.id, user.id)).run();
 
-	return jsonResponse({ ok: true, consent: actualizado ?? null });
+  return jsonResponse({ ok: true });
 };

@@ -1,14 +1,14 @@
 import type { APIRoute } from 'astro';
-import { getDb } from '../../../lib/db';
-import { portfolioImages, trades } from '../../../lib/schema';
-import { eq, and, asc } from 'drizzle-orm';
-import { errorResponse, jsonResponse } from '../../../lib/utils/response';
+import { getDb } from '../../../../database/client';
+import { portfolioImages, trades } from '../../../../database/schema';
+import { eq, and, asc, count, sql } from 'drizzle-orm';
+import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
 
 export const GET: APIRoute = async ({ params, locals }) => {
   const tradeId = Number(params.tradeId);
   if (!tradeId) return errorResponse('tradeId requerido', 400);
 
-  const db = await getDb();
+  const db = getDb(locals);
   const images = await db.select()
     .from(portfolioImages)
     .where(eq(portfolioImages.tradeId, tradeId))
@@ -19,17 +19,15 @@ export const GET: APIRoute = async ({ params, locals }) => {
 };
 
 export const POST: APIRoute = async ({ params, request, locals }) => {
-  const currentUser = locals.currentUser;
-  if (!currentUser) return errorResponse('No autorizado', 401);
-  if (currentUser.role !== 'provider' && currentUser.role !== 'admin') {
-    return errorResponse('Solo prestadores', 403);
-  }
+  const user = (locals as any).user;
+  if (!user) return errorResponse('No autorizado', 401);
+  if (user.role !== 'provider' && user.role !== 'admin') return errorResponse('Solo prestadores', 403);
 
   const tradeId = Number(params.tradeId);
-  const db = await getDb();
+  const db = getDb(locals);
 
-  const trade = await db.select().from(trades).where(and(eq(trades.id, tradeId), eq(trades.userId, currentUser.id))).get();
-  if (!trade && currentUser.role !== 'admin') return errorResponse('Oficio no encontrado', 404);
+  const trade = await db.select().from(trades).where(and(eq(trades.id, tradeId), eq(trades.userId, user.id))).get();
+  if (!trade && user.role !== 'admin') return errorResponse('Oficio no encontrado', 404);
 
   const formData = await request.formData();
   const file = formData.get('image') as File | null;
@@ -42,11 +40,11 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
   const base64 = Buffer.from(buffer).toString('base64');
   const dataUrl = `data:${file.type};base64,${base64}`;
 
-  const count = await db.select({ c: eq(portfolioImages.tradeId, tradeId) }).from(portfolioImages).all();
-  const sortOrder = count.length;
+  const countResult = await db.select({ c: count() }).from(portfolioImages).where(eq(portfolioImages.tradeId, tradeId)).get();
+  const nextOrder = (countResult?.c ?? 0);
 
   await db.insert(portfolioImages).values({
-    tradeId, url: dataUrl, caption, sortOrder,
+    tradeId, url: dataUrl, caption, sortOrder: nextOrder,
   }).run();
 
   return jsonResponse({ ok: true });
