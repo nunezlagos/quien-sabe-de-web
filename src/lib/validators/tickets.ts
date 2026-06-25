@@ -1,4 +1,4 @@
-import { z } from 'zod/v4';
+import * as z from 'zod/v4';
 
 export const ticketKindSchema = z.enum(['suplantacion', 'mal_servicio', 'contenido', 'consulta']);
 export const ticketStatusSchema = z.enum(['abierto', 'en_revision', 'cerrado']);

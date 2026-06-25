@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import { getDb } from '../../../../database/client';
 import { users } from '../../../../database/schema';
 import { eq } from 'drizzle-orm';
-import { z } from 'zod/v4';
+import * as z from 'zod/v4';
 import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
 
 const consentSchema = z.object({

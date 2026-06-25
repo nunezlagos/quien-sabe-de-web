@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getTradesService } from '../../lib/services/trades.service';
+import { isAvailableNow } from '../../lib/services/availability/index';
 import { getDb } from '../../database/client';
 import { users, reviews, trades as tradesTable, portfolioImages } from '../../database/schema';
 import { eq, desc } from 'drizzle-orm';
@@ -41,6 +42,9 @@ const portfolio = await db
   .orderBy(desc(portfolioImages.createdAt))
   .all();
 
+// Check real availability (manual toggle + schedule)
+const scheduleAvailable = trade.availableNow ? await isAvailableNow(Astro.locals, trade.userId) : false;
+
 // Other trades by same provider
 const otherTrades = provider
   ? await db
@@ -80,7 +84,7 @@ const otherTrades = provider
                   <i class="ri-shield-check-fill"></i> Verificado
                 </span>
               ) : null}
-              {trade.availableNow ? (
+              {scheduleAvailable ? (
                 <span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full border border-green-200 flex items-center gap-1">
                   <i class="ri-flashlight-fill"></i> Disponible ahora
                 </span>

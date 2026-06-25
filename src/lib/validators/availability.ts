@@ -1,4 +1,4 @@
-import { z } from 'zod/v4';
+import * as z from 'zod/v4';
 
 export const availabilityRangeSchema = z.object({
   dayOfWeek: z.number().int().min(0).max(6),

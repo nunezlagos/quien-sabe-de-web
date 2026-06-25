@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getDb } from '../../../database/client';
 import { eventsLog } from '../../../database/schema';
-import { z } from 'zod/v4';
+import * as z from 'zod/v4';
 import { errorResponse, jsonResponse } from '../../../lib/utils/response';
 
 const EVENT_ALLOWLIST = ['signup', 'search', 'contact', 'review', 'donation', 'ticket_open'] as const;
