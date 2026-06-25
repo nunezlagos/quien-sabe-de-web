@@ -1,0 +1,14 @@
+name: Deploy Staging
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bunx wrangler d1 migrations apply quien-sabe-db --env staging
+      - run: bunx wrangler deploy --env staging
+      - run: curl -f http://staging.quiensabe.cl/api/v1/health

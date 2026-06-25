@@ -1,0 +1,15 @@
+name: Deploy Production
+on:
+  push:
+    tags: ['v*']
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bunx wrangler d1 migrations apply quien-sabe-db --env production
+      - run: bunx wrangler deploy --env production
+      - run: curl -f https://quiensabe.cl/api/v1/health

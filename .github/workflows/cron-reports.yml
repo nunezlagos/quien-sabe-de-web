@@ -1,0 +1,11 @@
+name: Monthly Report Cron
+on:
+  schedule:
+    - cron: '0 3 1 * *'
+  workflow_dispatch:
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl -f -X POST https://quiensabe.cl/api/v1/admin/monthly-reports/generate \
+          -H "X-Cron-Key: ${{ secrets.CRON_KEY }}"

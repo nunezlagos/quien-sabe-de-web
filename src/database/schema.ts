@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, real, index } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, real, index, uniqueIndex } from 'drizzle-orm/sqlite-core';
 
 export const users = sqliteTable('users', {
   id: integer('id').primaryKey({ autoIncrement: true }),
@@ -123,6 +123,18 @@ export const appSettings = sqliteTable('app_settings', {
 });
 
 export type ContactEvent = typeof contactEvents.$inferSelect;
+
+export const providerAvailability = sqliteTable('provider_availability', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  dayOfWeek: integer('day_of_week').notNull(),
+  startTime: text('start_time').notNull(),
+  endTime: text('end_time').notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+}, (t) => ({
+  uniqueSlot: uniqueIndex('uq_provider_availability_slot').on(t.userId, t.dayOfWeek, t.startTime),
+  byProvider: index('idx_provider_availability_user').on(t.userId),
+}));
 
 export const tickets = sqliteTable('tickets', {
   id: integer('id').primaryKey({ autoIncrement: true }),
