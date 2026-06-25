@@ -5,8 +5,8 @@ import { CorreoYaRegistradoError, crearUsuario, usuarioPublico } from '../../../
 import { crearSesion } from '../../../../lib/services/auth/sesion';
 import { establecerCookieSesion } from '../../../../lib/utils/cookies';
 import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
-import { getDb } from '../../../../lib/db';
-import { users } from '../../../../lib/schema';
+import { getDb } from '../../../../database/client';
+import { users } from '../../../../database/schema';
 import { eq } from 'drizzle-orm';
 import { sendMail, buildVerificationEmail } from '../../../../lib/services/email/mailpit';
 import crypto from 'crypto';

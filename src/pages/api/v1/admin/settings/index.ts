@@ -1,14 +1,14 @@
 import type { APIRoute } from 'astro';
-import { getDb } from '../../../../lib/db';
-import { appSettings } from '../../../../lib/schema';
+import { getDb } from '../../../../database/client';
+import { appSettings } from '../../../../database/schema';
 import { eq } from 'drizzle-orm';
 import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
 
 export const GET: APIRoute = async ({ locals }) => {
-  const u = locals.currentUser;
+  const u = (locals as any).user;
   if (!u || u.role !== 'admin') return errorResponse('No autorizado', 401);
 
-  const db = await getDb();
+  const db = getDb(locals);
   const rows = await db.select().from(appSettings).all();
   const settings: Record<string, string> = {};
   for (const r of rows) settings[r.key] = r.value;
@@ -16,11 +16,13 @@ export const GET: APIRoute = async ({ locals }) => {
 };
 
 export const PATCH: APIRoute = async ({ request, locals }) => {
-  const u = locals.currentUser;
+  const u = (locals as any).user;
   if (!u || u.role !== 'admin') return errorResponse('No autorizado', 401);
 
-  const body = await request.json();
-  const db = await getDb();
+  let body: any;
+  try { body = await request.json(); } catch { return errorResponse('JSON inválido', 400); }
+
+  const db = getDb(locals);
 
   for (const [key, value] of Object.entries(body)) {
     const existing = await db.select().from(appSettings).where(eq(appSettings.key, key)).get();

@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { ResetPasswordBody } from '../../../../lib/validators/auth';
-import { getDb } from '../../../../lib/db';
-import { users } from '../../../../lib/schema';
+import { getDb } from '../../../../database/client';
+import { users } from '../../../../database/schema';
 import { eq } from 'drizzle-orm';
 import { hashContrasena } from '../../../../lib/services/auth/contrasena';
 import { errorResponse, jsonResponse } from '../../../../lib/utils/response';

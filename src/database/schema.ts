@@ -202,6 +202,27 @@ export const ticketMessages = sqliteTable('ticket_messages', {
   byTicketPublic: index('idx_ticket_messages_ticket_public').on(t.ticketId, t.internalNote, t.createdAt),
 }));
 
+export const expenses = sqliteTable('expenses', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  description: text('description').notNull(),
+  amountClp: integer('amount_clp').notNull(),
+  category: text('category', { enum: ['hosting', 'dominio', 'marketing', 'legal', 'herramientas', 'otros'] }).notNull().default('otros'),
+  receiptUrl: text('receipt_url'),
+  createdBy: integer('created_by').references(() => users.id, { onDelete: 'set null' }),
+  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+}, (t) => ({
+  byCreatedDesc: index('idx_expenses_created').on(t.createdAt),
+}));
+
+export const monthlyReports = sqliteTable('monthly_reports', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  yearMonth: text('year_month').notNull().unique(),
+  totalDonations: integer('total_donations').notNull().default(0),
+  totalExpenses: integer('total_expenses').notNull().default(0),
+  pdfUrl: text('pdf_url'),
+  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});
+
 export type Ticket = typeof tickets.$inferSelect;
 export type TicketNew = typeof tickets.$inferInsert;
 export type TicketMessage = typeof ticketMessages.$inferSelect;

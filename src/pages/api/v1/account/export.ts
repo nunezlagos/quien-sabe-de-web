@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
-import { getDb } from '../../../lib/db';
-import { users, trades, reviews, contactEvents } from '../../../lib/schema';
+import { getDb } from '../../../database/client';
+import { users, trades, reviews, contactEvents } from '../../../database/schema';
 import { eq } from 'drizzle-orm';
 import { errorResponse } from '../../../lib/utils/response';
 

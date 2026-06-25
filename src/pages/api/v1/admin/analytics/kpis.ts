@@ -1,14 +1,14 @@
 import type { APIRoute } from 'astro';
-import { getDb } from '../../../../lib/db';
-import { users, trades, contactEvents, reviews, appSettings } from '../../../../lib/schema';
+import { getDb } from '../../../../database/client';
+import { users, trades, contactEvents, reviews, appSettings } from '../../../../database/schema';
 import { eq, count, gte, and } from 'drizzle-orm';
 import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
 
 export const GET: APIRoute = async ({ locals }) => {
-  const u = locals.currentUser;
+  const u = (locals as any).user;
   if (!u || u.role !== 'admin') return errorResponse('No autorizado', 401);
 
-  const db = await getDb();
+  const db = getDb(locals);
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
   const totalUsers = (await db.select({ c: count() }).from(users).get())?.c ?? 0;

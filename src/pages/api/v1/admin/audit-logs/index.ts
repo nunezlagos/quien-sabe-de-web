@@ -1,14 +1,14 @@
 import type { APIRoute } from 'astro';
-import { getDb } from '../../../../lib/db';
-import { adminAuditLog, users } from '../../../../lib/schema';
+import { getDb } from '../../../../database/client';
+import { adminAuditLog, users } from '../../../../database/schema';
 import { desc, eq } from 'drizzle-orm';
 import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
 
 export const GET: APIRoute = async ({ locals }) => {
-  const u = locals.currentUser;
+  const u = (locals as any).user;
   if (!u || u.role !== 'admin') return errorResponse('No autorizado', 401);
 
-  const db = await getDb();
+  const db = getDb(locals);
   const logs = await db.select({
     id: adminAuditLog.id,
     action: adminAuditLog.action,

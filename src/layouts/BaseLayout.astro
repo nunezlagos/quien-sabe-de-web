@@ -102,10 +102,15 @@ const currentPath = Astro.url.pathname;
     <!-- Cookie Consent Banner -->
     <div id="cookie-banner" class="fixed bottom-0 left-0 right-0 z-50 bg-gray-900 text-white p-4 shadow-2xl transition-all duration-500 translate-y-0" style="display:none">
         <div class="container mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
-            <p class="text-xs md:text-sm text-gray-300">Usamos cookies técnicas para el funcionamiento del sitio. Al navegar, aceptas su uso.</p>
-            <button id="cookie-accept" class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full font-bold text-xs transition flex-shrink-0">
-                Aceptar
-            </button>
+            <p class="text-xs md:text-sm text-gray-300">Usamos cookies técnicas para el funcionamiento del sitio y analytics opcionales para mejorar la experiencia. Puedes aceptar todas o solo las necesarias.</p>
+            <div class="flex gap-2 flex-shrink-0">
+                <button id="cookie-reject" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-full font-bold text-xs transition">
+                    Solo necesarias
+                </button>
+                <button id="cookie-accept" class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full font-bold text-xs transition">
+                    Aceptar todas
+                </button>
+            </div>
         </div>
     </div>
 
@@ -116,11 +121,18 @@ const currentPath = Astro.url.pathname;
         (function() {
             const banner = document.getElementById('cookie-banner');
             const acceptBtn = document.getElementById('cookie-accept');
-            if (!banner || !acceptBtn) return;
-            if (localStorage.getItem('cookie-consent') === 'accepted') return;
+            const rejectBtn = document.getElementById('cookie-reject');
+            if (!banner || !acceptBtn || !rejectBtn) return;
+            const consent = localStorage.getItem('cookie-consent');
+            if (consent === 'accepted' || consent === 'rejected') return;
             banner.style.display = 'block';
             acceptBtn.addEventListener('click', function() {
                 localStorage.setItem('cookie-consent', 'accepted');
+                banner.classList.add('translate-y-full');
+                setTimeout(function() { banner.style.display = 'none'; }, 500);
+            });
+            rejectBtn.addEventListener('click', function() {
+                localStorage.setItem('cookie-consent', 'rejected');
                 banner.classList.add('translate-y-full');
                 setTimeout(function() { banner.style.display = 'none'; }, 500);
             });
