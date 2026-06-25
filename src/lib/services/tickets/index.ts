@@ -1,6 +1,7 @@
 import { getDb } from '../../../database/client';
-import { tickets, ticketMessages } from '../../db/schema';
+import { tickets, ticketMessages, users } from '../../../database/schema';
 import { eq, and, count, desc, sql } from 'drizzle-orm';
+import { sendMail, buildTicketNotificationEmail } from '../../email/mailpit';
 
 export async function createTicket(locals: any, input: { kind: string; subject: string; body: string; contactEmail?: string; targetProviderId?: number }): Promise<typeof tickets.$inferSelect> {
   const db = getDb(locals);
@@ -81,7 +82,19 @@ export async function transitionTicket(locals: any, ticketId: number, status: st
     }).run();
   }
 
-  return (await getTicketById(locals, ticketId))!;
+  const ticket = await getTicketById(locals, ticketId);
+
+  if (ticket && (status === 'en_revision' || status === 'cerrado')) {
+    const recipient = ticket.contactEmail || (ticket.createdByUserId
+      ? (await db.select({ email: users.email }).from(users).where(eq(users.id, ticket.createdByUserId)).get())?.email
+      : null);
+    if (recipient) {
+      const statusText = status === 'en_revision' ? 'está en revisión' : 'ha sido cerrado';
+      sendMail(buildTicketNotificationEmail(recipient, ticketId, ticket.subject, statusText));
+    }
+  }
+
+  return ticket!;
 }
 
 export async function addMessage(locals: any, ticketId: number, sender: string, body: string, internalNote: boolean = false): Promise<typeof ticketMessages.$inferSelect> {

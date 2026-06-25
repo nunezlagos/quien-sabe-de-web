@@ -45,3 +45,12 @@ export function buildWelcomeEmail(name: string, email: string) {
     html: `<p>Hola <b>${name}</b>, bienvenido a QuiénSabe.</p>`,
   };
 }
+
+export function buildTicketNotificationEmail(recipient: string, ticketId: number, subject: string, statusText: string) {
+  return {
+    to: recipient,
+    subject: `Ticket #${ticketId} ${statusText} — QuiénSabe`,
+    text: `Tu ticket #${ticketId} "${subject}" ha sido ${statusText}.`,
+    html: `<p>Tu ticket <b>#${ticketId}</b> — <i>${subject}</i> — ha sido <b>${statusText}</b>.</p><p>Si tienes dudas, responde a este mensaje desde tu ticket.</p>`,
+  };
+}
