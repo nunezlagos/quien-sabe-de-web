@@ -1,6 +1,6 @@
 # HU-28.1 — Esquema user_favorites
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-28-actividad-vecino-favoritos
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-28-actividad-vecino-favoritos
 
 ## Historia de usuario
 

@@ -1,6 +1,6 @@
 # HU-22.1 — Cookie banner inicial con elección persistida
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-22-compliance-ley-19628
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-22-compliance-ley-19628
 
 ## Historia de usuario
 

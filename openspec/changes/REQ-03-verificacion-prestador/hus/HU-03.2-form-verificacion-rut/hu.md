@@ -1,6 +1,6 @@
 # HU-03.2 — Formulario de verificación de prestador
 
-**Estado:** implementada-mvp | **Prioridad:** P0 | **REQ padre:** REQ-03-verificacion-prestador
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-03-verificacion-prestador
 
 ## Historia de usuario
 

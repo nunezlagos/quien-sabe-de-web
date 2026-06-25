@@ -1,6 +1,6 @@
 # HU-21.2 — Selector de oficio y multi-comuna
 
-**Estado:** implementada-mvp-parcial | **Prioridad:** P0 | **REQ padre:** REQ-21-onboarding-prestador
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-21-onboarding-prestador
 
 ## Historia de usuario
 

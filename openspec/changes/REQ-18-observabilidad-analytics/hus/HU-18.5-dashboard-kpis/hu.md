@@ -1,6 +1,6 @@
 # HU-18.5 — Dashboard de KPIs vs targets OE
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-18-observabilidad-analytics
+**Estado:** implementada-mvp | **Prioridad:** P1 | **REQ padre:** REQ-18-observabilidad-analytics
 
 ## Historia de usuario
 

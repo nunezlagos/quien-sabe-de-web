@@ -1,6 +1,6 @@
 # HU-03.1 — Validador puro de RUT chileno
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-03-verificacion-prestador
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-03-verificacion-prestador
 
 ## Historia de usuario
 

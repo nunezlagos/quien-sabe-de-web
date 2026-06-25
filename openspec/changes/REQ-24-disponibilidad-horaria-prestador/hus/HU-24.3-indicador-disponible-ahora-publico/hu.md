@@ -1,6 +1,6 @@
 # HU-24.3 — Badge 'Disponible ahora' en perfil público
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-24-disponibilidad-horaria-prestador
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-24-disponibilidad-horaria-prestador
 
 ## Historia de usuario
 

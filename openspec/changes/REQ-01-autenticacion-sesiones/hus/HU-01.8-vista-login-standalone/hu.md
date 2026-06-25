@@ -1,6 +1,6 @@
 # HU-01.8 — Vista standalone `/iniciar-sesion` con CTA principal
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-01-autenticacion-sesiones
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-01-autenticacion-sesiones
 
 ## Historia de usuario
 

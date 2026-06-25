@@ -1,6 +1,6 @@
 # HU-17.4 — Templates de verificación aprobada/rechazada
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-17-notificaciones-email
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-17-notificaciones-email
 
 ## Historia de usuario
 

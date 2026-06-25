@@ -1,6 +1,6 @@
 # HU-21.3 — Endpoint crear perfil PRO desde wizard
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-21-onboarding-prestador
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-21-onboarding-prestador
 
 ## Historia de usuario
 

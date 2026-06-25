@@ -1,6 +1,6 @@
 # HU-01.5 — Logout limpia sesión KV y cookie
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-01-autenticacion-sesiones
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-01-autenticacion-sesiones
 
 ## Historia de usuario
 

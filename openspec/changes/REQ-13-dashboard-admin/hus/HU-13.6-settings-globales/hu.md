@@ -1,6 +1,6 @@
 # HU-13.6 — Settings globales editables
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-13-dashboard-admin
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-13-dashboard-admin
 
 ## Historia de usuario
 

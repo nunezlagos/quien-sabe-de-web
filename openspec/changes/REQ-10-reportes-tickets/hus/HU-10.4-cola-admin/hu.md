@@ -1,6 +1,6 @@
 # HU-10.4 — Cola admin con filtros
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-10-reportes-tickets
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-10-reportes-tickets
 
 ## Historia de usuario
 

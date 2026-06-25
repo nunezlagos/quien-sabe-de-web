@@ -1,6 +1,6 @@
 # HU-14.6 — Email de recibo de donación
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-14-donaciones-pagos
+**Estado:** implementada-mvp | **Prioridad:** P0 | **REQ padre:** REQ-14-donaciones-pagos
 
 ## Historia de usuario
 

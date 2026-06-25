@@ -1,6 +1,6 @@
 # HU-06.2 — Filtros combinables (comuna, rating, verified)
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-06-buscador-discovery
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-06-buscador-discovery
 
 ## Historia de usuario
 

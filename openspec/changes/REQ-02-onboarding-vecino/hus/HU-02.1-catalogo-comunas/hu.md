@@ -1,6 +1,6 @@
 # HU-02.1 — Catálogo de comunas RM como seed
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-02-onboarding-vecino
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-02-onboarding-vecino
 
 ## Historia de usuario
 

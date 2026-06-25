@@ -1,6 +1,6 @@
 # HU-23.5 — Render galería editable en dashboard prestador
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-23-portfolio-prestador
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-23-portfolio-prestador
 
 ## Historia de usuario
 

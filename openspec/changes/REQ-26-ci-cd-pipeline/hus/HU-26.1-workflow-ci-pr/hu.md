@@ -1,6 +1,6 @@
 # HU-26.1 — Workflow CI en pull request
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-26-ci-cd-pipeline
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-26-ci-cd-pipeline
 
 ## Historia de usuario
 

@@ -1,6 +1,6 @@
 # HU-16.3 — Renderizar /terms con versión
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-16-paginas-estaticas
+**Estado:** implementada-mvp | **Prioridad:** P0 | **REQ padre:** REQ-16-paginas-estaticas
 
 ## Historia de usuario
 

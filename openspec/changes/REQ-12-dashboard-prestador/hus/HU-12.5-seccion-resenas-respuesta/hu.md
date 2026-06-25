@@ -1,6 +1,6 @@
 # HU-12.5 — Sección de reseñas recibidas con respuesta
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-12-dashboard-prestador
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-12-dashboard-prestador
 
 ## Historia de usuario
 

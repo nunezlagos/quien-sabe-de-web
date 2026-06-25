@@ -1,6 +1,6 @@
 # HU-01.2 — Sesión KV + middleware global con Astro.locals.user
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-01-autenticacion-sesiones
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-01-autenticacion-sesiones
 
 ## Historia de usuario
 

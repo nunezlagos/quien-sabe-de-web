@@ -1,6 +1,6 @@
 # HU-04.2 — CRUD del perfil de prestador con Zod
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-04-perfil-prestador
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-04-perfil-prestador
 
 ## Historia de usuario
 

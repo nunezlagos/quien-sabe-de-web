@@ -1,6 +1,6 @@
 # HU-16.8 — Vista `/faq` con acordeón de preguntas frecuentes
 
-**Estado:** planificada | **Prioridad:** P2 | **REQ padre:** REQ-16-paginas-estaticas
+**Estado:** implementada | **Prioridad:** P2 | **REQ padre:** REQ-16-paginas-estaticas
 
 ## Historia de usuario
 

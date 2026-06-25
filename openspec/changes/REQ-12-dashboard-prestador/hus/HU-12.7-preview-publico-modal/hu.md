@@ -1,6 +1,6 @@
 # HU-12.7 — Preview público en modal iframe
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-12-dashboard-prestador
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-12-dashboard-prestador
 
 ## Historia de usuario
 

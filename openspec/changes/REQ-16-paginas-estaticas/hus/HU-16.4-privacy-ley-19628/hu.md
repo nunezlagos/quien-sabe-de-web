@@ -1,6 +1,6 @@
 # HU-16.4 — Página /privacy cumpliendo Ley 19.628
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-16-paginas-estaticas
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-16-paginas-estaticas
 
 ## Historia de usuario
 

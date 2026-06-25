@@ -1,6 +1,6 @@
 # HU-10.7 — Notificación por email en cada cambio de estado
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-10-reportes-tickets
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-10-reportes-tickets
 
 ## Historia de usuario
 

@@ -1,6 +1,6 @@
 # HU-09.6 — Moderación admin: ocultar reseña con motivo
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-09-resenas-rating
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-09-resenas-rating
 
 ## Historia de usuario
 

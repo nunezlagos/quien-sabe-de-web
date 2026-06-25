@@ -1,6 +1,6 @@
 # HU-19.4 — Invalidar todas las sesiones tras cambio de password
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-19-recuperacion-password
+**Estado:** implementada-mvp | **Prioridad:** P0 | **REQ padre:** REQ-19-recuperacion-password
 
 ## Historia de usuario
 

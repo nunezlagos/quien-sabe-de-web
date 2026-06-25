@@ -1,6 +1,6 @@
 # HU-18.2 — Helper cliente track(event, props)
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-18-observabilidad-analytics
+**Estado:** implementada-mvp | **Prioridad:** P0 | **REQ padre:** REQ-18-observabilidad-analytics
 
 ## Historia de usuario
 

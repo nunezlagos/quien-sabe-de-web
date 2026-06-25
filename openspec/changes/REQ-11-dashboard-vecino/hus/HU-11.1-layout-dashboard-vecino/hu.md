@@ -1,6 +1,6 @@
 # HU-11.1 — Layout del dashboard del vecino
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-11-dashboard-vecino
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-11-dashboard-vecino
 
 ## Historia de usuario
 

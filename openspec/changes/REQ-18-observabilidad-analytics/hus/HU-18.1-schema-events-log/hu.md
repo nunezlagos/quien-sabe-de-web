@@ -1,6 +1,6 @@
 # HU-18.1 — Schema events_log con índices
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-18-observabilidad-analytics
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-18-observabilidad-analytics
 
 ## Historia de usuario
 

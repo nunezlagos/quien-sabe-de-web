@@ -1,6 +1,6 @@
 # HU-08.1 — Schema contact_events con índices
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-08-contacto-tracking
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-08-contacto-tracking
 
 ## Historia de usuario
 

@@ -1,6 +1,6 @@
 # HU-08.5 — Métricas globales de contacto para admin
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-08-contacto-tracking
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-08-contacto-tracking
 
 ## Historia de usuario
 

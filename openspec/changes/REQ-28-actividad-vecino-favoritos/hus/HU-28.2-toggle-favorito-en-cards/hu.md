@@ -1,6 +1,6 @@
 # HU-28.2 — Botón corazón en cards de index y profile
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-28-actividad-vecino-favoritos
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-28-actividad-vecino-favoritos
 
 ## Historia de usuario
 

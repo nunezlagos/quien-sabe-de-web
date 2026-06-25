@@ -1,6 +1,6 @@
 # HU-12.2 — Widgets de métricas (últimos 30 días)
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-12-dashboard-prestador
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-12-dashboard-prestador
 
 ## Historia de usuario
 

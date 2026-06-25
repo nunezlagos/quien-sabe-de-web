@@ -1,6 +1,6 @@
 # HU-16.7 — Vista `/about` institucional (página "Quiénes somos")
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-16-paginas-estaticas
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-16-paginas-estaticas
 
 ## Historia de usuario
 

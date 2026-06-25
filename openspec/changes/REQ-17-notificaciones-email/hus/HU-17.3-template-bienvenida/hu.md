@@ -1,6 +1,6 @@
 # HU-17.3 — Template de bienvenida
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-17-notificaciones-email
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-17-notificaciones-email
 
 ## Historia de usuario
 

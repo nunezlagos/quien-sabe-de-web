@@ -1,6 +1,6 @@
 # HU-05.5 — Activar y desactivar servicios
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-05-catalogo-servicios
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-05-catalogo-servicios
 
 ## Historia de usuario
 

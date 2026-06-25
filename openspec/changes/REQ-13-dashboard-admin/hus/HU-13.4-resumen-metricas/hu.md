@@ -1,6 +1,6 @@
 # HU-13.4 — Widgets de métricas globales
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-13-dashboard-admin
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-13-dashboard-admin
 
 ## Historia de usuario
 

@@ -1,6 +1,6 @@
 # HU-25.2 — Endpoint /ready para deploys
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-25-healthcheck-uptime
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-25-healthcheck-uptime
 
 ## Historia de usuario
 

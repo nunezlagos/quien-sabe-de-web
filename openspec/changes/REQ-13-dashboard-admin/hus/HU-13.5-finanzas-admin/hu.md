@@ -1,6 +1,6 @@
 # HU-13.5 — Sección finanzas admin (donaciones/costos)
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-13-dashboard-admin
+**Estado:** implementada-mvp | **Prioridad:** P1 | **REQ padre:** REQ-13-dashboard-admin
 
 ## Historia de usuario
 

@@ -1,6 +1,6 @@
 # HU-19.3 — Confirmar nuevo password usando token
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-19-recuperacion-password
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-19-recuperacion-password
 
 ## Historia de usuario
 

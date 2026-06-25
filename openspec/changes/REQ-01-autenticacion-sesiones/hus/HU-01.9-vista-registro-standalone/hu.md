@@ -1,6 +1,6 @@
 # HU-01.9 — Vista `/registro` con mensaje "demo cerrada"
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-01-autenticacion-sesiones
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-01-autenticacion-sesiones
 
 ## Historia de usuario
 

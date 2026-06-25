@@ -1,6 +1,6 @@
 # HU-08.4 — Métricas de contacto para el prestador
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-08-contacto-tracking
+**Estado:** implementada-mvp | **Prioridad:** P1 | **REQ padre:** REQ-08-contacto-tracking
 
 ## Historia de usuario
 

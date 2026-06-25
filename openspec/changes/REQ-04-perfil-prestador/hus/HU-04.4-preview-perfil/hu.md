@@ -1,6 +1,6 @@
 # HU-04.4 — Vista preview del perfil antes de publicar
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-04-perfil-prestador
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-04-perfil-prestador
 
 ## Historia de usuario
 

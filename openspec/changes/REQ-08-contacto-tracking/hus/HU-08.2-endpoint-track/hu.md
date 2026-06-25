@@ -1,6 +1,6 @@
 # HU-08.2 — Endpoint POST /contacts/track con rate-limit
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-08-contacto-tracking
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-08-contacto-tracking
 
 ## Historia de usuario
 

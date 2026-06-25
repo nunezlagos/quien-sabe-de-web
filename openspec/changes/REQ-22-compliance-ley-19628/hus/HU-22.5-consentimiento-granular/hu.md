@@ -1,6 +1,6 @@
 # HU-22.5 — Consentimiento granular por finalidad
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-22-compliance-ley-19628
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-22-compliance-ley-19628
 
 ## Historia de usuario
 

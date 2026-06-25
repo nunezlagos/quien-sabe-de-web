@@ -1,6 +1,6 @@
 # HU-18.3 — Endpoint POST /events/track con rate-limit
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-18-observabilidad-analytics
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-18-observabilidad-analytics
 
 ## Historia de usuario
 

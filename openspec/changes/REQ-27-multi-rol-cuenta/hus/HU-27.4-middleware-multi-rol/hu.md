@@ -1,6 +1,6 @@
 # HU-27.4 — Middleware requireRole acepta multi-rol
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-27-multi-rol-cuenta
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-27-multi-rol-cuenta
 
 ## Historia de usuario
 

@@ -1,6 +1,6 @@
 # HU-23.3 — Reorder y eliminar fotos del portfolio
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-23-portfolio-prestador
+**Estado:** implementada-mvp | **Prioridad:** P1 | **REQ padre:** REQ-23-portfolio-prestador
 
 ## Historia de usuario
 

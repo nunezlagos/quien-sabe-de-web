@@ -1,6 +1,6 @@
 # HU-04.3 — Subida y resize de foto del prestador
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-04-perfil-prestador
+**Estado:** implementada-mvp | **Prioridad:** P0 | **REQ padre:** REQ-04-perfil-prestador
 
 ## Historia de usuario
 

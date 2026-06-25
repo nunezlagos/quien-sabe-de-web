@@ -1,6 +1,6 @@
 # HU-22.2 — Página /privacy cubriendo Ley 19.628
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-22-compliance-ley-19628
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-22-compliance-ley-19628
 
 ## Historia de usuario
 

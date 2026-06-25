@@ -1,6 +1,6 @@
 # HU-20.1 — Envío automático de email de verificación al registrar
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-20-verificacion-email-post-registro
+**Estado:** implementada-mvp | **Prioridad:** P0 | **REQ padre:** REQ-20-verificacion-email-post-registro
 
 ## Historia de usuario
 

@@ -1,6 +1,6 @@
 # HU-18.6 — Tabla paginada de eventos para debug
 
-**Estado:** planificada | **Prioridad:** P2 | **REQ padre:** REQ-18-observabilidad-analytics
+**Estado:** implementada | **Prioridad:** P2 | **REQ padre:** REQ-18-observabilidad-analytics
 
 ## Historia de usuario
 

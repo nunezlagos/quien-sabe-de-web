@@ -1,6 +1,6 @@
 # HU-07.5 — Slug humano y redirect desde ?id=
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-07-perfil-publico
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-07-perfil-publico
 
 ## Historia de usuario
 

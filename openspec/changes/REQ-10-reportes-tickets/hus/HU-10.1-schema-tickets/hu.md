@@ -1,6 +1,6 @@
 # HU-10.1 — Schema tickets + ticket_messages
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-10-reportes-tickets
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-10-reportes-tickets
 
 ## Historia de usuario
 

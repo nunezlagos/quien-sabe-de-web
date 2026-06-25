@@ -1,6 +1,6 @@
 # HU-09.5 — Promedio público y filtro por rating
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-09-resenas-rating
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-09-resenas-rating
 
 ## Historia de usuario
 

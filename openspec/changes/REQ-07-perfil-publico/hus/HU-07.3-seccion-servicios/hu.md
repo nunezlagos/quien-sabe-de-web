@@ -1,6 +1,6 @@
 # HU-07.3 — Sección de catálogo de servicios en perfil
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-07-perfil-publico
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-07-perfil-publico
 
 ## Historia de usuario
 

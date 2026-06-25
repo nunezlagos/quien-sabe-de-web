@@ -1,6 +1,6 @@
 # HU-13.3 — CRUD de oficios (trades) con reorder
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-13-dashboard-admin
+**Estado:** implementada-mvp | **Prioridad:** P0 | **REQ padre:** REQ-13-dashboard-admin
 
 ## Historia de usuario
 

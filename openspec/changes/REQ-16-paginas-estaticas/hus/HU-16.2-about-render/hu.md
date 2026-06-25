@@ -1,6 +1,6 @@
 # HU-16.2 — Renderizar /about
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-16-paginas-estaticas
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-16-paginas-estaticas
 
 ## Historia de usuario
 

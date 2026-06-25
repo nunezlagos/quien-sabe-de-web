@@ -1,6 +1,6 @@
 # HU-22.3 — Export de datos del titular en JSON
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-22-compliance-ley-19628
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-22-compliance-ley-19628
 
 ## Historia de usuario
 

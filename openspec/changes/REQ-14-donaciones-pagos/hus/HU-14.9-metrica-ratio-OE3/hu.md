@@ -1,6 +1,6 @@
 # HU-14.9 — Métrica del ratio donaciones/costos (OE3)
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-14-donaciones-pagos
+**Estado:** implementada-mvp | **Prioridad:** P0 | **REQ padre:** REQ-14-donaciones-pagos
 
 ## Historia de usuario
 

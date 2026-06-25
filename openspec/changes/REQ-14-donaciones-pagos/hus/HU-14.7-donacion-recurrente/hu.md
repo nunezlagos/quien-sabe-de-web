@@ -1,6 +1,6 @@
 # HU-14.7 — Donación recurrente mensual MP
 
-**Estado:** planificada | **Prioridad:** P2 | **REQ padre:** REQ-14-donaciones-pagos
+**Estado:** implementada-mvp | **Prioridad:** P2 | **REQ padre:** REQ-14-donaciones-pagos
 
 ## Historia de usuario
 

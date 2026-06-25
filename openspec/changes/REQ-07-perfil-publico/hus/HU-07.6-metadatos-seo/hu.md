@@ -1,6 +1,6 @@
 # HU-07.6 — Metadatos SEO en perfiles públicos
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-07-perfil-publico
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-07-perfil-publico
 
 ## Historia de usuario
 

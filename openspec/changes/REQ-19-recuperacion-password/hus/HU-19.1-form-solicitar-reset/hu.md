@@ -1,6 +1,6 @@
 # HU-19.1 — Solicitar reset de contraseña por email
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-19-recuperacion-password
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-19-recuperacion-password
 
 ## Historia de usuario
 

@@ -1,6 +1,6 @@
 # HU-20.2 — Confirmar email con token
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-20-verificacion-email-post-registro
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-20-verificacion-email-post-registro
 
 ## Historia de usuario
 

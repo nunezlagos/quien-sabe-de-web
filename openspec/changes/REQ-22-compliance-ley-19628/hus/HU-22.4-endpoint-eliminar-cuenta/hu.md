@@ -1,6 +1,6 @@
 # HU-22.4 — Eliminar cuenta con soft delete y anonimización
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-22-compliance-ley-19628
+**Estado:** implementada-mvp | **Prioridad:** P0 | **REQ padre:** REQ-22-compliance-ley-19628
 
 ## Historia de usuario
 

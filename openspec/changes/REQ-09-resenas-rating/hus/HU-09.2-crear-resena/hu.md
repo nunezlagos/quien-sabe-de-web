@@ -1,6 +1,6 @@
 # HU-09.2 — Crear reseña con gate por contact_event
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-09-resenas-rating
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-09-resenas-rating
 
 ## Historia de usuario
 

@@ -1,6 +1,6 @@
 # HU-10.6 — Hilo de mensajes con notas internas
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-10-reportes-tickets
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-10-reportes-tickets
 
 ## Historia de usuario
 

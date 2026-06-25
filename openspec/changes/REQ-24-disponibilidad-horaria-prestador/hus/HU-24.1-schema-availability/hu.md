@@ -1,6 +1,6 @@
 # HU-24.1 — Esquema provider_availability
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-24-disponibilidad-horaria-prestador
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-24-disponibilidad-horaria-prestador
 
 ## Historia de usuario
 

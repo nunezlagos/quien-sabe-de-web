@@ -1,6 +1,6 @@
 # HU-17.5 — Template de cambio de estado de ticket
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-17-notificaciones-email
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-17-notificaciones-email
 
 ## Historia de usuario
 

@@ -1,6 +1,6 @@
 # HU-20.4 — Banner "email no verificado" en dashboard del usuario
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-20-verificacion-email-post-registro
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-20-verificacion-email-post-registro
 
 ## Historia de usuario
 

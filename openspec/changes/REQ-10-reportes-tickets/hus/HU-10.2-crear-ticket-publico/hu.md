@@ -1,6 +1,6 @@
 # HU-10.2 — Crear ticket público sin sesión
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-10-reportes-tickets
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-10-reportes-tickets
 
 ## Historia de usuario
 

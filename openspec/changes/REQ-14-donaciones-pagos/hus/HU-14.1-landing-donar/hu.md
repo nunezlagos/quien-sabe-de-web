@@ -1,6 +1,6 @@
 # HU-14.1 — Landing /donate con CTA y montos sugeridos
 
-**Estado:** implementada-mvp | **Prioridad:** P0 | **REQ padre:** REQ-14-donaciones-pagos
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-14-donaciones-pagos
 
 ## Historia de usuario
 

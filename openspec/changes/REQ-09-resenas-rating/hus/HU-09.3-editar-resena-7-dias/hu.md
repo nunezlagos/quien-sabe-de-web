@@ -1,6 +1,6 @@
 # HU-09.3 — Editar reseña dentro de 7 días
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-09-resenas-rating
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-09-resenas-rating
 
 ## Historia de usuario
 

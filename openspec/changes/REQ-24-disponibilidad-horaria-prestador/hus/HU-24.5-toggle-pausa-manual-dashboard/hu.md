@@ -1,6 +1,6 @@
 # HU-24.5 — Toggle global Disponible/Pausa manual desde dashboard
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-24-disponibilidad-horaria-prestador
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-24-disponibilidad-horaria-prestador
 
 ## Historia de usuario
 

@@ -1,6 +1,6 @@
 # HU-15.2 — CRUD de gastos admin
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-15-transparencia-publica
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-15-transparencia-publica
 
 ## Historia de usuario
 

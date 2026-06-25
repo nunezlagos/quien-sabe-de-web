@@ -1,6 +1,6 @@
 # HU-13.7 — Log de auditoría de acciones admin
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-13-dashboard-admin
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-13-dashboard-admin
 
 ## Historia de usuario
 

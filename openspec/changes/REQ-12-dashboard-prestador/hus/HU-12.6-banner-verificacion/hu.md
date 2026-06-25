@@ -1,6 +1,6 @@
 # HU-12.6 — Banner de estado de verificación
 
-**Estado:** implementada-mvp-parcial | **Prioridad:** P0 | **REQ padre:** REQ-12-dashboard-prestador
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-12-dashboard-prestador
 
 ## Historia de usuario
 

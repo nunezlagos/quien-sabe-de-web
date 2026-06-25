@@ -1,6 +1,6 @@
 # HU-15.3 — Vista pública /transparency con widgets
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-15-transparencia-publica
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-15-transparencia-publica
 
 ## Historia de usuario
 

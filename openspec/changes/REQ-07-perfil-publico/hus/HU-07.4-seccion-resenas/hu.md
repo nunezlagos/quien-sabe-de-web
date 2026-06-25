@@ -1,6 +1,6 @@
 # HU-07.4 — Sección de reseñas con promedio y paginación
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-07-perfil-publico
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-07-perfil-publico
 
 ## Historia de usuario
 

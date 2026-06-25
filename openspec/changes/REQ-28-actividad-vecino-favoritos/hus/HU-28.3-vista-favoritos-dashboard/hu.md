@@ -1,6 +1,6 @@
 # HU-28.3 — Sección Vecinos Guardados en dashboard-user
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-28-actividad-vecino-favoritos
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-28-actividad-vecino-favoritos
 
 ## Historia de usuario
 

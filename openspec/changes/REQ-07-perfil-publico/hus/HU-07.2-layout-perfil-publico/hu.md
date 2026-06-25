@@ -1,6 +1,6 @@
 # HU-07.2 — Layout del perfil público
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-07-perfil-publico
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-07-perfil-publico
 
 ## Historia de usuario
 

@@ -1,6 +1,6 @@
 # HU-04.1 — Schema providers + trades con seed
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-04-perfil-prestador
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-04-perfil-prestador
 
 ## Historia de usuario
 

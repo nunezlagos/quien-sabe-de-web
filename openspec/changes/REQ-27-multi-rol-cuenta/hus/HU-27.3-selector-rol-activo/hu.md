@@ -1,6 +1,6 @@
 # HU-27.3 — Selector de rol activo en navbar
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-27-multi-rol-cuenta
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-27-multi-rol-cuenta
 
 ## Historia de usuario
 

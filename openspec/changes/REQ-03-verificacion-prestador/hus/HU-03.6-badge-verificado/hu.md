@@ -1,6 +1,6 @@
 # HU-03.6 — Badge de verificación en perfil público
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-03-verificacion-prestador
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-03-verificacion-prestador
 
 ## Historia de usuario
 

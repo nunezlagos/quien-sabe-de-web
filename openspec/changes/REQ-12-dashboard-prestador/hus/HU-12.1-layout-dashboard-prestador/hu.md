@@ -1,6 +1,6 @@
 # HU-12.1 — Layout dashboard prestador con sidebar y tabs
 
-**Estado:** implementada-mvp | **Prioridad:** P0 | **REQ padre:** REQ-12-dashboard-prestador
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-12-dashboard-prestador
 
 ## Historia de usuario
 

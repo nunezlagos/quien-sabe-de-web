@@ -1,6 +1,6 @@
 # HU-05.1 — Schema services y service_coverage
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-05-catalogo-servicios
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-05-catalogo-servicios
 
 ## Historia de usuario
 

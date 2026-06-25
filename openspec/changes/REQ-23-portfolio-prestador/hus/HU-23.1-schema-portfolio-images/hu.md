@@ -1,6 +1,6 @@
 # HU-23.1 — Esquema portfolio_images con límite 5
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-23-portfolio-prestador
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-23-portfolio-prestador
 
 ## Historia de usuario
 

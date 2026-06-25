@@ -1,6 +1,6 @@
 # HU-25.1 — Endpoint /health con bindings y latencias
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-25-healthcheck-uptime
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-25-healthcheck-uptime
 
 ## Historia de usuario
 

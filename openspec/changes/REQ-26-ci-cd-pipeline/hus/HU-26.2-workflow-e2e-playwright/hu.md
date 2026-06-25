@@ -1,6 +1,6 @@
 # HU-26.2 — Workflow E2E Playwright en PR
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-26-ci-cd-pipeline
+**Estado:** implementada-mvp | **Prioridad:** P0 | **REQ padre:** REQ-26-ci-cd-pipeline
 
 ## Historia de usuario
 

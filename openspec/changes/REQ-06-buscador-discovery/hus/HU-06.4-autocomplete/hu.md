@@ -1,6 +1,6 @@
 # HU-06.4 — Autocompletado de oficios y comunas
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-06-buscador-discovery
+**Estado:** implementada-mvp | **Prioridad:** P1 | **REQ padre:** REQ-06-buscador-discovery
 
 ## Historia de usuario
 

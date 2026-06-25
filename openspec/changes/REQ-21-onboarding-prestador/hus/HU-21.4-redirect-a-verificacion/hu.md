@@ -1,6 +1,6 @@
 # HU-21.4 — Redirect post-wizard a /verification
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-21-onboarding-prestador
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-21-onboarding-prestador
 
 ## Historia de usuario
 

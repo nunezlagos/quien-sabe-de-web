@@ -1,6 +1,6 @@
 # HU-17.6 — Template de recibo de donación
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-17-notificaciones-email
+**Estado:** implementada-mvp | **Prioridad:** P0 | **REQ padre:** REQ-17-notificaciones-email
 
 ## Historia de usuario
 

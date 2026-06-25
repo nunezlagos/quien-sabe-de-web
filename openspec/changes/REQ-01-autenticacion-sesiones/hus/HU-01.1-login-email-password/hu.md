@@ -1,6 +1,6 @@
 # HU-01.1 — Inicio de sesión con email + contraseña (registro público deshabilitado)
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-01-autenticacion-sesiones
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-01-autenticacion-sesiones
 
 ## Historia de usuario
 

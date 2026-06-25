@@ -1,6 +1,6 @@
 # HU-06.5 — Estado del buscador sincronizado con URL
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-06-buscador-discovery
+**Estado:** implementada-mvp | **Prioridad:** P1 | **REQ padre:** REQ-06-buscador-discovery
 
 ## Historia de usuario
 

@@ -1,6 +1,6 @@
 # HU-26.5 — Cron mensual fallback de reportes
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-26-ci-cd-pipeline
+**Estado:** implementada-mvp | **Prioridad:** P1 | **REQ padre:** REQ-26-ci-cd-pipeline
 
 ## Historia de usuario
 

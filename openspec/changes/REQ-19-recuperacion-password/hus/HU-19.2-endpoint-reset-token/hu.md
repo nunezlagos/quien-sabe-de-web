@@ -1,6 +1,6 @@
 # HU-19.2 — Validar token de reset vigente
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-19-recuperacion-password
+**Estado:** implementada-mvp | **Prioridad:** P0 | **REQ padre:** REQ-19-recuperacion-password
 
 ## Historia de usuario
 

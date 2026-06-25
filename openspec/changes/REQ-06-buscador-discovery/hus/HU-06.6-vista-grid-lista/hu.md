@@ -1,6 +1,6 @@
 # HU-06.6 — Switch grid/lista en resultados de búsqueda
 
-**Estado:** planificada | **Prioridad:** P2 | **REQ padre:** REQ-06-buscador-discovery
+**Estado:** implementada | **Prioridad:** P2 | **REQ padre:** REQ-06-buscador-discovery
 
 ## Historia de usuario
 

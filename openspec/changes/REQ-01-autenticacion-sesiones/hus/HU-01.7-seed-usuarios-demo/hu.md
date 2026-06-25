@@ -1,6 +1,6 @@
 # HU-01.7 — Seed de usuarios demo para autenticación en fase demo
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-01-autenticacion-sesiones
+**Estado:** implementada-mvp | **Prioridad:** P0 | **REQ padre:** REQ-01-autenticacion-sesiones
 
 ## Historia de usuario
 

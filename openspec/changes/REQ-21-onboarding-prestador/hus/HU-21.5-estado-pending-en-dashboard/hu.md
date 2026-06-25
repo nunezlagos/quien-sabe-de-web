@@ -1,6 +1,6 @@
 # HU-21.5 — Banner verificación pendiente en dashboard prestador
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-21-onboarding-prestador
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-21-onboarding-prestador
 
 ## Historia de usuario
 

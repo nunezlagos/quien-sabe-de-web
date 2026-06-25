@@ -1,6 +1,6 @@
 # HU-14.2 — Checkout Mercado Pago
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-14-donaciones-pagos
+**Estado:** implementada-mvp | **Prioridad:** P0 | **REQ padre:** REQ-14-donaciones-pagos
 
 ## Historia de usuario
 

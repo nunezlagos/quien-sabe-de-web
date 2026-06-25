@@ -1,6 +1,6 @@
 # HU-23.2 — Upload foto portfolio con resize a R2
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-23-portfolio-prestador
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-23-portfolio-prestador
 
 ## Historia de usuario
 

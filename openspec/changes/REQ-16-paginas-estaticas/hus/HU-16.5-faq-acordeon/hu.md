@@ -1,6 +1,6 @@
 # HU-16.5 — FAQ con acordeón y búsqueda local
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-16-paginas-estaticas
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-16-paginas-estaticas
 
 > **Scope:** Esta HU cubre solo el componente `<FaqAccordion />` y los datos. La vista `/faq` completa está cubierta por HU-16.8 (incluye buscador + layout + estilos).
 

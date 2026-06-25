@@ -1,6 +1,6 @@
 # HU-09.1 — Schema reviews + review_responses
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-09-resenas-rating
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-09-resenas-rating
 
 ## Historia de usuario
 

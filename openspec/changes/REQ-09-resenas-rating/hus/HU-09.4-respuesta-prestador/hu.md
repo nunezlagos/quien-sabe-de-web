@@ -1,6 +1,6 @@
 # HU-09.4 — Respuesta única del prestador a una reseña
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-09-resenas-rating
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-09-resenas-rating
 
 ## Historia de usuario
 

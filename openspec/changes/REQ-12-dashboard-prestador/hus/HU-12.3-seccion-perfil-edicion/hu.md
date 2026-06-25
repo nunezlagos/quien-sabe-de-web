@@ -1,6 +1,6 @@
 # HU-12.3 — Sección de edición de perfil inline
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-12-dashboard-prestador
+**Estado:** implementada | **Prioridad:** P0 | **REQ padre:** REQ-12-dashboard-prestador
 
 ## Historia de usuario
 

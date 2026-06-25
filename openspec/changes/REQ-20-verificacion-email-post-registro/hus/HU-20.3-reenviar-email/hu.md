@@ -1,6 +1,6 @@
 # HU-20.3 — Reenviar email de verificación con rate limit
 
-**Estado:** planificada | **Prioridad:** P1 | **REQ padre:** REQ-20-verificacion-email-post-registro
+**Estado:** implementada | **Prioridad:** P1 | **REQ padre:** REQ-20-verificacion-email-post-registro
 
 ## Historia de usuario
 

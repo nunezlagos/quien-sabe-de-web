@@ -1,6 +1,6 @@
 # HU-21.1 — Port del wizard create-trade desde mockup
 
-**Estado:** planificada | **Prioridad:** P0 | **REQ padre:** REQ-21-onboarding-prestador
+**Estado:** implementada-mvp | **Prioridad:** P0 | **REQ padre:** REQ-21-onboarding-prestador
 
 ## Historia de usuario
 
