@@ -19,117 +19,333 @@ const rating = trade.rating ?? 0;
 
 function renderStars(r: number): string {
   const full = Math.floor(r);
-  const half = r - full >= 0.5;
   let s = '';
   for (let i = 1; i <= 5; i++) {
     if (i <= full) s += '<i class="ri-star-fill"></i>';
     else if (i - 0.5 <= r) s += '<i class="ri-star-half-fill"></i>';
-    else s += '<i class="ri-star-line text-green-300"></i>';
+    else s += '<i class="ri-star-line"></i>';
   }
   return s;
 }
 ---
 
-<article class="card-tradecard group flex flex-col h-full">
-  <div class="p-6 flex flex-col flex-grow relative">
-    <div class="flex justify-between items-start mb-5 relative z-10">
-      <div class="flex items-end gap-4">
-        <div class="w-16 h-16 rounded-2xl bg-warm-100 border-2 border-white shadow-md flex items-center justify-center text-primary font-bold text-xl group-hover:scale-105 transition overflow-hidden relative flex-shrink-0">
-          <div class="w-full h-full bg-gradient-to-br from-green-100 to-green-50 flex items-center justify-center text-green-primary font-bold text-3xl rounded-xl">
-            {initials}
-          </div>
+<article class="card-base">
+  <div class="card-body">
+    <div class="card-header">
+      <div class="avatar-wrapper">
+        <div class="avatar-inner">
+          {initials}
         </div>
-        <div class="mb-1">
-          <h3 class="font-bold text-slate-800 text-lg leading-tight break-words mb-2 group-hover:text-green-primary transition font-display">{trade.name}</h3>
-          <div class="flex flex-wrap gap-1.5 mt-1.5">
-            <span class="text-[10px] font-bold uppercase text-white bg-green-primary px-2.5 py-1 rounded-full tracking-wider shadow-sm">
-              {trade.symbol ?? 'Oficio'}
-            </span>
-          </div>
-          <div class="flex flex-wrap gap-1.5 items-center mt-2">
-            {trade.verified ? (
-            <span class="text-[10px] font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 flex items-center gap-1">
-              <i class="ri-shield-check-fill"></i> Verificado
-            </span>
-            ) : null}
-            {trade.availableNow ? (
-            <span class="text-[10px] font-semibold text-green-700 bg-green-50 px-2 py-0.5 rounded-full border border-green-100 flex items-center gap-1">
-              <i class="ri-flashlight-fill"></i> Disponible
-            </span>
-            ) : null}
-          </div>
-          {trade.communeName ? (
-          <span class="text-[10px] text-slate-400 flex items-center gap-1 mt-2">
-            <i class="ri-map-pin-line"></i> <span>{trade.communeName}</span>
+      </div>
+      <div class="card-title-block">
+        <h3 class="card-title">{trade.name}</h3>
+        <div class="badges">
+          <span class="badge badge-trade">{trade.symbol ?? 'Oficio'}</span>
+        </div>
+        <div class="badges secondary">
+          {trade.verified ? (
+          <span class="badge badge-verified">
+            <i class="ri-shield-check-fill"></i> Verificado
+          </span>
+          ) : null}
+          {trade.availableNow ? (
+          <span class="badge badge-available">
+            <i class="ri-flashlight-fill"></i> Disponible
           </span>
           ) : null}
         </div>
+        {trade.communeName ? (
+        <span class="badge-location">
+          <i class="ri-map-pin-line"></i> {trade.communeName}
+        </span>
+        ) : null}
       </div>
-      <div class="text-right mt-6">
-        <div class="text-xs text-yellow-400 drop-shadow-sm flex gap-0.5" set:html={renderStars(rating)}>
-        </div>
-      </div>
+      <div class="card-rating">
+        <div class="stars" set:html={renderStars(rating)}></div>
       </div>
     </div>
 
-    <div class="mb-5 flex-grow">
-      <p class="text-slate-500 text-sm leading-relaxed line-clamp-3">
-        {trade.description ?? 'Servicio profesional disponible en tu barrio.'}
-      </p>
+    <div class="card-description">
+      <p>{trade.description ?? 'Servicio profesional disponible en tu barrio.'}</p>
     </div>
 
-    <div class="flex flex-wrap gap-2 mb-4 min-h-[28px]">
-      <span class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-lg font-medium whitespace-nowrap border border-slate-200">{trade.symbol ?? 'General'}</span>
+    <div class="card-tags">
+      <span class="tag">{trade.symbol ?? 'General'}</span>
     </div>
   </div>
 
-  <div class="px-6 py-5 bg-gradient-to-t from-slate-50 to-warm-50 border-t border-slate-100 flex items-center justify-between mt-auto">
-    <div>
-      <span class="text-[10px] text-slate-400 uppercase font-bold block tracking-wide">Desde</span>
-      <span class="text-xl font-extrabold text-slate-800">${precio}</span>
+  <div class="card-footer">
+    <div class="card-price">
+      <span class="price-label">Desde</span>
+      <span class="price-value">${precio}</span>
     </div>
-    <div class="flex gap-2">
+    <div class="card-actions">
       <button
         data-fav-toggle={trade.slug}
-        class="w-11 h-11 rounded-xl bg-white border border-slate-200 text-slate-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50 flex items-center justify-center transition-all shadow-sm hover:shadow-md js-fav-btn"
+        class="btn-icon btn-fav js-fav-btn"
         title="Guardar"
       >
-        <i class="ri-heart-line text-lg"></i>
+        <i class="ri-heart-line"></i>
       </button>
       <a
         href={`/p/${trade.slug}`}
-        class="w-11 h-11 rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-green-primary hover:border-green-200 hover:bg-green-50 flex items-center justify-center transition-all shadow-sm hover:shadow-md"
+        class="btn-icon btn-view"
         title="Ver Detalles"
       >
-        <i class="ri-eye-line text-lg"></i>
+        <i class="ri-eye-line"></i>
       </a>
       <a
         href={`/p/${trade.slug}`}
-        class="w-11 h-11 rounded-xl bg-gradient-to-br from-green-primary to-green-dark text-white flex items-center justify-center transition-all shadow-md hover:shadow-lg hover:scale-105 hover:-translate-y-0.5"
+        class="btn-icon btn-whatsapp"
         title="Contactar"
       >
-        <i class="ri-whatsapp-line text-xl"></i>
+        <i class="ri-whatsapp-line"></i>
       </a>
     </div>
   </div>
 </article>
 
 <style>
-  .card-tradecard {
-    background: white;
-    border-radius: 1rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e2e8f0;
+  .card-base {
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-default);
+    display: flex;
+    flex-direction: column;
     transition: box-shadow 300ms ease, transform 200ms ease;
     overflow: hidden;
   }
 
-  .card-tradecard:hover {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  .card-base:hover {
+    box-shadow: var(--shadow-card-hover);
     transform: translateY(-2px);
   }
 
-  .font-display {
-    font-family: 'Nunito', sans-serif;
+  .card-body {
+    padding: var(--space-6);
+    flex-grow: 1;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-5);
+  }
+
+  .avatar-wrapper {
+    flex-shrink: 0;
+  }
+
+  .avatar-inner {
+    width: 4rem;
+    height: 4rem;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--green-100) 0%, var(--green-50) 100%);
+    border: 2px solid white;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--green-600);
+    transition: transform 200ms ease;
+  }
+
+  .card-base:hover .avatar-inner {
+    transform: scale(1.05);
+  }
+
+  .card-title-block {
+    flex-grow: 1;
+    padding-left: var(--space-3);
+  }
+
+  .card-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.3;
+    margin-bottom: var(--space-2);
+    transition: color 200ms ease;
+  }
+
+  .card-base:hover .card-title {
+    color: var(--green-600);
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    margin-top: var(--space-2);
+  }
+
+  .badges.secondary {
+    margin-top: var(--space-1);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.625rem;
+    border-radius: var(--radius-full);
+  }
+
+  .badge-trade {
+    background: var(--green-600);
+    color: white;
+  }
+
+  .badge-verified {
+    background: var(--slate-100);
+    color: var(--slate-600);
+    border: 1px solid var(--slate-200);
+  }
+
+  .badge-available {
+    background: var(--green-50);
+    color: var(--green-700);
+    border: 1px solid var(--green-200);
+  }
+
+  .badge-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.625rem;
+    color: var(--text-muted);
+    margin-top: var(--space-2);
+  }
+
+  .card-rating {
+    margin-top: var(--space-6);
+    flex-shrink: 0;
+  }
+
+  .stars {
+    display: flex;
+    gap: 2px;
+    color: #fbbf24;
+    font-size: 0.75rem;
+  }
+
+  .card-description {
+    margin-bottom: var(--space-4);
+  }
+
+  .card-description p {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    min-height: 1.75rem;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    background: var(--slate-100);
+    color: var(--slate-600);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    border: 1px solid var(--slate-200);
+  }
+
+  .card-footer {
+    padding: var(--space-5) var(--space-6);
+    background: var(--bg-warm);
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-price {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .price-label {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+  }
+
+  .price-value {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+
+  .card-actions {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .btn-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 200ms ease;
+    border: 1px solid var(--border-default);
+    background: white;
+  }
+
+  .btn-icon i {
+    font-size: 1.125rem;
+  }
+
+  .btn-fav {
+    color: var(--slate-400);
+  }
+
+  .btn-fav:hover {
+    color: #ef4444;
+    border-color: #fecaca;
+    background: #fef2f2;
+  }
+
+  .btn-view {
+    color: var(--slate-500);
+  }
+
+  .btn-view:hover {
+    color: var(--green-600);
+    border-color: var(--green-200);
+    background: var(--green-50);
+  }
+
+  .btn-whatsapp {
+    background: var(--green-600);
+    color: white;
+    border-color: var(--green-700);
+  }
+
+  .btn-whatsapp:hover {
+    background: var(--green-700);
+    transform: scale(1.05);
+    box-shadow: var(--shadow-card-hover);
   }
 </style>

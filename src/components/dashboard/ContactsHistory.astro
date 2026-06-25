@@ -27,67 +27,180 @@ const labelMap: Record<string, string> = {
   phone: 'Teléfono',
   profile: 'Perfil',
 };
-
-const bgMap: Record<string, string> = {
-  whatsapp: 'bg-green-100 text-green-600',
-  email: 'bg-blue-100 text-blue-600',
-  phone: 'bg-purple-100 text-purple-600',
-  profile: 'bg-slate-100 text-slate-600',
-};
 ---
 
-<div class="card-widget">
-  <h3 class="font-bold text-slate-800 text-base mb-5 flex items-center gap-2">
-    <i class="ri-chat-1-fill text-primary"></i> Historial de contactos
+<div class="widget-card">
+  <h3 class="widget-title">
+    <i class="ri-chat-1-fill" style="color: var(--orange-500)"></i> Historial de contactos
   </h3>
 
   {events.length > 0 ? (
-    <div class="space-y-3">
+    <div class="events-list">
       {events.map((ev) => (
-        <div class="flex items-center gap-3 p-3 bg-gradient-to-br from-slate-50 to-warm-50 rounded-xl border border-slate-200 hover:border-green-200 hover:shadow-sm transition-all duration-200">
-          <div class={`w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 ${bgMap[ev.eventType] || 'bg-slate-100 text-slate-600'}`}>
+        <div class="event-item">
+          <div class="event-icon" data-type={ev.eventType}>
             <i class={iconMap[ev.eventType] || 'ri-question-line'}></i>
           </div>
-          <div class="flex-1 min-w-0">
-            <a href={`/p/${ev.tradeSlug}`} class="font-bold text-slate-800 text-sm hover:text-green-primary transition font-display truncate block">
-              {ev.tradeName}
-            </a>
-            <p class="text-xs text-slate-500">
-              Contacto vía {labelMap[ev.eventType] || ev.eventType}
-            </p>
+          <div class="event-info">
+            <a href={`/p/${ev.tradeSlug}`} class="event-trade">{ev.tradeName}</a>
+            <p class="event-label">Contacto vía {labelMap[ev.eventType] || ev.eventType}</p>
           </div>
-          <time class="text-xs text-slate-400 flex-shrink-0">
-            {new Date(ev.createdAt).toLocaleDateString('es-CL', { day: 'numeric', month: 'short' })}
-          </time>
+          <time class="event-date">{new Date(ev.createdAt).toLocaleDateString('es-CL', { day: 'numeric', month: 'short' })}</time>
         </div>
       ))}
     </div>
   ) : (
-    <div class="text-center py-10 text-slate-400">
-      <div class="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-3">
-        <i class="ri-chat-1-line text-3xl text-slate-300"></i>
+    <div class="empty-state">
+      <div class="empty-icon">
+        <i class="ri-chat-1-line"></i>
       </div>
-      <p class="text-sm font-medium">Aún no has contactado a ningún vecino.</p>
-      <p class="text-xs mt-1 text-slate-400">Cuando contactes a un oficio aparecerá aquí.</p>
+      <p class="empty-text">Aún no has contactado a ningún vecino.</p>
+      <p class="empty-subtext">Cuando contactes a un oficio aparecerá aquí.</p>
     </div>
   )}
 </div>
 
 <style>
-  .card-widget {
-    background: white;
-    border-radius: 1rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e2e8f0;
-    padding: 1.5rem;
+  .widget-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-default);
+    padding: var(--space-6);
     transition: box-shadow 300ms ease;
   }
 
-  .card-widget:hover {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  .widget-card:hover {
+    box-shadow: var(--shadow-card-hover);
   }
 
-  .font-display {
-    font-family: 'Nunito', sans-serif;
+  .widget-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-5);
+  }
+
+  .events-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .event-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    background: var(--bg-warm);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+    transition: all 200ms ease;
+  }
+
+  .event-item:hover {
+    border-color: var(--green-300);
+    box-shadow: var(--shadow-card);
+  }
+
+  .event-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .event-icon[data-type="whatsapp"] {
+    background: var(--green-100);
+    color: var(--green-600);
+  }
+
+  .event-icon[data-type="email"] {
+    background: var(--slate-100);
+    color: var(--slate-600);
+  }
+
+  .event-icon[data-type="phone"] {
+    background: var(--orange-100);
+    color: var(--orange-600);
+  }
+
+  .event-icon[data-type="profile"] {
+    background: var(--slate-100);
+    color: var(--slate-500);
+  }
+
+  .event-icon i {
+    font-size: 1.125rem;
+  }
+
+  .event-info {
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  .event-trade {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 200ms ease;
+  }
+
+  .event-trade:hover {
+    color: var(--green-600);
+  }
+
+  .event-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .event-date {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: var(--space-10) 0;
+  }
+
+  .empty-icon {
+    width: 4rem;
+    height: 4rem;
+    border-radius: var(--radius-xl);
+    background: var(--slate-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-3);
+  }
+
+  .empty-icon i {
+    font-size: 1.5rem;
+    color: var(--slate-300);
+  }
+
+  .empty-text {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+
+  .empty-subtext {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: var(--space-1);
   }
 </style>

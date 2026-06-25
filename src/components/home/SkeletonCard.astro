@@ -1,33 +1,107 @@
 ---
-// Skeleton placeholder for trade cards — animación pulse
+// Skeleton placeholder for trade cards
 ---
 
-<article class="card-skeleton bg-white rounded-2xl border border-slate-200 p-6 animate-pulse shadow-sm" aria-hidden="true">
-  <div class="flex items-center gap-4 mb-5">
-    <div class="w-16 h-16 rounded-2xl bg-slate-100 flex-shrink-0"></div>
-    <div class="flex-1 min-w-0">
-      <div class="h-5 bg-slate-100 rounded w-3/4 mb-2"></div>
-      <div class="h-3 bg-slate-100 rounded w-1/2"></div>
+<article class="skeleton-card" aria-hidden="true">
+  <div class="skeleton-header">
+    <div class="skeleton-avatar"></div>
+    <div class="skeleton-info">
+      <div class="skeleton-line w-3/4 h-4"></div>
+      <div class="skeleton-line w-1/2 h-3"></div>
     </div>
   </div>
-  <div class="h-3 bg-slate-100 rounded mb-3"></div>
-  <div class="h-3 bg-slate-100 rounded mb-3 w-5/6"></div>
-  <div class="h-3 bg-slate-100 rounded mb-5 w-2/3"></div>
-  <div class="flex gap-2 mb-5">
-    <div class="h-6 bg-slate-100 rounded-full w-16"></div>
-    <div class="h-6 bg-slate-100 rounded-full w-20"></div>
+  <div class="skeleton-body">
+    <div class="skeleton-line w-full h-3"></div>
+    <div class="skeleton-line w-5/6 h-3"></div>
+    <div class="skeleton-line w-2/3 h-3"></div>
   </div>
-  <div class="flex justify-between items-center border-t border-slate-100 pt-5">
+  <div class="skeleton-tags">
+    <div class="skeleton-tag"></div>
+    <div class="skeleton-tag w-20"></div>
+  </div>
+  <div class="skeleton-footer">
     <div>
-      <div class="h-3 bg-slate-100 rounded w-12 mb-1"></div>
-      <div class="h-5 bg-slate-100 rounded w-16"></div>
+      <div class="skeleton-line w-12 h-2"></div>
+      <div class="skeleton-line w-16 h-5"></div>
     </div>
-    <div class="h-11 bg-slate-100 rounded-xl w-28"></div>
+    <div class="skeleton-btn"></div>
   </div>
 </article>
 
 <style>
-  .card-skeleton {
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  .skeleton-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-default);
+    padding: var(--space-6);
+  }
+
+  .skeleton-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+
+  .skeleton-avatar {
+    width: 4rem;
+    height: 4rem;
+    border-radius: var(--radius-lg);
+    background: var(--slate-200);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .skeleton-info {
+    flex-grow: 1;
+  }
+
+  .skeleton-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+
+  .skeleton-tags {
+    display: flex;
+    gap: var(--space-2);
+    margin-bottom: var(--space-5);
+  }
+
+  .skeleton-tag {
+    width: 4rem;
+    height: 1.5rem;
+    border-radius: var(--radius-full);
+    background: var(--slate-200);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .skeleton-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--border-light);
+  }
+
+  .skeleton-btn {
+    width: 7rem;
+    height: 2.75rem;
+    border-radius: var(--radius-lg);
+    background: var(--slate-200);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .skeleton-line {
+    height: 0.75rem;
+    border-radius: var(--radius-sm);
+    background: var(--slate-200);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
   }
 </style>

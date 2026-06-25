@@ -1,20 +1,131 @@
 ---
-// Advertisement banner (subtle)
+// Advertisement banner
 ---
 
-<div class="mb-12 bg-gradient-to-r from-indigo-50 to-blue-50 rounded-2xl p-6 flex items-center justify-between border border-indigo-100 shadow-sm relative overflow-hidden group cursor-pointer hover:shadow-md transition">
-  <div class="absolute top-0 right-0 bg-gray-200 text-[10px] px-2 py-0.5 text-gray-500 rounded-bl-lg font-bold">PUBLICIDAD</div>
-  <div class="relative z-10 flex items-center gap-4">
-    <div class="bg-white p-3 rounded-full shadow-sm">
-      <i class="ri-store-3-line text-indigo-500 text-2xl"></i>
+<div class="ad-banner">
+  <span class="ad-badge">PUBLICIDAD</span>
+  <div class="ad-content">
+    <div class="ad-icon">
+      <i class="ri-store-3-line"></i>
     </div>
-    <div>
-      <h3 class="font-bold text-gray-800 text-sm md:text-base">¿Tienes una ferretería o negocio local?</h3>
-      <p class="text-xs md:text-sm text-gray-600">Apoya a tu comunidad y destaca aquí. <span class="text-indigo-600 font-bold underline">Contáctanos</span></p>
+    <div class="ad-text">
+      <h3 class="ad-title">¿Tienes una ferretería o negocio local?</h3>
+      <p class="ad-description">Apoya a tu comunidad y destaca aquí. <span class="ad-link">Contáctanos</span></p>
     </div>
   </div>
-  <div class="hidden md:block">
-    <i class="ri-arrow-right-line text-indigo-300 group-hover:text-indigo-500 transition text-2xl"></i>
+  <div class="ad-arrow">
+    <i class="ri-arrow-right-line"></i>
   </div>
-  <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-indigo-100 rounded-full opacity-50"></div>
+  <div class="ad-decoration"></div>
 </div>
+
+<style>
+  .ad-banner {
+    background: linear-gradient(135deg, var(--slate-50) 0%, var(--slate-100) 100%);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 300ms ease;
+  }
+
+  .ad-banner:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-1px);
+  }
+
+  .ad-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: var(--slate-200);
+    color: var(--slate-500);
+    font-size: 0.625rem;
+    font-weight: 700;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0 var(--radius-xl) 0 var(--radius-md);
+  }
+
+  .ad-content {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    position: relative;
+    z-index: 1;
+  }
+
+  .ad-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--radius-lg);
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-card);
+    flex-shrink: 0;
+  }
+
+  .ad-icon i {
+    font-size: 1.5rem;
+    color: var(--slate-400);
+  }
+
+  .ad-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .ad-description {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  .ad-link {
+    color: var(--green-600);
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  .ad-arrow {
+    display: none;
+    position: relative;
+    z-index: 1;
+  }
+
+  @media (min-width: 768px) {
+    .ad-arrow {
+      display: block;
+    }
+  }
+
+  .ad-arrow i {
+    font-size: 1.5rem;
+    color: var(--slate-300);
+    transition: all 200ms ease;
+  }
+
+  .ad-banner:hover .ad-arrow i {
+    color: var(--green-500);
+    transform: translateX(4px);
+  }
+
+  .ad-decoration {
+    position: absolute;
+    right: -1rem;
+    bottom: -1rem;
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    background: var(--slate-200);
+    opacity: 0.3;
+  }
+</style>

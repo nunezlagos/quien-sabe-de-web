@@ -4,94 +4,245 @@ const hiddenClass = visible ? '' : 'hidden';
 ---
 
 <aside id="search-sidebar" class="{hiddenClass} md:w-1/4 space-y-5 w-full animate-fade-in-left">
-  <div class="card-sidebar">
-    <h3 class="font-bold text-slate-800 mb-5 flex items-center gap-2"><i class="ri-filter-3-line text-primary"></i> Filtros</h3>
+  <div class="widget-card">
+    <h3 class="sidebar-title">
+      <i class="ri-filter-3-line" style="color: var(--green-600)"></i> Filtros
+    </h3>
 
     <!-- Categories -->
-    <div class="mb-6">
-      <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Oficio</h4>
-      <div class="space-y-2">
-        <label class="flex items-center gap-2.5 cursor-pointer hover:text-green-primary transition">
-          <input type="checkbox" class="rounded text-primary focus:ring-primary border-slate-300 w-4 h-4">
-          <span class="text-sm text-slate-600">Gasfiter</span>
+    <div class="filter-section">
+      <h4 class="filter-label">Oficio</h4>
+      <div class="filter-options">
+        <label class="filter-option">
+          <input type="checkbox" class="filter-checkbox">
+          <span class="filter-text">Gasfiter</span>
         </label>
-        <label class="flex items-center gap-2.5 cursor-pointer hover:text-green-primary transition">
-          <input type="checkbox" class="rounded text-primary focus:ring-primary border-slate-300 w-4 h-4">
-          <span class="text-sm text-slate-600">Electricista</span>
+        <label class="filter-option">
+          <input type="checkbox" class="filter-checkbox">
+          <span class="filter-text">Electricista</span>
         </label>
-        <label class="flex items-center gap-2.5 cursor-pointer hover:text-green-primary transition">
-          <input type="checkbox" class="rounded text-primary focus:ring-primary border-slate-300 w-4 h-4">
-          <span class="text-sm text-slate-600">Jardinero</span>
+        <label class="filter-option">
+          <input type="checkbox" class="filter-checkbox">
+          <span class="filter-text">Jardinero</span>
         </label>
-        <label class="flex items-center gap-2.5 cursor-pointer hover:text-green-primary transition">
-          <input type="checkbox" class="rounded text-primary focus:ring-primary border-slate-300 w-4 h-4">
-          <span class="text-sm text-slate-600">Maestro</span>
+        <label class="filter-option">
+          <input type="checkbox" class="filter-checkbox">
+          <span class="filter-text">Maestro</span>
         </label>
       </div>
     </div>
 
     <!-- Price Range -->
-    <div class="mb-6">
-      <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Precio Base</h4>
-      <div class="flex items-center gap-2">
-        <input type="number" placeholder="Min" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:border-green-primary focus:ring-1 focus:ring-green-primary/20 transition">
-        <span class="text-slate-300">-</span>
-        <input type="number" placeholder="Max" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:border-green-primary focus:ring-1 focus:ring-green-primary/20 transition">
+    <div class="filter-section">
+      <h4 class="filter-label">Precio Base</h4>
+      <div class="price-inputs">
+        <input type="number" placeholder="Min" class="price-input">
+        <span class="price-separator">-</span>
+        <input type="number" placeholder="Max" class="price-input">
       </div>
     </div>
 
     <!-- Rating -->
-    <div>
-      <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Valoración</h4>
-      <div class="space-y-2">
-        <label class="flex items-center gap-2.5 cursor-pointer hover:text-green-primary transition">
-          <input type="radio" name="rating" class="text-primary focus:ring-primary border-slate-300 w-4 h-4">
-          <div class="flex text-yellow-400 text-sm gap-0.5">
+    <div class="filter-section">
+      <h4 class="filter-label">Valoración</h4>
+      <div class="filter-options">
+        <label class="filter-option">
+          <input type="radio" name="rating" class="filter-radio">
+          <div class="rating-stars">
             <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i>
           </div>
         </label>
-        <label class="flex items-center gap-2.5 cursor-pointer hover:text-green-primary transition">
-          <input type="radio" name="rating" class="text-primary focus:ring-primary border-slate-300 w-4 h-4">
-          <div class="flex text-yellow-400 text-sm gap-0.5">
+        <label class="filter-option">
+          <input type="radio" name="rating" class="filter-radio">
+          <div class="rating-stars">
             <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-line"></i>
           </div>
-          <span class="text-xs text-slate-400">& más</span>
+          <span class="rating-more">& más</span>
         </label>
       </div>
     </div>
   </div>
 
   <!-- Promo Box -->
-  <div class="card-promo">
-    <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mx-auto mb-3">
-      <i class="ri-shield-star-line text-3xl text-white opacity-90"></i>
+  <div class="promo-card">
+    <div class="promo-icon">
+      <i class="ri-shield-star-line"></i>
     </div>
-    <h4 class="font-bold text-lg mb-1 text-white">Vecinos Verificados</h4>
-    <p class="text-xs opacity-90 mb-5 text-white/80">Contrata con confianza.</p>
-    <button class="bg-white text-green-primary text-xs font-bold px-5 py-2.5 rounded-full hover:bg-green-50 transition shadow-md">Saber más</button>
+    <h4 class="promo-title">Vecinos Verificados</h4>
+    <p class="promo-text">Contrata con confianza.</p>
+    <button class="promo-btn">Saber más</button>
   </div>
 </aside>
 
 <style>
-  .card-sidebar {
-    background: white;
-    border-radius: 1rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e2e8f0;
-    padding: 1.5rem;
+  .widget-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-default);
+    padding: var(--space-6);
     transition: box-shadow 300ms ease;
   }
 
-  .card-sidebar:hover {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  .widget-card:hover {
+    box-shadow: var(--shadow-card-hover);
   }
 
-  .card-promo {
-    background: linear-gradient(135deg, #2e8b57 0%, #166534 100%);
-    border-radius: 1rem;
-    padding: 1.75rem 1.5rem;
+  .sidebar-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-5);
+  }
+
+  .filter-section {
+    margin-bottom: var(--space-5);
+  }
+
+  .filter-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .filter-label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .filter-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .filter-option {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    transition: color 200ms ease;
+  }
+
+  .filter-option:hover {
+    color: var(--green-600);
+  }
+
+  .filter-checkbox,
+  .filter-radio {
+    width: 1rem;
+    height: 1rem;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border-default);
+    accent-color: var(--green-600);
+    cursor: pointer;
+  }
+
+  .filter-text {
+    font-size: 0.875rem;
+    color: var(--slate-600);
+  }
+
+  .price-inputs {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .price-input {
+    flex: 1;
+    background: var(--slate-50);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    transition: all 200ms ease;
+  }
+
+  .price-input:focus {
+    outline: none;
+    border-color: var(--green-400);
+    box-shadow: 0 0 0 3px var(--green-50);
+  }
+
+  .price-separator {
+    color: var(--slate-300);
+  }
+
+  .rating-stars {
+    display: flex;
+    gap: 2px;
+    color: #fbbf24;
+    font-size: 0.875rem;
+  }
+
+  .rating-more {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-left: 0.25rem;
+  }
+
+  /* Promo Card */
+  .promo-card {
+    background: linear-gradient(135deg, var(--green-600) 0%, var(--green-800) 100%);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
     text-align: center;
-    box-shadow: 0 10px 15px -3px rgba(46, 139, 87, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-card-hover);
     border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .promo-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--radius-xl);
+    background: rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-3);
+  }
+
+  .promo-icon i {
+    font-size: 1.5rem;
+    color: white;
+    opacity: 0.9;
+  }
+
+  .promo-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: var(--space-1);
+  }
+
+  .promo-text {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: var(--space-4);
+  }
+
+  .promo-btn {
+    background: white;
+    color: var(--green-600);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.5rem 1.25rem;
+    border-radius: var(--radius-full);
+    border: none;
+    cursor: pointer;
+    transition: all 200ms ease;
+    box-shadow: var(--shadow-card);
+  }
+
+  .promo-btn:hover {
+    background: var(--green-50);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-card-hover);
   }
 </style>
