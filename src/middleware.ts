@@ -2,6 +2,9 @@ import { defineMiddleware } from 'astro/middleware';
 import { leerSesion } from './lib/services/auth/sesion';
 import { leerCookieSesion, limpiarCookieSesion } from './lib/utils/cookies';
 import { buscarUsuarioPorId } from './lib/services/auth/usuarios';
+import { getDb } from './database/client';
+import { userRoles } from './database/schema';
+import { eq } from 'drizzle-orm';
 
 const RUTAS_PROTEGIDAS = ['/dashboard', '/dashboard-admin', '/dashboard-prestador', '/dashboard-user', '/cuenta'];
 const RUTAS_AUTH = ['/registro', '/iniciar-sesion'];
@@ -25,11 +28,14 @@ export const onRequest = defineMiddleware(async (contexto, siguiente) => {
 			if (carga) {
 				const usuarioDb = await buscarUsuarioPorId(contexto, carga.userId);
 				if (usuarioDb && usuarioDb.status === 'active') {
+					const db = getDb(contexto);
+					const roles = (await db.select({ role: userRoles.role }).from(userRoles).where(eq(userRoles.userId, usuarioDb.id)).all()).map(r => r.role);
 					contexto.locals.user = {
 						id: usuarioDb.id,
 						email: usuarioDb.email,
 						name: usuarioDb.name,
 						role: usuarioDb.role,
+						roles: [usuarioDb.role, ...roles],
 						status: usuarioDb.status,
 					};
 				} else {

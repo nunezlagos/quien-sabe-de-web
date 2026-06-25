@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getDb } from '../database/client';
-import { trades, reviews, contactEvents } from '../database/schema';
+import { trades, reviews, contactEvents, portfolioImages } from '../database/schema';
 import { eq, desc, avg, count, gt, and, inArray, isNotNull } from 'drizzle-orm';
 
 const user = Astro.locals.user;
@@ -91,6 +91,21 @@ const initials = user.name.slice(0, 1).toUpperCase();
 const perfilActualizado = Astro.url.searchParams.get('perfil') === 'actualizado';
 const algunVerificado = myTrades.some((t) => Boolean(t.verified));
 const showVerificationBanner = totalOficios > 0 && !algunVerificado;
+
+// Portfolio images for the provider
+const myPortfolio = myTradeIds.length > 0 ? await db
+  .select({
+    id: portfolioImages.id,
+    url: portfolioImages.url,
+    caption: portfolioImages.caption,
+    tradeName: trades.name,
+    tradeSlug: trades.slug,
+  })
+  .from(portfolioImages)
+  .innerJoin(trades, eq(trades.id, portfolioImages.tradeId))
+  .where(inArray(portfolioImages.tradeId, myTradeIds))
+  .orderBy(desc(portfolioImages.createdAt))
+  .all() : [];
 ---
 
 <BaseLayout title="Panel Proveedor — QuiénSabe">
@@ -142,6 +157,7 @@ const showVerificationBanner = totalOficios > 0 && !algunVerificado;
           <a href="#editar-perfil" class="block px-6 py-4 border-l-4 border-transparent hover:bg-gray-50 text-gray-600 font-medium transition"><i class="ri-edit-line mr-2 align-middle"></i> Editar Perfil</a>
           <a href="#mis-servicios" class="block px-6 py-4 border-l-4 border-transparent hover:bg-gray-50 text-gray-600 font-medium transition"><i class="ri-list-settings-line mr-2 align-middle"></i> Mis Servicios</a>
           <a href="#resenas" class="block px-6 py-4 border-l-4 border-transparent hover:bg-gray-50 text-gray-600 font-medium transition"><i class="ri-chat-1-line mr-2 align-middle"></i> Reseñas</a>
+          <a href="#portfolio" class="block px-6 py-4 border-l-4 border-transparent hover:bg-gray-50 text-gray-600 font-medium transition"><i class="ri-gallery-line mr-2 align-middle"></i> Portafolio</a>
           <a href="/dashboard-prestador/soporte" class="w-full text-left block px-6 py-4 border-l-4 border-transparent hover:bg-red-50 text-red-500 font-medium transition border-t border-gray-100 mt-2">
             <i class="ri-customer-service-2-line mr-2 align-middle"></i> Soporte / Ayuda
           </a>
@@ -433,6 +449,29 @@ const showVerificationBanner = totalOficios > 0 && !algunVerificado;
                 ))}
               </div>
             </>
+          )}
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <h3 class="font-extrabold text-xl text-gray-800 mb-4 flex items-center gap-2">
+            <i class="ri-gallery-line text-orange-500"></i> Portafolio
+          </h3>
+          {myPortfolio.length > 0 ? (
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {myPortfolio.map((img) => (
+                <a href={`/p/${img.tradeSlug}`} class="group relative rounded-xl overflow-hidden bg-gray-100 aspect-square">
+                  <img src={img.url} alt={img.caption || img.tradeName} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+                  {img.caption && <span class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-2 text-xs text-white">{img.caption}</span>}
+                </a>
+              ))}
+            </div>
+          ) : (
+            <div class="text-center py-8 text-gray-500">
+              <i class="ri-image-2-line text-4xl text-gray-300 mb-2 block"></i>
+              <p class="text-sm font-medium">Aún no tienes fotos en tu portafolio.</p>
+              <p class="text-xs text-gray-400 mt-1">Las fotos que subas aparecerán en tu perfil público.</p>
+            </div>
           )}
         </section>
 
