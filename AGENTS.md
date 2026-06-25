@@ -15,3 +15,10 @@ Astro 5 + Tailwind 4 + Drizzle ORM + Cloudflare D1/KV/R2. Docker-first dev.
 
 - **All JS/CSS must be in their own files under `src/lib/client/` or `src/styles/`**, never inline in Astro templates. Extract `<script>` and `<style>` blocks to dedicated files and import them.
 - **Components** in `src/components/`, **pages** in `src/pages/`, **client JS** in `src/lib/client/`, **validators** in `src/lib/validators/`, **services** in `src/lib/services/`.
+
+## Testing
+
+- **Tests focused on functionality, not implementation.** Assert on behavior and outputs, not internal state or mocks. Avoid overspecification.
+- **No false positives.** A test must fail when the functionality breaks. If changing valid behavior breaks a test, the test is wrong, not the code.
+- **Prefer integration over unit** where the integration boundary is narrow (e.g. validator tests test the zod schema end-to-end, not helper internals).
+- **Red/Green/Refactor/Sabotage**: write failing test → minimal code → refactor → break fix → confirm test fails → restore fix.

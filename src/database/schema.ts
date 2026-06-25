@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, real } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, real, index } from 'drizzle-orm/sqlite-core';
 
 export const users = sqliteTable('users', {
   id: integer('id').primaryKey({ autoIncrement: true }),
@@ -123,3 +123,35 @@ export const appSettings = sqliteTable('app_settings', {
 });
 
 export type ContactEvent = typeof contactEvents.$inferSelect;
+
+export const tickets = sqliteTable('tickets', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  kind: text('kind', { enum: ['suplantacion', 'mal_servicio', 'contenido', 'consulta'] }).notNull(),
+  status: text('status', { enum: ['abierto', 'en_revision', 'cerrado'] }).notNull().default('abierto'),
+  assigneeAdminId: integer('assignee_admin_id').references(() => users.id, { onDelete: 'set null' }),
+  targetProviderId: integer('target_provider_id').references(() => trades.id, { onDelete: 'cascade' }),
+  createdByUserId: integer('created_by_user_id').references(() => users.id, { onDelete: 'set null' }),
+  contactEmail: text('contact_email'),
+  subject: text('subject').notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+}, (t) => ({
+  byStatusCreated: index('idx_tickets_status_created').on(t.status, t.createdAt),
+  byAssignee: index('idx_tickets_assignee').on(t.assigneeAdminId),
+  byKind: index('idx_tickets_kind').on(t.kind),
+  byUserProvider: index('idx_tickets_user_provider').on(t.createdByUserId, t.targetProviderId, t.status),
+}));
+
+export const ticketMessages = sqliteTable('ticket_messages', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  ticketId: integer('ticket_id').notNull().references(() => tickets.id, { onDelete: 'cascade' }),
+  sender: text('sender', { enum: ['author', 'admin', 'system'] }).notNull(),
+  body: text('body').notNull(),
+  internalNote: integer('internal_note', { mode: 'boolean' }).notNull().default(false),
+  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+}, (t) => ({
+  byTicketPublic: index('idx_ticket_messages_ticket_public').on(t.ticketId, t.internalNote, t.createdAt),
+}));
+
+export type Ticket = typeof tickets.$inferSelect;
+export type TicketNew = typeof tickets.$inferInsert;
+export type TicketMessage = typeof ticketMessages.$inferSelect;
