@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
-import { getAvailability, replaceAvailability } from '../../../../lib/services/availability';
-import { availabilityArraySchema } from '../../../../lib/validators/availability';
-import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
+import { getAvailability, replaceAvailability } from '../../../../../lib/services/availability';
+import { availabilityArraySchema } from '../../../../../lib/validators/availability';
+import { errorResponse, jsonResponse } from '../../../../../lib/utils/response';
 
 export const GET: APIRoute = async ({ locals }) => {
   const user = (locals as any).user;

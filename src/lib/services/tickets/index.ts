@@ -1,7 +1,7 @@
 import { getDb } from '../../../database/client';
 import { tickets, ticketMessages, users } from '../../../database/schema';
 import { eq, and, count, desc, sql } from 'drizzle-orm';
-import { sendMail, buildTicketNotificationEmail } from '../../email/mailpit';
+import { sendMail, buildTicketNotificationEmail } from '../../services/email/mailpit';
 
 export async function createTicket(locals: any, input: { kind: string; subject: string; body: string; contactEmail?: string; targetProviderId?: number }): Promise<typeof tickets.$inferSelect> {
   const db = getDb(locals);
@@ -45,7 +45,8 @@ export async function createTicket(locals: any, input: { kind: string; subject: 
 
 export async function getTicketById(locals: any, ticketId: number): Promise<typeof tickets.$inferSelect | null> {
   const db = getDb(locals);
-  return db.select().from(tickets).where(eq(tickets.id, ticketId)).get() || null;
+  const result = await db.select().from(tickets).where(eq(tickets.id, ticketId)).get();
+  return result ?? null;
 }
 
 export async function listTicketsForAdmin(locals: any, filters: { status?: string; kind?: string; assignee?: string; limit?: number; cursor?: number }): Promise<{ items: any[]; cursor: number | null }> {

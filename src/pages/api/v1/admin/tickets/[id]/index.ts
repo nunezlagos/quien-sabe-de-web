@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
-import { transitionTicket, getTicketById } from '../../../../lib/services/tickets';
-import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
+import { transitionTicket, getTicketById } from '../../../../../../lib/services/tickets';
+import { errorResponse, jsonResponse } from '../../../../../../lib/utils/response';
 
 export const PATCH: APIRoute = async ({ params, request, locals }) => {
   const user = (locals as any).user;

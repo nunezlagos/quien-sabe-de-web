@@ -1,6 +1,6 @@
 import { getDb } from '../../../database/client';
 import { donations } from '../../../database/schema';
-import { eq, desc } from 'drizzle-orm';
+import { eq, desc, and } from 'drizzle-orm';
 import { sendMail } from '../../services/email/mailpit';
 
 export async function createDonation(locals: any, input: { provider: string; amountClp: number; recurring: boolean; payerEmail?: string; userId?: number; externalId?: string }) {
@@ -19,8 +19,10 @@ export async function createDonation(locals: any, input: { provider: string; amo
 export async function updateDonationStatus(locals: any, externalId: string, status: string, provider: string) {
   const db = getDb(locals);
   const donation = await db.select().from(donations)
-    .where(eq(donations.externalId, externalId))
-    .where(eq(donations.provider, provider as any))
+    .where(and(
+      eq(donations.externalId, externalId),
+      eq(donations.provider, provider as any)
+    ))
     .get();
   if (!donation) return null;
   await db.update(donations).set({ status: status as any, updatedAt: new Date() })

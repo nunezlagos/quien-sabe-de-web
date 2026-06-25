@@ -2,13 +2,13 @@
 import '../../styles/pages/page-loader.css';
 ---
 
-<div id="page-loader">
+<div id="page-loader" class="fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center transition-opacity duration-500">
   <div class="relative">
     <div class="text-5xl md:text-6xl font-extrabold text-gray-200 tracking-tight">
       Quién<span class="text-gray-200">Sabe</span>
     </div>
-    <div class="absolute top-0 left-0 text-5xl md:text-6xl font-extrabold text-orange-500 tracking-tight page-loader-fill">
-      Quién<span class="text-orange-500">Sabe</span>
+    <div class="absolute top-0 left-0 text-5xl md:text-6xl font-extrabold text-primary tracking-tight page-loader-fill">
+      Quién<span class="text-primary">Sabe</span>
     </div>
   </div>
   <p class="text-gray-400 text-sm mt-4 font-medium animate-pulse">Cargando barrio...</p>

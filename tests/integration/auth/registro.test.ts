@@ -18,12 +18,12 @@ describe('POST /api/v1/auth/registro', () => {
 		expect(response.status).toBe(201);
 
 		const json = await response.json();
-		expect(json.usuario).toMatchObject({
+		expect(json.currentUser).toMatchObject({
 			nombre: 'Ana Pérez',
 			correo: 'ana@ejemplo.cl',
 			rol: 'user',
 		});
-		expect(json.usuario).not.toHaveProperty('passwordHash');
+		expect(json.currentUser).not.toHaveProperty('passwordHash');
 		expect(cookies.get('sesion')?.value).toBeTruthy();
 
 		const stored = await buscarUsuarioPorCorreo({ locals: contexto.locals }, 'ana@ejemplo.cl');
@@ -74,7 +74,7 @@ describe('POST /api/v1/auth/iniciar-sesion', () => {
 		const r = await inicioSesion(contexto);
 		expect(r.status).toBe(200);
 		const json = await r.json();
-		expect(json.usuario.correo).toBe('ana@x.cl');
+		expect(json.currentUser.correo).toBe('ana@x.cl');
 		expect(cookies.get('sesion')?.value).toBeTruthy();
 	});
 
@@ -111,8 +111,11 @@ describe('POST /api/v1/auth/iniciar-sesion', () => {
 });
 
 describe('POST /api/v1/auth/cerrar-sesion', () => {
+	beforeEach(() => {
+		resetContextoAuth();
+	});
 	it('destruye sesión y limpia cookie', async () => {
-		const a = crearContextoAuth({ body: { nombre: 'Ana', correo: 'ana@x.cl', contrasena: 'Secreta123!' } });
+		const a = crearContextoAuth({ body: { nombre: 'Ana', correo: 'cerrar@x.cl', contrasena: 'Secreta123!' } });
 		await registro(a.contexto);
 		const tokenInicial = a.cookies.get('sesion')?.value;
 		expect(tokenInicial).toBeTruthy();
@@ -154,6 +157,6 @@ describe('GET /api/v1/auth/yo', () => {
 		const r = await yo(contexto);
 		expect(r.status).toBe(200);
 		const json = await r.json();
-		expect(json.usuario.correo).toBe('ana@x.cl');
+		expect(json.currentUser.correo).toBe('ana@x.cl');
 	});
 });

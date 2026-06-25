@@ -8,6 +8,10 @@ export const users = sqliteTable('users', {
   role: text('role', { enum: ['user', 'provider', 'admin'] }).notNull().default('user'),
   status: text('status', { enum: ['active', 'banned'] }).notNull().default('active'),
   avatarUrl: text('avatar_url'),
+  communeId: integer('commune_id').references(() => communes.id, { onDelete: 'set null' }),
+  interests: text('interests'),
+  onboardedAt: integer('onboarded_at', { mode: 'timestamp' }),
+  acceptedTermsAt: integer('accepted_terms_at', { mode: 'timestamp' }),
   consentEmailProduct: integer('consent_email_product', { mode: 'boolean' }),
   consentAnalytics: integer('consent_analytics', { mode: 'boolean' }),
   consentProfilePublic: integer('consent_profile_public', { mode: 'boolean' }),
@@ -54,7 +58,7 @@ export const tradeCommunes = sqliteTable('trade_communes', {
   tradeId: integer('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
   communeId: integer('commune_id').notNull().references(() => communes.id, { onDelete: 'cascade' }),
 }, (t) => ({
-  pk: [t.tradeId, t.communeId],
+  pk: primaryKey({ columns: [t.tradeId, t.communeId] }),
 }));
 
 /**
@@ -63,6 +67,7 @@ export const tradeCommunes = sqliteTable('trade_communes', {
 export const reviews = sqliteTable('reviews', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   tradeId: integer('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
+  userId: integer('user_id').references(() => users.id, { onDelete: 'set null' }),
   reviewerName: text('reviewer_name').notNull(),
   rating: integer('rating').notNull(),
   body: text('body').notNull(),
@@ -121,6 +126,16 @@ export const appSettings = sqliteTable('app_settings', {
   value: text('value').notNull(),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
+
+export const userViews = sqliteTable('user_views', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  tradeId: integer('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
+  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+}, (t) => ({
+  byUserCreatedDesc: index('idx_user_views_user_created').on(t.userId, t.createdAt),
+  uniqueView: uniqueIndex('uq_user_views_user_trade').on(t.userId, t.tradeId),
+}));
 
 export type ContactEvent = typeof contactEvents.$inferSelect;
 
@@ -223,6 +238,19 @@ export const monthlyReports = sqliteTable('monthly_reports', {
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
 
+export const verificationDocuments = sqliteTable('verification_documents', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  kind: text('kind', { enum: ['cedula', 'certificado', 'comprobante', 'otro'] }).notNull(),
+  r2Key: text('r2_key').notNull(),
+  contentType: text('content_type').notNull(),
+  uploadedAt: integer('uploaded_at', { mode: 'timestamp' }),
+  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+}, (t) => ({
+  byUser: index('idx_verification_docs_user').on(t.userId),
+}));
+
 export type Ticket = typeof tickets.$inferSelect;
 export type TicketNew = typeof tickets.$inferInsert;
 export type TicketMessage = typeof ticketMessages.$inferSelect;
+export type VerificationDocument = typeof verificationDocuments.$inferSelect;

@@ -1,8 +1,8 @@
 import type { APIRoute } from 'astro';
-import { getDb } from '../../../../database/client';
-import { expenses } from '../../../../database/schema';
+import { getDb } from '../../../../../database/client';
+import { expenses } from '../../../../../database/schema';
 import { eq, desc } from 'drizzle-orm';
-import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
+import { errorResponse, jsonResponse } from '../../../../../lib/utils/response';
 import * as z from 'zod/v4';
 
 const expenseSchema = z.object({
@@ -33,5 +33,5 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const db = getDb(locals);
   const { lastInsertRowid } = await db.insert(expenses).values({ ...parsed.data, createdBy: user.id }).run();
 
-  return jsonResponse({ id: Number(lastInsertRowid) }, 201);
+  return jsonResponse({ id: Number(lastInsertRowid) }, { status: 201 });
 };

@@ -2,6 +2,7 @@
 import { getDb } from '../database/client';
 import { users, trades, communes, tickets, ticketMessages } from '../database/schema';
 import { desc, eq, count, and, sql } from 'drizzle-orm';
+import '../styles/admin.css';
 
 const SECCIONES_VALIDAS = [
 	'dashboard',
@@ -146,7 +147,6 @@ const ROLES: Record<string, string> = {
 	provider: 'Proveedor',
 	admin: 'Administrador',
 };
-
 const NAV: Array<{ id: SeccionId; href: string; label: string; icon: string; badge?: string }> = [
 	{ id: 'dashboard', href: '/dashboard-admin', label: 'Dashboard', icon: 'ri-dashboard-3-line' },
 	{ id: 'users', href: '/dashboard-admin?section=users', label: 'Usuarios', icon: 'ri-user-settings-line' },
@@ -208,7 +208,6 @@ const auditPlaceholder = [
 	<title>Admin · QuiénSabe</title>
 	<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="/src/styles/admin.css">
 </head>
 <body class="admin-shell">
 
@@ -762,8 +761,8 @@ const auditPlaceholder = [
 		</main>
 	</div>
 <script>
-  import { initBanButtons } from '../../lib/client/admin/ban-user';
-  import { initTicketActions } from '../../lib/client/admin/tickets';
+  import { initBanButtons } from '../lib/client/admin/ban-user';
+  import { initTicketActions } from '../lib/client/admin/tickets';
   initBanButtons();
   initTicketActions();
 </script>

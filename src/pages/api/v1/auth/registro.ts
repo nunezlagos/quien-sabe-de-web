@@ -42,7 +42,7 @@ export const POST: APIRoute = async (contexto) => {
 		});
 
 		const verificationToken = crypto.randomBytes(32).toString('hex');
-		const db = await getDb();
+		const db = getDb(contexto);
 		await db.update(users).set({ emailVerificationToken: verificationToken }).where(eq(users.id, currentUser.id)).run();
 
 		const siteUrl = contexto.locals.runtime.env.PUBLIC_SITE_URL || 'http://127.0.0.1:4323';

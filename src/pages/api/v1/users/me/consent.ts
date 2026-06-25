@@ -1,9 +1,9 @@
 import type { APIRoute } from 'astro';
-import { getDb } from '../../../../database/client';
-import { users } from '../../../../database/schema';
+import { getDb } from '../../../../../database/client';
+import { users } from '../../../../../database/schema';
 import { eq } from 'drizzle-orm';
 import * as z from 'zod/v4';
-import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
+import { errorResponse, jsonResponse } from '../../../../../lib/utils/response';
 
 const consentSchema = z.object({
   consentEmailProduct: z.boolean().optional(),

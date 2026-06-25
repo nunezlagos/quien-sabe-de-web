@@ -1,8 +1,8 @@
 import type { APIRoute } from 'astro';
-import { getDb } from '../../../../database/client';
-import { reviews, adminAuditLog } from '../../../../database/schema';
+import { getDb } from '../../../../../../database/client';
+import { reviews, adminAuditLog } from '../../../../../../database/schema';
 import { eq } from 'drizzle-orm';
-import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
+import { errorResponse, jsonResponse } from '../../../../../../lib/utils/response';
 import * as z from 'zod/v4';
 
 const hideSchema = z.object({

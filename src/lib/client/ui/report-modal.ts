@@ -13,6 +13,7 @@ export function initReportModal() {
   });
 
   function close() {
+    if (!modal) return;
     modal.classList.add('hidden');
     document.body.style.overflow = '';
   }

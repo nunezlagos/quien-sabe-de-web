@@ -1,8 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactsHistory from '../components/dashboard/ContactsHistory.astro';
+import MyReviews from '../components/dashboard/MyReviews.astro';
+import RecentViews from '../components/dashboard/RecentViews.astro';
+import EditProfileModal from '../components/dashboard/EditProfileModal.astro';
 import { getDb } from '../database/client';
-import { trades, communes, reviews, contactEvents, favorites, users } from '../database/schema';
-import { eq, desc, avg, count, inArray } from 'drizzle-orm';
+import { trades, communes, reviews, contactEvents, favorites, users, userViews } from '../database/schema';
+import { eq, desc, asc, avg, count, inArray } from 'drizzle-orm';
 
 const currentUser = Astro.locals.user;
 if (!currentUser) {
@@ -14,6 +18,12 @@ const tabParam = url.searchParams.get('tab') ?? 'historial';
 const tab = (['historial', 'resenas', 'perfil'] as const).find((t) => t === tabParam) ?? 'historial';
 
 const db = getDb(Astro.locals);
+
+const allCommunes = await db
+  .select({ id: communes.id, name: communes.name })
+  .from(communes)
+  .orderBy(asc(communes.name))
+  .all();
 
 const myTrades = await db
   .select({
@@ -56,6 +66,57 @@ const contactHistory = myTradeIds.length > 0
       .limit(20)
       .all()
   : [];
+
+// Contact history for this user (as a visitor / vecino)
+const myContacts = await db
+  .select({
+    id: contactEvents.id,
+    eventType: contactEvents.eventType,
+    tradeId: contactEvents.tradeId,
+    tradeName: trades.name,
+    tradeSlug: trades.slug,
+    createdAt: contactEvents.createdAt,
+  })
+  .from(contactEvents)
+  .innerJoin(trades, eq(contactEvents.tradeId, trades.id))
+  .where(eq(contactEvents.userId, currentUser.id))
+  .orderBy(desc(contactEvents.createdAt))
+  .limit(50)
+  .all();
+
+// Reviews written by this user
+const myReviews = await db
+  .select({
+    id: reviews.id,
+    tradeId: reviews.tradeId,
+    tradeName: trades.name,
+    tradeSlug: trades.slug,
+    rating: reviews.rating,
+    body: reviews.body,
+    createdAt: reviews.createdAt,
+  })
+  .from(reviews)
+  .innerJoin(trades, eq(reviews.tradeId, trades.id))
+  .where(eq(reviews.userId, currentUser.id))
+  .orderBy(desc(reviews.createdAt))
+  .limit(50)
+  .all();
+
+// Recent views
+const recentViews = await db
+  .select({
+    id: userViews.id,
+    tradeId: userViews.tradeId,
+    tradeName: trades.name,
+    tradeSlug: trades.slug,
+    createdAt: userViews.createdAt,
+  })
+  .from(userViews)
+  .innerJoin(trades, eq(userViews.tradeId, trades.id))
+  .where(eq(userViews.userId, currentUser.id))
+  .orderBy(desc(userViews.createdAt))
+  .limit(10)
+  .all();
 
 const myFavorites = await db
   .select({
@@ -211,6 +272,8 @@ const myFavorites = await db
           </div>
         )}
 
+        <ContactsHistory events={myContacts} />
+
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div class="lg:col-span-2 bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
             <h3 class="font-bold text-gray-800 text-lg mb-4 flex items-center gap-2">
@@ -240,36 +303,25 @@ const myFavorites = await db
             )}
           </div>
 
-          <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
-            <h3 class="font-bold text-gray-800 text-lg mb-4 flex items-center gap-2">
-              <i class="ri-history-line text-gray-400"></i> Recientes
-            </h3>
-            <div class="text-center py-8 text-gray-400">
-              <i class="ri-history-line text-4xl mb-2 block opacity-30"></i>
-              <p class="text-sm font-medium">Sin actividad reciente.</p>
-              <p class="text-xs mt-1">Tus búsquedas aparecerán aquí.</p>
-            </div>
-          </div>
+          <RecentViews views={recentViews} />
         </div>
       </section>
     )}
 
     {tab === 'resenas' && (
-      <section class="bg-white rounded-3xl shadow-sm border border-gray-100 p-12 text-center">
-        <i class="ri-star-smile-line text-6xl text-gray-300 mb-4 block"></i>
-        <p class="text-gray-500">
-          Aún no has dejado reseñas.{' '}
-          <a href="/" class="text-orange-500 font-bold hover:text-orange-600">
-            Buscar vecinos para reseñar
-          </a>
-        </p>
-        <p class="text-xs text-gray-400 mt-3">HU-11.3 proveerá el listado cuando el endpoint de reseñas esté disponible.</p>
+      <section>
+        <MyReviews reviews={myReviews} />
       </section>
     )}
 
     {tab === 'perfil' && (
       <section class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
-        <h2 class="text-2xl font-extrabold text-gray-800 mb-6">Datos de tu cuenta</h2>
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-extrabold text-gray-800">Datos de tu cuenta</h2>
+          <button onclick="openEditProfileModal()" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-md">
+            <i class="ri-pencil-line"></i> Editar perfil
+          </button>
+        </div>
         <dl class="space-y-4">
           <div class="flex justify-between border-b border-gray-100 pb-3">
             <dt class="text-gray-500">Nombre</dt>
@@ -305,6 +357,7 @@ const myFavorites = await db
         </div>
       </section>
     )}
+    <EditProfileModal open={tab === 'perfil'} communes={allCommunes} />
   </main>
 <script>
   const btnResend = document.getElementById('btn-resend-verification');

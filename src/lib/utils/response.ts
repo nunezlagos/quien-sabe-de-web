@@ -9,6 +9,10 @@ export function jsonResponse<T>(data: T, init: ResponseInit = {}): Response {
   });
 }
 
+export function successResponse(data: unknown, status = 200): Response {
+  return jsonResponse(data, { status });
+}
+
 export function errorResponse(message: string, status = 400, details?: unknown): Response {
   const body: { error: string; details?: unknown } = { error: message };
   if (details !== undefined) body.details = details;

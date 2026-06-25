@@ -1,8 +1,8 @@
 import type { APIRoute } from 'astro';
-import { getDb } from '../../../../database/client';
-import { portfolioImages, trades } from '../../../../database/schema';
+import { getDb } from '../../../../../database/client';
+import { portfolioImages, trades } from '../../../../../database/schema';
 import { eq, and, asc, count, sql } from 'drizzle-orm';
-import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
+import { errorResponse, jsonResponse } from '../../../../../lib/utils/response';
 
 export const GET: APIRoute = async ({ params, locals }) => {
   const tradeId = Number(params.tradeId);

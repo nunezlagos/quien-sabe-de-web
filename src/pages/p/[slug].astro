@@ -36,7 +36,7 @@ const email = provider?.email ?? '';
 
 // Portfolio images
 const portfolio = await db
-  .select({ id: portfolioImages.id, imageUrl: portfolioImages.imageUrl, caption: portfolioImages.caption })
+  .select({ id: portfolioImages.id, url: portfolioImages.url, caption: portfolioImages.caption })
   .from(portfolioImages)
   .where(eq(portfolioImages.tradeId, trade.id))
   .orderBy(desc(portfolioImages.createdAt))
@@ -57,7 +57,7 @@ const otherTrades = provider
 ---
 
 <BaseLayout title={`${trade.name} — QuiénSabe`} description={trade.description?.slice(0, 200) ?? `Servicio de ${trade.symbol ?? 'oficio'} en tu barrio`}>
-  <main class="container mx-auto px-4 py-8 max-w-4xl">
+  <main class="container mx-auto px-4 py-8 max-w-4xl" data-view-trade={trade.id}>
     <!-- Breadcrumb -->
     <nav class="text-sm text-gray-500 mb-6">
       <a href="/" class="hover:text-orange-500">Inicio</a>
@@ -230,8 +230,8 @@ const otherTrades = provider
       <h2 class="text-xl font-extrabold text-gray-800 mb-4">Galería de trabajos</h2>
       <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
         {portfolio.map((img) => (
-          <a href={img.imageUrl} target="_blank" class="aspect-square rounded-xl overflow-hidden bg-gray-100 hover:opacity-90 transition">
-            <img src={img.imageUrl} alt={img.caption ?? ''} class="w-full h-full object-cover" loading="lazy" />
+          <a href={img.url} target="_blank" class="aspect-square rounded-xl overflow-hidden bg-gray-100 hover:opacity-90 transition">
+            <img src={img.url} alt={img.caption ?? ''} class="w-full h-full object-cover" loading="lazy" />
           </a>
         ))}
       </div>
@@ -361,6 +361,11 @@ const otherTrades = provider
   initContactTracking();
   initFavButtons();
   initReportModal();
+  const mainEl = document.querySelector('[data-view-trade]');
+  if (mainEl) {
+    import('../../lib/client/tracking/view-tracker').then(m => m.recordView(Number(mainEl.dataset.viewTrade))).catch(() => {});
+  }
+</script>
 </script>
 
 </BaseLayout>

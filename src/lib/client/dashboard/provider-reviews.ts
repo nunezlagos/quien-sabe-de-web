@@ -3,25 +3,26 @@ export function initProviderPreview() {
   const btnPreview = document.getElementById('btn-preview-profile');
   const modal = document.getElementById('preview-modal');
   const closeBtn = document.getElementById('close-preview');
-  const previewContent = document.getElementById('preview-content');
+  const previewFrame = document.getElementById('preview-frame') as HTMLIFrameElement | null;
 
-  if (btnPreview && modal) {
-    btnPreview.addEventListener('click', async () => {
+  if (btnPreview && modal && previewFrame) {
+    btnPreview.addEventListener('click', () => {
       modal.classList.remove('hidden');
-      previewContent.innerHTML = '<div class="flex items-center justify-center py-12"><div class="animate-spin w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full"></div></div>';
       const slug = btnPreview.dataset.slug;
-      try {
-        const res = await fetch(`/p/${slug}?partial=1`);
-        const html = await res.text();
-        previewContent.innerHTML = html;
-      } catch {
-        previewContent.innerHTML = '<p class="text-center text-red-500 py-8">Error al cargar la vista previa.</p>';
-      }
+      previewFrame.src = `/p/${slug}`;
     });
   }
-  if (closeBtn && modal) {
-    closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
-    modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.add('hidden'); });
+  if (closeBtn && modal && previewFrame) {
+    closeBtn.addEventListener('click', () => {
+      modal.classList.add('hidden');
+      previewFrame.src = 'about:blank';
+    });
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.add('hidden');
+        previewFrame.src = 'about:blank';
+      }
+    });
   }
 }
 

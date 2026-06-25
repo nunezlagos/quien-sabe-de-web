@@ -1,15 +1,55 @@
-name: Deploy Production
+name: Deploy — Production
 on:
   push:
     tags: ['v*']
+
+concurrency:
+  group: deploy-prod
+
 jobs:
+  verify-tag:
+    runs-on: ubuntu-latest
+    outputs:
+      signed: ${{ steps.check-signature.outputs.signed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - id: check-signature
+        run: |
+          if git tag -v ${{ github.ref_name }} 2>/dev/null; then
+            echo "signed=true" >> $GITHUB_OUTPUT
+          else
+            echo "signed=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
   deploy:
+    needs: verify-tag
     runs-on: ubuntu-latest
     environment: production
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
       - run: bun install --frozen-lockfile
-      - run: bunx wrangler d1 migrations apply quien-sabe-db --env production
-      - run: bunx wrangler deploy --env production
-      - run: curl -f https://quiensabe.cl/api/v1/health
+      - name: Apply D1 migrations
+        run: bunx wrangler d1 migrations apply DB --env production
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Deploy to production
+        run: bunx wrangler deploy --env production
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Smoke test
+        run: |
+          curl -f -s -o /dev/null -w "%{http_code}" "https://quien-sabe.cl/api/v1/health" | grep -q 200
+      - name: Notify Discord
+        if: always()
+        uses: tsickert/discord-webhook@v6
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+          content: "🚀 Production deploy v${{ github.ref_name }} — ${{ job.status }}"

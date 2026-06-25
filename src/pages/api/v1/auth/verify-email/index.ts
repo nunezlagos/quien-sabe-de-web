@@ -1,11 +1,11 @@
 import type { APIRoute } from 'astro';
 import { getDb } from '../../../../../database/client';
 import { users } from '../../../../../database/schema';
-import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
+import { errorResponse, jsonResponse } from '../../../../../lib/utils/response';
 import { eq } from 'drizzle-orm';
 
 export const GET: APIRoute = async ({ url, locals }) => {
-  const db = await getDb();
+  const db = getDb(locals);
   const token = url.searchParams.get('token');
   if (!token) return errorResponse('Token requerido', 400);
 

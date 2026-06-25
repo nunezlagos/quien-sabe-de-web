@@ -1,14 +1,14 @@
 import type { APIRoute } from 'astro';
-import { getDb } from '../../../database/client';
-import { users, trades, reviews, contactEvents } from '../../../database/schema';
+import { getDb } from '../../../../database/client';
+import { users, trades, reviews, contactEvents } from '../../../../database/schema';
 import { eq } from 'drizzle-orm';
-import { errorResponse } from '../../../lib/utils/response';
+import { errorResponse } from '../../../../lib/utils/response';
 
 export const GET: APIRoute = async ({ locals }) => {
-  const currentUser = locals.currentUser;
+  const currentUser = locals.user;
   if (!currentUser) return errorResponse('No autorizado', 401);
 
-  const db = await getDb();
+  const db = getDb(locals);
   const userData = await db.select().from(users).where(eq(users.id, currentUser.id)).get();
   const userTrades = await db.select().from(trades).where(eq(trades.userId, currentUser.id)).all();
   const tradeIds = userTrades.map((t) => t.id);

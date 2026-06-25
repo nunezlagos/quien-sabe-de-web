@@ -4,7 +4,7 @@ import { users } from '../../../../../database/schema';
 import { eq } from 'drizzle-orm';
 import { destruirSesion, leerSesion } from '../../../../../lib/services/auth/sesion';
 import { limpiarCookieSesion, leerCookieSesion } from '../../../../../lib/utils/cookies';
-import { errorResponse } from '../../../../lib/utils/response';
+import { errorResponse } from '../../../../../lib/utils/response';
 
 export const prerender = false;
 

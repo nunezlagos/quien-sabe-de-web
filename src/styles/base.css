@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @theme {
-  --color-primary: #2E8B57;
-  --color-primary-dark: #1f633d;
+  --color-primary: #f97316;
+  --color-primary-dark: #ea580c;
 }
 @import "./components.css";
 @import "./global/animations.css";
@@ -37,6 +37,7 @@ body {
   --color-gray-900: #111827;
 
   --color-primary: #f97316;
+  --color-primary-dark: #ea580c;
   --color-facebook: #1877F2;
   --color-facebook-dark: #166fe5;
 

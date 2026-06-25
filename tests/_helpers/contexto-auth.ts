@@ -1,5 +1,5 @@
 import type { APIContext } from 'astro';
-import { createInMemoryDb, createInMemoryKV, FakeCookies, type KVLike } from './in-memory-db';
+import { createInMemoryDb, createD1LikeBinding, createInMemoryKV, FakeCookies, type KVLike } from './in-memory-db';
 
 let dbSingleton: ReturnType<typeof createInMemoryDb> | null = null;
 
@@ -57,7 +57,7 @@ export function crearContextoAuth(opciones?: {
 		locals: {
 			runtime: {
 				env: {
-					DB: db.$client,
+					DB: createD1LikeBinding(db.$client) as unknown as KVNamespace,
 					SESSION: kv as unknown as KVNamespace,
 					SESSION_TTL_SECONDS: '2592000',
 					PUBLIC_SITE_URL: 'http://localhost:4323',

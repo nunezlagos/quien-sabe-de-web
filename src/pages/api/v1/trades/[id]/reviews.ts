@@ -29,6 +29,7 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
 
   await db.insert(reviews).values({
     tradeId,
+    userId: locals.user?.id ?? null,
     reviewerName,
     rating,
     body,

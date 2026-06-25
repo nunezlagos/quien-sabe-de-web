@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
-import { getAvailability } from '../../../../lib/services/availability';
-import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
+import { getAvailability } from '../../../../../lib/services/availability';
+import { errorResponse, jsonResponse } from '../../../../../lib/utils/response';
 
 export const GET: APIRoute = async ({ params, locals }) => {
   const userId = Number(params.id);

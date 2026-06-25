@@ -1,11 +1,22 @@
-name: Monthly Report Cron
+name: Cron — Monthly Reports Backup
 on:
   schedule:
     - cron: '0 3 1 * *'
   workflow_dispatch:
+
 jobs:
-  generate:
+  generate-report:
     runs-on: ubuntu-latest
     steps:
-      - run: curl -f -X POST https://quiensabe.cl/api/v1/admin/monthly-reports/generate \
-          -H "X-Cron-Key: ${{ secrets.CRON_KEY }}"
+      - name: Trigger report generation
+        run: |
+          curl -f -s -o /dev/null -w "%{http_code}" \
+            -H "X-Cron-Key: ${{ secrets.CRON_KEY }}" \
+            "https://quien-sabe.cl/api/v1/admin/reports/monthly" \
+            | grep -q 200
+      - name: Notify Discord on failure
+        if: failure()
+        uses: tsickert/discord-webhook@v6
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+          content: "❌ Monthly report cron FAILED — check ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
-import { getTicketById, addMessage } from '../../../lib/services/tickets';
-import { errorResponse, jsonResponse } from '../../../lib/utils/response';
+import { getTicketById, addMessage } from '../../../../../../lib/services/tickets';
+import { errorResponse, jsonResponse } from '../../../../../../lib/utils/response';
 
 export const POST: APIRoute = async ({ params, request, locals }) => {
   const user = (locals as any).user || null;
@@ -26,5 +26,5 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
 
   const message = await addMessage(locals, ticketId, sender, body.body, internalNote);
 
-  return jsonResponse(message, 201);
+  return jsonResponse(message, { status: 201 });
 };

@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { errorResponse } from '../../../../lib/utils/response';
+import { errorResponse } from '../../../../../lib/utils/response';
 
 export const prerender = false;
 

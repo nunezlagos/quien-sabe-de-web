@@ -19,7 +19,10 @@ declare namespace App {
 		email: string;
 		name: string;
 		role: 'user' | 'provider' | 'admin';
+		roles?: string[];
+		activeRole?: string;
 		status: 'active' | 'banned';
+		onboardedAt?: Date | null;
 	}
 
 	interface Locals {
@@ -30,5 +33,6 @@ declare namespace App {
 				waitUntil?: (promise: Promise<unknown>) => void;
 			};
 		};
+		container?: import('./lib/di/container').Container;
 	}
 }

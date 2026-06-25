@@ -2,16 +2,16 @@ import type { APIRoute } from 'astro';
 import { getDb } from '../../../../../database/client';
 import { users } from '../../../../../database/schema';
 import { eq } from 'drizzle-orm';
-import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
-import { sendMail, buildVerificationEmail } from '../../../../lib/services/email/mailpit';
+import { errorResponse, jsonResponse } from '../../../../../lib/utils/response';
+import { sendMail, buildVerificationEmail } from '../../../../../lib/services/email/mailpit';
 import crypto from 'crypto';
 
 export const POST: APIRoute = async ({ locals }) => {
-  const currentUser = locals.currentUser;
+  const currentUser = locals.user;
   if (!currentUser) return errorResponse('No autorizado', 401);
-  if (currentUser.emailVerified) return errorResponse('Email ya verificado', 400);
+  if ((currentUser as { emailVerified?: boolean }).emailVerified) return errorResponse('Email ya verificado', 400);
 
-  const db = await getDb();
+  const db = getDb(locals);
   const token = crypto.randomBytes(32).toString('hex');
   await db.update(users).set({ emailVerificationToken: token }).where(eq(users.id, currentUser.id)).run();
 

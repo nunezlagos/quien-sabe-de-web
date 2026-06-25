@@ -1,14 +1,41 @@
-name: Deploy Staging
+name: Deploy — Staging
 on:
   push:
     branches: [main]
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
       - run: bun install --frozen-lockfile
-      - run: bunx wrangler d1 migrations apply quien-sabe-db --env staging
-      - run: bunx wrangler deploy --env staging
-      - run: curl -f http://staging.quiensabe.cl/api/v1/health
+      - name: Apply D1 migrations
+        run: bunx wrangler d1 migrations apply DB --env staging
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Deploy to staging
+        run: bunx wrangler deploy --env staging
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Smoke test
+        run: |
+          DEPLOY_URL=$(bunx wrangler deploy --env staging --dry-run --outdir /tmp 2>&1 | grep -oP 'https://[^\s]+' | head -1)
+          curl -f -s -o /dev/null -w "%{http_code}" "$DEPLOY_URL/api/v1/health" | grep -q 200
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Notify Discord
+        if: always()
+        uses: tsickert/discord-webhook@v6
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+          content: "🚀 Staging deploy ${{ job.status }} — ${{ github.sha }}"

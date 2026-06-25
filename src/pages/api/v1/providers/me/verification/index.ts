@@ -1,17 +1,11 @@
 import type { APIRoute } from 'astro';
-import { getDb } from '../../../../../database/client';
-import { users } from '../../../../../database/schema';
-import { errorResponse } from '../../../../lib/utils/response';
-import { VerificationRequest } from '../../../../../lib/validators/verification';
+import { getDb } from '../../../../../../database/client';
+import { users } from '../../../../../../database/schema';
+import { errorResponse } from '../../../../../../lib/utils/response';
+import { VerificationRequest } from '../../../../../../lib/validators/verification';
 
 export const prerender = false;
 
-/**
- * POST /api/v1/providers/me/verification
- * Registra una solicitud de verificación para el proveedor autenticado.
- * MVP: valida y devuelve acuse; la persistencia en tabla `verification_requests`
- * llega con HU-12.6 (admin reviewer).
- */
 export const POST: APIRoute = async (contexto) => {
   const currentUser = contexto.locals.user;
   if (!currentUser) return errorResponse('no autenticado', 401);
@@ -33,7 +27,6 @@ export const POST: APIRoute = async (contexto) => {
   }
 
   const { rut, trade } = parsed.data;
-  // Toca la DB para que el binding falle ruidosamente si la migración no corrió.
   const db = getDb(contexto.locals);
   await db.select().from(users).limit(1).all();
 

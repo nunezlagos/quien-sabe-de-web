@@ -50,7 +50,7 @@ export const createUser = async (ctx: APIContext) => {
     
     const result = createUserSchema.safeParse(body);
     if (!result.success) {
-        const errorMessages = result.error.issues.map((err: any) => `${err.path.join('.')}: ${err.message}`);
+        const errorMessages = result.error.issues.map((err: any) => `${err.path.join('.')}: ${err.message}`).join(', ');
         return errorResponse(errorMessages, 400);
     }
 
@@ -76,7 +76,7 @@ export const updateUser = async (ctx: APIContext) => {
 
     const result = updateUserSchema.safeParse(body);
     if (!result.success) {
-      const errorMessages = result.error.issues.map((err: any) => `${err.path.join('.')}: ${err.message}`);
+      const errorMessages = result.error.issues.map((err: any) => `${err.path.join('.')}: ${err.message}`).join(', ');
       return errorResponse(errorMessages, 400);
     }
 

@@ -1,0 +1,54 @@
+---
+export interface ReviewItem {
+  id: number;
+  tradeId: number;
+  tradeName: string;
+  tradeSlug: string;
+  rating: number;
+  body: string;
+  createdAt: string;
+}
+
+export interface Props {
+  reviews: ReviewItem[];
+}
+
+const { reviews } = Astro.props;
+
+function stars(rating: number): string {
+  return '★'.repeat(rating) + '☆'.repeat(5 - rating);
+}
+---
+
+<div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
+  <h3 class="font-bold text-gray-800 text-lg mb-4 flex items-center gap-2">
+    <i class="ri-star-smile-line text-yellow-500"></i> Mis reseñas ({reviews.length})
+  </h3>
+
+  {reviews.length > 0 ? (
+    <div class="space-y-4">
+      {reviews.map((r) => (
+        <article class="bg-gray-50 rounded-2xl border border-gray-100 p-4">
+          <div class="flex items-center justify-between mb-2">
+            <a href={`/p/${r.tradeSlug}`} class="font-bold text-gray-800 text-sm hover:text-orange-600 transition">
+              {r.tradeName}
+            </a>
+            <time class="text-xs text-gray-400">
+              {new Date(r.createdAt).toLocaleDateString('es-CL', { day: 'numeric', month: 'short', year: 'numeric' })}
+            </time>
+          </div>
+          <div class="text-yellow-500 text-sm mb-2">{stars(r.rating)}</div>
+          <p class="text-sm text-gray-700 leading-relaxed">{r.body}</p>
+        </article>
+      ))}
+    </div>
+  ) : (
+    <div class="text-center py-8 text-gray-400">
+      <i class="ri-star-smile-line text-4xl mb-2 block opacity-30"></i>
+      <p class="text-sm font-medium">Aún no has dejado reseñas.</p>
+      <p class="text-xs mt-1">
+        <a href="/" class="text-orange-500 font-bold hover:text-orange-600">Buscar vecinos para reseñar</a>
+      </p>
+    </div>
+  )}
+</div>

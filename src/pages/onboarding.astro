@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OnboardingWizard from '../components/dashboard/OnboardingWizard.astro';
+import { getDb } from '../database/client';
+import { communes } from '../database/schema';
+import { eq, asc } from 'drizzle-orm';
+
+const user = Astro.locals.user;
+if (!user) {
+  return Astro.redirect('/iniciar-sesion?redirigir=/onboarding');
+}
+
+if (user.role !== 'user') {
+  return Astro.redirect('/dashboard');
+}
+
+if (user.onboardedAt) {
+  return Astro.redirect('/dashboard');
+}
+
+// We need to check the actual DB value for onboardedAt since locals.user
+// may be stale. Query the user from DB.
+import { buscarUsuarioPorId } from '../lib/services/auth/usuarios';
+const dbUser = await buscarUsuarioPorId(Astro, user.id);
+if (dbUser?.onboardedAt) {
+  return Astro.redirect('/dashboard');
+}
+
+const db = getDb(Astro.locals);
+const allCommunes = await db
+  .select({ id: communes.id, name: communes.name })
+  .from(communes)
+  .orderBy(asc(communes.name))
+  .all();
+---
+
+<BaseLayout title="Bienvenido — QuiénSabe de Web">
+  <OnboardingWizard communes={allCommunes} />
+</BaseLayout>

@@ -1,8 +1,8 @@
 import type { APIRoute } from 'astro';
-import { getDb } from '../../../../database/client';
-import { appSettings } from '../../../../database/schema';
+import { getDb } from '../../../../../database/client';
+import { appSettings } from '../../../../../database/schema';
 import { eq } from 'drizzle-orm';
-import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
+import { errorResponse, jsonResponse } from '../../../../../lib/utils/response';
 
 export const GET: APIRoute = async ({ locals }) => {
   const u = (locals as any).user;
@@ -24,7 +24,7 @@ export const PATCH: APIRoute = async ({ request, locals }) => {
 
   const db = getDb(locals);
 
-  for (const [key, value] of Object.entries(body)) {
+  for (const [key, value] of Object.entries(body ?? {})) {
     const existing = await db.select().from(appSettings).where(eq(appSettings.key, key)).get();
     if (existing) {
       await db.update(appSettings).set({ value: String(value), updatedAt: new Date() }).where(eq(appSettings.key, key)).run();

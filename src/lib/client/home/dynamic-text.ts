@@ -15,10 +15,12 @@ export function initDynamicText(): void {
   let index = 0;
 
   function cambiar() {
+    if (!el) return;
     el.classList.remove('animate-fade-in-up');
     el.classList.add('animate-fade-out-up');
 
     setTimeout(() => {
+      if (!el) return;
       index = (index + 1) % TRADES.length;
       el.textContent = TRADES[index].name;
       el.classList.remove('animate-fade-out-up');

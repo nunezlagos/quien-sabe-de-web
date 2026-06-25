@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
-import { getTicketById, listMessages } from '../../../lib/services/tickets';
-import { errorResponse, jsonResponse } from '../../../lib/utils/response';
+import { getTicketById, listMessages } from '../../../../../lib/services/tickets';
+import { errorResponse, jsonResponse } from '../../../../../lib/utils/response';
 
 export const GET: APIRoute = async ({ params, locals, url }) => {
   const user = (locals as any).user || null;

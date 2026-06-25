@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
-import { updateDonationStatus } from '../../../lib/services/donations';
-import { errorResponse, jsonResponse } from '../../../lib/utils/response';
+import { updateDonationStatus } from '../../../../../lib/services/donations';
+import { errorResponse, jsonResponse } from '../../../../../lib/utils/response';
 
 export const POST: APIRoute = async ({ request, locals }) => {
   let body: any;

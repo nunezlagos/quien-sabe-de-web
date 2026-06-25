@@ -1,8 +1,8 @@
 import type { APIRoute } from 'astro';
-import { getDb } from '../../../../database/client';
-import { eventsLog } from '../../../../database/schema';
+import { getDb } from '../../../../../database/client';
+import { eventsLog } from '../../../../../database/schema';
 import { eq, desc, and } from 'drizzle-orm';
-import { errorResponse, jsonResponse } from '../../../../lib/utils/response';
+import { errorResponse, jsonResponse } from '../../../../../lib/utils/response';
 
 export const GET: APIRoute = async ({ locals, url }) => {
   const user = (locals as any).user;

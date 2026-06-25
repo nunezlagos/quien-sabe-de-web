@@ -1,0 +1,65 @@
+---
+export interface ContactEvent {
+  id: number;
+  eventType: string;
+  tradeId: number;
+  tradeName: string;
+  tradeSlug: string;
+  createdAt: string;
+}
+
+export interface Props {
+  events: ContactEvent[];
+}
+
+const { events } = Astro.props;
+
+const iconMap: Record<string, string> = {
+  whatsapp: 'ri-whatsapp-line',
+  email: 'ri-mail-line',
+  phone: 'ri-phone-line',
+  profile: 'ri-user-line',
+};
+
+const labelMap: Record<string, string> = {
+  whatsapp: 'WhatsApp',
+  email: 'Email',
+  phone: 'Teléfono',
+  profile: 'Perfil',
+};
+---
+
+<div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
+  <h3 class="font-bold text-gray-800 text-lg mb-4 flex items-center gap-2">
+    <i class="ri-chat-1-line text-orange-500"></i> Historial de contactos
+  </h3>
+
+  {events.length > 0 ? (
+    <div class="space-y-3">
+      {events.map((ev) => (
+        <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl border border-gray-100">
+          <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 text-lg flex-shrink-0">
+            <i class={iconMap[ev.eventType] || 'ri-question-line'}></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <a href={`/p/${ev.tradeSlug}`} class="font-bold text-gray-800 text-sm hover:text-orange-600 transition truncate block">
+              {ev.tradeName}
+            </a>
+            <p class="text-xs text-gray-500">
+              Contacto vía {labelMap[ev.eventType] || ev.eventType}
+            </p>
+          </div>
+          <time class="text-xs text-gray-400 flex-shrink-0">
+            {new Date(ev.createdAt).toLocaleDateString('es-CL', { day: 'numeric', month: 'short' })}
+          </time>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <div class="text-center py-8 text-gray-400">
+      <i class="ri-chat-1-line text-4xl mb-2 block opacity-30"></i>
+      <p class="text-sm font-medium">Aún no has contactado a ningún vecino.</p>
+      <p class="text-xs mt-1">Cuando contactes a un oficio aparecerá aquí.</p>
+    </div>
+  )}
+</div>
