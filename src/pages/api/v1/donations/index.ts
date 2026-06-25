@@ -1,43 +1,28 @@
 import type { APIRoute } from 'astro';
-import { getDb } from '../../../../database/client';
-import { users } from '../../../../database/schema';
-import { errorResponse } from '../../../../lib/utils/response';
-import { DonationBody } from '../../../../lib/validators/donations';
+import { createDonation } from '../../../lib/services/donations';
+import { DonationBody } from '../../../lib/validators/donations';
+import { errorResponse, jsonResponse } from '../../../lib/utils/response';
 
-export const prerender = false;
+export const POST: APIRoute = async ({ request, locals }) => {
+  const user = (locals as any).user || null;
+  let body: any;
+  try { body = await request.json(); } catch { return errorResponse('JSON inválido', 400); }
 
-/**
- * POST /api/v1/donations
- * Registra la intención de donar. MVP: valida y devuelve acuse; la integración
- * real con Mercado Pago / Webpay llega con HU-14.7/14.8.
- */
-export const POST: APIRoute = async (contexto) => {
-  const formData = await contexto.request.formData();
-  const body = Object.fromEntries(formData.entries());
   const parsed = DonationBody.safeParse(body);
-
-  if (!parsed.success) {
-    const firstIssue = parsed.error.issues[0];
-    const errorMsg = encodeURIComponent(firstIssue?.message ?? 'datos inválidos');
-    return new Response(null, {
-      status: 302,
-      headers: { Location: `/donar?error=${errorMsg}` },
-    });
-  }
+  if (!parsed.success) return errorResponse(parsed.error.issues.map(i => i.message).join(', '), 422);
 
   const { amount, provider, recurring } = parsed.data;
-  // Toca la DB para validar binding (los usuarios pueden donar sin estar logueados).
-  const db = getDb(contexto.locals);
-  await db.select().from(users).limit(1).all();
-
-  const params = new URLSearchParams({
-    ok: '1',
-    amount: String(amount),
+  const donation = await createDonation(locals, {
     provider,
-    recurring: recurring ? '1' : '0',
+    amountClp: amount,
+    recurring,
+    payerEmail: user?.email,
+    userId: user?.id,
   });
-  return new Response(null, {
-    status: 302,
-    headers: { Location: `/donar?${params.toString()}` },
-  });
+
+  const initPoint = provider === 'mercadopago'
+    ? `https://www.mercadopago.cl/checkout/v1/redirect?preference_id=mock_${donation.id}`
+    : `https://webpay3g.transbank.cl/webpago.cgi?token=mock_${donation.id}`;
+
+  return jsonResponse({ id: donation.id, amount, provider, initPoint }, 201);
 };

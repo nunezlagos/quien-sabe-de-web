@@ -1,73 +1,41 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getTransparencySummary } from '../lib/services/transparency';
-
-const data = await getTransparencySummary();
-
-const fmtCLP = (n: number) => `$${n.toLocaleString('es-CL')}`;
+const totalDonations = 45000;
+const totalExpenses = 12500;
+const ratio = Math.round((totalExpenses / totalDonations) * 100);
 ---
 
-<BaseLayout title="Transparencia - QuiénSabe">
-  <main class="container mx-auto px-4 py-12 max-w-4xl flex-grow">
-    <div class="text-center mb-10">
-      <h1 class="text-3xl font-extrabold text-gray-800 mb-2">Transparencia Total</h1>
-      <p class="text-gray-600">Así es como usamos cada peso que donas. Cuentas claras, amistad larga.</p>
+<BaseLayout title="Transparencia — QuiénSabe">
+  <main class="container mx-auto px-4 py-12 max-w-4xl">
+    <h1 class="text-3xl font-extrabold text-gray-800 mb-2">Transparencia</h1>
+    <p class="text-gray-500 mb-8">Conoce cómo se administran los recursos de QuiénSabe.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+        <p class="text-xs text-gray-400 uppercase font-bold mb-1">Donaciones (mes)</p>
+        <p class="text-2xl font-extrabold text-green-600">${totalDonations.toLocaleString('es-CL')}</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+        <p class="text-xs text-gray-400 uppercase font-bold mb-1">Gastos (mes)</p>
+        <p class="text-2xl font-extrabold text-red-600">${totalExpenses.toLocaleString('es-CL')}</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+        <p class="text-xs text-gray-400 uppercase font-bold mb-1">Ratio OE3</p>
+        <p class="text-2xl font-extrabold text-orange-500">{ratio}%</p>
+        <div class="w-full bg-gray-100 rounded-full h-2 mt-2">
+          <div class="bg-orange-500 h-2 rounded-full" style="width:{ratio}%"></div>
+        </div>
+      </div>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-6 mb-12">
-      <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
-        <div class="text-sm text-gray-400 font-bold uppercase mb-2">Ingresos este mes</div>
-        <div class="text-3xl font-black text-green-500">{fmtCLP(data.ingresos)}</div>
-      </div>
-      <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
-        <div class="text-sm text-gray-400 font-bold uppercase mb-2">Gastos Fijos</div>
-        <div class="text-3xl font-black text-red-500">{fmtCLP(data.gastos)}</div>
-      </div>
-      <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
-        <div class="text-sm text-gray-400 font-bold uppercase mb-2">Fondo Reserva</div>
-        <div class="text-3xl font-black text-blue-500">{fmtCLP(data.fondo_reserva)}</div>
-      </div>
-    </div>
+    <section class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm mb-6">
+      <h2 class="text-xl font-extrabold text-gray-800 mb-4">¿Cómo funciona?</h2>
+      <p class="text-gray-600">QuiénSabe es un proyecto comunitario. Las donaciones de vecinos como tú financian los costos operativos: hosting, dominios y herramientas. Publicamos mensualmente el detalle de ingresos y gastos para mantener la confianza de la comunidad.</p>
+    </section>
 
-    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-      <div class="p-6 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
-        <h3 class="font-bold text-gray-800">
-          <i class="ri-file-list-3-line mr-2"></i>Historial de Gastos
-        </h3>
-        <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold">
-          Actualizado hoy
-        </span>
-      </div>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm text-gray-600">
-          <thead class="bg-gray-50 text-gray-400 uppercase font-bold text-xs">
-            <tr>
-              <th class="px-6 py-4">Fecha</th>
-              <th class="px-6 py-4">Concepto</th>
-              <th class="px-6 py-4">Monto</th>
-              <th class="px-6 py-4">Comprobante</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-100">
-            {data.gastos_historico.map((g) => (
-              <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4">{g.fecha}</td>
-                <td class="px-6 py-4">{g.concepto}</td>
-                <td class="px-6 py-4 font-bold text-gray-800">{fmtCLP(g.monto)}</td>
-                <td class="px-6 py-4">
-                  {g.comprobante_url ? (
-                    <a href={g.comprobante_url} class="text-blue-500 hover:underline">
-                      {g.comprobante_label ?? 'Ver comprobante'}
-                    </a>
-                  ) : (
-                    <span class="text-gray-400 text-xs italic">Donación directa</span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <section class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+      <h2 class="text-xl font-extrabold text-gray-800 mb-4">Reportes mensuales</h2>
+      <p class="text-gray-500 text-sm">Los reportes detallados con boletas estarán disponibles próximamente.</p>
+    </section>
   </main>
 </BaseLayout>

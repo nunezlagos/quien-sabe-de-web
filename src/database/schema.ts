@@ -124,6 +124,21 @@ export const appSettings = sqliteTable('app_settings', {
 
 export type ContactEvent = typeof contactEvents.$inferSelect;
 
+export const donations = sqliteTable('donations', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  provider: text('provider', { enum: ['mercadopago', 'webpay'] }).notNull(),
+  externalId: text('external_id'),
+  amountClp: integer('amount_clp').notNull(),
+  status: text('status', { enum: ['pending', 'approved', 'rejected', 'refunded', 'abandoned'] }).notNull().default('pending'),
+  payerEmail: text('payer_email'),
+  userId: integer('user_id').references(() => users.id, { onDelete: 'set null' }),
+  recurring: integer('recurring', { mode: 'boolean' }).notNull().default(false),
+  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});
+
+export type Donation = typeof donations.$inferSelect;
+
 export const providerAvailability = sqliteTable('provider_availability', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
