@@ -5,8 +5,9 @@ FROM oven/bun:1.3.8-alpine AS builder
 
 WORKDIR /build
 
+RUN apk add --no-cache python3 build-base
 COPY package.json bun.lock ./
-RUN bun install --frozen-lockfile
+RUN bun install
 
 COPY . .
 

@@ -16,4 +16,4 @@ node /app/seed.mjs 2>&1 || echo "⚠️ Seed failed (non-fatal)"
 echo "✅ Seed done"
 
 echo "🚀 Starting app..."
-exec node /app/server/entry.mjs
+exec node /app/dist/server/entry.mjs

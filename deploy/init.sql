@@ -161,7 +161,7 @@ CREATE TABLE IF NOT EXISTS `events_log` (
   `id` int AUTO_INCREMENT PRIMARY KEY,
   `event` varchar(30) NOT NULL,
   `actor_role` varchar(20) NOT NULL,
-  `props_json` text NOT NULL DEFAULT '{}',
+  `props_json` text NOT NULL,
   `created_at` datetime,
   INDEX `idx_events_log_event` (`event`),
   INDEX `idx_events_log_event_created` (`event`, `created_at`)

@@ -2,8 +2,8 @@ FROM oven/bun:1.3.8
 
 WORKDIR /app
 
-# Dependencias del sistema mínimas (curl para healthchecks, git para algunos paquetes)
-RUN apt-get update && apt-get install -y --no-install-recommends curl git bash && rm -rf /var/lib/apt/lists/*
+# Dependencias del sistema (build-essential+python3 para native addons, curl para healthchecks)
+RUN apt-get update && apt-get install -y --no-install-recommends curl git bash python3 build-essential && rm -rf /var/lib/apt/lists/*
 
 # Instalar dependencias primero para cachear esta capa
 COPY package.json bun.lock ./
