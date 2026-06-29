@@ -42,18 +42,18 @@ export const POST: APIRoute = async (contexto) => {
 		});
 
 		const verificationToken = crypto.randomBytes(32).toString('hex');
-		const db = getDb(contexto);
+		const db = getDb();
 		await db.update(users).set({ emailVerificationToken: verificationToken }).where(eq(users.id, currentUser.id)).run();
 
-		const siteUrl = contexto.locals.runtime.env.PUBLIC_SITE_URL || 'http://127.0.0.1:4323';
+		const siteUrl = process.env.PUBLIC_SITE_URL || 'http://127.0.0.1:4323';
 		sendMail(buildVerificationEmail(currentUser.email, verificationToken, siteUrl));
 
-		const sesion = await crearSesion(contexto.locals.runtime.env, currentUser);
+		const sesion = await crearSesion(currentUser);
 		establecerCookieSesion(
 			contexto.cookies,
 			sesion.token,
 			sesion.ttlSegundos,
-			contexto.locals.runtime.env.PUBLIC_SITE_URL,
+			process.env.PUBLIC_SITE_URL,
 		);
 		return jsonResponse({ currentUser: usuarioPublico(currentUser) }, { status: 201 });
 	} catch (err) {

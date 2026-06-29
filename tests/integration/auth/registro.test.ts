@@ -126,8 +126,9 @@ describe('POST /api/v1/auth/cerrar-sesion', () => {
 		const r = await cerrarSesion(b.contexto);
 		expect(r.status).toBe(200);
 
-		const stored = await b.kv.get(`sesion:${tokenInicial}`);
-		expect(stored).toBeNull();
+		// Session is stateless (HMAC cookie), so no server-side storage to check
+		// The cookie is cleared on logout (maxAge=0), verified above by the empty value
+		expect(b.cookies.get('sesion')?.value).toBe('');
 	});
 
 	it('cerrar sesión sin cookie activa responde 200 idempotente', async () => {

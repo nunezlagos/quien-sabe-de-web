@@ -1,11 +1,15 @@
-export const GET = async ({ locals }: any) => {
+import { getDb } from '../../database/client';
+import { users } from '../../database/schema';
+import { eq } from 'drizzle-orm';
+
+export const GET = async () => {
   try {
-    const db = locals.runtime?.env?.DB || locals.DB;
-    const { results } = await db.prepare('SELECT 1 as health').all();
+    const db = getDb();
+    const [row] = await db.select().from(users).limit(1);
     
     return new Response(JSON.stringify({ 
       status: 'ok', 
-      db_check: results[0].health === 1,
+      db_check: true,
       timestamp: new Date().toISOString()
     }), {
       headers: { 'Content-Type': 'application/json' }

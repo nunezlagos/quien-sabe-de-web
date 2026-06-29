@@ -47,16 +47,16 @@ export const DELETE: APIRoute = async (contexto) => {
 
 	const token = leerCookieSesion(contexto.cookies);
 	if (token) {
-		const carga = await leerSesion(contexto.locals.runtime.env, token);
+		const carga = await leerSesion(token);
 		if (carga) {
-			await destruirSesion(contexto.locals.runtime.env, token);
+			await destruirSesion(token);
 		}
 	}
 
-	const db = getDb(contexto);
+	const db = getDb();
 	await db.delete(users).where(eq(users.id, usuario.id));
 
-	limpiarCookieSesion(contexto.cookies, contexto.locals.runtime.env.PUBLIC_SITE_URL);
+	limpiarCookieSesion(contexto.cookies, process.env.PUBLIC_SITE_URL);
 	contexto.cookies.delete('data_export_requested', { path: '/' });
 
 	return new Response(null, {

@@ -15,7 +15,7 @@ COPY . .
 
 EXPOSE 4323
 
-# Hot reload: Astro dev escucha en 0.0.0.0:4323. Wrangler platformProxy se inicializa solo.
+# Hot reload: Astro dev escucha en 0.0.0.0:4323.
 # CHOKIDAR_USEPOLLING habilita watch confiable dentro de volúmenes Docker.
 ENV CHOKIDAR_USEPOLLING=true
 ENV WATCHPACK_POLLING=true

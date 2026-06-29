@@ -1,29 +1,33 @@
-import { drizzle } from 'drizzle-orm/d1';
+import { drizzle } from 'drizzle-orm/mysql2';
+import mysql from 'mysql2/promise';
 import * as schema from './schema';
 
-function pickBinding(objeto: any): any {
-  if (!objeto) return undefined;
-  return (
-    objeto?.runtime?.env?.DB ||
-    objeto?.DB ||
-    objeto?.locals?.runtime?.env?.DB ||
-    objeto?.locals?.DB
-  );
+let pool: mysql.Pool | null = null;
+
+function getPool(): mysql.Pool {
+  if (!pool) {
+    pool = mysql.createPool({
+      host: process.env.DB_HOST || 'localhost',
+      port: Number(process.env.DB_PORT) || 3306,
+      user: process.env.DB_USER || 'quien_sabe',
+      password: process.env.DB_PASSWORD || '',
+      database: process.env.DB_NAME || 'quien_sabe',
+      waitForConnections: true,
+      connectionLimit: 10,
+    });
+  }
+  return pool;
 }
 
-export function getDb(objeto: any) {
-  const dbBinding = pickBinding(objeto);
+let dbInstance: ReturnType<typeof drizzle> | null = null;
 
-  if (!dbBinding && typeof process !== 'undefined' && process.env.DB) {
-    // @ts-ignore
-    return drizzle(process.env.DB, { schema });
+export function getDb() {
+  if (!dbInstance) {
+    dbInstance = drizzle(getPool(), { schema, mode: 'default' });
   }
-
-  if (!dbBinding) {
-    throw new Error('Database binding (DB) not found. Ensure you are running with wrangler or have the binding configured.');
-  }
-
-  return drizzle(dbBinding, { schema });
+  return dbInstance;
 }
 
-export const getDbFromContext = (context: any) => getDb(context?.locals ?? context);
+export function getDbFromContext() {
+  return getDb();
+}

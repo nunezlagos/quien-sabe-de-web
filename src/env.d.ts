@@ -1,38 +1,41 @@
 /// <reference path="../.astro/types.d.ts" />
 /// <reference types="astro/client" />
 
-type D1Database = import('@cloudflare/workers-types').D1Database;
-type R2Bucket = import('@cloudflare/workers-types').R2Bucket;
-type KVNamespace = import('@cloudflare/workers-types').KVNamespace;
+declare namespace App {
+  interface User {
+    id: number;
+    email: string;
+    name: string;
+    role: 'user' | 'provider' | 'admin';
+    roles?: string[];
+    activeRole?: string;
+    status: 'active' | 'banned';
+    onboardedAt?: Date | null;
+  }
 
-interface Env {
-	DB: D1Database;
-	BUCKET: R2Bucket;
-	SESSION: KVNamespace;
-	SESSION_TTL_SECONDS?: string;
-	PUBLIC_SITE_URL?: string;
+  interface Locals {
+    user?: User;
+    container?: import('./lib/di/container').Container;
+  }
 }
 
-declare namespace App {
-	interface User {
-		id: number;
-		email: string;
-		name: string;
-		role: 'user' | 'provider' | 'admin';
-		roles?: string[];
-		activeRole?: string;
-		status: 'active' | 'banned';
-		onboardedAt?: Date | null;
-	}
-
-	interface Locals {
-		user?: User;
-		runtime: {
-			env: Env;
-			ctx?: {
-				waitUntil?: (promise: Promise<unknown>) => void;
-			};
-		};
-		container?: import('./lib/di/container').Container;
-	}
+declare namespace NodeJS {
+  interface ProcessEnv {
+    DB_HOST?: string;
+    DB_PORT?: string;
+    DB_USER?: string;
+    DB_PASSWORD?: string;
+    DB_NAME?: string;
+    MINIO_ENDPOINT?: string;
+    MINIO_PORT?: string;
+    MINIO_ACCESS_KEY?: string;
+    MINIO_SECRET_KEY?: string;
+    MINIO_BUCKET?: string;
+    MINIO_USE_SSL?: string;
+    SESSION_SECRET?: string;
+    SESSION_TTL_SECONDS?: string;
+    PUBLIC_SITE_URL?: string;
+    PORT?: string;
+    HOST?: string;
+  }
 }

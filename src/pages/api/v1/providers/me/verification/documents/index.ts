@@ -25,20 +25,20 @@ export const POST: APIRoute = async (contexto) => {
   if (!file || !kind) return errorResponse('file y kind son requeridos', 422);
   if (!ALLOWED_CONTENT_TYPES.includes(file.type)) return errorResponse('content-type no permitido', 422);
 
-  const db = getDb(contexto.locals);
+  const db = getDb();
   const ext = file.name.split('.').pop() || file.type.split('/')[1];
-  const r2Key = `verificaciones/${currentUser.id}/${Date.now()}-${kind}.${ext}`;
+  const objectKey = `verificaciones/${currentUser.id}/${Date.now()}-${kind}.${ext}`;
 
-  const uploads = getUploadsService(contexto);
+  const uploads = getUploadsService();
   await uploads.uploadImage(file, `verificaciones/${currentUser.id}`);
 
   await db.insert(verificationDocuments).values({
     userId: currentUser.id,
     kind: kind as 'cedula' | 'certificado' | 'comprobante' | 'otro',
-    r2Key,
+    objectKey: objectKey,
     contentType: file.type,
     uploadedAt: new Date(),
   }).run();
 
-  return jsonResponse({ ok: true, r2_key: r2Key }, { status: 200 });
+  return jsonResponse({ ok: true, object_key: objectKey }, { status: 200 });
 };

@@ -17,9 +17,6 @@ services:
       - ./astro.config.mjs:/app/astro.config.mjs
       - ./tsconfig.json:/app/tsconfig.json
       - ./drizzle.config.ts:/app/drizzle.config.ts
-      - ./wrangler.toml:/app/wrangler.toml:ro
-      # Estado persistente de wrangler/D1 local entre rebuilds
-      - wrangler_state:/app/.wrangler
       # node_modules dentro del container (no sobreescribir con el host)
       - app_node_modules:/app/node_modules
     environment:
@@ -98,7 +95,6 @@ services:
       - quien-sabe-net
 
 volumes:
-  wrangler_state:
   app_node_modules:
   minio_data:
 

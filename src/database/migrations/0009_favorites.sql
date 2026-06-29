@@ -1,7 +1,0 @@
-CREATE TABLE favorites (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  trade_id INTEGER NOT NULL REFERENCES trades(id) ON DELETE CASCADE,
-  created_at INTEGER NOT NULL DEFAULT (unixepoch()),
-  UNIQUE(user_id, trade_id)
-);

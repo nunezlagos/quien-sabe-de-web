@@ -8,11 +8,11 @@ export const prerender = false;
 export const POST: APIRoute = async (contexto) => {
 	const token = leerCookieSesion(contexto.cookies);
 	if (token) {
-		const carga = await leerSesion(contexto.locals.runtime.env, token);
+		const carga = await leerSesion(token);
 		if (carga) {
-			await destruirSesion(contexto.locals.runtime.env, token);
+			await destruirSesion(token);
 		}
 	}
-	limpiarCookieSesion(contexto.cookies, contexto.locals.runtime.env.PUBLIC_SITE_URL);
+	limpiarCookieSesion(contexto.cookies, process.env.PUBLIC_SITE_URL);
 	return jsonResponse({ ok: true });
 };

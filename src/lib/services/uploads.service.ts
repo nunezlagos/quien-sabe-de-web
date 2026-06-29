@@ -1,33 +1,46 @@
-import type { R2Bucket } from '@cloudflare/workers-types';
+import { Client } from 'minio';
 
 export class UploadsService {
-  private bucket: R2Bucket;
+  private client: Client;
+  private bucket: string;
 
-  constructor(bucket: R2Bucket) {
-    this.bucket = bucket;
+  constructor() {
+    this.client = new Client({
+      endPoint: process.env.MINIO_ENDPOINT || 'localhost',
+      port: Number(process.env.MINIO_PORT) || 9000,
+      useSSL: process.env.MINIO_USE_SSL === 'true',
+      accessKey: process.env.MINIO_ACCESS_KEY || 'minioadmin',
+      secretKey: process.env.MINIO_SECRET_KEY || 'minioadmin',
+    });
+    this.bucket = process.env.MINIO_BUCKET || 'quien-sabe-files';
   }
 
   async uploadImage(file: File, folder: string = 'uploads'): Promise<string> {
     const key = `${folder}/${Date.now()}-${file.name}`;
-    
-    await this.bucket.put(key, await file.arrayBuffer(), {
-      httpMetadata: {
-        contentType: file.type,
-      },
+    const buffer = Buffer.from(await file.arrayBuffer());
+
+    await this.client.putObject(this.bucket, key, buffer, buffer.length, {
+      'Content-Type': file.type,
     });
 
-    return key; 
+    const endpoint = process.env.MINIO_ENDPOINT || 'localhost';
+    const port = process.env.MINIO_PORT || '9000';
+    return `http://${endpoint}:${port}/${this.bucket}/${key}`;
   }
 
   async getFile(key: string) {
-    return await this.bucket.get(key);
+    try {
+      return await this.client.getObject(this.bucket, key);
+    } catch {
+      return null;
+    }
+  }
+
+  async deleteFile(key: string): Promise<void> {
+    await this.client.removeObject(this.bucket, key);
   }
 }
 
-export const getUploadsService = (context: any) => {
-  const bucket = context.locals?.runtime?.env?.BUCKET || context.locals?.BUCKET;
-  if (!bucket) {
-    throw new Error('R2 Bucket binding (BUCKET) not found');
-  }
-  return new UploadsService(bucket);
+export const getUploadsService = () => {
+  return new UploadsService();
 };

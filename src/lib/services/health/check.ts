@@ -1,4 +1,5 @@
 import { getDb } from '../../../database/client';
+import { sql } from 'drizzle-orm';
 
 interface HealthComponent {
   status: 'ok' | 'down' | 'timeout';
@@ -9,36 +10,36 @@ interface HealthResponse {
   status: 'ok' | 'degraded' | 'down';
   timestamp: string;
   components: {
-    d1: HealthComponent;
+    database: HealthComponent;
   };
 }
 
-export async function runHealthChecks(locals: any): Promise<HealthResponse> {
+export async function runHealthChecks(): Promise<HealthResponse> {
   const start = Date.now();
-  let d1Status: HealthComponent = { status: 'ok', latencyMs: 0 };
+  let dbStatus: HealthComponent = { status: 'ok', latencyMs: 0 };
 
   try {
-    const db = getDb(locals);
-    await db.run('SELECT 1');
-    d1Status.latencyMs = Date.now() - start;
+    const db = getDb();
+    await db.execute(sql`SELECT 1`);
+    dbStatus.latencyMs = Date.now() - start;
   } catch {
-    d1Status = { status: 'down', latencyMs: Date.now() - start };
+    dbStatus = { status: 'down', latencyMs: Date.now() - start };
   }
 
-  const allOk = d1Status.status === 'ok';
-  const anyOk = d1Status.status === 'ok';
+  const allOk = dbStatus.status === 'ok';
+  const anyOk = dbStatus.status === 'ok';
 
   return {
     status: allOk ? 'ok' : anyOk ? 'degraded' : 'down',
     timestamp: new Date().toISOString(),
-    components: { d1: d1Status },
+    components: { database: dbStatus },
   };
 }
 
-export async function checkMigrationsCurrent(locals: any): Promise<boolean> {
+export async function checkMigrationsCurrent(): Promise<boolean> {
   try {
-    const db = getDb(locals);
-    const result = await db.run('SELECT COUNT(*) as c FROM drizzle_migrations');
+    const db = getDb();
+    await db.execute(sql`SELECT COUNT(*) as c FROM drizzle_migrations`);
     return true;
   } catch {
     return false;

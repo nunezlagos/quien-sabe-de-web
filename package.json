@@ -12,22 +12,27 @@
     "test:run": "vitest run",
     "test:cov": "vitest run --coverage",
     "db:generate": "drizzle-kit generate",
-    "db:migrate:local": "wrangler d1 migrations apply quien-sabe-db --local",
-    "db:migrate:prod": "wrangler d1 migrations apply quien-sabe-db --remote",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "deploy": "docker compose -f deploy/docker-compose.yml up -d --build",
+    "deploy:down": "docker compose -f deploy/docker-compose.yml down",
+    "deploy:logs": "docker compose -f deploy/docker-compose.yml logs -f"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^12.6.12",
+    "@astrojs/node": "^9.0.0",
     "@tailwindcss/postcss": "^4.1.18",
     "@tailwindcss/vite": "^4.1.18",
     "aos": "^2.3.4",
     "astro": "^5.17.1",
     "drizzle-orm": "^0.45.1",
+    "minio": "^8.0.7",
+    "mysql2": "^3.14.1",
     "tailwindcss": "^4.1.18",
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^25.1.0",
+    "better-sqlite3": "^12.11.1",
     "drizzle-kit": "^0.31.8",
     "vitest": "^4.1.9"
   }

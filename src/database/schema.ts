@@ -1,91 +1,78 @@
-import { sqliteTable, text, integer, real, index, uniqueIndex, primaryKey } from 'drizzle-orm/sqlite-core';
+import { mysqlTable, int, text, varchar, boolean, datetime, index, uniqueIndex, primaryKey } from 'drizzle-orm/mysql-core';
 
-export const users = sqliteTable('users', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  email: text('email').notNull().unique(),
-  name: text('name').notNull(),
-  passwordHash: text('password_hash').notNull().default(''),
-  role: text('role', { enum: ['user', 'provider', 'admin'] }).notNull().default('user'),
-  status: text('status', { enum: ['active', 'banned'] }).notNull().default('active'),
+export const users = mysqlTable('users', {
+  id: int('id').autoincrement().primaryKey(),
+  email: varchar('email', { length: 255 }).notNull().unique(),
+  name: varchar('name', { length: 255 }).notNull(),
+  passwordHash: varchar('password_hash', { length: 255 }).notNull().default(''),
+  role: varchar('role', { length: 20, enum: ['user', 'provider', 'admin'] }).notNull().default('user'),
+  status: varchar('status', { length: 20, enum: ['active', 'banned'] }).notNull().default('active'),
   avatarUrl: text('avatar_url'),
-  communeId: integer('commune_id').references(() => communes.id, { onDelete: 'set null' }),
+  communeId: int('commune_id').references(() => communes.id, { onDelete: 'set null' }),
   interests: text('interests'),
-  onboardedAt: integer('onboarded_at', { mode: 'timestamp' }),
-  acceptedTermsAt: integer('accepted_terms_at', { mode: 'timestamp' }),
-  consentEmailProduct: integer('consent_email_product', { mode: 'boolean' }),
-  consentAnalytics: integer('consent_analytics', { mode: 'boolean' }),
-  consentProfilePublic: integer('consent_profile_public', { mode: 'boolean' }),
-  emailVerified: integer('email_verified', { mode: 'boolean' }).notNull().default(false),
+  onboardedAt: datetime('onboarded_at'),
+  acceptedTermsAt: datetime('accepted_terms_at'),
+  consentEmailProduct: boolean('consent_email_product'),
+  consentAnalytics: boolean('consent_analytics'),
+  consentProfilePublic: boolean('consent_profile_public'),
+  emailVerified: boolean('email_verified').notNull().default(false),
   emailVerificationToken: text('email_verification_token'),
   sessionToken: text('session_token'),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+  createdAt: datetime('created_at').$defaultFn(() => new Date()),
 });
 
-export const communes = sqliteTable('communes', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  name: text('name').notNull(),
-  slug: text('slug').notNull().unique(),
-  region: text('region').notNull().default('Metropolitana'),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+export const communes = mysqlTable('communes', {
+  id: int('id').autoincrement().primaryKey(),
+  name: varchar('name', { length: 255 }).notNull(),
+  slug: varchar('slug', { length: 255 }).notNull().unique(),
+  region: varchar('region', { length: 100 }).notNull().default('Metropolitana'),
+  createdAt: datetime('created_at').$defaultFn(() => new Date()),
 });
 
-/**
- * Trades = oficios (no confundir con stock trades).
- * Modelo MVP: cada provider tiene 1..N oficios/trades que ofrece.
- */
-export const trades = sqliteTable('trades', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
-  symbol: text('symbol').notNull(),
-  name: text('name').notNull(),
-  slug: text('slug').notNull().unique(),
-  category: text('category', { enum: ['hogar', 'tecnologia', 'automotriz', 'educacion', 'salud_belleza', 'otros'] }).notNull().default('hogar'),
+export const trades = mysqlTable('trades', {
+  id: int('id').autoincrement().primaryKey(),
+  userId: int('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  symbol: varchar('symbol', { length: 50 }).notNull(),
+  name: varchar('name', { length: 255 }).notNull(),
+  slug: varchar('slug', { length: 255 }).notNull().unique(),
+  category: varchar('category', { length: 30, enum: ['hogar', 'tecnologia', 'automotriz', 'educacion', 'salud_belleza', 'otros'] }).notNull().default('hogar'),
   description: text('description'),
-  basePriceClp: integer('base_price_clp'),
+  basePriceClp: int('base_price_clp'),
   imageUrl: text('image_url'),
-  whatsapp: text('whatsapp'),
-  verified: integer('verified', { mode: 'boolean' }).notNull().default(false),
-  status: text('status', { enum: ['active', 'paused'] }).notNull().default('active'),
-  communeId: integer('commune_id').references(() => communes.id, { onDelete: 'set null' }),
-  availableNow: integer('available_now', { mode: 'boolean' }).notNull().default(false),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+  whatsapp: varchar('whatsapp', { length: 50 }),
+  verified: boolean('verified').notNull().default(false),
+  status: varchar('status', { length: 20, enum: ['active', 'paused'] }).notNull().default('active'),
+  communeId: int('commune_id').references(() => communes.id, { onDelete: 'set null' }),
+  availableNow: boolean('available_now').notNull().default(false),
+  createdAt: datetime('created_at').$defaultFn(() => new Date()),
 });
 
-/**
- * Cobertura: en qué comunas atiende cada trade.
- */
-export const tradeCommunes = sqliteTable('trade_communes', {
-  tradeId: integer('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
-  communeId: integer('commune_id').notNull().references(() => communes.id, { onDelete: 'cascade' }),
+export const tradeCommunes = mysqlTable('trade_communes', {
+  tradeId: int('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
+  communeId: int('commune_id').notNull().references(() => communes.id, { onDelete: 'cascade' }),
 }, (t) => ({
   pk: primaryKey({ columns: [t.tradeId, t.communeId] }),
 }));
 
-/**
- * Reviews de vecinos a providers.
- */
-export const reviews = sqliteTable('reviews', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  tradeId: integer('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
-  userId: integer('user_id').references(() => users.id, { onDelete: 'set null' }),
-  reviewerName: text('reviewer_name').notNull(),
-  rating: integer('rating').notNull(),
+export const reviews = mysqlTable('reviews', {
+  id: int('id').autoincrement().primaryKey(),
+  tradeId: int('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
+  userId: int('user_id').references(() => users.id, { onDelete: 'set null' }),
+  reviewerName: varchar('reviewer_name', { length: 255 }).notNull(),
+  rating: int('rating').notNull(),
   body: text('body').notNull(),
   response: text('response'),
-  respondedAt: integer('responded_at', { mode: 'timestamp' }),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+  respondedAt: datetime('responded_at'),
+  createdAt: datetime('created_at').$defaultFn(() => new Date()),
 });
 
-/**
- * Contact events: track whatsapp/email clicks from public profiles.
- */
-export const contactEvents = sqliteTable('contact_events', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  tradeId: integer('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
+export const contactEvents = mysqlTable('contact_events', {
+  id: int('id').autoincrement().primaryKey(),
+  tradeId: int('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
   visitorId: text('visitor_id'),
-  userId: integer('user_id').references(() => users.id, { onDelete: 'set null' }),
-  eventType: text('event_type', { enum: ['whatsapp', 'email', 'phone', 'profile'] }).notNull(),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+  userId: int('user_id').references(() => users.id, { onDelete: 'set null' }),
+  eventType: varchar('event_type', { length: 20, enum: ['whatsapp', 'email', 'phone', 'profile'] }).notNull(),
+  createdAt: datetime('created_at').$defaultFn(() => new Date()),
 });
 
 export type Usuario = typeof users.$inferSelect;
@@ -94,44 +81,45 @@ export type Trade = typeof trades.$inferSelect;
 export type TradeNuevo = typeof trades.$inferInsert;
 export type Commune = typeof communes.$inferSelect;
 export type Review = typeof reviews.$inferSelect;
-export const favorites = sqliteTable('favorites', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
-  tradeId: integer('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+
+export const favorites = mysqlTable('favorites', {
+  id: int('id').autoincrement().primaryKey(),
+  userId: int('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  tradeId: int('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
+  createdAt: datetime('created_at').$defaultFn(() => new Date()),
 });
 
-export const portfolioImages = sqliteTable('portfolio_images', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  tradeId: integer('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
+export const portfolioImages = mysqlTable('portfolio_images', {
+  id: int('id').autoincrement().primaryKey(),
+  tradeId: int('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
   url: text('url').notNull(),
   caption: text('caption'),
-  sortOrder: integer('sort_order').notNull().default(0),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+  sortOrder: int('sort_order').notNull().default(0),
+  createdAt: datetime('created_at').$defaultFn(() => new Date()),
 });
 
-export const adminAuditLog = sqliteTable('admin_audit_log', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  adminId: integer('admin_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
-  action: text('action').notNull(),
-  entityType: text('entity_type'),
-  entityId: integer('entity_id'),
+export const adminAuditLog = mysqlTable('admin_audit_log', {
+  id: int('id').autoincrement().primaryKey(),
+  adminId: int('admin_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  action: varchar('action', { length: 255 }).notNull(),
+  entityType: varchar('entity_type', { length: 100 }),
+  entityId: int('entity_id'),
   details: text('details'),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+  createdAt: datetime('created_at').$defaultFn(() => new Date()),
 });
 
-export const appSettings = sqliteTable('app_settings', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  key: text('key').notNull().unique(),
+export const appSettings = mysqlTable('app_settings', {
+  id: int('id').autoincrement().primaryKey(),
+  key: varchar('key', { length: 255 }).notNull().unique(),
   value: text('value').notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()),
 });
 
-export const userViews = sqliteTable('user_views', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
-  tradeId: integer('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+export const userViews = mysqlTable('user_views', {
+  id: int('id').autoincrement().primaryKey(),
+  userId: int('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  tradeId: int('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
+  createdAt: datetime('created_at').$defaultFn(() => new Date()),
 }, (t) => ({
   byUserCreatedDesc: index('idx_user_views_user_created').on(t.userId, t.createdAt),
   uniqueView: uniqueIndex('uq_user_views_user_trade').on(t.userId, t.tradeId),
@@ -139,36 +127,36 @@ export const userViews = sqliteTable('user_views', {
 
 export type ContactEvent = typeof contactEvents.$inferSelect;
 
-export const donations = sqliteTable('donations', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  provider: text('provider', { enum: ['mercadopago', 'webpay'] }).notNull(),
-  externalId: text('external_id'),
-  amountClp: integer('amount_clp').notNull(),
-  status: text('status', { enum: ['pending', 'approved', 'rejected', 'refunded', 'abandoned'] }).notNull().default('pending'),
-  payerEmail: text('payer_email'),
-  userId: integer('user_id').references(() => users.id, { onDelete: 'set null' }),
-  recurring: integer('recurring', { mode: 'boolean' }).notNull().default(false),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+export const donations = mysqlTable('donations', {
+  id: int('id').autoincrement().primaryKey(),
+  provider: varchar('provider', { length: 20, enum: ['mercadopago', 'webpay'] }).notNull(),
+  externalId: varchar('external_id', { length: 255 }),
+  amountClp: int('amount_clp').notNull(),
+  status: varchar('status', { length: 20, enum: ['pending', 'approved', 'rejected', 'refunded', 'abandoned'] }).notNull().default('pending'),
+  payerEmail: varchar('payer_email', { length: 255 }),
+  userId: int('user_id').references(() => users.id, { onDelete: 'set null' }),
+  recurring: boolean('recurring').notNull().default(false),
+  createdAt: datetime('created_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()),
 });
 
 export type Donation = typeof donations.$inferSelect;
 
-export const userRoles = sqliteTable('user_roles', {
-  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
-  role: text('role', { enum: ['user', 'provider', 'admin'] }).notNull(),
-  grantedAt: integer('granted_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
-  grantedBy: integer('granted_by').references(() => users.id, { onDelete: 'set null' }),
+export const userRoles = mysqlTable('user_roles', {
+  userId: int('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  role: varchar('role', { length: 20, enum: ['user', 'provider', 'admin'] }).notNull(),
+  grantedAt: datetime('granted_at').$defaultFn(() => new Date()),
+  grantedBy: int('granted_by').references(() => users.id, { onDelete: 'set null' }),
 }, (t) => ({
   pk: primaryKey({ columns: [t.userId, t.role] }),
 }));
 
-export const eventsLog = sqliteTable('events_log', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  event: text('event', { enum: ['signup', 'search', 'contact', 'review', 'donation', 'ticket_open'] }).notNull(),
-  actorRole: text('actor_role', { enum: ['anonymous', 'user', 'provider', 'admin'] }).notNull(),
+export const eventsLog = mysqlTable('events_log', {
+  id: int('id').autoincrement().primaryKey(),
+  event: varchar('event', { length: 30, enum: ['signup', 'search', 'contact', 'review', 'donation', 'ticket_open'] }).notNull(),
+  actorRole: varchar('actor_role', { length: 20, enum: ['anonymous', 'user', 'provider', 'admin'] }).notNull(),
   propsJson: text('props_json').notNull().default('{}'),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+  createdAt: datetime('created_at').$defaultFn(() => new Date()),
 }, (t) => ({
   byEvent: index('idx_events_log_event').on(t.event),
   byEventCreatedDesc: index('idx_events_log_event_created').on(t.event, t.createdAt),
@@ -177,28 +165,28 @@ export const eventsLog = sqliteTable('events_log', {
 export type UserRole = typeof userRoles.$inferSelect;
 export type EventLog = typeof eventsLog.$inferSelect;
 
-export const providerAvailability = sqliteTable('provider_availability', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
-  dayOfWeek: integer('day_of_week').notNull(),
-  startTime: text('start_time').notNull(),
-  endTime: text('end_time').notNull(),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+export const providerAvailability = mysqlTable('provider_availability', {
+  id: int('id').autoincrement().primaryKey(),
+  userId: int('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  dayOfWeek: int('day_of_week').notNull(),
+  startTime: varchar('start_time', { length: 10 }).notNull(),
+  endTime: varchar('end_time', { length: 10 }).notNull(),
+  createdAt: datetime('created_at').$defaultFn(() => new Date()),
 }, (t) => ({
   uniqueSlot: uniqueIndex('uq_provider_availability_slot').on(t.userId, t.dayOfWeek, t.startTime),
   byProvider: index('idx_provider_availability_user').on(t.userId),
 }));
 
-export const tickets = sqliteTable('tickets', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  kind: text('kind', { enum: ['suplantacion', 'mal_servicio', 'contenido', 'consulta'] }).notNull(),
-  status: text('status', { enum: ['abierto', 'en_revision', 'cerrado'] }).notNull().default('abierto'),
-  assigneeAdminId: integer('assignee_admin_id').references(() => users.id, { onDelete: 'set null' }),
-  targetProviderId: integer('target_provider_id').references(() => trades.id, { onDelete: 'cascade' }),
-  createdByUserId: integer('created_by_user_id').references(() => users.id, { onDelete: 'set null' }),
-  contactEmail: text('contact_email'),
-  subject: text('subject').notNull(),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+export const tickets = mysqlTable('tickets', {
+  id: int('id').autoincrement().primaryKey(),
+  kind: varchar('kind', { length: 30, enum: ['suplantacion', 'mal_servicio', 'contenido', 'consulta'] }).notNull(),
+  status: varchar('status', { length: 20, enum: ['abierto', 'en_revision', 'cerrado'] }).notNull().default('abierto'),
+  assigneeAdminId: int('assignee_admin_id').references(() => users.id, { onDelete: 'set null' }),
+  targetProviderId: int('target_provider_id').references(() => trades.id, { onDelete: 'cascade' }),
+  createdByUserId: int('created_by_user_id').references(() => users.id, { onDelete: 'set null' }),
+  contactEmail: varchar('contact_email', { length: 255 }),
+  subject: varchar('subject', { length: 255 }).notNull(),
+  createdAt: datetime('created_at').$defaultFn(() => new Date()),
 }, (t) => ({
   byStatusCreated: index('idx_tickets_status_created').on(t.status, t.createdAt),
   byAssignee: index('idx_tickets_assignee').on(t.assigneeAdminId),
@@ -206,46 +194,46 @@ export const tickets = sqliteTable('tickets', {
   byUserProvider: index('idx_tickets_user_provider').on(t.createdByUserId, t.targetProviderId, t.status),
 }));
 
-export const ticketMessages = sqliteTable('ticket_messages', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  ticketId: integer('ticket_id').notNull().references(() => tickets.id, { onDelete: 'cascade' }),
-  sender: text('sender', { enum: ['author', 'admin', 'system'] }).notNull(),
+export const ticketMessages = mysqlTable('ticket_messages', {
+  id: int('id').autoincrement().primaryKey(),
+  ticketId: int('ticket_id').notNull().references(() => tickets.id, { onDelete: 'cascade' }),
+  sender: varchar('sender', { length: 20, enum: ['author', 'admin', 'system'] }).notNull(),
   body: text('body').notNull(),
-  internalNote: integer('internal_note', { mode: 'boolean' }).notNull().default(false),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+  internalNote: boolean('internal_note').notNull().default(false),
+  createdAt: datetime('created_at').$defaultFn(() => new Date()),
 }, (t) => ({
   byTicketPublic: index('idx_ticket_messages_ticket_public').on(t.ticketId, t.internalNote, t.createdAt),
 }));
 
-export const expenses = sqliteTable('expenses', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  description: text('description').notNull(),
-  amountClp: integer('amount_clp').notNull(),
-  category: text('category', { enum: ['hosting', 'dominio', 'marketing', 'legal', 'herramientas', 'otros'] }).notNull().default('otros'),
+export const expenses = mysqlTable('expenses', {
+  id: int('id').autoincrement().primaryKey(),
+  description: varchar('description', { length: 255 }).notNull(),
+  amountClp: int('amount_clp').notNull(),
+  category: varchar('category', { length: 30, enum: ['hosting', 'dominio', 'marketing', 'legal', 'herramientas', 'otros'] }).notNull().default('otros'),
   receiptUrl: text('receipt_url'),
-  createdBy: integer('created_by').references(() => users.id, { onDelete: 'set null' }),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+  createdBy: int('created_by').references(() => users.id, { onDelete: 'set null' }),
+  createdAt: datetime('created_at').$defaultFn(() => new Date()),
 }, (t) => ({
   byCreatedDesc: index('idx_expenses_created').on(t.createdAt),
 }));
 
-export const monthlyReports = sqliteTable('monthly_reports', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  yearMonth: text('year_month').notNull().unique(),
-  totalDonations: integer('total_donations').notNull().default(0),
-  totalExpenses: integer('total_expenses').notNull().default(0),
+export const monthlyReports = mysqlTable('monthly_reports', {
+  id: int('id').autoincrement().primaryKey(),
+  yearMonth: varchar('year_month', { length: 7 }).notNull().unique(),
+  totalDonations: int('total_donations').notNull().default(0),
+  totalExpenses: int('total_expenses').notNull().default(0),
   pdfUrl: text('pdf_url'),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+  createdAt: datetime('created_at').$defaultFn(() => new Date()),
 });
 
-export const verificationDocuments = sqliteTable('verification_documents', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
-  kind: text('kind', { enum: ['cedula', 'certificado', 'comprobante', 'otro'] }).notNull(),
-  r2Key: text('r2_key').notNull(),
-  contentType: text('content_type').notNull(),
-  uploadedAt: integer('uploaded_at', { mode: 'timestamp' }),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+export const verificationDocuments = mysqlTable('verification_documents', {
+  id: int('id').autoincrement().primaryKey(),
+  userId: int('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  kind: varchar('kind', { length: 30, enum: ['cedula', 'certificado', 'comprobante', 'otro'] }).notNull(),
+  objectKey: varchar('object_key', { length: 255 }).notNull(),
+  contentType: varchar('content_type', { length: 100 }).notNull(),
+  uploadedAt: datetime('uploaded_at'),
+  createdAt: datetime('created_at').$defaultFn(() => new Date()),
 }, (t) => ({
   byUser: index('idx_verification_docs_user').on(t.userId),
 }));

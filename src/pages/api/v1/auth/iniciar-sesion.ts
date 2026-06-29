@@ -40,12 +40,12 @@ export const POST: APIRoute = async (contexto) => {
 		return errorResponse('cuenta deshabilitada', 403);
 	}
 
-	const sesion = await crearSesion(contexto.locals.runtime.env, currentUser);
+	const sesion = await crearSesion(currentUser);
 	establecerCookieSesion(
 		contexto.cookies,
 		sesion.token,
 		sesion.ttlSegundos,
-		contexto.locals.runtime.env.PUBLIC_SITE_URL,
+		process.env.PUBLIC_SITE_URL,
 	);
 	return jsonResponse({ currentUser: usuarioPublico(currentUser) });
 };

@@ -15,14 +15,7 @@ export const POST: APIRoute = async (ctx) => {
   }
 
   try {
-      const locals = ctx.locals as any;
-      const dbBinding = locals?.runtime?.env?.DB || locals?.DB;
-      
-      if (!dbBinding) {
-          throw new Error('DB binding not found. Are you running with `wrangler` or `astro dev --host` with correct adapter config?');
-      }
-
-      const result = await seed(dbBinding);
+      const result = await seed();
       return new Response(JSON.stringify({ success: true, data: result }), {
           headers: { 'Content-Type': 'application/json' }
       });

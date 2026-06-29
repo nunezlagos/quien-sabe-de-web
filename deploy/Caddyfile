@@ -1,0 +1,10 @@
+:8083 {
+    reverse_proxy app:4323
+
+    encode zstd gzip
+
+    header {
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
+}

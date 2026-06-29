@@ -1,11 +1,8 @@
-import { drizzle } from 'drizzle-orm/d1';
-import { users } from './schema';
+import { getDb } from './client';
 
-export const seed = async (dbBinding: any) => {
-  const db = drizzle(dbBinding);
-
+export const seed = async () => {
+  const db = getDb();
   console.log('Seeding database...');
-
   console.log('Seeding complete.');
-  return { message: "Database initialized (empty)" };
+  return { message: 'Database initialized (empty)' };
 };

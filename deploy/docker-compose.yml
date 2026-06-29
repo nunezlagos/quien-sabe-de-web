@@ -1,0 +1,130 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: qs-mysql
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      MYSQL_DATABASE: ${DB_NAME:-quiensabe}
+      MYSQL_USER: ${DB_USER:-quiensabe}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-quiensabe}
+    ports:
+      - "127.0.0.1:3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-rootpass}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - qs_internal
+
+  minio:
+    image: minio/minio:RELEASE.2024-10-13T13-34-11Z
+    container_name: qs-minio
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    ports:
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - qs_internal
+
+  minio-bootstrap:
+    image: minio/mc:latest
+    container_name: qs-minio-bootstrap
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+      MINIO_BUCKET: ${MINIO_BUCKET:-quien-sabe-files}
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        set -e
+        mc alias set local http://minio:9000 "$$MINIO_ROOT_USER" "$$MINIO_ROOT_PASSWORD"
+        mc mb --ignore-existing local/"$$MINIO_BUCKET"
+        mc anonymous set download local/"$$MINIO_BUCKET"
+    networks:
+      - qs_internal
+    restart: "no"
+
+  app:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    container_name: qs-app
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_USER: ${DB_USER:-quiensabe}
+      DB_PASSWORD: ${DB_PASSWORD:-quiensabe}
+      DB_NAME: ${DB_NAME:-quiensabe}
+      MINIO_ENDPOINT: minio
+      MINIO_PORT: "9000"
+      MINIO_ACCESS_KEY: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-minioadmin}
+      MINIO_BUCKET: ${MINIO_BUCKET:-quien-sabe-files}
+      MINIO_USE_SSL: "false"
+      SESSION_SECRET: ${SESSION_SECRET:-change-me-in-production}
+      SESSION_TTL_SECONDS: ${SESSION_TTL_SECONDS:-2592000}
+      PUBLIC_SITE_URL: ${PUBLIC_SITE_URL:-http://localhost:8083}
+      PORT: "4323"
+      HOST: "0.0.0.0"
+    expose:
+      - "4323"
+    networks:
+      - qs_internal
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: qs-caddy
+    restart: unless-stopped
+    ports:
+      - "8083:8083"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - app
+    networks:
+      - qs_internal
+
+volumes:
+  mysql_data:
+    name: qs_mysql_data
+  minio_data:
+    name: qs_minio_data
+  caddy_data:
+    name: qs_caddy_data
+  caddy_config:
+    name: qs_caddy_config
+
+networks:
+  qs_internal:
+    name: qs_internal
+    driver: bridge

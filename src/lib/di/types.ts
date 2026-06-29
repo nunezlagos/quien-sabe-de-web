@@ -1,38 +1,27 @@
-import type { DrizzleD1Database } from 'drizzle-orm/d1';
 import type * as schema from '../../database/schema';
 
-export type Database = DrizzleD1Database<typeof schema>;
+export type Database = ReturnType<typeof import('../db/compat').d1>;
 
 export interface AuthUser {
-	id: number;
-	email: string;
-	name: string;
-	role: 'user' | 'provider' | 'admin';
-	roles: ('user' | 'provider' | 'admin')[];
-	activeRole: string;
-	status: 'active' | 'banned';
-	onboardedAt: Date | null;
+  id: number;
+  email: string;
+  name: string;
+  role: 'user' | 'provider' | 'admin';
+  roles: ('user' | 'provider' | 'admin')[];
+  activeRole: string;
+  status: 'active' | 'banned';
+  onboardedAt: Date | null;
 }
 
 export interface AppContext {
-	locals: {
-		user?: AuthUser;
-		runtime?: {
-			env: {
-				DB: Database;
-				[key: string]: unknown;
-			};
-		};
-		DB?: Database;
-	};
-	cookies?: {
-		get(name: string): { value: string } | undefined;
-		set(name: string, value: string, options?: Record<string, unknown>): void;
-		delete(name: string): void;
-	};
-}
-
-export interface Env {
-	DB: Database;
-	[key: string]: unknown;
+  locals: {
+    user?: AuthUser;
+    DB?: Database;
+    container?: import('./container').Container;
+  };
+  cookies?: {
+    get(name: string): { value: string } | undefined;
+    set(name: string, value: string, options?: Record<string, unknown>): void;
+    delete(name: string): void;
+  };
 }
