@@ -21,7 +21,7 @@ export const GET: APIRoute = async (contexto) => {
 	}
 
 	try {
-		const db = getDb(contexto.locals);
+		const db = getDb();
 		const filas = await db
 			.select({
 				id: trades.id,

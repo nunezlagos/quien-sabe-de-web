@@ -9,7 +9,7 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
     return new Response(JSON.stringify({ error: 'ID de oficio inválido' }), { status: 400 });
   }
 
-  const db = getDb(locals);
+  const db = getDb();
   const trade = await db.select().from(trades).where(eq(trades.id, tradeId)).get();
   if (!trade) {
     return new Response(JSON.stringify({ error: 'Oficio no encontrado' }), { status: 404 });

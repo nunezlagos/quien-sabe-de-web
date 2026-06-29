@@ -26,7 +26,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const user = (locals as any).user;
   const actorRole = !user ? 'anonymous' : user.role === 'admin' ? 'admin' : user.role === 'provider' ? 'provider' : 'user';
 
-  const db = getDb(locals);
+  const db = getDb();
   await db.insert(eventsLog).values({
     event: parsed.data.event as any,
     actorRole: actorRole as any,

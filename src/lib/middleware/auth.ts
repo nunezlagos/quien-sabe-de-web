@@ -12,7 +12,7 @@ export async function requireRole(locals: any, roleOrRoles: Role | Role[]): Prom
 
   const required = Array.isArray(roleOrRoles) ? roleOrRoles : [roleOrRoles];
 
-  const db = getDb(locals);
+  const db = getDb();
   const rows = await db
     .select({ role: userRoles.role })
     .from(userRoles)

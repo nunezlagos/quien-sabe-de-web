@@ -17,7 +17,7 @@ const url = Astro.url;
 const tabParam = url.searchParams.get('tab') ?? 'historial';
 const tab = (['historial', 'resenas', 'perfil'] as const).find((t) => t === tabParam) ?? 'historial';
 
-const db = getDb(Astro.locals);
+const db = getDb();
 
 const allCommunes = await db
   .select({ id: communes.id, name: communes.name })

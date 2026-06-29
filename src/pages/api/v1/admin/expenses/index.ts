@@ -15,7 +15,7 @@ const expenseSchema = z.object({
 export const GET: APIRoute = async ({ locals }) => {
   const user = (locals as any).user;
   if (!user || user.role !== 'admin') return errorResponse('No autorizado', 403);
-  const db = getDb(locals);
+  const db = getDb();
   const items = await db.select().from(expenses).orderBy(desc(expenses.createdAt)).all();
   return jsonResponse(items);
 };
@@ -30,7 +30,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const parsed = expenseSchema.safeParse(body);
   if (!parsed.success) return errorResponse(parsed.error.issues.map(i => i.message).join(', '), 422);
 
-  const db = getDb(locals);
+  const db = getDb();
   const { lastInsertRowid } = await db.insert(expenses).values({ ...parsed.data, createdBy: user.id }).run();
 
   return jsonResponse({ id: Number(lastInsertRowid) }, { status: 201 });

@@ -14,7 +14,7 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
   let body: any;
   try { body = await request.json(); } catch { return errorResponse('JSON inválido', 400); }
 
-  const db = getDb(locals);
+  const db = getDb();
   const existing = await db.select().from(expenses).where(eq(expenses.id, id)).get();
   if (!existing) return errorResponse('Gasto no encontrado', 404);
 
@@ -35,7 +35,7 @@ export const DELETE: APIRoute = async ({ params, locals }) => {
   const id = Number(params.id);
   if (!id) return errorResponse('ID inválido', 400);
 
-  const db = getDb(locals);
+  const db = getDb();
   await db.delete(expenses).where(eq(expenses.id, id)).run();
   return jsonResponse({ ok: true });
 };

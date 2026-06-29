@@ -14,7 +14,7 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
   let body: any;
   try { body = await request.json(); } catch { return errorResponse('JSON inválido', 400); }
 
-  const db = getDb(locals);
+  const db = getDb();
   const trade = await db.select().from(trades).where(eq(trades.id, tradeId)).get();
   if (!trade) return errorResponse('Oficio no encontrado', 404);
   if (trade.userId !== user.id && user.role !== 'admin') return errorResponse('No autorizado', 403);

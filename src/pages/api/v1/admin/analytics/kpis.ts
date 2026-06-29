@@ -8,7 +8,7 @@ export const GET: APIRoute = async ({ locals }) => {
   const u = (locals as any).user;
   if (!u || u.role !== 'admin') return errorResponse('No autorizado', 401);
 
-  const db = getDb(locals);
+  const db = getDb();
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
   const totalUsers = (await db.select({ c: count() }).from(users).get())?.c ?? 0;

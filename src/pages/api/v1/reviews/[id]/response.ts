@@ -5,7 +5,7 @@ import { errorResponse, jsonResponse } from '../../../../../lib/utils/response';
 import { eq, and } from 'drizzle-orm';
 
 export const POST: APIRoute = async ({ params, request, locals }) => {
-  const db = getDb(locals);
+  const db = getDb();
   const currentUser = locals.user;
   if (!currentUser) return errorResponse('No autorizado', 401);
   if (currentUser.role !== 'provider') return errorResponse('Solo prestadores', 403);

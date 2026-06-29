@@ -50,5 +50,5 @@ export class UsersService {
 }
 
 export const getUsersService = (context: unknown) => {
-	return new UsersService(getDb(context));
+	return new UsersService(getDb());
 };

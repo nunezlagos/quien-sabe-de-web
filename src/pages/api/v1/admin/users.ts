@@ -21,7 +21,7 @@ export const GET: APIRoute = async (contexto) => {
 	}
 
 	try {
-		const db = getDb(contexto.locals);
+		const db = getDb();
 		const filas = await db
 			.select({
 				id: users.id,
@@ -58,7 +58,7 @@ export const PATCH: APIRoute = async ({ request, locals }) => {
 	const action = body.action;
 	if (!userId || !['ban', 'unban'].includes(action)) return errorResponse('Parámetros inválidos', 400);
 
-	const db = getDb(locals);
+	const db = getDb();
 	const status = action === 'ban' ? 'banned' : 'active';
 	await db.update(users).set({ status }).where(eq(users.id, userId)).run();
 

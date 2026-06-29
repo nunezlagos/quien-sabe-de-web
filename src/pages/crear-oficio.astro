@@ -11,7 +11,7 @@ if (!currentUser) {
 
 const error = Astro.url.searchParams.get('error');
 
-const db = getDb(Astro.locals);
+const db = getDb();
 const communeList = await db.select({ id: communes.id, name: communes.name }).from(communes).orderBy(asc(communes.name)).all();
 
 const OFICIOS = [

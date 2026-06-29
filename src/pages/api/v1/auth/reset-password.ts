@@ -12,7 +12,7 @@ export const GET: APIRoute = async (ctx) => {
   const token = ctx.url.searchParams.get('token');
   if (!token) return errorResponse('token requerido', 400);
 
-  const db = getDb(ctx.locals);
+  const db = getDb();
   const user = await db.select()
     .from(users)
     .where(eq(users.emailVerificationToken, token))
@@ -36,7 +36,7 @@ export const POST: APIRoute = async (ctx) => {
     return errorResponse('datos inválidos', 400, parsed.error.flatten());
   }
 
-  const db = getDb(ctx.locals);
+  const db = getDb();
   const user = await db.select()
     .from(users)
     .where(eq(users.emailVerificationToken, parsed.data.token))

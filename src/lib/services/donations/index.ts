@@ -4,7 +4,7 @@ import { eq, desc, and } from 'drizzle-orm';
 import { sendMail } from '../../services/email/mailpit';
 
 export async function createDonation(locals: any, input: { provider: string; amountClp: number; recurring: boolean; payerEmail?: string; userId?: number; externalId?: string }) {
-  const db = getDb(locals);
+  const db = getDb();
   return db.insert(donations).values({
     provider: input.provider as any,
     amountClp: input.amountClp,
@@ -17,7 +17,7 @@ export async function createDonation(locals: any, input: { provider: string; amo
 }
 
 export async function updateDonationStatus(locals: any, externalId: string, status: string, provider: string) {
-  const db = getDb(locals);
+  const db = getDb();
   const donation = await db.select().from(donations)
     .where(and(
       eq(donations.externalId, externalId),
@@ -39,7 +39,7 @@ export async function updateDonationStatus(locals: any, externalId: string, stat
 }
 
 export async function getUserDonations(locals: any, userId: number) {
-  const db = getDb(locals);
+  const db = getDb();
   return db.select().from(donations)
     .where(eq(donations.userId, userId))
     .orderBy(desc(donations.createdAt))

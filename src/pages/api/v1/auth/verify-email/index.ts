@@ -5,7 +5,7 @@ import { errorResponse, jsonResponse } from '../../../../../lib/utils/response';
 import { eq } from 'drizzle-orm';
 
 export const GET: APIRoute = async ({ url, locals }) => {
-  const db = getDb(locals);
+  const db = getDb();
   const token = url.searchParams.get('token');
   if (!token) return errorResponse('Token requerido', 400);
 

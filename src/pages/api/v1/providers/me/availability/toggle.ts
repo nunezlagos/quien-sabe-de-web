@@ -11,7 +11,7 @@ export const PATCH: APIRoute = async ({ request, locals }) => {
   let body: any;
   try { body = await request.json(); } catch { return errorResponse('JSON inválido', 400); }
 
-  const db = getDb(locals);
+  const db = getDb();
   const enabled = body.enabled !== false;
   await db.update(trades).set({ availableNow: enabled }).where(eq(trades.userId, user.id)).run();
 

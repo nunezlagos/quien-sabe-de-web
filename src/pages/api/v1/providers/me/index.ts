@@ -17,7 +17,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const description = (formData.get('description') as string)?.trim();
   const whatsappRaw = (formData.get('whatsapp') as string)?.trim();
 
-  const db = getDb(locals);
+  const db = getDb();
   const errors: string[] = [];
 
   if (!name || name.length < 2) {

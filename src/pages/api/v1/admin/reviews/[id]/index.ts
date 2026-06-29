@@ -22,7 +22,7 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
   const parsed = hideSchema.safeParse(body);
   if (!parsed.success) return errorResponse(parsed.error.issues.map(i => i.message).join(', '), 422);
 
-  const db = getDb(locals);
+  const db = getDb();
   const review = await db.select().from(reviews).where(eq(reviews.id, reviewId)).get();
   if (!review) return errorResponse('Reseña no encontrada', 404);
 

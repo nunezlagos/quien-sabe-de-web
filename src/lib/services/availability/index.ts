@@ -3,7 +3,7 @@ import { providerAvailability } from '../../../database/schema';
 import { eq, and, sql } from 'drizzle-orm';
 
 export async function getAvailability(locals: any, userId: number): Promise<any[]> {
-  const db = getDb(locals);
+  const db = getDb();
   return db.select().from(providerAvailability)
     .where(eq(providerAvailability.userId, userId))
     .orderBy(providerAvailability.dayOfWeek, providerAvailability.startTime)
@@ -11,7 +11,7 @@ export async function getAvailability(locals: any, userId: number): Promise<any[
 }
 
 export async function replaceAvailability(locals: any, userId: number, slots: { dayOfWeek: number; startTime: string; endTime: string }[]) {
-  const db = getDb(locals);
+  const db = getDb();
   await db.delete(providerAvailability).where(eq(providerAvailability.userId, userId)).run();
   if (slots.length > 0) {
     await db.insert(providerAvailability).values(
@@ -22,7 +22,7 @@ export async function replaceAvailability(locals: any, userId: number, slots: { 
 }
 
 export async function isAvailableNow(locals: any, userId: number): Promise<boolean> {
-  const db = getDb(locals);
+  const db = getDb();
   const now = new Date();
   const dayOfWeek = now.getDay();
   const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;

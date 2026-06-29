@@ -8,7 +8,7 @@ export const GET: APIRoute = async ({ locals }) => {
   const u = (locals as any).user;
   if (!u || u.role !== 'admin') return errorResponse('No autorizado', 401);
 
-  const db = getDb(locals);
+  const db = getDb();
   const rows = await db.select().from(appSettings).all();
   const settings: Record<string, string> = {};
   for (const r of rows) settings[r.key] = r.value;
@@ -22,7 +22,7 @@ export const PATCH: APIRoute = async ({ request, locals }) => {
   let body: any;
   try { body = await request.json(); } catch { return errorResponse('JSON inválido', 400); }
 
-  const db = getDb(locals);
+  const db = getDb();
 
   for (const [key, value] of Object.entries(body ?? {})) {
     const existing = await db.select().from(appSettings).where(eq(appSettings.key, key)).get();

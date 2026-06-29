@@ -147,5 +147,5 @@ export class TradesService {
 import { getDb } from '../../database/client';
 
 export const getTradesService = (context: unknown) => {
-	return new TradesService(getDb(context));
+	return new TradesService(getDb());
 };

@@ -13,7 +13,7 @@ export const POST: APIRoute = async (contexto) => {
   const id = Number(contexto.params.id);
   if (!id) return errorResponse('id inválido', 400);
 
-  const db = getDb(contexto.locals);
+  const db = getDb();
   const doc = await db
     .select()
     .from(verificationDocuments)

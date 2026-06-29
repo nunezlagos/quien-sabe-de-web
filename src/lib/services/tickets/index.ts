@@ -4,7 +4,7 @@ import { eq, and, count, desc, sql } from 'drizzle-orm';
 import { sendMail, buildTicketNotificationEmail } from '../../services/email/mailpit';
 
 export async function createTicket(locals: any, input: { kind: string; subject: string; body: string; contactEmail?: string; targetProviderId?: number }): Promise<typeof tickets.$inferSelect> {
-  const db = getDb(locals);
+  const db = getDb();
   const user = (locals as any).user || null;
 
   const ticket = await db.insert(tickets).values({
@@ -44,13 +44,13 @@ export async function createTicket(locals: any, input: { kind: string; subject: 
 }
 
 export async function getTicketById(locals: any, ticketId: number): Promise<typeof tickets.$inferSelect | null> {
-  const db = getDb(locals);
+  const db = getDb();
   const result = await db.select().from(tickets).where(eq(tickets.id, ticketId)).get();
   return result ?? null;
 }
 
 export async function listTicketsForAdmin(locals: any, filters: { status?: string; kind?: string; assignee?: string; limit?: number; cursor?: number }): Promise<{ items: any[]; cursor: number | null }> {
-  const db = getDb(locals);
+  const db = getDb();
   const conditions = [];
   if (filters.status) conditions.push(eq(tickets.status, filters.status as any));
   if (filters.kind) conditions.push(eq(tickets.kind, filters.kind as any));
@@ -69,7 +69,7 @@ export async function listTicketsForAdmin(locals: any, filters: { status?: strin
 }
 
 export async function transitionTicket(locals: any, ticketId: number, status: string, assigneeAdminId?: number): Promise<typeof tickets.$inferSelect> {
-  const db = getDb(locals);
+  const db = getDb();
   const updates: any = { status };
   if (assigneeAdminId) updates.assigneeAdminId = assigneeAdminId;
   await db.update(tickets).set(updates).where(eq(tickets.id, ticketId)).run();
@@ -99,12 +99,12 @@ export async function transitionTicket(locals: any, ticketId: number, status: st
 }
 
 export async function addMessage(locals: any, ticketId: number, sender: string, body: string, internalNote: boolean = false): Promise<typeof ticketMessages.$inferSelect> {
-  const db = getDb(locals);
+  const db = getDb();
   return db.insert(ticketMessages).values({ ticketId, sender: sender as any, body, internalNote }).returning().get();
 }
 
 export async function listMessages(locals: any, ticketId: number, isAdmin: boolean): Promise<any[]> {
-  const db = getDb(locals);
+  const db = getDb();
   const conditions: any[] = [eq(ticketMessages.ticketId, ticketId)];
   if (!isAdmin) conditions.push(eq(ticketMessages.internalNote, false));
   return db.select().from(ticketMessages).where(and(...conditions)).orderBy(ticketMessages.createdAt).all();

@@ -18,7 +18,7 @@ if (!trade) {
   return new Response('Perfil no encontrado', { status: 404 });
 }
 
-const db = getDb(Astro.locals);
+const db = getDb();
 
 // Provider info
 const provider = await db.select().from(users).where(eq(users.id, trade.userId)).get();

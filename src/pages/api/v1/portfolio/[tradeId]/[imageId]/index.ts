@@ -12,7 +12,7 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
   const imageId = Number((params as any).imageId);
   if (!tradeId || !imageId) return errorResponse('IDs inválidos', 400);
 
-  const db = getDb(locals);
+  const db = getDb();
   const img = await db.select().from(portfolioImages).where(
     and(eq(portfolioImages.id, imageId), eq(portfolioImages.tradeId, tradeId))
   ).get();
@@ -37,7 +37,7 @@ export const DELETE: APIRoute = async ({ params, locals }) => {
   const imageId = Number((params as any).imageId);
   if (!tradeId || !imageId) return errorResponse('IDs inválidos', 400);
 
-  const db = getDb(locals);
+  const db = getDb();
   const img = await db.select().from(portfolioImages).where(
     and(eq(portfolioImages.id, imageId), eq(portfolioImages.tradeId, tradeId))
   ).get();

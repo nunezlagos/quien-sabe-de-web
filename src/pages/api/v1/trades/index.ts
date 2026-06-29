@@ -46,7 +46,7 @@ export const POST: APIRoute = async (ctx) => {
   }
 
   const baseSlug = slugify(`${symbolFinal}-${name}`);
-  const db = getDb(ctx.locals);
+  const db = getDb();
 
   let slugFinal = baseSlug;
   let suffix = 1;

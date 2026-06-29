@@ -8,7 +8,7 @@ export const POST: APIRoute = async ({ locals }) => {
   const currentUser = locals.user;
   if (!currentUser) return errorResponse('No autorizado', 401);
 
-  const db = getDb(locals);
+  const db = getDb();
   await db.delete(users).where(eq(users.id, currentUser.id)).run();
 
   return new Response(null, {

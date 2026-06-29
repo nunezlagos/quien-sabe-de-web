@@ -13,7 +13,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     return new Response(null, { status: 204 });
   }
 
-  const db = getDb(locals);
+  const db = getDb();
   const user = locals.user;
 
   await db.insert(contactEvents).values({

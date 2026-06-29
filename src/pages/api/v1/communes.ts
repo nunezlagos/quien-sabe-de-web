@@ -5,7 +5,7 @@ import { listCommunes } from '../../../lib/services/communes';
 export const GET: APIRoute = async ({ url, locals }) => {
   try {
     const q = url.searchParams.get('q') ?? undefined;
-    const db = getDb(locals);
+    const db = getDb();
     const rows = await listCommunes(db, q);
     return new Response(JSON.stringify(rows), {
       status: 200,

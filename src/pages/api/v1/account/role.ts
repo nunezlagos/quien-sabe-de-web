@@ -20,7 +20,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
   if (!['user', 'provider'].includes(role)) return errorResponse('Rol inválido', 400);
 
-  const db = getDb(locals);
+  const db = getDb();
   const typedRole = role as 'user' | 'provider' | 'admin';
 
   await db.update(users).set({ role: typedRole }).where(eq(users.id, currentUser.id)).run();

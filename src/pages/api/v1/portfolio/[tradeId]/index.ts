@@ -8,7 +8,7 @@ export const GET: APIRoute = async ({ params, locals }) => {
   const tradeId = Number(params.tradeId);
   if (!tradeId) return errorResponse('tradeId requerido', 400);
 
-  const db = getDb(locals);
+  const db = getDb();
   const images = await db.select()
     .from(portfolioImages)
     .where(eq(portfolioImages.tradeId, tradeId))
@@ -24,7 +24,7 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
   if (user.role !== 'provider' && user.role !== 'admin') return errorResponse('Solo prestadores', 403);
 
   const tradeId = Number(params.tradeId);
-  const db = getDb(locals);
+  const db = getDb();
 
   const trade = await db.select().from(trades).where(and(eq(trades.id, tradeId), eq(trades.userId, user.id))).get();
   if (!trade && user.role !== 'admin') return errorResponse('Oficio no encontrado', 404);

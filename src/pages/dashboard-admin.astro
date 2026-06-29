@@ -29,7 +29,7 @@ const seccionActiva: SeccionId = (SECCIONES_VALIDAS as readonly string[]).includ
 	? (param as SeccionId)
 	: 'dashboard';
 
-const db = getDb(Astro.locals);
+const db = getDb();
 
 let listaUsuarios: Array<{
 	id: number;

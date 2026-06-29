@@ -21,7 +21,7 @@ export const POST: APIRoute = async (ctx) => {
     return errorResponse('datos inválidos', 400, parsed.error.flatten());
   }
 
-  const db = getDb(ctx.locals);
+  const db = getDb();
   const user = await db.select()
     .from(users)
     .where(eq(users.email, parsed.data.correo.toLowerCase()))

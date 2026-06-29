@@ -24,7 +24,7 @@ export const GET: APIRoute = async ({ locals }) => {
   const user = locals.user;
   if (!user) return errorResponse('No autorizado', 401);
 
-  const db = getDb(locals);
+  const db = getDb();
   const u = await db
     .select({
       id: users.id,
@@ -57,7 +57,7 @@ export const PATCH: APIRoute = async ({ request, locals }) => {
     return errorResponse(msgs, 422);
   }
 
-  const db = getDb(locals);
+  const db = getDb();
   await db.update(users).set(parsed.data).where(eq(users.id, user.id)).run();
 
   return jsonResponse({ ok: true });
@@ -80,7 +80,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     return errorResponse('Solo vecinos pueden completar onboarding', 403);
   }
 
-  const db = getDb(locals);
+  const db = getDb();
   await db
     .update(users)
     .set({

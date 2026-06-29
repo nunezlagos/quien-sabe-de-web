@@ -8,7 +8,7 @@ const ALL_ROLES = ['user', 'provider', 'admin'] as const;
 export type Role = (typeof ALL_ROLES)[number];
 
 export async function getUserRoles(locals: any, userId: number): Promise<Role[]> {
-  const db = getDb(locals);
+  const db = getDb();
   const roles = await db
     .select({ role: userRoles.role })
     .from(userRoles)
@@ -19,7 +19,7 @@ export async function getUserRoles(locals: any, userId: number): Promise<Role[]>
 
 export async function addRoleToUser(locals: any, userId: number, role: Role, grantedBy?: number): Promise<void> {
   if (!AUTO_ASSIGNABLE_ROLES.includes(role)) throw new Error(`rol ${role} no es auto-asignable`);
-  const db = getDb(locals);
+  const db = getDb();
   await db
     .insert(userRoles)
     .values({ userId, role, grantedBy, grantedAt: new Date() })

@@ -14,7 +14,7 @@ export async function crearUsuario(
 	contexto: { locals: App.Locals },
 	input: { nombre: string; correo: string; contrasenaHash: string },
 ): Promise<Usuario> {
-	const db = getDb(contexto);
+	const db = getDb();
 	try {
 		const fila = await db
 			.insert(users)
@@ -59,7 +59,7 @@ export async function buscarUsuarioPorCorreo(
 	contexto: { locals: App.Locals },
 	correo: string,
 ): Promise<Usuario | null> {
-	const db = getDb(contexto);
+	const db = getDb();
 	const fila = await db
 		.select()
 		.from(users)
@@ -72,7 +72,7 @@ export async function buscarUsuarioPorId(
 	contexto: { locals: App.Locals },
 	id: number,
 ): Promise<Usuario | null> {
-	const db = getDb(contexto);
+	const db = getDb();
 	const fila = await db
 		.select()
 		.from(users)

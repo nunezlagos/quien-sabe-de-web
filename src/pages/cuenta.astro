@@ -11,7 +11,7 @@ if (!currentUser) {
 
 const exportSolicitado = Astro.url.searchParams.get('export') === 'requested';
 
-const db = getDb(Astro.locals);
+const db = getDb();
 const consents = await db
 	.select({
 		emailProduct: users.consentEmailProduct,

@@ -8,7 +8,7 @@ export const GET: APIRoute = async ({ locals, url }) => {
   const user = (locals as any).user;
   if (!user || user.role !== 'admin') return errorResponse('No autorizado', 403);
 
-  const db = getDb(locals);
+  const db = getDb();
   const event = url.searchParams.get('event');
   const limit = Math.min(Number(url.searchParams.get('limit')) || 50, 200);
 

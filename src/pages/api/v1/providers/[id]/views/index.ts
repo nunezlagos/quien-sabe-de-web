@@ -13,7 +13,7 @@ export const POST: APIRoute = async ({ params, locals }) => {
   const tradeId = Number(params.id);
   if (!Number.isFinite(tradeId)) return errorResponse('ID inválido', 400);
 
-  const db = getDb(locals);
+  const db = getDb();
 
   const trade = await db
     .select({ id: trades.id })

@@ -8,7 +8,7 @@ export const GET: APIRoute = async ({ locals }) => {
   const u = (locals as any).user;
   if (!u || u.role !== 'admin') return errorResponse('No autorizado', 401);
 
-  const db = getDb(locals);
+  const db = getDb();
   const logs = await db.select({
     id: adminAuditLog.id,
     action: adminAuditLog.action,

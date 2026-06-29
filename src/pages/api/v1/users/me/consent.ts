@@ -15,7 +15,7 @@ export const GET: APIRoute = async ({ locals }) => {
   const user = (locals as any).user;
   if (!user) return errorResponse('No autorizado', 401);
 
-  const db = getDb(locals);
+  const db = getDb();
   const u = await db.select({
     consentEmailProduct: users.consentEmailProduct,
     consentAnalytics: users.consentAnalytics,
@@ -35,7 +35,7 @@ export const PATCH: APIRoute = async ({ request, locals }) => {
   const parsed = consentSchema.safeParse(body);
   if (!parsed.success) return errorResponse(parsed.error.issues.map(i => i.message).join(', '), 422);
 
-  const db = getDb(locals);
+  const db = getDb();
   await db.update(users).set(parsed.data).where(eq(users.id, user.id)).run();
 
   return jsonResponse({ ok: true });

@@ -11,7 +11,7 @@ export const POST: APIRoute = async ({ locals }) => {
   if (!currentUser) return errorResponse('No autorizado', 401);
   if ((currentUser as { emailVerified?: boolean }).emailVerified) return errorResponse('Email ya verificado', 400);
 
-  const db = getDb(locals);
+  const db = getDb();
   const token = crypto.randomBytes(32).toString('hex');
   await db.update(users).set({ emailVerificationToken: token }).where(eq(users.id, currentUser.id)).run();
 

@@ -8,7 +8,7 @@ export const GET: APIRoute = async ({ locals }) => {
   const currentUser = locals.user;
   if (!currentUser) return errorResponse('No autorizado', 401);
 
-  const db = getDb(locals);
+  const db = getDb();
   const userFavorites = await db.select()
     .from(favorites)
     .where(eq(favorites.userId, currentUser.id))
@@ -25,7 +25,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const tradeId = Number(body.tradeId);
   if (!tradeId) return errorResponse('tradeId requerido', 400);
 
-  const db = getDb(locals);
+  const db = getDb();
   const existing = await db.select()
     .from(favorites)
     .where(and(eq(favorites.userId, currentUser.id), eq(favorites.tradeId, tradeId)))

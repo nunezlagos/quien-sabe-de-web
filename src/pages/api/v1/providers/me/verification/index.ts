@@ -27,7 +27,7 @@ export const POST: APIRoute = async (contexto) => {
   }
 
   const { rut, trade } = parsed.data;
-  const db = getDb(contexto.locals);
+  const db = getDb();
   await db.select().from(users).limit(1).all();
 
   return new Response(null, {

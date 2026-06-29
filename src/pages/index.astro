@@ -28,7 +28,7 @@ const results = await tradesService.search({
   limit: 50,
 });
 
-const db = getDb(Astro.locals);
+const db = getDb();
 const communesList = await db.select({ id: communes.id, name: communes.name }).from(communes).orderBy(asc(communes.name)).all();
 
 const allTrades = await tradesService.search({ limit: 50 });

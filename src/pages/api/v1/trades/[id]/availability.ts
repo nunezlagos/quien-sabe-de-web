@@ -12,7 +12,7 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
   const tradeId = Number(params.id);
   if (!tradeId) return new Response(JSON.stringify({ error: 'ID inválido' }), { status: 400 });
 
-  const db = getDb(locals);
+  const db = getDb();
   const trade = await db.select().from(trades).where(eq(trades.id, tradeId)).get();
   if (!trade || trade.userId !== user.id) {
     return new Response(JSON.stringify({ error: 'No autorizado' }), { status: 403 });

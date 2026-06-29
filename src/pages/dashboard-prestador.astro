@@ -12,7 +12,7 @@ if (user.role !== 'provider' && user.role !== 'admin') {
   return Astro.redirect('/dashboard');
 }
 
-const db = getDb(Astro.locals);
+const db = getDb();
 
 const myTrades = await db
   .select({

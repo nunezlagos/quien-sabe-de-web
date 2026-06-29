@@ -10,7 +10,7 @@ export const GET: APIRoute = async ({ locals }) => {
   const user = locals.user;
   if (!user) return errorResponse('No autorizado', 401);
 
-  const db = getDb(locals);
+  const db = getDb();
   const items = await db
     .select({
       id: userViews.id,

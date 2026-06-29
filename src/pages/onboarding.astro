@@ -26,7 +26,7 @@ if (dbUser?.onboardedAt) {
   return Astro.redirect('/dashboard');
 }
 
-const db = getDb(Astro.locals);
+const db = getDb();
 const allCommunes = await db
   .select({ id: communes.id, name: communes.name })
   .from(communes)
