@@ -21,9 +21,51 @@ function getPool(): mysql.Pool {
 
 let dbInstance: ReturnType<typeof drizzle> | null = null;
 
+function wrapQueryBuilder<T extends object>(qb: T): T {
+  return new Proxy(qb, {
+    get(target, prop, receiver) {
+      if (prop === 'all') {
+        return async () => await target;
+      }
+      if (prop === 'get') {
+        return async () => {
+          const rows = await target;
+          return Array.isArray(rows) ? rows[0] : rows;
+        };
+      }
+      if (prop === 'run') {
+        return async () => {
+          const result = await target;
+          if (result && typeof result === 'object' && 'insertId' in (result as any)) {
+            const r = result as any;
+            return { changes: r.affectedRows ?? 0, lastInsertRowid: r.insertId ?? 0 };
+          }
+          if (Array.isArray(result) && result.length === 1 && 'insertId' in result[0]) {
+            const r = result[0] as any;
+            return { changes: r.affectedRows ?? 0, lastInsertRowid: r.insertId ?? 0 };
+          }
+          return { changes: 0, lastInsertRowid: 0 };
+        };
+      }
+      const value = Reflect.get(target, prop, receiver);
+      if (typeof value === 'function') {
+        return (...args: any[]) => {
+          const result = value.apply(target, args);
+          if (result && typeof result === 'object') {
+            return wrapQueryBuilder(result);
+          }
+          return result;
+        };
+      }
+      return value;
+    },
+  });
+}
+
 export function getDb() {
   if (!dbInstance) {
-    dbInstance = drizzle(getPool(), { schema, mode: 'default' });
+    const raw = drizzle(getPool(), { schema, mode: 'default' });
+    dbInstance = wrapQueryBuilder(raw);
   }
   return dbInstance;
 }
