@@ -5,6 +5,7 @@ import { slugify } from '../../../../lib/utils/slug';
 import { eq } from 'drizzle-orm';
 import { searchTrades } from '../../../../api/v1/controllers/trades.controller';
 import { CreateTradeBody } from '../../../../lib/validators/trades';
+import { insertReturning } from '../../../../lib/db/returning';
 
 export const prerender = false;
 
@@ -60,21 +61,17 @@ export const POST: APIRoute = async (ctx) => {
   // restantes; acá anteponemos "569" para tener el número completo.
   const fullWhatsapp = `569${whatsapp}`;
 
-  const newTrade = await db
-    .insert(trades)
-    .values({
-      userId: currentUser.id,
-      symbol: symbolFinal,
-      name,
-      slug: slugFinal,
-      description,
-      basePriceClp: base_price_clp,
-      whatsapp: fullWhatsapp,
-      verified: false,
-      status: 'active',
-    })
-    .returning()
-    .get();
+  const newTrade = await insertReturning(db, trades, {
+    userId: currentUser.id,
+    symbol: symbolFinal,
+    name,
+    slug: slugFinal,
+    description,
+    basePriceClp: base_price_clp,
+    whatsapp: fullWhatsapp,
+    verified: false,
+    status: 'active',
+  });
 
   // Save commune coverage
   const rawCommuneIds = formData.getAll('commune_ids') as string[];

@@ -1,6 +1,6 @@
 import type * as schema from '../../database/schema';
 
-export type Database = ReturnType<typeof import('../db/compat').d1>;
+export type Database = ReturnType<typeof import('../../database/client').getDb>;
 
 export interface AuthUser {
   id: number;

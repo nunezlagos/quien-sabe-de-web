@@ -1,6 +1,7 @@
 import { reviews, trades } from '../../database/schema';
 import { eq, desc } from 'drizzle-orm';
 import type { Database } from '../di/database';
+import { insertReturning } from '../db/returning';
 
 export class TradeReviewService {
 	private db: Database;
@@ -16,13 +17,13 @@ export class TradeReviewService {
 		rating: number;
 		body: string;
 	}) {
-		return await this.db.insert(reviews).values({
+		return await insertReturning(this.db, reviews, {
 			tradeId: data.tradeId,
 			userId: data.userId,
 			reviewerName: data.reviewerName,
 			rating: data.rating,
 			body: data.body,
-		}).returning().get();
+		});
 	}
 
 	async getReviewById(reviewId: number) {

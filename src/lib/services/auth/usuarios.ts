@@ -2,6 +2,7 @@ import { getDb } from '../../../database/client';
 import { users } from '../../../database/schema';
 import type { Usuario } from '../../../database/schema';
 import { eq } from 'drizzle-orm';
+import { insertReturning } from '../../db/returning';
 
 export class CorreoYaRegistradoError extends Error {
 	constructor() {
@@ -16,17 +17,13 @@ export async function crearUsuario(
 ): Promise<Usuario> {
 	const db = getDb();
 	try {
-		const fila = await db
-			.insert(users)
-			.values({
-				email: input.correo,
-				name: input.nombre,
-				passwordHash: input.contrasenaHash,
-				role: 'user',
-				status: 'active',
-			})
-			.returning()
-			.get();
+		const fila = await insertReturning(db, users, {
+			email: input.correo,
+			name: input.nombre,
+			passwordHash: input.contrasenaHash,
+			role: 'user',
+			status: 'active',
+		});
 		return fila;
 	} catch (err) {
 		const mensajes: string[] = [];

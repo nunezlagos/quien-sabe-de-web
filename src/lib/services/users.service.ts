@@ -2,6 +2,7 @@ import { users } from '../../database/schema';
 import { eq } from 'drizzle-orm';
 import type { Database } from '../di/database';
 import { getDb } from '../../database/client';
+import { insertReturning, updateReturning, deleteReturning } from '../db/returning';
 
 export class UsersService {
 	private db: Database;
@@ -25,27 +26,20 @@ export class UsersService {
 	}
 
 	async createUser(data: { email: string; name: string; role?: 'user' | 'provider' | 'admin'; avatarUrl?: string }) {
-		return await this.db.insert(users).values({
+		return await insertReturning(this.db, users, {
 			email: data.email,
 			name: data.name,
 			role: data.role || 'user',
 			avatarUrl: data.avatarUrl,
-		}).returning().get();
+		});
 	}
 
 	async updateUser(id: number, data: Partial<{ email: string; name: string; role: 'user' | 'provider' | 'admin'; avatarUrl: string }>) {
-		return await this.db.update(users)
-			.set(data)
-			.where(eq(users.id, id))
-			.returning()
-			.get();
+		return await updateReturning(this.db, users, data, eq(users.id, id));
 	}
 
 	async deleteUser(id: number) {
-		return await this.db.delete(users)
-			.where(eq(users.id, id))
-			.returning()
-			.get();
+		return await deleteReturning(this.db, users, eq(users.id, id));
 	}
 }
 

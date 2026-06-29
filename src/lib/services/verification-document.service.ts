@@ -1,6 +1,7 @@
 import { verificationDocuments } from '../../database/schema';
 import { eq, desc } from 'drizzle-orm';
 import type { Database } from '../di/database';
+import { insertReturning } from '../db/returning';
 
 export class VerificationDocumentService {
 	private db: Database;
@@ -24,12 +25,12 @@ export class VerificationDocumentService {
 		objectKey: string;
 		contentType: string;
 	}) {
-		return await this.db.insert(verificationDocuments).values({
+		return await insertReturning(this.db, verificationDocuments, {
 			userId: data.userId,
 			kind: data.kind,
 			objectKey: data.objectKey,
 			contentType: data.contentType,
 			uploadedAt: new Date(),
-		}).returning().get();
+		});
 	}
 }

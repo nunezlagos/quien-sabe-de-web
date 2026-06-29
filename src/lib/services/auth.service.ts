@@ -1,6 +1,7 @@
 import { users } from '../../database/schema';
 import { eq } from 'drizzle-orm';
 import type { Database } from '../di/database';
+import { insertReturning } from '../db/returning';
 
 export class AuthService {
 	private db: Database;
@@ -20,11 +21,11 @@ export class AuthService {
 	}
 
 	async createUser(data: { email: string; name: string; role?: 'user' | 'provider' | 'admin'; avatarUrl?: string }) {
-		return await this.db.insert(users).values({
+		return await insertReturning(this.db, users, {
 			email: data.email,
 			name: data.name,
 			role: data.role || 'user',
 			avatarUrl: data.avatarUrl,
-		}).returning().get();
+		});
 	}
 }

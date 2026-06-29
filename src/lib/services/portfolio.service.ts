@@ -1,6 +1,7 @@
 import { portfolioImages, trades } from '../../database/schema';
 import { eq, asc, count, and, desc } from 'drizzle-orm';
 import type { Database } from '../di/database';
+import { insertReturning } from '../db/returning';
 
 export class PortfolioService {
 	private db: Database;
@@ -46,12 +47,12 @@ export class PortfolioService {
 
 		const nextOrder = (countResult?.c ?? 0);
 
-		return await this.db.insert(portfolioImages).values({
+		return await insertReturning(this.db, portfolioImages, {
 			tradeId: data.tradeId,
 			url: data.url,
 			caption: data.caption,
 			sortOrder: nextOrder,
-		}).returning().get();
+		});
 	}
 
 	async updateCaption(imageId: number, caption: string): Promise<void> {

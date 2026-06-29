@@ -2,19 +2,20 @@ import { getDb } from '../../../database/client';
 import { tickets, ticketMessages, users } from '../../../database/schema';
 import { eq, and, count, desc, sql } from 'drizzle-orm';
 import { sendMail, buildTicketNotificationEmail } from '../../services/email/mailpit';
+import { insertReturning } from '../../db/returning';
 
 export async function createTicket(locals: any, input: { kind: string; subject: string; body: string; contactEmail?: string; targetProviderId?: number }): Promise<typeof tickets.$inferSelect> {
   const db = getDb();
   const user = (locals as any).user || null;
 
-  const ticket = await db.insert(tickets).values({
+  const ticket = await insertReturning(db, tickets, {
     kind: input.kind as any,
     subject: input.subject,
     contactEmail: input.contactEmail || null,
     targetProviderId: input.targetProviderId || null,
     createdByUserId: user?.id || null,
     status: 'abierto',
-  }).returning().get();
+  });
 
   await db.insert(ticketMessages).values({
     ticketId: ticket.id,
@@ -100,7 +101,7 @@ export async function transitionTicket(locals: any, ticketId: number, status: st
 
 export async function addMessage(locals: any, ticketId: number, sender: string, body: string, internalNote: boolean = false): Promise<typeof ticketMessages.$inferSelect> {
   const db = getDb();
-  return db.insert(ticketMessages).values({ ticketId, sender: sender as any, body, internalNote }).returning().get();
+  return insertReturning(db, ticketMessages, { ticketId, sender: sender as any, body, internalNote });
 }
 
 export async function listMessages(locals: any, ticketId: number, isAdmin: boolean): Promise<any[]> {

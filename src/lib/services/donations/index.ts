@@ -2,10 +2,11 @@ import { getDb } from '../../../database/client';
 import { donations } from '../../../database/schema';
 import { eq, desc, and } from 'drizzle-orm';
 import { sendMail } from '../../services/email/mailpit';
+import { insertReturning } from '../../db/returning';
 
 export async function createDonation(locals: any, input: { provider: string; amountClp: number; recurring: boolean; payerEmail?: string; userId?: number; externalId?: string }) {
   const db = getDb();
-  return db.insert(donations).values({
+  return insertReturning(db, donations, {
     provider: input.provider as any,
     amountClp: input.amountClp,
     recurring: input.recurring,
@@ -13,7 +14,7 @@ export async function createDonation(locals: any, input: { provider: string; amo
     userId: input.userId || null,
     externalId: input.externalId || null,
     status: 'pending',
-  }).returning().get();
+  });
 }
 
 export async function updateDonationStatus(locals: any, externalId: string, status: string, provider: string) {

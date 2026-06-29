@@ -1,6 +1,7 @@
 import { users } from '../../database/schema';
 import { eq } from 'drizzle-orm';
 import type { Database } from '../di/database';
+import { updateReturning } from '../db/returning';
 
 export class UserProfileService {
 	private db: Database;
@@ -20,10 +21,6 @@ export class UserProfileService {
 		communeId?: number;
 		interests?: string;
 	}) {
-		return await this.db.update(users)
-			.set(data)
-			.where(eq(users.id, userId))
-			.returning()
-			.get();
+		return await updateReturning(this.db, users, data, eq(users.id, userId));
 	}
 }

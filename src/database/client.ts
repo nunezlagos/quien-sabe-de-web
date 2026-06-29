@@ -19,23 +19,33 @@ function getPool(): mysql.Pool {
   return pool;
 }
 
-let dbInstance: ReturnType<typeof drizzle> | null = null;
+let dbInstance: ReturnType<typeof drizzle<typeof schema>> | null = null;
 
-function wrapQueryBuilder<T extends object>(qb: T): T {
-  return new Proxy(qb, {
-    get(target, prop, receiver) {
-      if (prop === 'all') {
-        return async () => await target;
+function getRawDb(): ReturnType<typeof drizzle<typeof schema>> {
+  if (!dbInstance) dbInstance = drizzle(getPool(), { schema, mode: 'default' });
+  return dbInstance;
+}
+
+const D1_METHODS = new Set(['all', 'get', 'run']);
+
+function d1wrap<T extends object>(target: T): T {
+  return new Proxy(target, {
+    get(obj, prop, receiver) {
+      if (typeof prop === 'symbol') {
+        return Reflect.get(obj, prop, receiver);
       }
-      if (prop === 'get') {
+      if (D1_METHODS.has(prop as string)) {
+        if (prop === 'all') {
+          return async () => await obj;
+        }
+        if (prop === 'get') {
+          return async () => {
+            const rows = await obj;
+            return Array.isArray(rows) ? rows[0] : rows;
+          };
+        }
         return async () => {
-          const rows = await target;
-          return Array.isArray(rows) ? rows[0] : rows;
-        };
-      }
-      if (prop === 'run') {
-        return async () => {
-          const result = await target;
+          const result = await obj;
           if (result && typeof result === 'object' && 'insertId' in (result as any)) {
             const r = result as any;
             return { changes: r.affectedRows ?? 0, lastInsertRowid: r.insertId ?? 0 };
@@ -47,12 +57,12 @@ function wrapQueryBuilder<T extends object>(qb: T): T {
           return { changes: 0, lastInsertRowid: 0 };
         };
       }
-      const value = Reflect.get(target, prop, receiver);
+      const value = Reflect.get(obj, prop, receiver);
       if (typeof value === 'function') {
-        return (...args: any[]) => {
-          const result = value.apply(target, args);
+        return (...args: unknown[]) => {
+          const result = (value as (...a: unknown[]) => unknown).apply(obj, args);
           if (result && typeof result === 'object') {
-            return wrapQueryBuilder(result);
+            return d1wrap(result as object);
           }
           return result;
         };
@@ -63,11 +73,13 @@ function wrapQueryBuilder<T extends object>(qb: T): T {
 }
 
 export function getDb() {
-  if (!dbInstance) {
-    const raw = drizzle(getPool(), { schema, mode: 'default' });
-    dbInstance = wrapQueryBuilder(raw);
-  }
-  return dbInstance;
+  const raw = getRawDb();
+  return {
+    select: (...args: unknown[]) => d1wrap((raw as any).select(...args)),
+    insert: (table: any) => d1wrap((raw as any).insert(table)),
+    update: (table: any) => d1wrap((raw as any).update(table)),
+    delete: (table: any) => d1wrap((raw as any).delete(table)),
+  };
 }
 
 export function getDbFromContext() {

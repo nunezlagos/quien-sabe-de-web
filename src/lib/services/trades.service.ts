@@ -1,6 +1,7 @@
 import { trades, communes, reviews, users } from '../../database/schema';
 import { eq, desc, sql, like, and, or, gte } from 'drizzle-orm';
 import type { Database } from '../di/database';
+import { insertReturning } from '../db/returning';
 
 /**
  * Servicio de oficios (trades).
@@ -38,7 +39,7 @@ export class TradesService {
 		communeId?: number;
 		category?: 'hogar' | 'tecnologia' | 'automotriz' | 'educacion' | 'salud_belleza' | 'otros';
 	}) {
-		return await this.db.insert(trades).values({
+		return await insertReturning(this.db, trades, {
 			userId: data.userId,
 			symbol: data.symbol,
 			name: data.name,
@@ -50,7 +51,7 @@ export class TradesService {
 			category: data.category || 'hogar',
 			verified: false,
 			status: 'active',
-		}).returning().get();
+		});
 	}
 
 	/**
