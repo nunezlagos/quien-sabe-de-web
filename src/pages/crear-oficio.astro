@@ -26,101 +26,352 @@ const OFICIOS = [
 ---
 
 <BaseLayout title="Crear Nuevo Oficio — QuiénSabe">
-  <main class="container mx-auto px-4 py-8 max-w-2xl">
-    <div class="text-center mb-8">
-      <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3 text-orange-500 text-2xl">
+  <main class="crear-oficio-main">
+    <div class="crear-oficio-header">
+      <div class="crear-oficio-icon">
         <i class="ri-briefcase-line"></i>
       </div>
-      <h1 class="text-2xl font-extrabold text-gray-800">Ofrece tus servicios</h1>
-      <p class="text-gray-500 text-sm">Completa tu perfil profesional.</p>
+      <h1 class="crear-oficio-title">Ofrece tus servicios</h1>
+      <p class="crear-oficio-subtitle">Completa tu perfil profesional.</p>
     </div>
 
     {error && (
-      <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 text-sm">
+      <div class="crear-oficio-error">
         {error}
       </div>
     )}
 
-    <form action="/api/v1/trades" method="POST" class="space-y-6" id="form-crear-oficio">
-      <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-        <h3 class="font-bold text-gray-800 text-base mb-4 border-b border-gray-100 pb-2">1. Información Básica</h3>
+    <form action="/api/v1/trades" method="POST" id="form-crear-oficio">
+      <section class="crear-section">
+        <h3 class="crear-section-title">1. Información Básica</h3>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label for="name" class="block text-xs font-bold text-gray-700 mb-1">Nombre Visible</label>
-            <input id="name" name="name" type="text" required minlength="3" maxlength="120" placeholder="Ej: Juan Pérez" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition">
+        <div class="crear-grid">
+          <div class="crear-field">
+            <label for="name" class="crear-label">Nombre Visible</label>
+            <input id="name" name="name" type="text" required minlength="3" maxlength="120" placeholder="Ej: Juan Pérez" class="crear-input">
           </div>
-          <div>
-            <label for="symbol" class="block text-xs font-bold text-gray-700 mb-1">Oficio</label>
-            <select id="symbol" name="symbol" required class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition js-oficio-select">
+          <div class="crear-field">
+            <label for="symbol" class="crear-label">Oficio</label>
+            <select id="symbol" name="symbol" required class="crear-select js-oficio-select">
               {OFICIOS.map((o) => (
                 <option value={o.value}>{o.label}</option>
               ))}
             </select>
           </div>
-          <div class="md:col-span-2" data-oficio-otro hidden>
-            <label for="symbol_custom" class="block text-xs font-bold text-gray-700 mb-1">Especifica tu oficio</label>
-            <input id="symbol_custom" name="symbol_custom" type="text" maxlength="30" placeholder="Ej: yesero, tapicero, soldador…" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition">
+          <div class="crear-field crear-field-full" data-oficio-otro hidden>
+            <label for="symbol_custom" class="crear-label">Especifica tu oficio</label>
+            <input id="symbol_custom" name="symbol_custom" type="text" maxlength="30" placeholder="Ej: yesero, tapicero, soldador…" class="crear-input">
           </div>
-          <div class="md:col-span-2">
-            <label for="description" class="block text-xs font-bold text-gray-700 mb-1">Descripción Corta (Bio)</label>
-            <textarea id="description" name="description" rows="2" required minlength="20" maxlength="1000" placeholder="Cuenta brevemente tu experiencia…" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition"></textarea>
-          </div>
-        </div>
-      </section>
-
-      <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-        <h3 class="font-bold text-gray-800 text-base mb-4 border-b border-gray-100 pb-2">2. Contacto y Precios</h3>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label for="whatsapp" class="block text-xs font-bold text-gray-700 mb-1">WhatsApp</label>
-            <div class="relative">
-              <span class="absolute left-3 top-2 text-gray-400 text-sm">+56 9</span>
-              <input id="whatsapp" name="whatsapp" type="tel" required inputmode="numeric" pattern="[0-9]{8}" maxlength="8" placeholder="12345678" class="w-full bg-gray-50 border border-gray-200 rounded-lg pl-14 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition">
-            </div>
-          </div>
-          <div>
-            <label for="base_price_clp" class="block text-xs font-bold text-gray-700 mb-1">Precio Base</label>
-            <div class="relative">
-              <span class="absolute left-3 top-2 text-gray-400 text-sm">$</span>
-              <input id="base_price_clp" name="base_price_clp" type="number" required min="1000" max="9999999" step="1000" placeholder="10000" class="w-full bg-gray-50 border border-gray-200 rounded-lg pl-6 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition">
-            </div>
+          <div class="crear-field crear-field-full">
+            <label for="description" class="crear-label">Descripción Corta (Bio)</label>
+            <textarea id="description" name="description" rows="2" required minlength="20" maxlength="1000" placeholder="Cuenta brevemente tu experiencia…" class="crear-textarea"></textarea>
           </div>
         </div>
       </section>
 
-      <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-        <h3 class="font-bold text-gray-800 text-base mb-4 border-b border-gray-100 pb-2">3. Cobertura de Comunas</h3>
-        <p class="text-xs text-gray-500 mb-3">¿En qué comunas atiendes?</p>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-48 overflow-y-auto border border-gray-200 rounded-xl p-2">
+      <section class="crear-section">
+        <h3 class="crear-section-title">2. Contacto y Precios</h3>
+
+        <div class="crear-grid">
+          <div class="crear-field">
+            <label for="whatsapp" class="crear-label">WhatsApp</label>
+            <div class="crear-input-wrapper">
+              <span class="crear-input-prefix">+56 9</span>
+              <input id="whatsapp" name="whatsapp" type="tel" required inputmode="numeric" pattern="[0-9]{8}" maxlength="8" placeholder="12345678" class="crear-input crear-input-prefixed">
+            </div>
+          </div>
+          <div class="crear-field">
+            <label for="base_price_clp" class="crear-label">Precio Base</label>
+            <div class="crear-input-wrapper">
+              <span class="crear-input-prefix">$</span>
+              <input id="base_price_clp" name="base_price_clp" type="number" required min="1000" max="9999999" step="1000" placeholder="10000" class="crear-input crear-input-prefixed">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="crear-section">
+        <h3 class="crear-section-title">3. Cobertura de Comunas</h3>
+        <p class="crear-label说明">¿En qué comunas atiendes?</p>
+        <div class="crear-communes-grid">
           {communeList.map((c) => (
-            <label class="flex items-center gap-2 p-2 hover:bg-gray-50 rounded-lg cursor-pointer text-sm">
-              <input type="checkbox" name="commune_ids" value={c.id} class="accent-orange-500 rounded" />
+            <label class="crear-commune-label">
+              <input type="checkbox" name="commune_ids" value={c.id} class="crear-checkbox">
               {c.name}
             </label>
           ))}
         </div>
       </section>
 
-      <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-        <h3 class="font-bold text-gray-800 text-base mb-4 border-b border-gray-100 pb-2">4. Verificación</h3>
+      <section class="crear-section">
+        <h3 class="crear-section-title">4. Verificación</h3>
 
-        <div class="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-orange-500 hover:bg-orange-50 transition cursor-pointer js-upload-cert">
-          <i class="ri-file-upload-line text-2xl text-gray-300 mb-1"></i>
-          <p class="text-xs text-gray-600 font-bold">Subir Certificado</p>
-          <p class="text-[10px] text-gray-400 mt-1">(Próximamente — HU-12.6)</p>
+        <div class="crear-upload-zone js-upload-cert">
+          <i class="ri-file-upload-line"></i>
+          <p class="crear-upload-text">Subir Certificado</p>
+          <p class="crear-upload-sub">(Próximamente — HU-12.6)</p>
         </div>
       </section>
 
-      <div class="flex gap-3 pt-2">
-        <a href="/dashboard" class="flex-1 py-3 rounded-xl text-center font-bold text-gray-500 hover:bg-gray-100 transition text-sm flex items-center justify-center">Volver</a>
-        <button type="submit" class="flex-[2] bg-orange-500 text-white py-3 rounded-xl font-bold hover:bg-orange-600 transition shadow-md text-sm">
-          Crear Perfil
-        </button>
+      <div class="crear-actions">
+        <a href="/dashboard" class="crear-btn crear-btn-secondary">Volver</a>
+        <button type="submit" class="crear-btn crear-btn-primary">Crear Perfil</button>
       </div>
     </form>
   </main>
+
+  <style>
+    .crear-oficio-main {
+      max-width: 42rem;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .crear-oficio-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .crear-oficio-icon {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      background: var(--orange-100);
+      color: var(--orange-500);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.75rem;
+      font-size: 1.5rem;
+    }
+
+    .crear-oficio-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .crear-oficio-subtitle {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+
+    .crear-oficio-error {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #b91c1c;
+      padding: 1rem;
+      border-radius: var(--radius-xl);
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    .crear-section {
+      background: white;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--border-default);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .crear-section-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .crear-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 640px) {
+      .crear-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .crear-field {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .crear-field-full {
+      grid-column: 1 / -1;
+    }
+
+    .crear-label {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      color: var(--stone-700);
+      margin-bottom: 0.25rem;
+    }
+
+    .crear-label说明 {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .crear-input,
+    .crear-select,
+    .crear-textarea {
+      background: var(--stone-50);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+      color: var(--text-primary);
+      transition: all 200ms ease;
+      width: 100%;
+    }
+
+    .crear-input:focus,
+    .crear-select:focus,
+    .crear-textarea:focus {
+      outline: none;
+      border-color: var(--amber-400);
+      box-shadow: 0 0 0 3px var(--amber-100);
+    }
+
+    .crear-input-wrapper {
+      position: relative;
+    }
+
+    .crear-input-prefix {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .crear-input-prefixed {
+      padding-left: 3rem;
+    }
+
+    .crear-communes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+      max-height: 12rem;
+      overflow-y: auto;
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-xl);
+      padding: 0.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .crear-communes-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .crear-commune-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      transition: all 200ms ease;
+    }
+
+    .crear-commune-label:hover {
+      background: var(--stone-50);
+      color: var(--text-primary);
+    }
+
+    .crear-checkbox {
+      accent-color: var(--orange-500);
+      border-radius: 0.25rem;
+      width: 1rem;
+      height: 1rem;
+    }
+
+    .crear-upload-zone {
+      border: 2px dashed var(--border-default);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 200ms ease;
+    }
+
+    .crear-upload-zone:hover {
+      border-color: var(--amber-400);
+      background: var(--amber-50);
+    }
+
+    .crear-upload-zone i {
+      font-size: 1.5rem;
+      color: var(--stone-300);
+      margin-bottom: 0.25rem;
+    }
+
+    .crear-upload-text {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .crear-upload-sub {
+      font-size: 0.625rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    .crear-actions {
+      display: flex;
+      gap: 0.75rem;
+      padding-top: 0.5rem;
+    }
+
+    .crear-btn {
+      flex: 1;
+      padding: 0.75rem;
+      border-radius: var(--radius-xl);
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.875rem;
+      transition: all 200ms ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+
+    .crear-btn-secondary {
+      background: var(--stone-100);
+      color: var(--text-muted);
+      border: 1px solid var(--border-default);
+    }
+
+    .crear-btn-secondary:hover {
+      background: var(--stone-200);
+      color: var(--text-primary);
+    }
+
+    .crear-btn-primary {
+      flex: 2;
+      background: var(--orange-500);
+      color: white;
+      box-shadow: var(--shadow-btn);
+    }
+
+    .crear-btn-primary:hover {
+      background: var(--orange-600);
+    }
+  </style>
 
   <script>
     import { initCreateTradeForm } from '../lib/client/trades/create-trade';

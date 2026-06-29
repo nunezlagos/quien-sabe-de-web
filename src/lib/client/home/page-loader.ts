@@ -9,7 +9,7 @@ export function hidePageLoader(): void {
 function hide(): void {
   const loader = document.getElementById('page-loader');
   if (loader) {
-    loader.classList.add('hidden');
-    setTimeout(() => loader.remove(), 500);
+    loader.classList.add('loader-hidden');
+    setTimeout(() => loader.remove(), 600);
   }
 }

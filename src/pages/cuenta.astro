@@ -30,132 +30,123 @@ const esPrestador = currentUser.role === 'provider';
 ---
 
 <BaseLayout title="Mis datos personales — QuiénSabe">
-	<main class="container mx-auto px-4 py-8 max-w-4xl">
-		<nav class="text-sm text-gray-500 font-medium mb-6 flex items-center gap-2">
-			<a href="/dashboard" class="hover:text-orange-500 transition">Mi cuenta</a>
+	<main class="cuenta-main">
+		<nav class="cuenta-breadcrumb">
+			<a href="/dashboard" class="cuenta-breadcrumb-link">Mi cuenta</a>
 			<i class="ri-arrow-right-s-line"></i>
-			<span class="text-gray-800 font-bold">Datos personales</span>
+			<span class="cuenta-breadcrumb-current">Datos personales</span>
 		</nav>
 
-		<div class="mb-8">
-			<h1 class="text-2xl font-extrabold text-gray-800 mb-1">Mis Datos Personales</h1>
-			<p class="text-gray-500 font-medium text-sm">
+		<div class="cuenta-page-header">
+			<h1 class="cuenta-page-title">Mis Datos Personales</h1>
+			<p class="cuenta-page-subtitle">
 				Ejerce tus derechos según la Ley 19.628 desde un solo lugar.
 			</p>
 		</div>
 
 		{exportSolicitado && (
-			<div
-				id="export-toast"
-				class="bg-blue-50 border border-blue-200 text-blue-700 rounded-2xl p-4 mb-6 flex items-start gap-3"
-				role="status"
-			>
-				<i class="ri-mail-send-line text-xl mt-0.5"></i>
+			<div id="export-toast" class="cuenta-toast" role="status">
+				<i class="ri-mail-send-line"></i>
 				<div>
-					<p class="font-bold text-sm">Solicitud recibida.</p>
-					<p class="text-xs font-medium">
+					<p class="cuenta-toast-title">Solicitud recibida.</p>
+					<p class="cuenta-toast-body">
 						Te enviaremos un ZIP con tus datos a <b>{currentUser.email}</b> en un máximo de 24 horas.
 					</p>
 				</div>
 			</div>
 		)}
 
-		<div class="space-y-6">
+		<div class="cuenta-cards">
 			<!-- Card 1: Descargar datos -->
-			<section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-				<form method="POST" action="/api/v1/users/me/data-export" class="flex flex-col md:flex-row items-start gap-4">
-					<div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500 text-2xl shrink-0">
+			<section class="cuenta-card">
+				<form method="POST" action="/api/v1/users/me/data-export" class="cuenta-card-form">
+					<div class="cuenta-card-icon cuenta-card-icon-blue">
 						<i class="ri-download-cloud-2-line" aria-hidden="true"></i>
 					</div>
-					<div class="flex-grow">
-						<h2 class="font-bold text-gray-800 text-lg mb-1">Descargar mis datos</h2>
-						<p class="text-sm text-gray-500 font-medium leading-relaxed">
+					<div class="cuenta-card-content">
+						<h2 class="cuenta-card-title">Descargar mis datos</h2>
+						<p class="cuenta-card-desc">
 							Recibirás un archivo ZIP con todos tus datos: perfil, mensajes, reseñas y configuraciones.
 							Te llegará al correo en un máximo de 24 horas.
 						</p>
 					</div>
-					<button
-						type="submit"
-						class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-xl shadow-md transition w-full md:w-auto shrink-0"
-					>
+					<button type="submit" class="cuenta-btn cuenta-btn-primary">
 						Solicitar descarga
 					</button>
 				</form>
 			</section>
 
 			<!-- Card 2: Consentimientos -->
-			<section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-				<div class="flex items-start gap-4 mb-6">
-					<div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-500 text-2xl shrink-0">
+			<section class="cuenta-card">
+				<div class="cuenta-card-header">
+					<div class="cuenta-card-icon cuenta-card-icon-orange">
 						<i class="ri-toggle-line" aria-hidden="true"></i>
 					</div>
 					<div>
-						<h2 class="font-bold text-gray-800 text-lg mb-1">Consentimientos</h2>
-						<p class="text-sm text-gray-500 font-medium">
-							Decide qué autorizas y qué no. Puedes cambiar esto cuando quieras.
-						</p>
+						<h2 class="cuenta-card-title">Consentimientos</h2>
+						<p class="cuenta-card-desc">Decide qué autorizas y qué no. Puedes cambiar esto cuando quieras.</p>
 					</div>
 				</div>
 
-				<div class="space-y-3">
-					<label class="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100 cursor-pointer hover:bg-white hover:shadow-sm transition">
-						<div class="flex items-center gap-3">
-							<i class="ri-mail-send-line text-orange-500 text-xl" aria-hidden="true"></i>
+				<div class="cuenta-consents">
+					<label class="cuenta-consent-item">
+						<div class="cuenta-consent-info">
+							<i class="ri-mail-send-line" aria-hidden="true"></i>
 							<div>
-								<h4 class="font-bold text-gray-800 text-sm">Recibir emails de comunicaciones del producto</h4>
-								<p class="text-xs text-gray-500 font-medium">Novedades, mejoras y avisos importantes.</p>
+								<h4 class="cuenta-consent-title">Recibir emails de comunicaciones del producto</h4>
+								<p class="cuenta-consent-desc">Novedades, mejoras y avisos importantes.</p>
 							</div>
 						</div>
-						<div class="relative inline-flex items-center">
+						<div class="cuenta-toggle">
 							<input
 								type="checkbox"
 								class="sr-only peer js-consent-toggle"
 								data-consent-key="consent_email_product"
 								checked={emailProductOn}
 							/>
-							<div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+							<div class="toggle-track"></div>
 						</div>
 					</label>
 
-					<label class="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100 cursor-pointer hover:bg-white hover:shadow-sm transition">
-						<div class="flex items-center gap-3">
-							<i class="ri-bar-chart-2-line text-orange-500 text-xl" aria-hidden="true"></i>
+					<label class="cuenta-consent-item">
+						<div class="cuenta-consent-info">
+							<i class="ri-bar-chart-2-line" aria-hidden="true"></i>
 							<div>
-								<h4 class="font-bold text-gray-800 text-sm">Analytics y métricas anónimas</h4>
-								<p class="text-xs text-gray-500 font-medium">Ayuda a mejorar la plataforma sin identificarte.</p>
+								<h4 class="cuenta-consent-title">Analytics y métricas anónimas</h4>
+								<p class="cuenta-consent-desc">Ayuda a mejorar la plataforma sin identificarte.</p>
 							</div>
 						</div>
-						<div class="relative inline-flex items-center">
+						<div class="cuenta-toggle">
 							<input
 								type="checkbox"
 								class="sr-only peer js-consent-toggle"
 								data-consent-key="consent_analytics"
 								checked={analyticsOn}
 							/>
-							<div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+							<div class="toggle-track"></div>
 						</div>
 					</label>
 
-					<label class={`flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100 cursor-pointer hover:bg-white hover:shadow-sm transition ${esPrestador ? '' : 'opacity-60'}`}>
-						<div class="flex items-center gap-3">
-							<i class="ri-eye-line text-orange-500 text-xl" aria-hidden="true"></i>
+					<label class={`cuenta-consent-item ${esPrestador ? '' : 'cuenta-consent-disabled'}`}>
+						<div class="cuenta-consent-info">
+							<i class="ri-eye-line" aria-hidden="true"></i>
 							<div>
-								<h4 class="font-bold text-gray-800 text-sm">
+								<h4 class="cuenta-consent-title">
 									Perfil público visible en el buscador
 									{esPrestador ? (
-										<span class="text-[10px] bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-bold ml-1">Solo prestador</span>
+										<span class="cuenta-badge cuenta-badge-orange">Solo prestador</span>
 									) : (
-										<span class="text-[10px] bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full font-bold ml-1">Solo prestador</span>
+										<span class="cuenta-badge">Solo prestador</span>
 									)}
 								</h4>
-								<p class="text-xs text-gray-500 font-medium">
+								<p class="cuenta-consent-desc">
 									{esPrestador
 										? 'Si lo desactivas, tu perfil deja de aparecer en búsquedas.'
 										: 'Tu rol actual no tiene perfil público. Se activará si te conviertes en prestador.'}
 								</p>
 							</div>
 						</div>
-						<div class="relative inline-flex items-center">
+						<div class="cuenta-toggle">
 							<input
 								type="checkbox"
 								class="sr-only peer js-consent-toggle"
@@ -163,21 +154,21 @@ const esPrestador = currentUser.role === 'provider';
 								checked={profilePublicOn}
 								disabled={!esPrestador}
 							/>
-							<div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+							<div class="toggle-track"></div>
 						</div>
 					</label>
 				</div>
 			</section>
 
 			<!-- Card 3: Eliminar cuenta -->
-			<section class="bg-white p-6 rounded-2xl shadow-sm border-2 border-red-100">
-				<div class="flex flex-col md:flex-row items-start gap-4">
-					<div class="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center text-red-500 text-2xl shrink-0">
+			<section class="cuenta-card cuenta-card-danger">
+				<div class="cuenta-card-form">
+					<div class="cuenta-card-icon cuenta-card-icon-red">
 						<i class="ri-delete-bin-line" aria-hidden="true"></i>
 					</div>
-					<div class="flex-grow">
-						<h2 class="font-bold text-gray-800 text-lg mb-1">Eliminar mi cuenta</h2>
-						<p class="text-sm text-gray-500 font-medium leading-relaxed">
+					<div class="cuenta-card-content">
+						<h2 class="cuenta-card-title">Eliminar mi cuenta</h2>
+						<p class="cuenta-card-desc">
 							Acción irreversible. Tus reseñas se anonimizan y tus datos se eliminan en 30 días,
 							según los plazos legales de retención.
 						</p>
@@ -185,7 +176,7 @@ const esPrestador = currentUser.role === 'provider';
 					<button
 						type="button"
 						id="open-delete-btn"
-						class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-xl shadow-md transition w-full md:w-auto shrink-0"
+						class="cuenta-btn cuenta-btn-danger"
 					>
 						Eliminar mi cuenta
 					</button>
@@ -197,40 +188,37 @@ const esPrestador = currentUser.role === 'provider';
 	<!-- Modal de confirmación de eliminación -->
 	<div
 		id="delete-modal"
-		class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center backdrop-blur-sm opacity-0 transition-opacity duration-300 p-4"
+		class="modal-overlay"
 		role="dialog"
 		aria-modal="true"
 		aria-labelledby="delete-modal-title"
 	>
-		<div
-			id="delete-modal-content"
-			class="bg-white rounded-3xl shadow-2xl w-full max-w-md transform scale-95 transition-transform duration-300"
-		>
-			<div class="p-6 border-b border-gray-100 flex justify-between items-center bg-red-50 rounded-t-3xl">
-				<h3 id="delete-modal-title" class="font-bold text-gray-800 text-lg flex items-center gap-2">
-					<i class="ri-alert-line text-red-500" aria-hidden="true"></i> Confirmar eliminación
+		<div id="delete-modal-content" class="modal-content">
+			<div class="modal-header">
+				<h3 id="delete-modal-title" class="modal-title">
+					<i class="ri-alert-line" aria-hidden="true"></i> Confirmar eliminación
 				</h3>
 				<button
 					id="close-delete-btn"
 					type="button"
-					class="text-gray-400 hover:text-gray-600 transition"
+					class="modal-close"
 					aria-label="Cerrar"
 				>
-					<i class="ri-close-line text-2xl" aria-hidden="true"></i>
+					<i class="ri-close-line" aria-hidden="true"></i>
 				</button>
 			</div>
 
-			<form id="form-eliminar" class="p-6 space-y-4">
-				<div class="bg-yellow-50 p-4 rounded-xl border border-yellow-100">
-					<p class="text-sm text-yellow-700 font-medium leading-relaxed">
+			<form id="form-eliminar" class="modal-form">
+				<div class="modal-warning">
+					<p class="modal-warning-text">
 						<i class="ri-information-line" aria-hidden="true"></i>
 						Esta acción es irreversible. Perderás acceso a tu perfil, mensajes y servicios publicados.
 					</p>
 				</div>
 
-				<div>
-					<label for="delete-confirm-input" class="block text-xs font-bold text-gray-700 mb-1">
-						Para confirmar, escribe <span class="text-red-500 font-extrabold">ELIMINAR</span>
+				<div class="modal-field">
+					<label for="delete-confirm-input" class="modal-label">
+						Para confirmar, escribe <span class="modal-label-danger">ELIMINAR</span>
 					</label>
 					<input
 						id="delete-confirm-input"
@@ -238,15 +226,15 @@ const esPrestador = currentUser.role === 'provider';
 						type="text"
 						placeholder="ELIMINAR"
 						autocomplete="off"
-						class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500/50 transition"
+						class="modal-input"
 					/>
 				</div>
 
-				<div class="flex gap-2 pt-2">
+				<div class="modal-actions">
 					<button
 						type="button"
 						id="cancel-delete-btn"
-						class="flex-1 bg-white border border-gray-200 text-gray-600 hover:border-orange-500 hover:text-orange-500 font-bold py-3 rounded-xl transition"
+						class="modal-btn modal-btn-cancel"
 					>
 						Cancelar
 					</button>
@@ -254,7 +242,7 @@ const esPrestador = currentUser.role === 'provider';
 						type="submit"
 						id="confirm-delete-btn"
 						disabled
-						class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-xl shadow-md transition opacity-50 cursor-not-allowed"
+						class="modal-btn modal-btn-danger modal-btn-disabled"
 					>
 						Eliminar definitivamente
 					</button>
@@ -262,9 +250,503 @@ const esPrestador = currentUser.role === 'provider';
 			</form>
 		</div>
 	</div>
-</BaseLayout>
 
-<script>
-	import { inicializarAccionesCuenta } from '../lib/client/auth/account-actions';
-	inicializarAccionesCuenta();
-</script>
+	<style>
+		.cuenta-main {
+			max-width: 52rem;
+			margin: 0 auto;
+			padding: 2rem 1rem;
+		}
+
+		.cuenta-breadcrumb {
+			display: flex;
+			align-items: center;
+			gap: 0.25rem;
+			font-size: 0.875rem;
+			font-weight: 500;
+			color: var(--text-muted);
+			margin-bottom: 1.5rem;
+		}
+
+		.cuenta-breadcrumb-link {
+			color: var(--amber-600);
+			text-decoration: none;
+		}
+
+		.cuenta-breadcrumb-link:hover {
+			text-decoration: underline;
+		}
+
+		.cuenta-breadcrumb-current {
+			color: var(--text-primary);
+			font-weight: 700;
+		}
+
+		.cuenta-page-header {
+			margin-bottom: 2rem;
+		}
+
+		.cuenta-page-title {
+			font-size: 1.5rem;
+			font-weight: 800;
+			color: var(--text-primary);
+			margin-bottom: 0.25rem;
+		}
+
+		.cuenta-page-subtitle {
+			color: var(--text-secondary);
+			font-size: 0.875rem;
+			font-weight: 500;
+		}
+
+		.cuenta-toast {
+			background: var(--blue-50);
+			border: 1px solid var(--blue-200);
+			color: var(--blue-700);
+			border-radius: var(--radius-2xl);
+			padding: 1rem;
+			margin-bottom: 1.5rem;
+			display: flex;
+			align-items: flex-start;
+			gap: 0.75rem;
+		}
+
+		.cuenta-toast i {
+			font-size: 1.25rem;
+			margin-top: 0.125rem;
+			flex-shrink: 0;
+		}
+
+		.cuenta-toast-title {
+			font-weight: 700;
+			font-size: 0.875rem;
+		}
+
+		.cuenta-toast-body {
+			font-size: 0.75rem;
+			font-weight: 500;
+			margin-top: 0.25rem;
+		}
+
+		.cuenta-cards {
+			display: flex;
+			flex-direction: column;
+			gap: 1.5rem;
+		}
+
+		.cuenta-card {
+			background: white;
+			border-radius: var(--radius-xl);
+			box-shadow: var(--shadow-card);
+			border: 1px solid var(--border-default);
+			padding: 1.5rem;
+		}
+
+		.cuenta-card-danger {
+			border: 2px solid #fecaca;
+		}
+
+		.cuenta-card-form {
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+			align-items: flex-start;
+		}
+
+		@media (min-width: 768px) {
+			.cuenta-card-form {
+				flex-direction: row;
+				align-items: center;
+			}
+		}
+
+		.cuenta-card-header {
+			display: flex;
+			align-items: flex-start;
+			gap: 1rem;
+			margin-bottom: 1.5rem;
+		}
+
+		.cuenta-card-icon {
+			width: 3.5rem;
+			height: 3.5rem;
+			border-radius: var(--radius-xl);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.5rem;
+			flex-shrink: 0;
+		}
+
+		.cuenta-card-icon-blue {
+			background: var(--blue-50);
+			color: var(--blue-500);
+		}
+
+		.cuenta-card-icon-orange {
+			background: var(--orange-50);
+			color: var(--orange-500);
+		}
+
+		.cuenta-card-icon-red {
+			background: #fef2f2;
+			color: #dc2626;
+		}
+
+		.cuenta-card-content {
+			flex-grow: 1;
+		}
+
+		.cuenta-card-title {
+			font-size: 1.125rem;
+			font-weight: 700;
+			color: var(--text-primary);
+			margin-bottom: 0.25rem;
+		}
+
+		.cuenta-card-desc {
+			font-size: 0.875rem;
+			color: var(--text-secondary);
+			font-weight: 500;
+			line-height: 1.6;
+		}
+
+		.cuenta-btn {
+			padding: 0.75rem 1.5rem;
+			border-radius: var(--radius-xl);
+			font-weight: 700;
+			font-size: 0.875rem;
+			transition: all 200ms ease;
+			border: none;
+			cursor: pointer;
+			white-space: nowrap;
+			width: 100%;
+		}
+
+		@media (min-width: 768px) {
+			.cuenta-btn {
+				width: auto;
+			}
+		}
+
+		.cuenta-btn-primary {
+			background: var(--orange-500);
+			color: white;
+			box-shadow: var(--shadow-btn);
+		}
+
+		.cuenta-btn-primary:hover {
+			background: var(--orange-600);
+		}
+
+		.cuenta-btn-danger {
+			background: #dc2626;
+			color: white;
+			box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
+		}
+
+		.cuenta-btn-danger:hover {
+			background: #b91c1c;
+		}
+
+		/* Consent items */
+		.cuenta-consents {
+			display: flex;
+			flex-direction: column;
+			gap: 0.75rem;
+		}
+
+		.cuenta-consent-item {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 1rem;
+			background: var(--stone-50);
+			border-radius: var(--radius-xl);
+			border: 1px solid var(--border-light);
+			cursor: pointer;
+			transition: all 200ms ease;
+			gap: 1rem;
+		}
+
+		.cuenta-consent-item:hover {
+			background: white;
+			box-shadow: var(--shadow-card);
+		}
+
+		.cuenta-consent-disabled {
+			opacity: 0.6;
+			cursor: default;
+		}
+
+		.cuenta-consent-disabled:hover {
+			background: var(--stone-50);
+			box-shadow: none;
+		}
+
+		.cuenta-consent-info {
+			display: flex;
+			align-items: center;
+			gap: 0.75rem;
+			flex-grow: 1;
+		}
+
+		.cuenta-consent-info > i {
+			font-size: 1.25rem;
+			color: var(--orange-500);
+			flex-shrink: 0;
+		}
+
+		.cuenta-consent-title {
+			font-size: 0.875rem;
+			font-weight: 700;
+			color: var(--text-primary);
+			display: flex;
+			align-items: center;
+			gap: 0.375rem;
+			flex-wrap: wrap;
+		}
+
+		.cuenta-consent-desc {
+			font-size: 0.75rem;
+			color: var(--text-muted);
+			font-weight: 500;
+			margin-top: 0.125rem;
+		}
+
+		.cuenta-badge {
+			font-size: 0.625rem;
+			padding: 0.125rem 0.5rem;
+			border-radius: var(--radius-full);
+			font-weight: 700;
+			background: var(--stone-200);
+			color: var(--stone-600);
+		}
+
+		.cuenta-badge-orange {
+			background: var(--orange-100);
+			color: var(--orange-700);
+		}
+
+		/* Toggle switch */
+		.cuenta-toggle {
+			position: relative;
+			flex-shrink: 0;
+		}
+
+		.toggle-track {
+			width: 2.75rem;
+			height: 1.5rem;
+			background: var(--stone-200);
+			border-radius: var(--radius-full);
+			transition: all 200ms ease;
+			cursor: pointer;
+			position: relative;
+		}
+
+		.toggle-track::after {
+			content: '';
+			position: absolute;
+			top: 0.125rem;
+			left: 0.125rem;
+			width: 1.25rem;
+			height: 1.25rem;
+			background: white;
+			border-radius: 50%;
+			transition: all 200ms ease;
+			box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+		}
+
+		.cuenta-consent-item:hover .toggle-track {
+			background: var(--stone-300);
+		}
+
+		/* When checkbox is checked, toggle turns orange */
+		.cuenta-consent-item:has(.js-consent-toggle:checked) .toggle-track {
+			background: var(--orange-500);
+		}
+
+		.cuenta-consent-item:has(.js-consent-toggle:checked) .toggle-track::after {
+			transform: translateX(1.25rem);
+		}
+
+		.cuenta-consent-item:has(.js-consent-toggle:checked):hover .toggle-track {
+			background: var(--orange-600);
+		}
+
+		/* Modal */
+		.modal-overlay {
+			position: fixed;
+			inset: 0;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: 200;
+			display: none;
+			align-items: center;
+			justify-content: center;
+			backdrop-filter: blur(4px);
+			padding: 1rem;
+		}
+
+		.modal-overlay.is-open {
+			display: flex;
+		}
+
+		.modal-content {
+			background: white;
+			border-radius: var(--radius-2xl);
+			box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+			width: 100%;
+			max-width: 28rem;
+			transform: scale(0.95);
+			transition: transform 300ms ease;
+		}
+
+		.modal-overlay.is-open .modal-content {
+			transform: scale(1);
+		}
+
+		.modal-header {
+			padding: 1.5rem;
+			border-bottom: 1px solid var(--border-light);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			background: #fef2f2;
+			border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+		}
+
+		.modal-title {
+			font-size: 1.125rem;
+			font-weight: 700;
+			color: var(--text-primary);
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
+		.modal-title i {
+			color: #dc2626;
+		}
+
+		.modal-close {
+			background: none;
+			border: none;
+			color: var(--stone-400);
+			cursor: pointer;
+			font-size: 1.5rem;
+			transition: color 200ms ease;
+		}
+
+		.modal-close:hover {
+			color: var(--stone-600);
+		}
+
+		.modal-form {
+			padding: 1.5rem;
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+		}
+
+		.modal-warning {
+			background: var(--amber-50);
+			border: 1px solid var(--amber-200);
+			padding: 1rem;
+			border-radius: var(--radius-xl);
+		}
+
+		.modal-warning-text {
+			font-size: 0.875rem;
+			color: var(--amber-700);
+			font-weight: 500;
+			line-height: 1.6;
+			display: flex;
+			gap: 0.5rem;
+		}
+
+		.modal-warning-text i {
+			flex-shrink: 0;
+		}
+
+		.modal-field {
+			display: flex;
+			flex-direction: column;
+			gap: 0.25rem;
+		}
+
+		.modal-label {
+			font-size: 0.6875rem;
+			font-weight: 700;
+			color: var(--stone-700);
+		}
+
+		.modal-label-danger {
+			color: #dc2626;
+			font-weight: 800;
+		}
+
+		.modal-input {
+			width: 100%;
+			background: var(--stone-50);
+			border: 1px solid var(--border-default);
+			border-radius: var(--radius-xl);
+			padding: 0.75rem 1rem;
+			font-size: 0.875rem;
+			transition: all 200ms ease;
+		}
+
+		.modal-input:focus {
+			outline: none;
+			border-color: #dc2626;
+			box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+		}
+
+		.modal-actions {
+			display: flex;
+			gap: 0.5rem;
+			padding-top: 0.5rem;
+		}
+
+		.modal-btn {
+			flex: 1;
+			padding: 0.75rem;
+			border-radius: var(--radius-xl);
+			font-weight: 700;
+			font-size: 0.875rem;
+			transition: all 200ms ease;
+			cursor: pointer;
+			border: none;
+		}
+
+		.modal-btn-cancel {
+			background: white;
+			color: var(--stone-600);
+			border: 1px solid var(--border-default);
+		}
+
+		.modal-btn-cancel:hover {
+			border-color: var(--amber-400);
+			color: var(--amber-600);
+		}
+
+		.modal-btn-danger {
+			background: #dc2626;
+			color: white;
+			box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
+		}
+
+		.modal-btn-danger:hover {
+			background: #b91c1c;
+		}
+
+		.modal-btn-disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+	</style>
+
+	<script>
+		import { inicializarAccionesCuenta } from '../lib/client/auth/account-actions';
+		inicializarAccionesCuenta();
+	</script>
+</BaseLayout>

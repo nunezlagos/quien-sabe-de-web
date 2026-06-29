@@ -15,21 +15,42 @@ body {
 }
 
 :root {
-  /* === COLOR PALETTE === */
+  /* === COMMUNITY WARM PALETTE ===
+   * Base: stone/warm-cream (neighborhood, handcrafted feel)
+   * Brand: forest-green sparingly (trust, verified)
+   * Accent: amber/orange for energy (CTAs, highlights)
+   * No more green-everywhere — green = special, not default
+   */
 
-  /* Primary Green (#206A3C) - main brand */
-  --green-50: #f0f7f2;
-  --green-100: #dbede3;
-  --green-200: #bcdcc8;
-  --green-300: #8fc4a3;
-  --green-400: #5fa67b;
-  --green-500: #3d8a5c;
-  --green-600: #206a3c;
-  --green-700: #1a5530;
-  --green-800: #144227;
-  --green-900: #0e301d;
+  /* Warm Stone — backgrounds & surfaces */
+  --stone-50: #fafaf9;
+  --stone-100: #f5f5f4;
+  --stone-200: #e7e5e4;
+  --stone-300: #d6d3d1;
+  --stone-400: #a8a29e;
+  --stone-500: #78716c;
+  --stone-600: #57534e;
+  --stone-700: #44403c;
+  --stone-800: #292524;
+  --stone-900: #1c1917;
 
-  /* Primary Orange - accent */
+  /* Warm Cream — page backgrounds (replaces cold slate-50) */
+  --cream-50: #fefdfb;
+  --cream-100: #fdfaf7;
+  --cream-200: #faf5eb;
+  --cream-300: #f5ead8;
+
+  /* Amber — primary accent (warmth, community energy) */
+  --amber-50: #fffbeb;
+  --amber-100: #fef3c7;
+  --amber-200: #fde68a;
+  --amber-300: #fcd34d;
+  --amber-400: #fbbf24;
+  --amber-500: #f59e0b;
+  --amber-600: #d97706;
+  --amber-700: #b45309;
+
+  /* Orange — CTAs, buttons, badges (energy, action) */
   --orange-50: #fff7ed;
   --orange-100: #ffedd5;
   --orange-200: #fed7aa;
@@ -39,7 +60,38 @@ body {
   --orange-600: #ea580c;
   --orange-700: #c2410c;
 
-  /* Neutrals - Slate */
+  /* Forest Green — sparingly (verified, trust, success) */
+  --green-50: #f0fdf4;
+  --green-100: #dcfce7;
+  --green-200: #bbf7d0;
+  --green-300: #86efac;
+  --green-400: #4ade80;
+  --green-500: #22c55e;
+  --green-600: #16a34a;
+  --green-700: #15803d;
+  --green-800: #166534;
+  --green-900: #14532d;
+
+  /* Sky Blue — for informational categories */
+  --blue-50: #f0f9ff;
+  --blue-100: #e0f2fe;
+  --blue-200: #bae6fd;
+  --blue-300: #7dd3fc;
+  --blue-400: #38bdf8;
+  --blue-500: #0ea5e9;
+  --blue-600: #0284c7;
+  --blue-700: #0369a1;
+
+  /* Rose — for love/donations categories */
+  --pink-50: #fdf2f8;
+  --pink-100: #fce7f3;
+  --pink-200: #fbcfe8;
+  --pink-300: #f9a8d4;
+  --pink-400: #f472b6;
+  --pink-500: #ec4899;
+  --pink-600: #db2777;
+
+  /* Slate — text & borders (readability) */
   --slate-50: #f8fafc;
   --slate-100: #f1f5f9;
   --slate-200: #e2e8f0;
@@ -51,36 +103,38 @@ body {
   --slate-800: #1e293b;
   --slate-900: #0f172a;
 
-  /* Warm whites */
-  --warm-50: #fefcf9;
-  --warm-100: #faf6f0;
-  --warm-200: #f5efe3;
+  /* Semantic: Backgrounds */
+  --bg-page: var(--cream-100);
+  --bg-card: white;
+  --bg-warm: var(--cream-200);
+  --bg-inset: var(--stone-100);
 
-  /* Semantic aliases */
-  --color-primary: var(--green-600);
-  --color-primary-dark: var(--green-700);
+  /* Semantic: Text */
+  --text-primary: var(--stone-800);
+  --text-secondary: var(--stone-600);
+  --text-muted: var(--stone-400);
+  --text-inverse: white;
+
+  /* Semantic: Borders */
+  --border-light: var(--stone-100);
+  --border-default: var(--stone-200);
+  --border-strong: var(--stone-300);
+  --border-focus: var(--amber-500);
+
+  /* Semantic: Brand */
+  --color-primary: var(--amber-600);
+  --color-primary-dark: var(--amber-700);
   --color-accent: var(--orange-500);
   --color-accent-dark: var(--orange-600);
+  --color-success: var(--green-600);
+  --color-success-light: var(--green-50);
+  --color-success-border: var(--green-200);
 
-  /* Backgrounds */
-  --bg-card: white;
-  --bg-page: var(--slate-50);
-  --bg-warm: var(--warm-100);
-
-  /* Text */
-  --text-primary: var(--slate-800);
-  --text-secondary: var(--slate-500);
-  --text-muted: var(--slate-400);
-
-  /* Borders */
-  --border-light: var(--slate-100);
-  --border-default: var(--slate-200);
-  --border-focus: var(--green-400);
-
-  /* Shadows - character with depth */
-  --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-card-hover: 0 10px 25px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.04);
-  --shadow-card-lifted: 0 20px 35px rgba(0,0,0,0.1), 0 8px 15px rgba(0,0,0,0.05);
+  /* Shadows — warm, soft */
+  --shadow-card: 0 2px 8px rgba(41, 37, 36, 0.08), 0 1px 3px rgba(41, 37, 36, 0.05);
+  --shadow-card-hover: 0 8px 24px rgba(41, 37, 36, 0.12), 0 3px 8px rgba(41, 37, 36, 0.06);
+  --shadow-card-lifted: 0 16px 40px rgba(41, 37, 36, 0.14), 0 6px 12px rgba(41, 37, 36, 0.08);
+  --shadow-btn: 0 2px 4px rgba(249, 115, 22, 0.25);
 
   /* Spacing */
   --space-1: 0.25rem;
@@ -100,15 +154,15 @@ body {
   --radius-2xl: 1.5rem;
   --radius-full: 9999px;
 
-  /* Legacy aliases for existing code */
-  --color-gray-50: var(--slate-50);
-  --color-gray-100: var(--slate-100);
-  --color-gray-200: var(--slate-200);
-  --color-gray-300: var(--slate-300);
-  --color-gray-400: var(--slate-400);
-  --color-gray-700: var(--slate-700);
-  --color-gray-800: var(--slate-800);
-  --color-gray-900: var(--slate-900);
+  /* Legacy aliases */
+  --color-gray-50: var(--stone-50);
+  --color-gray-100: var(--stone-100);
+  --color-gray-200: var(--stone-200);
+  --color-gray-300: var(--stone-300);
+  --color-gray-400: var(--stone-400);
+  --color-gray-700: var(--stone-700);
+  --color-gray-800: var(--stone-800);
+  --color-gray-900: var(--stone-900);
 
   --color-green-50: var(--green-50);
   --color-green-100: var(--green-100);
@@ -124,14 +178,12 @@ body {
   --color-facebook: #1877F2;
   --color-facebook-dark: #166fe5;
 
-  --color-yellow-50: #fefce8;
-  --color-yellow-100: #fef9c3;
-  --color-yellow-200: #fef08a;
-  --color-yellow-300: #fde047;
-  --color-yellow-600: #ca8a04;
-  --color-yellow-700: #a16207;
-  --color-yellow-800: #854d0e;
-  --color-yellow-900: #713f12;
+  --color-yellow-50: var(--amber-50);
+  --color-yellow-100: var(--amber-100);
+  --color-yellow-200: var(--amber-200);
+  --color-yellow-300: var(--amber-300);
+  --color-yellow-600: var(--amber-600);
+  --color-yellow-700: var(--amber-700);
 
   --color-red-50: #fef2f2;
   --color-red-200: #fecaca;

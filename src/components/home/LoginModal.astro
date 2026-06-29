@@ -2,40 +2,226 @@
 // Login/Register modal for unauthenticated users
 ---
 
-<div id="login-modal" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity duration-300">
-  <div class="bg-white rounded-[2rem] shadow-2xl max-w-md w-full p-8 relative animate-zoom-in">
-    <button class="close-modal absolute top-5 right-6 text-gray-300 hover:text-gray-600 transition">
-      <i class="ri-close-circle-line text-3xl"></i>
+<div id="login-modal" class="login-modal" role="dialog" aria-modal="true">
+  <div class="login-backdrop"></div>
+  <div class="login-card">
+    <button class="login-close close-modal" aria-label="Cerrar">
+      <i class="ri-close-circle-line"></i>
     </button>
 
-    <div class="text-center mb-8">
-      <div class="bg-green-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-green-100">
-        <i class="ri-user-smile-line text-3xl text-primary"></i>
+    <div class="login-header">
+      <div class="login-icon">
+        <i class="ri-user-smile-line"></i>
       </div>
-      <h2 class="text-2xl font-extrabold text-gray-800">¡Únete al Barrio!</h2>
-      <p class="text-gray-500 mt-2 font-medium">Regístrate para ofrecer tus servicios y llegar a más vecinos.</p>
+      <h2 class="login-title">¡Únete al Barrio!</h2>
+      <p class="login-subtitle">Regístrate para ofrecer tus servicios y llegar a más vecinos.</p>
     </div>
 
-    <div class="space-y-4">
-      <button id="login-google-btn" class="w-full flex items-center justify-center gap-3 border border-gray-300 py-3.5 rounded-xl hover:bg-gray-50 transition font-bold text-gray-700">
-        <i class="ri-google-fill text-red-500 text-xl"></i> Continuar con Google
+    <div class="login-buttons">
+      <button id="login-google-btn" class="login-btn login-btn-google">
+        <i class="ri-google-fill"></i> Continuar con Google
       </button>
-      <button id="login-facebook-btn" class="w-full flex items-center justify-center gap-3 bg-[#1877F2] text-white py-3.5 rounded-xl hover:bg-[#166fe5] transition font-bold shadow-md hover:shadow-lg">
-        <i class="ri-facebook-fill text-xl"></i> Continuar con Facebook
+      <button id="login-facebook-btn" class="login-btn login-btn-facebook">
+        <i class="ri-facebook-fill"></i> Continuar con Facebook
       </button>
 
-      <div class="relative py-2">
-        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-200"></div></div>
-        <div class="relative flex justify-center text-xs uppercase"><span class="bg-white px-2 text-gray-400">O ingresa a tu panel</span></div>
+      <div class="login-divider">
+        <span>o ingresa a tu panel</span>
       </div>
 
-      <a href="/iniciar-sesion" class="w-full flex items-center justify-center gap-3 bg-gray-800 text-white py-3.5 rounded-xl hover:bg-gray-900 transition font-bold shadow-md block text-center">
-        <i class="ri-dashboard-3-line text-xl"></i> Iniciar sesión
+      <a href="/iniciar-sesion" class="login-btn login-btn-email">
+        <i class="ri-dashboard-3-line"></i> Iniciar sesión
       </a>
     </div>
 
-    <p class="text-center text-xs text-gray-400 mt-6">
-      Al registrarte aceptas nuestras <a href="/terminos" class="underline hover:text-primary">normas de convivencia</a>.
+    <p class="login-terms">
+      Al registrarte aceptas nuestras <a href="/terminos">normas de convivencia</a>.
     </p>
   </div>
 </div>
+
+<style>
+  .login-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 300ms ease;
+  }
+
+  .login-modal:not(.hidden) {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .login-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(28, 25, 23, 0.6);
+    backdrop-filter: blur(4px);
+  }
+
+  .login-card {
+    position: relative;
+    background: white;
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-card-lifted);
+    padding: 2.5rem;
+    max-width: 26rem;
+    width: 100%;
+    text-align: center;
+    transform: scale(0.95);
+    transition: transform 300ms ease;
+  }
+
+  .login-modal:not(.hidden) .login-card {
+    transform: scale(1);
+  }
+
+  .login-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    background: none;
+    border: none;
+    color: var(--stone-300);
+    cursor: pointer;
+    font-size: 1.75rem;
+    line-height: 1;
+    transition: color 200ms ease;
+    padding: 0.25rem;
+  }
+
+  .login-close:hover {
+    color: var(--stone-500);
+  }
+
+  .login-icon {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+    background: var(--amber-50);
+    border: 3px solid var(--amber-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+    font-size: 2rem;
+    color: var(--amber-600);
+  }
+
+  .login-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .login-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 1.75rem;
+    line-height: 1.5;
+  }
+
+  .login-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .login-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-xl);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 200ms ease;
+    border: none;
+    text-decoration: none;
+    font-family: inherit;
+  }
+
+  .login-btn i {
+    font-size: 1.25rem;
+  }
+
+  .login-btn-google {
+    background: white;
+    color: var(--stone-700);
+    border: 1px solid var(--border-default);
+    box-shadow: var(--shadow-card);
+  }
+
+  .login-btn-google:hover {
+    background: var(--stone-50);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .login-btn-facebook {
+    background: #1877F2;
+    color: white;
+    box-shadow: 0 2px 4px rgba(24, 119, 242, 0.3);
+  }
+
+  .login-btn-facebook:hover {
+    background: #166fe5;
+    box-shadow: 0 4px 12px rgba(24, 119, 242, 0.4);
+  }
+
+  .login-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
+
+  .login-divider::before,
+  .login-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-default);
+  }
+
+  .login-btn-email {
+    background: var(--stone-800);
+    color: white;
+    box-shadow: var(--shadow-card);
+  }
+
+  .login-btn-email:hover {
+    background: var(--stone-900);
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-1px);
+  }
+
+  .login-terms {
+    margin-top: 1.5rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  .login-terms a {
+    color: var(--amber-600);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+</style>

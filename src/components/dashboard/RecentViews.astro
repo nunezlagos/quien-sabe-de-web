@@ -86,8 +86,8 @@ const { views } = Astro.props;
   }
 
   .view-item:hover {
-    border-color: var(--green-300);
-    background: var(--green-50);
+    border-color: var(--amber-300);
+    background: var(--amber-50);
     box-shadow: var(--shadow-card);
   }
 
@@ -95,14 +95,14 @@ const { views } = Astro.props;
     width: 2.5rem;
     height: 2.5rem;
     border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, var(--green-100) 0%, var(--green-50) 100%);
-    border: 1px solid var(--green-200);
+    background: linear-gradient(135deg, var(--amber-100) 0%, var(--orange-50) 100%);
+    border: 1px solid var(--amber-200);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.75rem;
     font-weight: 700;
-    color: var(--green-600);
+    color: var(--amber-700);
     flex-shrink: 0;
     transition: transform 200ms ease;
   }
@@ -127,7 +127,7 @@ const { views } = Astro.props;
   }
 
   .view-item:hover .view-name {
-    color: var(--green-600);
+    color: var(--amber-700);
   }
 
   .view-date {

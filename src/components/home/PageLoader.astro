@@ -2,19 +2,84 @@
 import '../../styles/pages/page-loader.css';
 ---
 
-<div id="page-loader" class="fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center transition-opacity duration-500">
-  <div class="relative">
-    <div class="text-5xl md:text-6xl font-extrabold text-gray-200 tracking-tight">
-      Quién<span class="text-gray-200">Sabe</span>
+<div id="page-loader" class="page-loader">
+  <div class="loader-content">
+    <div class="loader-brand">
+      <div class="loader-logo-wrap">
+        <div class="loader-logo-base">Quién<span>Sabe</span></div>
+        <div class="loader-logo-fill">Quién<span>Sabe</span></div>
+      </div>
     </div>
-    <div class="absolute top-0 left-0 text-5xl md:text-6xl font-extrabold text-primary tracking-tight page-loader-fill">
-      Quién<span class="text-primary">Sabe</span>
-    </div>
+    <p class="loader-text">Cargando barrio...</p>
   </div>
-  <p class="text-gray-400 text-sm mt-4 font-medium animate-pulse">Cargando barrio...</p>
 </div>
 
 <script>
   import { hidePageLoader } from '../../lib/client/home/page-loader';
   hidePageLoader();
 </script>
+
+<style>
+  .page-loader {
+    position: fixed;
+    inset: 0;
+    background: white;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 500ms ease;
+  }
+
+  .page-loader.loader-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .loader-content {
+    text-align: center;
+  }
+
+  .loader-brand {
+    position: relative;
+    display: inline-block;
+  }
+
+  .loader-logo-wrap {
+    position: relative;
+    display: inline-block;
+  }
+
+  .loader-logo-base,
+  .loader-logo-fill {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .loader-logo-base {
+    color: var(--stone-200);
+  }
+
+  .loader-logo-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: var(--amber-600);
+    animation: loader-pulse 1.5s ease-in-out infinite;
+  }
+
+  .loader-text {
+    color: var(--stone-400);
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-top: 1rem;
+    animation: loader-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes loader-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+</style>

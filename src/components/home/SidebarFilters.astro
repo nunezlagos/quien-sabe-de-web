@@ -1,12 +1,11 @@
 ---
 const { visible = false } = Astro.props;
-const hiddenClass = visible ? '' : 'hidden';
 ---
 
-<aside id="search-sidebar" class="{hiddenClass} md:w-1/4 space-y-5 w-full animate-fade-in-left">
+<aside id="search-sidebar" class:list={["sidebar-wrapper", { hidden: !visible }]}>
   <div class="widget-card">
     <h3 class="sidebar-title">
-      <i class="ri-filter-3-line" style="color: var(--green-600)"></i> Filtros
+      <i class="ri-filter-3-line" style="color: var(--amber-600)"></i> Filtros
     </h3>
 
     <!-- Categories -->
@@ -75,6 +74,21 @@ const hiddenClass = visible ? '' : 'hidden';
 </aside>
 
 <style>
+  .sidebar-wrapper {
+    width: 100%;
+  }
+
+  @media (min-width: 1024px) {
+    .sidebar-wrapper {
+      width: 280px;
+      flex-shrink: 0;
+    }
+  }
+
+  .sidebar-wrapper.hidden {
+    display: none !important;
+  }
+
   .widget-card {
     background: var(--bg-card);
     border-radius: var(--radius-xl);
@@ -130,7 +144,7 @@ const hiddenClass = visible ? '' : 'hidden';
   }
 
   .filter-option:hover {
-    color: var(--green-600);
+    color: var(--amber-600);
   }
 
   .filter-checkbox,
@@ -139,7 +153,7 @@ const hiddenClass = visible ? '' : 'hidden';
     height: 1rem;
     border-radius: var(--radius-sm);
     border: 2px solid var(--border-default);
-    accent-color: var(--green-600);
+    accent-color: var(--amber-600);
     cursor: pointer;
   }
 
@@ -166,8 +180,8 @@ const hiddenClass = visible ? '' : 'hidden';
 
   .price-input:focus {
     outline: none;
-    border-color: var(--green-400);
-    box-shadow: 0 0 0 3px var(--green-50);
+    border-color: var(--amber-400);
+    box-shadow: 0 0 0 3px var(--amber-50);
   }
 
   .price-separator {
@@ -189,7 +203,7 @@ const hiddenClass = visible ? '' : 'hidden';
 
   /* Promo Card */
   .promo-card {
-    background: linear-gradient(135deg, var(--green-600) 0%, var(--green-800) 100%);
+    background: linear-gradient(135deg, var(--amber-600) 0%, var(--orange-700) 100%);
     border-radius: var(--radius-xl);
     padding: var(--space-6);
     text-align: center;
@@ -229,7 +243,7 @@ const hiddenClass = visible ? '' : 'hidden';
 
   .promo-btn {
     background: white;
-    color: var(--green-600);
+    color: var(--amber-700);
     font-size: 0.75rem;
     font-weight: 700;
     padding: 0.5rem 1.25rem;
@@ -241,7 +255,7 @@ const hiddenClass = visible ? '' : 'hidden';
   }
 
   .promo-btn:hover {
-    background: var(--green-50);
+    background: var(--cream-200);
     transform: translateY(-1px);
     box-shadow: var(--shadow-card-hover);
   }

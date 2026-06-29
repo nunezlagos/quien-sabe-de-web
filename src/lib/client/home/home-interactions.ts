@@ -1,12 +1,4 @@
 export function initHomeInteractions(): void {
-  const mainBody = document.body;
-  const searchSidebar = document.getElementById('search-sidebar');
-  const heroSection = document.getElementById('hero-section');
-  const heroSearchContainer = document.getElementById('hero-search-container');
-  const neighborsContainer = document.getElementById('neighbors-container');
-  const noResultsElement = document.getElementById('no-results');
-  const gridViewBtn = document.getElementById('grid-view-btn');
-  const listViewBtn = document.getElementById('list-view-btn');
   const searchBtn = document.getElementById('search-btn');
   const searchInput = document.getElementById('search-input') as HTMLInputElement | null;
   const tradeSelect = document.getElementById('trade-select') as HTMLSelectElement | null;
@@ -17,33 +9,10 @@ export function initHomeInteractions(): void {
   const loginModal = document.getElementById('login-modal');
   const closeModalBtn = document.querySelector('.close-modal');
 
-  function enableSearchMode() {
-    mainBody.classList.add('search-mode');
-    if (searchSidebar) searchSidebar.classList.remove('hidden');
-    if (heroSection && !mainBody.classList.contains('search-sticky')) {
-      heroSection.style.display = 'none';
-    }
-    if (heroSearchContainer) {
-      heroSearchContainer.style.display = 'none';
-    }
-    if (neighborsContainer) {
-      neighborsContainer.classList.remove('md:grid-cols-2', 'lg:grid-cols-3');
-      neighborsContainer.classList.add('grid-cols-1');
-    }
-    if (listViewBtn) {
-      listViewBtn.classList.add('bg-white', 'shadow-sm', 'text-primary');
-      listViewBtn.classList.remove('text-gray-400');
-    }
-    if (gridViewBtn) {
-      gridViewBtn.classList.remove('bg-white', 'shadow-sm', 'text-primary');
-    }
-  }
-
-  function handleSearch(e?: Event) {
+  function handleSearch(e?: Event): void {
     if (e) e.preventDefault();
-    enableSearchMode();
 
-    const keyword = searchInput?.value.toLowerCase() ?? '';
+    const keyword = searchInput?.value ?? '';
     const selectedTrade = tradeSelect?.value ?? '';
     const selectedCommune = communeSelect?.value ?? '';
 
@@ -60,36 +29,28 @@ export function initHomeInteractions(): void {
   if (tradeSelect) tradeSelect.addEventListener('change', handleSearch);
   if (communeSelect) communeSelect.addEventListener('change', handleSearch);
 
-  if (gridViewBtn) {
+  // View toggle — grid vs list
+  const gridViewBtn = document.getElementById('grid-view-btn');
+  const listViewBtn = document.getElementById('list-view-btn');
+  const neighborsContainer = document.getElementById('neighbors-container');
+
+  if (gridViewBtn && neighborsContainer) {
     gridViewBtn.addEventListener('click', () => {
-      if (neighborsContainer) {
-        neighborsContainer.classList.remove('grid-cols-1');
-        neighborsContainer.classList.add('md:grid-cols-2', 'lg:grid-cols-3');
-      }
-      gridViewBtn.classList.add('bg-white', 'shadow-sm', 'text-primary');
-      gridViewBtn.classList.remove('text-gray-400');
-      if (listViewBtn) {
-        listViewBtn.classList.remove('bg-white', 'shadow-sm', 'text-primary');
-        listViewBtn.classList.add('text-gray-400');
-      }
+      neighborsContainer.classList.remove('list-view');
+      gridViewBtn.classList.add('view-btn-active');
+      if (listViewBtn) listViewBtn.classList.remove('view-btn-active');
     });
   }
 
-  if (listViewBtn) {
+  if (listViewBtn && neighborsContainer) {
     listViewBtn.addEventListener('click', () => {
-      if (neighborsContainer) {
-        neighborsContainer.classList.remove('md:grid-cols-2', 'lg:grid-cols-3');
-        neighborsContainer.classList.add('grid-cols-1');
-      }
-      listViewBtn.classList.add('bg-white', 'shadow-sm', 'text-primary');
-      listViewBtn.classList.remove('text-gray-400');
-      if (gridViewBtn) {
-        gridViewBtn.classList.remove('bg-white', 'shadow-sm', 'text-primary');
-        gridViewBtn.classList.add('text-gray-400');
-      }
+      neighborsContainer.classList.add('list-view');
+      listViewBtn.classList.add('view-btn-active');
+      if (gridViewBtn) gridViewBtn.classList.remove('view-btn-active');
     });
   }
 
+  // Login modal
   if (loginBtn && loginModal) {
     loginBtn.addEventListener('click', () => loginModal.classList.remove('hidden'));
   }
