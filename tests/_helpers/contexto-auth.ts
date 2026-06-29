@@ -1,29 +1,16 @@
 import type { APIContext } from 'astro';
-import { createInMemoryDb, FakeCookies } from './in-memory-db';
-
-let dbSingleton: ReturnType<typeof createInMemoryDb> | null = null;
-
-function getOrCreateDb() {
-  if (!dbSingleton) dbSingleton = createInMemoryDb();
-  return dbSingleton;
-}
-
-export function resetContextoAuth() {
-  dbSingleton = null;
-}
+import { FakeCookies } from './in-memory-db';
 
 export interface ContextoAuth {
   contexto: APIContext;
-  db: ReturnType<typeof createInMemoryDb>;
   cookies: FakeCookies;
 }
 
 export function crearContextoAuth(opciones?: {
   body?: unknown;
   url?: string;
-  db?: ReturnType<typeof createInMemoryDb>;
+  cookies?: FakeCookies;
 }): ContextoAuth {
-  const db = opciones?.db ?? getOrCreateDb();
   const cookies = opciones?.cookies ?? new FakeCookies();
 
   const url = opciones?.url ? new URL(opciones.url) : new URL('http://localhost/');
@@ -56,5 +43,7 @@ export function crearContextoAuth(opciones?: {
     },
   } as unknown as APIContext;
 
-  return { contexto, db, cookies };
+  return { contexto, cookies };
 }
+
+export function resetContextoAuth() {}

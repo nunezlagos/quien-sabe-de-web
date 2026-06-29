@@ -3,15 +3,17 @@ import { POST as registro } from '../../../src/pages/api/v1/auth/registro';
 import { POST as inicioSesion } from '../../../src/pages/api/v1/auth/iniciar-sesion';
 import { POST as cerrarSesion } from '../../../src/pages/api/v1/auth/cerrar-sesion';
 import { GET as yo } from '../../../src/pages/api/v1/auth/yo';
-import { crearContextoAuth, resetContextoAuth } from '../../_helpers/contexto-auth';
+import { crearContextoAuth } from '../../_helpers/contexto-auth';
+import { resetTestDb } from '../../_helpers/test-db';
 import { buscarUsuarioPorCorreo } from '../../../src/lib/services/auth/usuarios';
 
+beforeEach(async () => {
+  await resetTestDb();
+});
+
 describe('POST /api/v1/auth/registro', () => {
-	beforeEach(() => {
-		resetContextoAuth();
-	});
 	it('registra usuario nuevo, hashea contraseña y emite cookie', async () => {
-		const { contexto, cookies, db } = crearContextoAuth({
+		const { contexto, cookies } = crearContextoAuth({
 			body: { nombre: 'Ana Pérez', correo: 'ana@ejemplo.cl', contrasena: 'Secreta123!' },
 		});
 		const response = await registro(contexto);
@@ -111,9 +113,6 @@ describe('POST /api/v1/auth/iniciar-sesion', () => {
 });
 
 describe('POST /api/v1/auth/cerrar-sesion', () => {
-	beforeEach(() => {
-		resetContextoAuth();
-	});
 	it('destruye sesión y limpia cookie', async () => {
 		const a = crearContextoAuth({ body: { nombre: 'Ana', correo: 'cerrar@x.cl', contrasena: 'Secreta123!' } });
 		await registro(a.contexto);
