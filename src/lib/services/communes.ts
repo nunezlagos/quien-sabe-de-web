@@ -38,5 +38,6 @@ export async function seedCommunes(db: any, data: CommuneInsert[]): Promise<void
     region: c.region ?? 'Metropolitana',
   }));
 
-  await db.insert(communes).values(rows).onConflictDoNothing({ target: communes.slug }).run();
+  // MySQL: inserción idempotente. slug es UNIQUE; ante colisión no-op (deja el id igual).
+  await db.insert(communes).values(rows).onDuplicateKeyUpdate({ set: { id: sql`id` } }).run();
 }
