@@ -3,21 +3,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Términos y Condiciones — QuiénSabe">
-  <main class="container mx-auto px-4 py-12 max-w-4xl flex-grow w-full">
-    <header class="bg-gradient-to-br from-orange-50 to-amber-50 p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 mb-8 text-center">
-      <div class="inline-block p-4 rounded-full bg-white/70 backdrop-blur-md mb-4 border border-orange-100">
-        <i class="ri-file-list-3-line text-5xl text-orange-500"></i>
+  <main class="legal-page">
+    <header class="legal-hero">
+      <div class="legal-hero-icon">
+        <i class="ri-file-list-3-line" aria-hidden="true"></i>
       </div>
-      <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-3 tracking-tight">
-        Términos y Condiciones de Uso
-      </h1>
-      <p class="text-gray-500 text-sm">Última actualización: Enero 2026</p>
+      <h1 class="legal-hero-title">Términos y Condiciones de Uso</h1>
+      <p class="legal-hero-meta">Última actualización: Enero 2026</p>
     </header>
 
-    <div class="space-y-6 text-gray-600 leading-relaxed">
-      <section class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-        <h2 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
-          <i class="ri-flag-line text-orange-500"></i> 1. Objetivo de la comunidad
+    <div class="legal-sections">
+      <section class="legal-card">
+        <h2 class="legal-card-title">
+          <i class="ri-flag-line" aria-hidden="true"></i> 1. Objetivo de la comunidad
         </h2>
         <p>
           "Quién Sabe" es una plataforma facilitadora de contacto entre vecinos.
@@ -26,9 +24,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </p>
       </section>
 
-      <section class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-        <h2 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
-          <i class="ri-shield-line text-orange-500"></i> 2. Responsabilidad
+      <section class="legal-card">
+        <h2 class="legal-card-title">
+          <i class="ri-shield-line" aria-hidden="true"></i> 2. Responsabilidad
         </h2>
         <p>
           La plataforma no se hace responsable por la calidad, cumplimiento o
@@ -37,9 +35,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </p>
       </section>
 
-      <section class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-        <h2 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
-          <i class="ri-user-heart-line text-orange-500"></i> 3. Conducta esperada
+      <section class="legal-card">
+        <h2 class="legal-card-title">
+          <i class="ri-user-heart-line" aria-hidden="true"></i> 3. Conducta esperada
         </h2>
         <p>
           Se espera un trato respetuoso. Cualquier reporte de abuso, estafa o
@@ -48,32 +46,173 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </p>
       </section>
 
-      <section class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-        <h2 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
-          <i class="ri-lock-2-line text-orange-500"></i> 4. Privacidad
+      <section class="legal-card">
+        <h2 class="legal-card-title">
+          <i class="ri-lock-2-line" aria-hidden="true"></i> 4. Privacidad
         </h2>
         <p>
           Los datos de contacto (teléfono, WhatsApp) son compartidos públicamente
           solo si el usuario así lo configura en su perfil PRO. No vendemos datos
           a terceros.
         </p>
-        <p class="mt-3">
+        <p class="legal-card-note">
           Para más detalles sobre el tratamiento de datos personales, consulta
           nuestra
-          <a href="/privacidad" class="text-orange-500 font-bold hover:underline">
-            Política de Privacidad
-          </a>.
+          <a href="/privacidad" class="legal-link">Política de Privacidad</a>.
         </p>
       </section>
     </div>
 
-    <div class="mt-12 pt-8 border-t border-gray-100 text-center">
-      <a
-        href="/"
-        class="inline-flex items-center gap-2 text-orange-500 font-bold hover:underline"
-      >
-        <i class="ri-arrow-left-line"></i> Volver al inicio
+    <div class="legal-footer">
+      <a href="/" class="legal-back-link">
+        <i class="ri-arrow-left-line" aria-hidden="true"></i> Volver al inicio
       </a>
     </div>
   </main>
 </BaseLayout>
+
+<style>
+  .legal-page {
+    width: 100%;
+    max-width: 56rem;
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-4);
+    flex-grow: 1;
+  }
+
+  @media (min-width: 768px) {
+    .legal-page {
+      padding: 3rem var(--space-6);
+    }
+  }
+
+  /* === HERO === */
+  .legal-hero {
+    background: linear-gradient(135deg, var(--orange-50) 0%, var(--amber-50) 100%);
+    padding: var(--space-8);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-default);
+    margin-bottom: var(--space-8);
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .legal-hero {
+      padding: 3rem;
+    }
+  }
+
+  .legal-hero-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 5rem;
+    height: 5rem;
+    border-radius: var(--radius-full);
+    background: var(--bg-card);
+    border: 1px solid var(--orange-200);
+    margin-bottom: var(--space-4);
+    font-size: 2.5rem;
+    color: var(--color-accent);
+  }
+
+  .legal-hero-title {
+    font-size: 1.875rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: var(--space-3);
+    letter-spacing: -0.02em;
+  }
+
+  @media (min-width: 768px) {
+    .legal-hero-title {
+      font-size: 2.25rem;
+    }
+  }
+
+  .legal-hero-meta {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  /* === SECTIONS === */
+  .legal-sections {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .legal-card {
+    background: var(--bg-card);
+    padding: var(--space-8);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-default);
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .legal-card-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-3);
+  }
+
+  .legal-card-title i {
+    color: var(--color-accent);
+  }
+
+  .legal-card-note {
+    margin-top: var(--space-3);
+  }
+
+  .legal-link {
+    color: var(--color-accent);
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+  }
+
+  .legal-link:hover {
+    text-decoration: underline;
+  }
+
+  .legal-link:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+
+  /* === FOOTER LINK === */
+  .legal-footer {
+    margin-top: 3rem;
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--border-default);
+    text-align: center;
+  }
+
+  .legal-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 44px;
+    padding: var(--space-2) var(--space-4);
+    color: var(--color-accent);
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: var(--radius-lg);
+  }
+
+  .legal-back-link:hover {
+    text-decoration: underline;
+  }
+
+  .legal-back-link:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+</style>

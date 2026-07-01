@@ -72,10 +72,10 @@ const recommendedTrades = shuffled.slice(0, 6);
           </div>
         </div>
         <div class="cards-with-ads">
-          <!-- Left lateral ad (desktop only) -->
-          <aside class="lateral-ad lateral-ad-left" aria-label="Publicidad">
+          <!-- Left lateral ad (desktop only) — el AdBanner ya expone role=complementary -->
+          <div class="lateral-ad lateral-ad-left">
             <AdBanner />
-          </aside>
+          </div>
 
           <div class="cards-grid">
             {recommendedTrades.map((t) => (
@@ -83,10 +83,10 @@ const recommendedTrades = shuffled.slice(0, 6);
             ))}
           </div>
 
-          <!-- Right lateral ad (desktop only) -->
-          <aside class="lateral-ad lateral-ad-right" aria-label="Publicidad">
+          <!-- Right lateral ad (desktop only) — el AdBanner ya expone role=complementary -->
+          <div class="lateral-ad lateral-ad-right">
             <AdBanner />
-          </aside>
+          </div>
         </div>
       </section>
     )}
@@ -114,12 +114,12 @@ const recommendedTrades = shuffled.slice(0, 6);
                 {results.length} vecino{results.length !== 1 ? 's' : ''} disponible{results.length !== 1 ? 's' : ''}
               </p>
             </div>
-            <div class="view-toggle">
-              <button id="grid-view-btn" class="view-btn view-btn-active" title="Grid" aria-label="Vista grilla">
-                <i class="ri-grid-fill"></i>
+            <div class="view-toggle" role="group" aria-label="Cambiar vista de resultados">
+              <button id="grid-view-btn" type="button" class="view-btn view-btn-active" title="Grid" aria-label="Vista grilla" aria-pressed="true">
+                <i class="ri-grid-fill" aria-hidden="true"></i>
               </button>
-              <button id="list-view-btn" class="view-btn" title="Lista" aria-label="Vista lista">
-                <i class="ri-list-check"></i>
+              <button id="list-view-btn" type="button" class="view-btn" title="Lista" aria-label="Vista lista" aria-pressed="false">
+                <i class="ri-list-check" aria-hidden="true"></i>
               </button>
             </div>
           </div>
@@ -235,12 +235,13 @@ const recommendedTrades = shuffled.slice(0, 6);
       width: 120px;
       flex-shrink: 0;
       position: sticky;
-      top: 0;
-      height: 100vh;
+      top: 1rem;
+      max-height: calc(100vh - 2rem);
     }
 
     .lateral-ad :global(.ad-banner) {
       height: 100%;
+      max-height: calc(100vh - 2rem);
       min-height: 400px;
     }
 
@@ -323,7 +324,12 @@ const recommendedTrades = shuffled.slice(0, 6);
     }
   }
 
-  @media (min-width: 900px) {
+  /*
+   * En 900px aparecen los anuncios laterales (2 × 120px + gaps), por lo que
+   * mantenemos 2 columnas en este paso intermedio para no estrujar las cards.
+   * Recién en pantallas anchas pasamos a 3 columnas.
+   */
+  @media (min-width: 1100px) {
     .cards-grid {
       grid-template-columns: repeat(3, 1fr);
     }
@@ -427,7 +433,7 @@ const recommendedTrades = shuffled.slice(0, 6);
   .view-toggle {
     display: flex;
     gap: 0.25rem;
-    background: white;
+    background: var(--bg-card);
     border: 1px solid var(--border-default);
     border-radius: var(--radius-xl);
     padding: 0.25rem;
@@ -436,8 +442,8 @@ const recommendedTrades = shuffled.slice(0, 6);
   }
 
   .view-btn {
-    width: 2.25rem;
-    height: 2.25rem;
+    width: 2.75rem;
+    height: 2.75rem;
     border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
@@ -455,8 +461,13 @@ const recommendedTrades = shuffled.slice(0, 6);
     background: var(--amber-50);
   }
 
+  .view-btn:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+
   .view-btn-active {
-    background: white;
+    background: var(--bg-card);
     color: var(--amber-600);
     box-shadow: var(--shadow-card);
   }
@@ -465,7 +476,7 @@ const recommendedTrades = shuffled.slice(0, 6);
   .no-results {
     text-align: center;
     padding: 3rem 1.5rem;
-    background: white;
+    background: var(--bg-card);
     border-radius: var(--radius-2xl);
     box-shadow: var(--shadow-card);
     border: 1px solid var(--border-default);

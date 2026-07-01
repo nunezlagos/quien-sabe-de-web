@@ -38,7 +38,11 @@ export function initHomeInteractions(): void {
     gridViewBtn.addEventListener('click', () => {
       neighborsContainer.classList.remove('list-view');
       gridViewBtn.classList.add('view-btn-active');
-      if (listViewBtn) listViewBtn.classList.remove('view-btn-active');
+      gridViewBtn.setAttribute('aria-pressed', 'true');
+      if (listViewBtn) {
+        listViewBtn.classList.remove('view-btn-active');
+        listViewBtn.setAttribute('aria-pressed', 'false');
+      }
     });
   }
 
@@ -46,7 +50,11 @@ export function initHomeInteractions(): void {
     listViewBtn.addEventListener('click', () => {
       neighborsContainer.classList.add('list-view');
       listViewBtn.classList.add('view-btn-active');
-      if (gridViewBtn) gridViewBtn.classList.remove('view-btn-active');
+      listViewBtn.setAttribute('aria-pressed', 'true');
+      if (gridViewBtn) {
+        gridViewBtn.classList.remove('view-btn-active');
+        gridViewBtn.setAttribute('aria-pressed', 'false');
+      }
     });
   }
 

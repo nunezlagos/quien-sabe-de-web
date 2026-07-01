@@ -7,6 +7,8 @@
 // - PATCH por toggle en cada checkbox de consentimiento.
 // - DELETE con confirmación "ELIMINAR" tipeada por el usuario.
 
+import { initModal } from '../ui/modal';
+
 const ENDPOINT_CONSENT = '/api/v1/users/me/consent';
 const ENDPOINT_DELETE = '/api/v1/users/me';
 const CONFIRM_TEXTO = 'ELIMINAR';
@@ -28,19 +30,24 @@ function inicializarModalEliminar(): void {
 	const input = document.getElementById('delete-confirm-input') as HTMLInputElement | null;
 	const formEliminar = document.getElementById('form-eliminar') as HTMLFormElement | null;
 
-	if (abrir) abrir.addEventListener('click', () => toggleModal(modal, contenido, true));
-	if (cerrar) cerrar.addEventListener('click', () => toggleModal(modal, contenido, false));
-	if (cancelar) cancelar.addEventListener('click', () => toggleModal(modal, contenido, false));
-	modal.addEventListener('click', (e) => {
-		if (e.target === modal) toggleModal(modal, contenido, false);
+	const openers = abrir ? [abrir] : [];
+	const closers = [cerrar, cancelar].filter((el): el is HTMLElement => el !== null);
+
+	initModal({
+		modal,
+		openers,
+		closers,
+		openClass: 'is-open',
+		onOpen: () => {
+			input?.focus();
+		},
 	});
 
 	if (confirmar && input && formEliminar) {
 		const refrescar = () => {
 			const coincide = input.value.trim() === CONFIRM_TEXTO;
 			confirmar.toggleAttribute('disabled', !coincide);
-			confirmar.classList.toggle('opacity-50', !coincide);
-			confirmar.classList.toggle('cursor-not-allowed', !coincide);
+			confirmar.classList.toggle('modal-btn-disabled', !coincide);
 		};
 		input.addEventListener('input', refrescar);
 		refrescar();
@@ -68,22 +75,6 @@ function inicializarModalEliminar(): void {
 				confirmar.removeAttribute('disabled');
 			}
 		});
-	}
-}
-
-function toggleModal(modal: HTMLElement, contenido: HTMLElement, abrir: boolean): void {
-	if (abrir) {
-		modal.classList.remove('hidden');
-		window.setTimeout(() => {
-			modal.classList.remove('opacity-0');
-			contenido.classList.remove('scale-95');
-			contenido.classList.add('scale-100');
-		}, 10);
-	} else {
-		modal.classList.add('opacity-0');
-		contenido.classList.remove('scale-100');
-		contenido.classList.add('scale-95');
-		window.setTimeout(() => modal.classList.add('hidden'), 300);
 	}
 }
 

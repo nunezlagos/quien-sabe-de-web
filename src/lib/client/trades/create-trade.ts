@@ -17,10 +17,14 @@ function initOtherTrade(): void {
   const toggle = () => {
     if (select.value === 'otro') {
       wrap.hidden = false;
+      wrap.setAttribute('aria-hidden', 'false');
+      inputCustom.disabled = false;
       inputCustom.required = true;
     } else {
       wrap.hidden = true;
+      wrap.setAttribute('aria-hidden', 'true');
       inputCustom.required = false;
+      inputCustom.disabled = true;
       inputCustom.value = '';
     }
   };

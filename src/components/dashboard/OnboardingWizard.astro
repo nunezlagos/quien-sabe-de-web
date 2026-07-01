@@ -5,23 +5,22 @@ export interface Props {
 const { communes } = Astro.props;
 ---
 
-<div class="min-h-screen bg-gradient-to-br from-orange-50 to-white flex items-center justify-center px-4 py-12">
-  <div class="bg-white rounded-3xl shadow-xl border border-gray-100 w-full max-w-lg p-8 sm:p-10">
-    <div class="text-center mb-8">
-      <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-        <i class="ri-hand-wave-line text-3xl text-orange-500"></i>
+<div class="onboarding-page">
+  <div class="onboarding-card">
+    <div class="onboarding-head">
+      <div class="onboarding-badge">
+        <i class="ri-hand-wave-line" aria-hidden="true"></i>
       </div>
-      <h1 class="text-2xl font-extrabold text-gray-800">¡Bienvenido a QuiénSabe!</h1>
-      <p class="text-sm text-gray-500 mt-2">Cuéntanos un poco de ti para empezar.</p>
+      <h1 class="onboarding-title">¡Bienvenido a QuiénSabe!</h1>
+      <p class="onboarding-subtitle">Cuéntanos un poco de ti para empezar.</p>
     </div>
 
-    <form id="onboarding-form" class="space-y-6">
-      <div>
-        <label for="onboarding-commune" class="block text-sm font-bold text-gray-700 mb-1.5">
-          ¿En qué comuna vives? <span class="text-red-500">*</span>
+    <form id="onboarding-form" class="onboarding-form">
+      <div class="onboarding-field">
+        <label for="onboarding-commune" class="onboarding-label">
+          ¿En qué comuna vives? <span class="onboarding-required" aria-hidden="true">*</span>
         </label>
-        <select id="onboarding-commune" name="communeId" required
-          class="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition">
+        <select id="onboarding-commune" name="communeId" required aria-required="true" class="onboarding-input">
           <option value="">Selecciona tu comuna</option>
           {communes.map((c) => (
             <option value={c.id}>{c.name}</option>
@@ -29,38 +28,223 @@ const { communes } = Astro.props;
         </select>
       </div>
 
-      <div>
-        <label for="onboarding-interests" class="block text-sm font-bold text-gray-700 mb-1.5">
+      <div class="onboarding-field">
+        <label for="onboarding-interests" class="onboarding-label">
           ¿Qué oficios te interesan? (opcional)
         </label>
         <textarea id="onboarding-interests" name="interests" rows="3" placeholder="Ej: gasfitería, electricidad, jardinería, clases..."
-          class="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"></textarea>
-        <p class="text-xs text-gray-400 mt-1">Sepáralos por coma. Nos ayuda a recomendarte mejores resultados.</p>
+          class="onboarding-input"></textarea>
+        <p class="onboarding-hint">Sepáralos por coma. Nos ayuda a recomendarte mejores resultados.</p>
       </div>
 
-      <div class="bg-gray-50 rounded-2xl p-4 border border-gray-100">
-        <label class="flex items-start gap-3 cursor-pointer">
-          <input id="onboarding-terms" type="checkbox" required
-            class="mt-0.5 w-5 h-5 text-orange-500 border-gray-300 rounded focus:ring-orange-500">
-          <span class="text-sm text-gray-600 leading-relaxed">
+      <div class="onboarding-terms">
+        <label class="onboarding-terms-label">
+          <input id="onboarding-terms" type="checkbox" required aria-required="true" class="onboarding-checkbox">
+          <span class="onboarding-terms-text">
             Acepto los
-            <a href="/terminos" target="_blank" class="text-orange-500 font-bold hover:text-orange-600 underline">Términos y condiciones</a>
+            <a href="/terminos" target="_blank" class="onboarding-link">Términos y condiciones</a>
             y la
-            <a href="/privacidad" target="_blank" class="text-orange-500 font-bold hover:text-orange-600 underline">Política de privacidad</a>.
+            <a href="/privacidad" target="_blank" class="onboarding-link">Política de privacidad</a>.
           </span>
         </label>
       </div>
 
-      <div id="onboarding-error" class="hidden bg-red-50 border border-red-200 text-red-700 text-sm font-medium px-4 py-3 rounded-xl" role="alert"></div>
+      <div id="onboarding-error" class="onboarding-error hidden" role="alert"></div>
 
-      <button type="submit" id="onboarding-submit"
-        class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-xl transition shadow-md text-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+      <button type="submit" id="onboarding-submit" class="onboarding-submit">
         <span>Empezar</span>
-        <i class="ri-arrow-right-line"></i>
+        <i class="ri-arrow-right-line" aria-hidden="true"></i>
       </button>
     </form>
   </div>
 </div>
+
+<style>
+  .onboarding-page {
+    min-height: 100vh;
+    background: linear-gradient(to bottom right, var(--orange-50), var(--bg-page));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+  }
+
+  .onboarding-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-card-lifted);
+    border: 1px solid var(--border-light);
+    width: 100%;
+    max-width: 32rem;
+    padding: 2rem;
+  }
+
+  @media (min-width: 640px) {
+    .onboarding-card {
+      padding: 2.5rem;
+    }
+  }
+
+  .onboarding-head {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .onboarding-badge {
+    width: 4rem;
+    height: 4rem;
+    background: var(--orange-100);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 1.875rem;
+    color: var(--orange-500);
+  }
+
+  .onboarding-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+
+  .onboarding-subtitle {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+  }
+
+  .onboarding-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .onboarding-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .onboarding-label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+  }
+
+  .onboarding-required {
+    color: var(--color-error);
+  }
+
+  .onboarding-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    font-size: 0.875rem;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    transition: border-color 200ms ease, box-shadow 200ms ease;
+  }
+
+  .onboarding-input:focus-visible {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px var(--orange-100);
+  }
+
+  .onboarding-hint {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+  }
+
+  .onboarding-terms {
+    background: var(--stone-50);
+    border-radius: var(--radius-xl);
+    padding: 1rem;
+    border: 1px solid var(--border-light);
+  }
+
+  .onboarding-terms-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    cursor: pointer;
+  }
+
+  .onboarding-checkbox {
+    margin-top: 0.125rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+    accent-color: var(--color-primary);
+  }
+
+  .onboarding-checkbox:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+
+  .onboarding-terms-text {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .onboarding-link {
+    color: var(--color-primary);
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  .onboarding-link:hover {
+    color: var(--color-accent-dark);
+  }
+
+  .onboarding-error {
+    background: var(--color-error-bg);
+    border: 1px solid var(--color-error-border);
+    color: var(--color-error-text);
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .onboarding-error.hidden {
+    display: none;
+  }
+
+  .onboarding-submit {
+    width: 100%;
+    min-height: 2.75rem;
+    background: var(--color-primary);
+    color: var(--cream-50);
+    font-weight: 700;
+    font-size: 0.875rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-lg);
+    border: none;
+    cursor: pointer;
+    transition: background 200ms ease;
+    box-shadow: var(--shadow-btn);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .onboarding-submit:hover {
+    background: var(--color-accent-dark);
+  }
+
+  .onboarding-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+</style>
 
 <script>
   const form = document.getElementById('onboarding-form') as HTMLFormElement;

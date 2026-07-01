@@ -147,6 +147,18 @@ const ROLES: Record<string, string> = {
 	provider: 'Proveedor',
 	admin: 'Administrador',
 };
+
+const TICKET_KIND_COLORS: Record<string, string> = {
+	suplantacion: 'red',
+	consulta: 'blue',
+	mal_servicio: 'orange',
+	contenido: 'orange',
+};
+const TICKET_STATUS_COLORS: Record<string, string> = {
+	abierto: 'orange',
+	en_revision: 'blue',
+	cerrado: 'green',
+};
 const NAV: Array<{ id: SeccionId; href: string; label: string; icon: string; badge?: string }> = [
 	{ id: 'dashboard', href: '/dashboard-admin', label: 'Dashboard', icon: 'ri-dashboard-3-line' },
 	{ id: 'users', href: '/dashboard-admin?section=users', label: 'Usuarios', icon: 'ri-user-settings-line' },
@@ -213,7 +225,7 @@ const auditPlaceholder = [
 
 	<aside class="admin-sidebar">
 		<div class="admin-sidebar__brand">
-			<i class="ri-shield-star-line admin-sidebar__brand-icon"></i>
+			<i class="ri-shield-star-line admin-sidebar__brand-icon" aria-hidden="true"></i>
 			<span class="admin-sidebar__brand-text">AdminPanel</span>
 		</div>
 
@@ -224,7 +236,7 @@ const auditPlaceholder = [
 					class={`admin-nav-link ${seccionActiva === item.id ? 'admin-nav-link--active' : ''}`}
 					aria-current={seccionActiva === item.id ? 'page' : undefined}
 				>
-					<i class={item.icon}></i>
+					<i class={item.icon} aria-hidden="true"></i>
 					<span>{item.label}</span>
 					{item.badge && (
 						<span class={`admin-nav-badge admin-nav-badge--${item.id === 'oficios' ? 'red' : 'orange'}`}>
@@ -238,7 +250,7 @@ const auditPlaceholder = [
 		<div class="admin-sidebar__footer">
 			<form method="POST" action="/api/v1/auth/cerrar-sesion" class="admin-logout-form">
 				<button type="submit" class="admin-logout-btn">
-					<i class="ri-logout-box-line"></i> Cerrar Sesión
+					<i class="ri-logout-box-line" aria-hidden="true"></i> Cerrar Sesión
 				</button>
 			</form>
 		</div>
@@ -252,7 +264,7 @@ const auditPlaceholder = [
 					<p class="admin-header__user-name">Admin Supremo</p>
 					<p class="admin-header__user-role">Superusuario</p>
 				</div>
-				<div class="admin-header__avatar" aria-hidden="true">A</div>
+				<div class="admin-header__avatar" role="img" aria-label="Avatar de Admin Supremo">A</div>
 			</div>
 		</header>
 
@@ -264,7 +276,7 @@ const auditPlaceholder = [
 							<i class="ri-user-fill admin-kpi-card__bg" aria-hidden="true"></i>
 							<div class="admin-kpi-card__head">
 								<div class="admin-kpi-card__icon admin-kpi-card__icon--blue">
-									<i class="ri-user-line"></i>
+									<i class="ri-user-line" aria-hidden="true"></i>
 								</div>
 								<span class="admin-trend admin-trend--up">+12%</span>
 							</div>
@@ -276,7 +288,7 @@ const auditPlaceholder = [
 							<i class="ri-hammer-fill admin-kpi-card__bg" aria-hidden="true"></i>
 							<div class="admin-kpi-card__head">
 								<div class="admin-kpi-card__icon admin-kpi-card__icon--primary">
-									<i class="ri-hammer-line"></i>
+									<i class="ri-hammer-line" aria-hidden="true"></i>
 								</div>
 								<span class="admin-trend admin-trend--up">+5%</span>
 							</div>
@@ -288,7 +300,7 @@ const auditPlaceholder = [
 							<i class="ri-star-fill admin-kpi-card__bg" aria-hidden="true"></i>
 							<div class="admin-kpi-card__head">
 								<div class="admin-kpi-card__icon admin-kpi-card__icon--orange">
-									<i class="ri-star-smile-line"></i>
+									<i class="ri-star-smile-line" aria-hidden="true"></i>
 								</div>
 								<span class="admin-trend admin-trend--neutral">0%</span>
 							</div>
@@ -300,7 +312,7 @@ const auditPlaceholder = [
 							<i class="ri-alert-fill admin-kpi-card__bg" aria-hidden="true"></i>
 							<div class="admin-kpi-card__head">
 								<div class="admin-kpi-card__icon admin-kpi-card__icon--red">
-									<i class="ri-alert-line"></i>
+									<i class="ri-alert-line" aria-hidden="true"></i>
 								</div>
 								<span class="admin-trend admin-trend--warn">Pendientes</span>
 							</div>
@@ -321,7 +333,8 @@ const auditPlaceholder = [
 							{chartActividad.map((valor, i) => (
 								<div class="admin-bar-chart__col">
 									<div
-										class={`admin-bar h-[${valor}%] ${i === 4 ? 'admin-bar--highlight' : ''}`}
+										class={`admin-bar ${i === 4 ? 'admin-bar--highlight' : ''}`}
+										style={`height: ${valor}%`}
 									>
 										<span class="admin-bar__tip">{valor}%</span>
 									</div>
@@ -340,7 +353,7 @@ const auditPlaceholder = [
 										<span class="admin-funnel__label">{paso.label}</span>
 										<span class="admin-funnel__value">{paso.value}</span>
 									</div>
-									<div class={`admin-funnel__bar admin-funnel__bar--${paso.color} w-[${paso.pct}%]`}></div>
+									<div class={`admin-funnel__bar admin-funnel__bar--${paso.color}`} style={`width: ${paso.pct}%`}></div>
 								</div>
 							))}
 						</div>
@@ -353,10 +366,10 @@ const auditPlaceholder = [
 					<section class="admin-panel">
 						<div class="admin-panel__head admin-panel__head--with-action">
 							<h3 class="admin-panel__title">
-								<i class="ri-user-settings-line admin-panel__title-icon"></i> Mantenedor Usuarios
+								<i class="ri-user-settings-line admin-panel__title-icon" aria-hidden="true"></i> Mantenedor Usuarios
 							</h3>
-							<button type="button" class="admin-btn admin-btn--primary" disabled aria-disabled="true" title="Próximamente">
-								<i class="ri-add-line"></i> Nuevo
+							<button type="button" class="admin-btn admin-btn--primary" disabled aria-disabled="true" aria-label="Nuevo usuario (próximamente)" title="Próximamente">
+								<i class="ri-add-line" aria-hidden="true"></i> Nuevo
 							</button>
 						</div>
 						<div class="admin-table-wrap">
@@ -389,8 +402,8 @@ const auditPlaceholder = [
 													</span>
 												</td>
 												<td class="admin-table__actions">
-													<button type="button" class="admin-icon-btn admin-icon-btn--red js-ban-user" data-user-id={u.id} data-user-name={u.name} data-current-status={u.status}>
-														{u.status === 'active' ? <i class="ri-forbid-line" title="Banear"></i> : <i class="ri-check-line" title="Desbanear"></i>}
+													<button type="button" class="admin-icon-btn admin-icon-btn--red js-ban-user" data-user-id={u.id} data-user-name={u.name} data-current-status={u.status} aria-label={u.status === 'active' ? `Banear a ${u.name}` : `Desbanear a ${u.name}`}>
+														{u.status === 'active' ? <i class="ri-forbid-line" aria-hidden="true"></i> : <i class="ri-check-line" aria-hidden="true"></i>}
 													</button>
 												</td>
 											</tr>
@@ -408,10 +421,10 @@ const auditPlaceholder = [
 					<section class="admin-panel">
 						<div class="admin-panel__head admin-panel__head--with-action">
 							<h3 class="admin-panel__title">
-								<i class="ri-briefcase-line admin-panel__title-icon"></i> Mantenedor Oficios
+								<i class="ri-briefcase-line admin-panel__title-icon" aria-hidden="true"></i> Mantenedor Oficios
 							</h3>
-							<button type="button" class="admin-btn admin-btn--primary" disabled aria-disabled="true" title="Próximamente">
-								<i class="ri-add-line"></i> Nuevo
+							<button type="button" class="admin-btn admin-btn--primary" disabled aria-disabled="true" aria-label="Nuevo oficio (próximamente)" title="Próximamente">
+								<i class="ri-add-line" aria-hidden="true"></i> Nuevo
 							</button>
 						</div>
 						<div class="admin-table-wrap">
@@ -448,8 +461,8 @@ const auditPlaceholder = [
 												</span>
 											</td>
 											<td class="admin-table__actions">
-												<button type="button" class="admin-icon-btn admin-icon-btn--blue" aria-label="Editar oficio" disabled>
-													<i class="ri-edit-line"></i>
+												<button type="button" class="admin-icon-btn admin-icon-btn--blue" aria-label="Editar oficio (próximamente)" aria-disabled="true" disabled>
+													<i class="ri-edit-line" aria-hidden="true"></i>
 												</button>
 											</td>
 										</tr>
@@ -486,7 +499,7 @@ const auditPlaceholder = [
 					<section class="admin-panel">
 						<div class="admin-table-wrap">
 							{listaTickets.length === 0 ? (
-								<p class="admin-empty"><i class="ri-inbox-line admin-empty__icon"></i> No hay tickets con esos filtros.</p>
+								<p class="admin-empty"><i class="ri-inbox-line admin-empty__icon" aria-hidden="true"></i> No hay tickets con esos filtros.</p>
 							) : (
 							<table class="admin-table">
 								<thead>
@@ -506,25 +519,25 @@ const auditPlaceholder = [
 									{listaTickets.map((t) => (
 										<tr class={t.status === 'abierto' ? 'admin-row--warn' : ''}>
 											<td class="admin-table__id">#{t.id}</td>
-											<td><span class="admin-pill admin-pill--{t.kind === 'suplantacion' ? 'red' : t.kind === 'consulta' ? 'blue' : 'orange'}">{t.kind}</span></td>
-											<td class="admin-table__name" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{t.subject}</td>
-											<td><span class={`admin-pill admin-pill--${t.status === 'abierto' ? 'orange' : t.status === 'en_revision' ? 'blue' : 'green'}`}>{t.status}</span></td>
+											<td><span class={`admin-pill admin-pill--${TICKET_KIND_COLORS[t.kind] ?? 'orange'}`}>{t.kind}</span></td>
+											<td class="admin-table__name admin-table__subject-cell">{t.subject}</td>
+											<td><span class={`admin-pill admin-pill--${TICKET_STATUS_COLORS[t.status] ?? 'orange'}`}>{t.status}</span></td>
 											<td class="admin-table__email">{t.contactEmail ?? `User#${t.createdByUserId}`}</td>
 											<td class="admin-table__count">{t.msgCount}</td>
 											<td class="admin-table__assignee">{t.assigneeAdminId ? `Admin#${t.assigneeAdminId}` : '—'}</td>
 											<td class="admin-table__date">{t.createdAt?.toLocaleDateString?.('es-CL') ?? ''}</td>
 											<td class="admin-table__actions">
-												<button type="button" class="admin-icon-btn admin-icon-btn--blue js-ticket-view" data-ticket-id={t.id} title="Ver ticket">
-													<i class="ri-eye-line"></i>
+												<button type="button" class="admin-icon-btn admin-icon-btn--blue js-ticket-view" data-ticket-id={t.id} aria-label={`Ver ticket #${t.id}`} title="Ver ticket">
+													<i class="ri-eye-line" aria-hidden="true"></i>
 												</button>
 												{t.status === 'abierto' && (
-												<button type="button" class="admin-icon-btn admin-icon-btn--blue js-ticket-assign" data-ticket-id={t.id} title="Tomar ticket">
-													<i class="ri-hand"></i>
+												<button type="button" class="admin-icon-btn admin-icon-btn--blue js-ticket-assign" data-ticket-id={t.id} aria-label={`Tomar ticket #${t.id}`} title="Tomar ticket">
+													<i class="ri-hand" aria-hidden="true"></i>
 												</button>
 												)}
 												{t.status !== 'cerrado' && (
-												<button type="button" class="admin-icon-btn admin-icon-btn--green js-ticket-close" data-ticket-id={t.id} title="Cerrar ticket">
-													<i class="ri-check-line"></i>
+												<button type="button" class="admin-icon-btn admin-icon-btn--green js-ticket-close" data-ticket-id={t.id} aria-label={`Cerrar ticket #${t.id}`} title="Cerrar ticket">
+													<i class="ri-check-line" aria-hidden="true"></i>
 												</button>
 												)}
 											</td>
@@ -555,7 +568,7 @@ const auditPlaceholder = [
 							<h3 class="admin-finance-card__label">Ratio OE3</h3>
 							<p class="admin-finance-card__value admin-finance-card__value--primary">80%</p>
 							<div class="admin-progress">
-								<div class="admin-progress__bar w-[80%]"></div>
+								<div class="admin-progress__bar" style="width: 80%"></div>
 							</div>
 						</article>
 					</div>
@@ -566,8 +579,8 @@ const auditPlaceholder = [
 							{finanzas6m.map((m) => (
 								<div class="admin-stacked-chart__col">
 									<div class="admin-stacked-chart__bars">
-										<div class={`admin-stacked-chart__bar admin-stacked-chart__bar--donaciones h-[${m.donaciones}%]`}></div>
-										<div class={`admin-stacked-chart__bar admin-stacked-chart__bar--gastos h-[${m.gastos}%]`}></div>
+										<div class="admin-stacked-chart__bar admin-stacked-chart__bar--donaciones" style={`height: ${m.donaciones}%`}></div>
+										<div class="admin-stacked-chart__bar admin-stacked-chart__bar--gastos" style={`height: ${m.gastos}%`}></div>
 									</div>
 									<span class="admin-stacked-chart__label">{m.mes}</span>
 								</div>
@@ -611,7 +624,7 @@ const auditPlaceholder = [
 								Guardar configuración
 							</button>
 							<p class="admin-form__note">
-								<i class="ri-information-line"></i> Las mutaciones de configuración se implementarán en HU-13.5. Esta vista es de solo lectura por ahora.
+								<i class="ri-information-line" aria-hidden="true"></i> Las mutaciones de configuración se implementarán en HU-13.5. Esta vista es de solo lectura por ahora.
 							</p>
 						</form>
 					</section>
@@ -624,7 +637,7 @@ const auditPlaceholder = [
 						<article class="admin-kpi-card">
 							<div class="admin-kpi-card__head">
 								<div class="admin-kpi-card__icon admin-kpi-card__icon--primary">
-									<i class="ri-eye-line"></i>
+									<i class="ri-eye-line" aria-hidden="true"></i>
 								</div>
 								<span class="admin-trend admin-trend--up">+18%</span>
 							</div>
@@ -634,7 +647,7 @@ const auditPlaceholder = [
 						<article class="admin-kpi-card">
 							<div class="admin-kpi-card__head">
 								<div class="admin-kpi-card__icon admin-kpi-card__icon--blue">
-									<i class="ri-chat-3-line"></i>
+									<i class="ri-chat-3-line" aria-hidden="true"></i>
 								</div>
 								<span class="admin-trend admin-trend--up">+22%</span>
 							</div>
@@ -644,7 +657,7 @@ const auditPlaceholder = [
 						<article class="admin-kpi-card">
 							<div class="admin-kpi-card__head">
 								<div class="admin-kpi-card__icon admin-kpi-card__icon--orange">
-									<i class="ri-search-line"></i>
+									<i class="ri-search-line" aria-hidden="true"></i>
 								</div>
 								<span class="admin-trend admin-trend--up">+9%</span>
 							</div>
@@ -654,7 +667,7 @@ const auditPlaceholder = [
 						<article class="admin-kpi-card">
 							<div class="admin-kpi-card__head">
 								<div class="admin-kpi-card__icon admin-kpi-card__icon--purple">
-									<i class="ri-heart-3-line"></i>
+									<i class="ri-heart-3-line" aria-hidden="true"></i>
 								</div>
 								<span class="admin-trend admin-trend--up">+31%</span>
 							</div>
@@ -676,7 +689,8 @@ const auditPlaceholder = [
 							{chartActividad.map((valor, i) => (
 								<div class="admin-bar-chart__col">
 									<div
-										class={`admin-bar admin-bar--analytics h-[${valor}%] ${i >= 5 ? 'admin-bar--muted' : ''}`}
+										class={`admin-bar admin-bar--analytics ${i >= 5 ? 'admin-bar--muted' : ''}`}
+										style={`height: ${valor}%`}
 									></div>
 									<span class="admin-bar-chart__label">{diasSemana[i]}</span>
 								</div>
@@ -693,7 +707,7 @@ const auditPlaceholder = [
 										<span class="admin-funnel__label">{paso.label}</span>
 										<span class="admin-funnel__value">{paso.value}</span>
 									</div>
-									<div class={`admin-funnel__bar admin-funnel__bar--${paso.color} w-[${paso.pct}%]`}></div>
+									<div class={`admin-funnel__bar admin-funnel__bar--${paso.color}`} style={`width: ${paso.pct}%`}></div>
 								</div>
 							))}
 						</div>
@@ -707,7 +721,7 @@ const auditPlaceholder = [
 									<span class="admin-top-list__rank">{item.rank}</span>
 									<span class="admin-top-list__name">{item.nombre}</span>
 									<div class="admin-top-list__bar-wrap">
-										<div class={`admin-top-list__bar w-[${item.pct}%]`}></div>
+										<div class="admin-top-list__bar" style={`width: ${item.pct}%`}></div>
 									</div>
 									<span class="admin-top-list__count">{item.count}</span>
 								</div>

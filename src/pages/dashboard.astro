@@ -138,86 +138,105 @@ const myFavorites = await db
 <BaseLayout title={`Mi panel — ${currentUser.name}`}>
   <main class="container mx-auto px-4 py-8 max-w-4xl">
     {!currentUser.emailVerified ? (
-      <div class="bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-4 flex items-start gap-3 mb-6">
-        <i class="ri-mail-unread-line text-yellow-700 text-2xl flex-shrink-0"></i>
-        <div class="flex-1">
-          <h4 class="font-bold text-yellow-900 text-sm">Verifica tu email</h4>
-          <p class="text-yellow-800 text-xs mt-1">Revisa <b>{currentUser.email}</b> y haz clic en el enlace de verificación. ¿No lo recibiste?</p>
+      <div
+        id="email-verification-banner"
+        role="alert"
+        class="bg-[var(--amber-50)] border-2 border-[var(--amber-200)] rounded-2xl p-4 flex items-start gap-3 mb-6"
+      >
+        <i class="ri-mail-unread-line text-[var(--amber-700)] text-2xl flex-shrink-0" aria-hidden="true"></i>
+        <div class="flex-1 min-w-0">
+          <h4 class="font-bold text-[var(--amber-700)] text-sm">Verifica tu email</h4>
+          <p class="text-[var(--amber-600)] text-xs mt-1">Revisa <b>{currentUser.email}</b> y haz clic en el enlace de verificación. ¿No lo recibiste?</p>
         </div>
-        <button id="btn-resend-verification" class="text-yellow-700 hover:text-yellow-900 text-xs font-bold underline flex-shrink-0" data-email={currentUser.email}>Reenviar</button>
+        <button type="button" id="btn-resend-verification" class="text-[var(--amber-700)] hover:text-[var(--amber-600)] text-xs font-bold underline flex-shrink-0 min-h-[44px] px-2" data-email={currentUser.email}>Reenviar</button>
+        <button type="button" id="btn-dismiss-verification" class="text-[var(--amber-700)] hover:text-[var(--amber-600)] flex-shrink-0 w-11 h-11 flex items-center justify-center rounded-full hover:bg-[var(--amber-100)] transition" aria-label="Cerrar aviso de verificación">
+          <i class="ri-close-line text-xl" aria-hidden="true"></i>
+        </button>
       </div>
     ) : null}
 
-    <header class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 mb-6">
-      <div class="flex items-center gap-4">
-        <div class="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 font-extrabold text-2xl flex-shrink-0">
+    <header class="bg-[var(--bg-card)] rounded-3xl shadow-[var(--shadow-card)] border border-[var(--border-default)] p-6 mb-6">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+        <div class="w-16 h-16 rounded-full bg-[var(--orange-100)] flex items-center justify-center text-[var(--orange-500)] font-extrabold text-2xl flex-shrink-0">
           {currentUser.name.slice(0, 1).toUpperCase()}
         </div>
-        <div class="flex-1">
-          <h1 class="text-2xl font-extrabold text-gray-800">Hola, {currentUser.name}</h1>
-          <p class="text-sm text-gray-500">{currentUser.email}</p>
+        <div class="flex-1 min-w-0">
+          <h1 class="text-2xl font-extrabold text-[var(--text-primary)] truncate">Hola, {currentUser.name}</h1>
+          <p class="text-sm text-[var(--text-muted)] truncate">{currentUser.email}</p>
         </div>
-        <div class="flex gap-2">
-          <span class={`px-3 py-1 rounded-full text-xs font-bold ${currentUser.role === 'admin' ? 'bg-purple-100 text-purple-700' : currentUser.role === 'provider' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
+        <div class="flex flex-wrap gap-2">
+          <span class={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap capitalize ${currentUser.role === 'admin' ? 'bg-[var(--pink-100)] text-[var(--pink-600)]' : currentUser.role === 'provider' ? 'bg-[var(--blue-100)] text-[var(--blue-700)]' : 'bg-[var(--green-100)] text-[var(--green-700)]'}`}>
             {currentUser.role}
           </span>
-          <span class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">
-            ● Activo
+          <span class="px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap bg-[var(--green-100)] text-[var(--green-700)]">
+            <span aria-hidden="true">●</span> Activo
           </span>
         </div>
       </div>
     </header>
 
-    <nav class="bg-white rounded-2xl shadow-sm border border-gray-100 p-2 mb-6 flex gap-1" aria-label="Secciones del panel">
+    <nav class="bg-[var(--bg-card)] rounded-2xl shadow-[var(--shadow-card)] border border-[var(--border-default)] p-2 mb-6 flex gap-1" aria-label="Secciones del panel" role="tablist">
       <a
+        id="tab-historial"
         href="/dashboard?tab=historial"
-        class={`flex-1 px-4 py-2.5 rounded-xl font-bold text-sm text-center transition ${tab === 'historial' ? 'bg-orange-500 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'}`}
+        role="tab"
+        aria-selected={tab === 'historial' ? 'true' : 'false'}
+        aria-controls="panel-historial"
+        class={`flex-1 px-4 py-2.5 rounded-xl font-bold text-sm text-center transition min-h-[44px] flex items-center justify-center gap-1 ${tab === 'historial' ? 'bg-[var(--orange-500)] text-[var(--text-inverse)] shadow-[var(--shadow-card)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-inset)]'}`}
       >
-        <i class="ri-time-line"></i> Historial
+        <i class="ri-time-line" aria-hidden="true"></i> Historial
       </a>
       <a
+        id="tab-resenas"
         href="/dashboard?tab=resenas"
-        class={`flex-1 px-4 py-2.5 rounded-xl font-bold text-sm text-center transition ${tab === 'resenas' ? 'bg-orange-500 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'}`}
+        role="tab"
+        aria-selected={tab === 'resenas' ? 'true' : 'false'}
+        aria-controls="panel-resenas"
+        class={`flex-1 px-4 py-2.5 rounded-xl font-bold text-sm text-center transition min-h-[44px] flex items-center justify-center gap-1 ${tab === 'resenas' ? 'bg-[var(--orange-500)] text-[var(--text-inverse)] shadow-[var(--shadow-card)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-inset)]'}`}
       >
-        <i class="ri-star-smile-line"></i> Mis reseñas
+        <i class="ri-star-smile-line" aria-hidden="true"></i> Mis reseñas
       </a>
       <a
+        id="tab-perfil"
         href="/dashboard?tab=perfil"
-        class={`flex-1 px-4 py-2.5 rounded-xl font-bold text-sm text-center transition ${tab === 'perfil' ? 'bg-orange-500 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'}`}
+        role="tab"
+        aria-selected={tab === 'perfil' ? 'true' : 'false'}
+        aria-controls="panel-perfil"
+        class={`flex-1 px-4 py-2.5 rounded-xl font-bold text-sm text-center transition min-h-[44px] flex items-center justify-center gap-1 ${tab === 'perfil' ? 'bg-[var(--orange-500)] text-[var(--text-inverse)] shadow-[var(--shadow-card)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-inset)]'}`}
       >
-        <i class="ri-user-settings-line"></i> Perfil
+        <i class="ri-user-settings-line" aria-hidden="true"></i> Perfil
       </a>
     </nav>
 
     {tab === 'historial' && (
-      <section class="space-y-6">
+      <section id="panel-historial" role="tabpanel" aria-labelledby="tab-historial" class="space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <a
             href="/"
-            class="block p-6 bg-white rounded-3xl shadow-sm border border-gray-100 hover:border-orange-500/50 hover:shadow-md transition group text-left relative overflow-hidden"
+            class="block p-6 bg-[var(--bg-card)] rounded-3xl shadow-[var(--shadow-card)] border border-[var(--border-default)] hover:border-[var(--color-accent)] hover:shadow-[var(--shadow-card-hover)] transition group text-left relative overflow-hidden focus-visible:ring-2 focus-visible:ring-[var(--border-focus)] focus-visible:outline-none"
           >
-            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition">
-              <i class="ri-search-eye-line text-6xl text-orange-500"></i>
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition" aria-hidden="true">
+              <i class="ri-search-eye-line text-6xl text-[var(--orange-500)]"></i>
             </div>
-            <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500 text-2xl mb-4 group-hover:scale-110 transition">
-              <i class="ri-search-line"></i>
+            <div class="w-12 h-12 bg-[var(--blue-50)] rounded-2xl flex items-center justify-center text-[var(--blue-500)] text-2xl mb-4 group-hover:scale-110 transition">
+              <i class="ri-search-line" aria-hidden="true"></i>
             </div>
-            <h3 class="font-bold text-gray-800 text-lg">Buscar Oficios</h3>
-            <p class="text-xs text-gray-500 mt-1 font-medium">Encuentra gasfíteres, electricistas y más cerca de ti.</p>
+            <h3 class="font-bold text-[var(--text-primary)] text-lg">Buscar Oficios</h3>
+            <p class="text-xs text-[var(--text-muted)] mt-1 font-medium">Encuentra gasfíteres, electricistas y más cerca de ti.</p>
           </a>
 
-          <div class="p-6 bg-white border border-gray-100 rounded-3xl text-left shadow-sm relative overflow-hidden group">
-            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition">
-              <i class="ri-briefcase-line text-6xl text-gray-500"></i>
+          <div class="p-6 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-3xl text-left shadow-[var(--shadow-card)] relative overflow-hidden group">
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition" aria-hidden="true">
+              <i class="ri-briefcase-line text-6xl text-[var(--text-muted)]"></i>
             </div>
-            <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-green-500 text-2xl mb-4 group-hover:scale-110 transition">
-              <i class="ri-hammer-line"></i>
+            <div class="w-12 h-12 bg-[var(--green-50)] rounded-2xl flex items-center justify-center text-[var(--green-500)] text-2xl mb-4 group-hover:scale-110 transition">
+              <i class="ri-hammer-line" aria-hidden="true"></i>
             </div>
-            <h3 class="font-bold text-gray-800 text-lg">¿Ofreces un servicio?</h3>
-            <p class="text-xs text-gray-500 mt-1 mb-4 font-medium">Crea tu perfil profesional y llega a más vecinos.</p>
+            <h3 class="font-bold text-[var(--text-primary)] text-lg">¿Ofreces un servicio?</h3>
+            <p class="text-xs text-[var(--text-muted)] mt-1 mb-4 font-medium">Crea tu perfil profesional y llega a más vecinos.</p>
             <a
               href="/crear-oficio"
-              class="inline-block text-center bg-gray-800 text-white px-5 py-2 rounded-xl text-xs font-bold hover:bg-gray-700 transition shadow-md"
+              class="inline-flex items-center justify-center text-center bg-[var(--stone-800)] text-[var(--text-inverse)] px-5 py-2 rounded-xl text-xs font-bold hover:bg-[var(--stone-700)] transition shadow-[var(--shadow-card)] min-h-[44px]"
             >
               Crear Perfil PRO
             </a>
@@ -225,43 +244,43 @@ const myFavorites = await db
         </div>
 
         {myTrades.length > 0 && (
-          <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="font-bold text-gray-800 text-lg flex items-center gap-2">
-                <i class="ri-briefcase-line text-orange-500"></i> Mis oficios publicados ({myTrades.length})
+          <div class="bg-[var(--bg-card)] rounded-3xl shadow-[var(--shadow-card)] border border-[var(--border-default)] p-6">
+            <div class="flex items-center justify-between gap-3 mb-4">
+              <h3 class="font-bold text-[var(--text-primary)] text-lg flex items-center gap-2 min-w-0">
+                <i class="ri-briefcase-line text-[var(--orange-500)] flex-shrink-0" aria-hidden="true"></i> <span class="truncate">Mis oficios publicados ({myTrades.length})</span>
               </h3>
               <a
                 href="/crear-oficio"
-                class="text-xs font-bold text-orange-500 hover:text-orange-600 transition"
+                class="text-xs font-bold text-[var(--orange-500)] hover:text-[var(--orange-600)] transition flex-shrink-0 whitespace-nowrap"
               >
-                <i class="ri-add-line"></i> Publicar otro
+                <i class="ri-add-line" aria-hidden="true"></i> Publicar otro
               </a>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               {myTrades.map((t) => (
-                <article class="bg-gray-50 rounded-2xl border border-gray-100 p-4">
-                  <div class="flex justify-between items-start mb-2">
-                    <span class="text-xs uppercase tracking-wide font-bold text-orange-600 bg-orange-100 px-2 py-1 rounded-full">
+                <article class="bg-[var(--bg-warm)] rounded-2xl border border-[var(--border-light)] p-4 transition focus-within:ring-2 focus-within:ring-[var(--border-focus)] focus-within:border-[var(--amber-300)]">
+                  <div class="flex justify-between items-start gap-2 mb-2">
+                    <span class="text-xs uppercase tracking-wide font-bold text-[var(--orange-600)] bg-[var(--orange-100)] px-2 py-1 rounded-full whitespace-nowrap">
                       {t.symbol}
                     </span>
-                    <span class={`text-xs font-bold px-2 py-1 rounded-full ${t.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
+                    <span class={`text-xs font-bold px-2 py-1 rounded-full whitespace-nowrap ${t.status === 'active' ? 'bg-[var(--green-100)] text-[var(--green-700)]' : 'bg-[var(--orange-100)] text-[var(--orange-700)]'}`}>
                       {t.status === 'active' ? 'Activo' : 'Pausado'}
                     </span>
                   </div>
-                  <h4 class="font-bold text-gray-800 text-base mb-1">{t.name}</h4>
-                  <p class="text-xs text-gray-500 mb-3">
+                  <h4 class="font-bold text-[var(--text-primary)] text-base mb-1 line-clamp-2">{t.name}</h4>
+                  <p class="text-xs text-[var(--text-muted)] mb-3">
                     {t.communeName ?? 'RM'} · ${(t.basePriceClp ?? 0).toLocaleString('es-CL')}
                   </p>
-                  <div class="flex gap-2 pt-3 border-t border-gray-100">
+                  <div class="flex flex-col sm:flex-row gap-2 pt-3 border-t border-[var(--border-light)]">
                     <a
                       href={`/p/${t.slug}`}
-                      class="flex-1 text-center bg-white hover:bg-gray-100 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-gray-200"
+                      class="flex-1 inline-flex items-center justify-center text-center bg-[var(--bg-card)] hover:bg-[var(--bg-inset)] text-[var(--text-secondary)] px-3 py-1.5 rounded-lg text-xs font-bold border border-[var(--border-default)] min-h-[44px]"
                     >
                       Ver público
                     </a>
                     <a
                       href={`/dashboard/oficio/${t.id}`}
-                      class="flex-1 text-center bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold"
+                      class="flex-1 inline-flex items-center justify-center text-center bg-[var(--orange-500)] hover:bg-[var(--orange-600)] text-[var(--text-inverse)] px-3 py-1.5 rounded-lg text-xs font-bold min-h-[44px]"
                     >
                       Editar
                     </a>
@@ -275,28 +294,28 @@ const myFavorites = await db
         <ContactsHistory events={myContacts} />
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div class="lg:col-span-2 bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
-            <h3 class="font-bold text-gray-800 text-lg mb-4 flex items-center gap-2">
-              <i class="ri-heart-line text-red-500"></i> Vecinos Guardados
+          <div class="lg:col-span-2 bg-[var(--bg-card)] rounded-3xl shadow-[var(--shadow-card)] border border-[var(--border-default)] p-6">
+            <h3 class="font-bold text-[var(--text-primary)] text-lg mb-4 flex items-center gap-2">
+              <i class="ri-heart-line text-[var(--color-red-700)]" aria-hidden="true"></i> Vecinos Guardados
             </h3>
             {myFavorites.length > 0 ? (
               <div class="space-y-3">
                 {myFavorites.map((fav) => (
-                  <a href={`/p/${fav.slug}`} class="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl border border-gray-100 hover:border-orange-500/50 transition">
-                    <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 font-bold text-sm flex-shrink-0">
+                  <a href={`/p/${fav.slug}`} class="flex items-center gap-3 p-3 bg-[var(--bg-warm)] rounded-2xl border border-[var(--border-light)] hover:border-[var(--color-accent)] transition min-h-[44px] focus-visible:ring-2 focus-visible:ring-[var(--border-focus)] focus-visible:outline-none">
+                    <div class="w-10 h-10 rounded-full bg-[var(--orange-100)] flex items-center justify-center text-[var(--orange-500)] font-bold text-sm flex-shrink-0">
                       {fav.symbol?.slice(0, 2).toUpperCase() ?? 'OF'}
                     </div>
                     <div class="flex-1 min-w-0">
-                      <h4 class="font-bold text-gray-800 text-sm truncate">{fav.name}</h4>
-                      <p class="text-xs text-gray-500">{fav.userName} · ${(fav.basePriceClp ?? 0).toLocaleString('es-CL')}</p>
+                      <h4 class="font-bold text-[var(--text-primary)] text-sm truncate">{fav.name}</h4>
+                      <p class="text-xs text-[var(--text-muted)] truncate">{fav.userName} · ${(fav.basePriceClp ?? 0).toLocaleString('es-CL')}</p>
                     </div>
-                    <i class="ri-arrow-right-s-line text-gray-400 text-xl"></i>
+                    <i class="ri-arrow-right-s-line text-[var(--text-muted)] text-xl flex-shrink-0" aria-hidden="true"></i>
                   </a>
                 ))}
               </div>
             ) : (
-              <div class="text-center py-8 text-gray-400">
-                <i class="ri-heart-line text-4xl mb-2 block opacity-30"></i>
+              <div class="text-center py-8 text-[var(--text-muted)]">
+                <i class="ri-heart-line text-4xl mb-2 block text-[var(--text-muted)]" aria-hidden="true"></i>
                 <p class="text-sm font-medium">Aún no has guardado vecinos.</p>
                 <p class="text-xs mt-1">Haz clic en el corazón en cualquier tarjeta o perfil.</p>
               </div>
@@ -309,49 +328,49 @@ const myFavorites = await db
     )}
 
     {tab === 'resenas' && (
-      <section>
+      <section id="panel-resenas" role="tabpanel" aria-labelledby="tab-resenas">
         <MyReviews reviews={myReviews} />
       </section>
     )}
 
     {tab === 'perfil' && (
-      <section class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="text-2xl font-extrabold text-gray-800">Datos de tu cuenta</h2>
-          <button onclick="openEditProfileModal()" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-md">
-            <i class="ri-pencil-line"></i> Editar perfil
+      <section id="panel-perfil" role="tabpanel" aria-labelledby="tab-perfil" class="bg-[var(--bg-card)] rounded-3xl shadow-[var(--shadow-card)] border border-[var(--border-default)] p-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+          <h2 class="text-2xl font-extrabold text-[var(--text-primary)]">Datos de tu cuenta</h2>
+          <button onclick="openEditProfileModal()" type="button" class="bg-[var(--orange-500)] hover:bg-[var(--orange-600)] text-[var(--text-inverse)] px-4 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1 shadow-[var(--shadow-card)] min-h-[44px]">
+            <i class="ri-pencil-line" aria-hidden="true"></i> Editar perfil
           </button>
         </div>
         <dl class="space-y-4">
-          <div class="flex justify-between border-b border-gray-100 pb-3">
-            <dt class="text-gray-500">Nombre</dt>
-            <dd class="font-bold text-gray-800">{currentUser.name}</dd>
+          <div class="profile-field">
+            <dt>Nombre</dt>
+            <dd>{currentUser.name}</dd>
           </div>
-          <div class="flex justify-between border-b border-gray-100 pb-3">
-            <dt class="text-gray-500">Email</dt>
-            <dd class="font-bold text-gray-800">{currentUser.email}</dd>
+          <div class="profile-field">
+            <dt>Email</dt>
+            <dd>{currentUser.email}</dd>
           </div>
-          <div class="flex justify-between border-b border-gray-100 pb-3">
-            <dt class="text-gray-500">Rol</dt>
-            <dd class="font-bold text-gray-800 capitalize">{currentUser.role}</dd>
+          <div class="profile-field">
+            <dt>Rol</dt>
+            <dd class="capitalize">{currentUser.role}</dd>
           </div>
-          <div class="flex justify-between border-b border-gray-100 pb-3">
-            <dt class="text-gray-500">ID</dt>
-            <dd class="font-bold text-gray-800">#{currentUser.id}</dd>
+          <div class="profile-field">
+            <dt>ID</dt>
+            <dd>#{currentUser.id}</dd>
           </div>
         </dl>
-        <div class="mt-6 flex flex-wrap gap-3">
-          <a href="/api/v1/account/export" class="bg-white border border-gray-200 hover:border-orange-500 text-gray-700 px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1">
-            <i class="ri-download-2-line"></i> Exportar mis datos
+        <div class="mt-6 flex flex-col sm:flex-row sm:flex-wrap gap-3">
+          <a href="/api/v1/account/export" class="bg-[var(--bg-card)] border border-[var(--border-default)] hover:border-[var(--color-accent)] text-[var(--text-secondary)] px-4 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1 min-h-[44px]">
+            <i class="ri-download-2-line" aria-hidden="true"></i> Exportar mis datos
           </a>
           <form method="POST" action="/api/v1/account/delete" class="contents" onsubmit="return confirm('¿Estás seguro? Esta acción eliminará tu cuenta y todos tus datos de forma permanente.')">
-            <button type="submit" class="bg-red-50 border border-red-200 hover:bg-red-100 text-red-600 px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1">
-              <i class="ri-delete-bin-6-line"></i> Eliminar cuenta
+            <button type="submit" class="bg-[var(--color-error-bg)] border border-[var(--color-error-border)] hover:bg-[var(--color-danger-light)] text-[var(--color-error-text)] px-4 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1 min-h-[44px]">
+              <i class="ri-delete-bin-6-line" aria-hidden="true"></i> Eliminar cuenta
             </button>
           </form>
           <form method="POST" action="/api/v1/auth/cerrar-sesion" class="contents js-logout-form">
-            <button type="submit" class="bg-gray-900 hover:bg-red-600 text-white px-6 py-2.5 rounded-xl font-bold transition ml-auto">
-              <i class="ri-logout-box-r-line"></i> Cerrar sesión
+            <button type="submit" class="bg-[var(--stone-900)] hover:bg-[var(--color-error)] text-[var(--text-inverse)] px-6 py-2.5 rounded-xl font-bold transition sm:ml-auto min-h-[44px]">
+              <i class="ri-logout-box-r-line" aria-hidden="true"></i> Cerrar sesión
             </button>
           </form>
         </div>
@@ -359,7 +378,39 @@ const myFavorites = await db
     )}
     <EditProfileModal open={tab === 'perfil'} communes={allCommunes} />
   </main>
+<style>
+  .profile-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-4);
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: var(--space-3);
+  }
+
+  .profile-field dt {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    flex-shrink: 0;
+  }
+
+  .profile-field dd {
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: right;
+    word-break: break-word;
+    min-width: 0;
+  }
+</style>
 <script>
+  const btnDismiss = document.getElementById('btn-dismiss-verification');
+  const verificationBanner = document.getElementById('email-verification-banner');
+  if (btnDismiss && verificationBanner) {
+    btnDismiss.addEventListener('click', () => {
+      verificationBanner.remove();
+    });
+  }
+
   const btnResend = document.getElementById('btn-resend-verification');
   if (btnResend) {
     btnResend.addEventListener('click', async () => {

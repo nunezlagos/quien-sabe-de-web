@@ -124,238 +124,268 @@ const myPortfolio = myTradeIds.length > 0 ? await db
 <BaseLayout title="Panel Proveedor — QuiénSabe">
 
   <main class="container mx-auto px-4 py-8">
+    <!-- Botón abrir menú (solo móvil) -->
+    <button
+      type="button"
+      id="btn-open-sidebar"
+      class="md:hidden mb-4 inline-flex items-center gap-2 bg-[var(--bg-card)] border border-[var(--border-default)] text-[var(--text-secondary)] px-4 py-2 rounded-xl text-sm font-bold shadow-[var(--shadow-card)] min-h-[44px]"
+      aria-controls="provider-sidebar"
+      aria-expanded="false"
+    >
+      <i class="ri-menu-line text-lg" aria-hidden="true"></i> Menú del panel
+    </button>
+
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-      <!-- Sidebar -->
-      <aside class="md:col-span-1 space-y-4">
-        <div class="bg-white p-6 rounded-3xl shadow-sm text-center border border-gray-100">
-          <div class="w-24 h-24 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 text-orange-500 text-3xl font-bold">
+      <!-- Sidebar / Drawer -->
+      <div
+        id="sidebar-overlay"
+        class="hidden md:hidden fixed inset-0 z-40 bg-black/50"
+        data-sidebar-overlay
+      ></div>
+      <aside
+        id="provider-sidebar"
+        class="md:col-span-1 space-y-4 max-md:hidden max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:z-50 max-md:w-[80%] max-md:max-w-xs max-md:overflow-y-auto max-md:bg-[var(--bg-page)] max-md:p-4 max-md:shadow-[var(--shadow-card-lifted)]"
+        aria-label="Navegación del panel de proveedor"
+      >
+        <button
+          type="button"
+          id="btn-close-sidebar"
+          class="md:hidden ml-auto flex w-11 h-11 items-center justify-center rounded-full hover:bg-[var(--bg-inset)] text-[var(--text-secondary)] transition"
+          aria-label="Cerrar menú del panel"
+        >
+          <i class="ri-close-line text-xl" aria-hidden="true"></i>
+        </button>
+        <div class="bg-[var(--bg-card)] p-6 rounded-3xl shadow-[var(--shadow-card)] text-center border border-[var(--border-default)]">
+          <div class="w-24 h-24 bg-[var(--orange-100)] rounded-full flex items-center justify-center mx-auto mb-4 text-[var(--orange-500)] text-3xl font-bold">
             {initials}
           </div>
-          <h2 class="font-bold text-gray-800 text-lg">{user.name}</h2>
-          <p class="text-sm text-gray-500 font-medium">{user.role}</p>
-          <div class="mt-4 flex justify-center gap-1 text-yellow-400 text-lg">
-            <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-half-fill"></i>
-            <span class="text-gray-400 ml-1 text-sm font-bold">({ratingGlobal.toFixed(1)})</span>
+          <h2 class="font-bold text-[var(--text-primary)] text-lg">{user.name}</h2>
+          <p class="text-sm text-[var(--text-muted)] font-medium capitalize">{user.role}</p>
+          <div class="mt-4 flex justify-center items-center gap-1 text-[var(--amber-400)] text-lg" role="img" aria-label={`Valoración global ${ratingGlobal.toFixed(1)} de 5`}>
+            <i class="ri-star-fill" aria-hidden="true"></i><i class="ri-star-fill" aria-hidden="true"></i><i class="ri-star-fill" aria-hidden="true"></i><i class="ri-star-fill" aria-hidden="true"></i><i class="ri-star-half-fill" aria-hidden="true"></i>
+            <span class="text-[var(--text-muted)] ml-1 text-sm font-bold">({ratingGlobal.toFixed(1)})</span>
           </div>
         </div>
 
-        <nav class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-          <div class="p-4 border-b border-gray-50 bg-gray-50/50">
+        <nav class="bg-[var(--bg-card)] rounded-3xl shadow-[var(--shadow-card)] border border-[var(--border-default)] overflow-hidden" aria-label="Secciones del panel">
+          <div class="p-4 border-b border-[var(--border-light)] bg-[var(--bg-warm)]">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-gray-500 uppercase">Estado</span>
+              <span class="text-xs font-bold text-[var(--text-muted)] uppercase">Estado</span>
               <label class="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" checked class="sr-only peer" data-provider-toggle>
-                <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-500"></div>
-                <p class="text-xs font-bold text-orange-500 ml-2" data-toggle-label>Visible para vecinos</p>
+                <input type="checkbox" checked class="sr-only peer" data-provider-toggle aria-label="Visibilidad del perfil para vecinos">
+                <div class="w-9 h-5 bg-[var(--stone-200)] peer-focus:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--border-focus)] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-[var(--stone-300)] after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[var(--green-500)]"></div>
+                <p class="text-xs font-bold text-[var(--orange-500)] ml-2" data-toggle-label>Visible para vecinos</p>
               </label>
             </div>
           </div>
-          <a href="/dashboard-prestador" class="block px-6 py-4 border-l-4 border-orange-500 bg-orange-50 text-orange-500 font-bold"><i class="ri-dashboard-line mr-2 align-middle"></i> Resumen</a>
-          <a href="#editar-perfil" class="block px-6 py-4 border-l-4 border-transparent hover:bg-gray-50 text-gray-600 font-medium transition"><i class="ri-edit-line mr-2 align-middle"></i> Editar Perfil</a>
-          <a href="#mis-servicios" class="block px-6 py-4 border-l-4 border-transparent hover:bg-gray-50 text-gray-600 font-medium transition"><i class="ri-list-settings-line mr-2 align-middle"></i> Mis Servicios</a>
-          <a href="#resenas" class="block px-6 py-4 border-l-4 border-transparent hover:bg-gray-50 text-gray-600 font-medium transition"><i class="ri-chat-1-line mr-2 align-middle"></i> Reseñas</a>
-          <a href="#portfolio" class="block px-6 py-4 border-l-4 border-transparent hover:bg-gray-50 text-gray-600 font-medium transition"><i class="ri-gallery-line mr-2 align-middle"></i> Portafolio</a>
-          <a href="/dashboard-prestador/soporte" class="w-full text-left block px-6 py-4 border-l-4 border-transparent hover:bg-red-50 text-red-500 font-medium transition border-t border-gray-100 mt-2">
-            <i class="ri-customer-service-2-line mr-2 align-middle"></i> Soporte / Ayuda
+          <a href="/dashboard-prestador" aria-current="page" class="flex items-center px-6 py-4 border-l-4 border-[var(--orange-500)] bg-[var(--orange-50)] text-[var(--orange-500)] font-bold min-h-[44px]"><i class="ri-dashboard-line mr-2 align-middle" aria-hidden="true"></i> Resumen</a>
+          <a href="#editar-perfil" class="flex items-center px-6 py-4 border-l-4 border-transparent hover:bg-[var(--bg-inset)] text-[var(--text-secondary)] font-medium transition min-h-[44px]"><i class="ri-edit-line mr-2 align-middle" aria-hidden="true"></i> Editar Perfil</a>
+          <a href="#mis-servicios" class="flex items-center px-6 py-4 border-l-4 border-transparent hover:bg-[var(--bg-inset)] text-[var(--text-secondary)] font-medium transition min-h-[44px]"><i class="ri-list-settings-line mr-2 align-middle" aria-hidden="true"></i> Mis Servicios</a>
+          <a href="#resenas" class="flex items-center px-6 py-4 border-l-4 border-transparent hover:bg-[var(--bg-inset)] text-[var(--text-secondary)] font-medium transition min-h-[44px]"><i class="ri-chat-1-line mr-2 align-middle" aria-hidden="true"></i> Reseñas</a>
+          <a href="#portfolio" class="flex items-center px-6 py-4 border-l-4 border-transparent hover:bg-[var(--bg-inset)] text-[var(--text-secondary)] font-medium transition min-h-[44px]"><i class="ri-gallery-line mr-2 align-middle" aria-hidden="true"></i> Portafolio</a>
+          <a href="/dashboard-prestador/soporte" class="w-full text-left flex items-center px-6 py-4 border-l-4 border-transparent hover:bg-[var(--color-error-bg)] text-[var(--color-error-text)] font-medium transition border-t border-[var(--border-light)] mt-2 min-h-[44px]">
+            <i class="ri-customer-service-2-line mr-2 align-middle" aria-hidden="true"></i> Soporte / Ayuda
           </a>
         </nav>
       </aside>
 
       <!-- Main Panel -->
       <div class="md:col-span-3 space-y-6">
-        <div class="flex justify-end gap-2">
+        <div class="flex flex-col sm:flex-row sm:justify-end gap-2">
           {myTrades.length > 0 && (
             <>
-              <button id="btn-preview-profile" data-slug={myTrades[0].slug} class="bg-white border border-gray-200 text-gray-600 px-4 py-2 rounded-xl text-sm font-bold hover:text-orange-500 hover:border-orange-500 transition flex items-center gap-2 shadow-sm">
-                <i class="ri-eye-line"></i> Previsualizar Perfil
+              <button type="button" id="btn-preview-profile" data-slug={myTrades[0].slug} class="bg-[var(--bg-card)] border border-[var(--border-default)] text-[var(--text-secondary)] px-4 py-2 rounded-xl text-sm font-bold hover:text-[var(--orange-500)] hover:border-[var(--orange-500)] transition flex items-center justify-center gap-2 shadow-[var(--shadow-card)] min-h-[44px]">
+                <i class="ri-eye-line" aria-hidden="true"></i> Previsualizar Perfil
               </button>
-              <a href={`/p/${myTrades[0].slug}`} class="bg-white border border-gray-200 text-gray-600 px-4 py-2 rounded-xl text-sm font-bold hover:text-orange-500 hover:border-orange-500 transition flex items-center gap-2 shadow-sm">
-                <i class="ri-external-link-line"></i> Ver Público
+              <a href={`/p/${myTrades[0].slug}`} class="bg-[var(--bg-card)] border border-[var(--border-default)] text-[var(--text-secondary)] px-4 py-2 rounded-xl text-sm font-bold hover:text-[var(--orange-500)] hover:border-[var(--orange-500)] transition flex items-center justify-center gap-2 shadow-[var(--shadow-card)] min-h-[44px]">
+                <i class="ri-external-link-line" aria-hidden="true"></i> Ver Público
               </a>
             </>
           )}
         </div>
 
         <!-- Preview Modal -->
-        <div id="preview-modal" class="fixed inset-0 z-50 hidden bg-black/50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
-          <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-xl flex flex-col">
-            <div class="flex justify-between items-center p-4 border-b border-gray-100 shrink-0">
-              <h3 class="font-bold text-gray-800">Vista previa del perfil público</h3>
-              <button id="close-preview" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition text-gray-500">
-                <i class="ri-close-line text-xl"></i>
+        <div id="preview-modal" class="preview-modal fixed inset-0 z-50 bg-black/50 items-center justify-center p-4 modal-backdrop" data-modal-backdrop role="dialog" aria-modal="true" aria-labelledby="preview-modal-title" aria-hidden="true">
+          <div class="bg-[var(--bg-card)] rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-[var(--shadow-card-lifted)] flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b border-[var(--border-light)] shrink-0">
+              <h3 id="preview-modal-title" class="font-bold text-[var(--text-primary)]">Vista previa del perfil público</h3>
+              <button type="button" id="close-preview" class="w-11 h-11 flex items-center justify-center rounded-full hover:bg-[var(--bg-inset)] transition text-[var(--text-muted)]" aria-label="Cerrar vista previa">
+                <i class="ri-close-line text-xl" aria-hidden="true"></i>
               </button>
             </div>
-            <iframe id="preview-frame" class="flex-1 w-full border-0" style="height: 70vh;" sandbox="allow-same-origin"></iframe>
+            <iframe id="preview-frame" title="Vista previa del perfil público" class="flex-1 w-full border-0" style="height: min(90vh, 800px);" sandbox="allow-same-origin"></iframe>
           </div>
         </div>
 
         <!-- Quick Stats -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
-            <span class="text-3xl font-extrabold text-gray-800">{visitas30d}</span>
-            <span class="text-xs text-gray-400 font-bold uppercase mt-1">Visitas Perfil</span>
+          <div class="bg-[var(--bg-card)] p-4 rounded-2xl shadow-[var(--shadow-card)] border border-[var(--border-default)] flex flex-col items-center justify-center text-center">
+            <span class="text-3xl font-extrabold text-[var(--text-primary)]">{visitas30d}</span>
+            <span class="text-xs text-[var(--text-muted)] font-bold uppercase mt-1">Visitas Perfil</span>
           </div>
-          <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
-            <span class="text-3xl font-extrabold text-orange-500">{contactos30d}</span>
-            <span class="text-xs text-gray-400 font-bold uppercase mt-1">Contactos</span>
+          <div class="bg-[var(--bg-card)] p-4 rounded-2xl shadow-[var(--shadow-card)] border border-[var(--border-default)] flex flex-col items-center justify-center text-center">
+            <span class="text-3xl font-extrabold text-[var(--orange-500)]">{contactos30d}</span>
+            <span class="text-xs text-[var(--text-muted)] font-bold uppercase mt-1">Contactos</span>
           </div>
-          <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
-            <span class="text-3xl font-extrabold text-yellow-400 flex items-center gap-1">{ratingGlobal.toFixed(1)} <i class="ri-star-fill text-xl"></i></span>
-            <span class="text-xs text-gray-400 font-bold uppercase mt-1">Valoración</span>
+          <div class="bg-[var(--bg-card)] p-4 rounded-2xl shadow-[var(--shadow-card)] border border-[var(--border-default)] flex flex-col items-center justify-center text-center">
+            <span class="text-3xl font-extrabold text-[var(--amber-400)] flex items-center gap-1">{ratingGlobal.toFixed(1)} <i class="ri-star-fill text-xl" aria-hidden="true"></i></span>
+            <span class="text-xs text-[var(--text-muted)] font-bold uppercase mt-1">Valoración</span>
           </div>
-          <div class="bg-white p-4 rounded-2xl border border-gray-100 text-center shadow-sm flex flex-col items-center justify-center">
-            <span class="text-3xl font-extrabold text-gray-800">{totalReviews}</span>
-            <span class="text-xs text-gray-400 font-bold uppercase mt-1">Reseñas</span>
-            <span class="text-xs text-green-500 font-bold mt-1">+{Math.floor(totalReviews/3)} este mes</span>
+          <div class="bg-[var(--bg-card)] p-4 rounded-2xl border border-[var(--border-default)] text-center shadow-[var(--shadow-card)] flex flex-col items-center justify-center">
+            <span class="text-3xl font-extrabold text-[var(--text-primary)]">{totalReviews}</span>
+            <span class="text-xs text-[var(--text-muted)] font-bold uppercase mt-1">Reseñas</span>
+            <span class="text-xs text-[var(--green-500)] font-bold mt-1">+{Math.floor(totalReviews/3)} este mes</span>
           </div>
         </div>
 
         {perfilActualizado ? (
-        <div class="bg-green-50 border-2 border-green-200 rounded-2xl p-4 flex items-start gap-3">
-          <i class="ri-check-line text-green-700 text-2xl flex-shrink-0 mt-0.5"></i>
+        <div role="status" class="bg-[var(--color-success-light)] border-2 border-[var(--color-success-border)] rounded-2xl p-4 flex items-start gap-3">
+          <i class="ri-check-line text-[var(--green-700)] text-2xl flex-shrink-0 mt-0.5" aria-hidden="true"></i>
           <div class="flex-1">
-            <h4 class="font-bold text-green-900 text-sm">Perfil actualizado</h4>
-            <p class="text-green-800 text-xs mt-1">Tus cambios se guardaron correctamente.</p>
+            <h4 class="font-bold text-[var(--green-800)] text-sm">Perfil actualizado</h4>
+            <p class="text-[var(--green-700)] text-xs mt-1">Tus cambios se guardaron correctamente.</p>
           </div>
         </div>
         ) : null}
 
         <!-- Banner Verificación -->
         {showVerificationBanner ? (
-        <div class="bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-4 flex items-start gap-3">
-          <i class="ri-time-line text-yellow-700 text-2xl flex-shrink-0 mt-0.5"></i>
+        <div role="alert" class="bg-[var(--amber-50)] border-2 border-[var(--amber-200)] rounded-2xl p-4 flex flex-col sm:flex-row items-start gap-3">
+          <i class="ri-time-line text-[var(--amber-700)] text-2xl flex-shrink-0 mt-0.5" aria-hidden="true"></i>
           <div class="flex-1">
-            <h4 class="font-bold text-yellow-900 text-sm">Verifica tu oficio para inspirar confianza</h4>
-            <p class="text-yellow-800 text-xs mt-1">Los vecinos confían más en perfiles verificados. Sube tu RUT y obtén el sello de verificado.</p>
+            <h4 class="font-bold text-[var(--amber-700)] text-sm">Verifica tu oficio para inspirar confianza</h4>
+            <p class="text-[var(--amber-600)] text-xs mt-1">Los vecinos confían más en perfiles verificados. Sube tu RUT y obtén el sello de verificado.</p>
           </div>
-          <a href="/verificar-oficio" class="text-yellow-700 hover:text-yellow-900 text-xs font-bold underline flex-shrink-0">Verificar ahora</a>
+          <a href="/verificar-oficio" class="text-[var(--amber-700)] hover:text-[var(--amber-600)] text-xs font-bold underline flex-shrink-0">Verificar ahora</a>
         </div>
         ) : null}
 
         <!-- Edit Profile Section -->
-        <section id="editar-perfil" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2"><i class="ri-user-edit-line text-orange-500"></i> Editar Perfil</h3>
+        <section id="editar-perfil" class="bg-[var(--bg-card)] rounded-2xl shadow-[var(--shadow-card)] border border-[var(--border-default)] p-6">
+          <h3 class="font-bold text-[var(--text-primary)] text-base mb-4 flex items-center gap-2"><i class="ri-user-edit-line text-[var(--orange-500)]" aria-hidden="true"></i> Editar Perfil</h3>
 
           <!-- Avatar upload -->
-          <form class="mb-6 p-4 bg-gray-50 rounded-2xl" action="/api/v1/providers/me/avatar" method="POST" enctype="multipart/form-data" id="form-avatar">
-            <div class="flex items-center gap-4">
-              <div class="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 text-2xl font-bold flex-shrink-0 overflow-hidden" id="avatar-preview">
+          <form class="mb-6 p-4 bg-[var(--bg-warm)] rounded-2xl" action="/api/v1/providers/me/avatar" method="POST" enctype="multipart/form-data" id="form-avatar">
+            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div class="w-16 h-16 rounded-full bg-[var(--orange-100)] flex items-center justify-center text-[var(--orange-500)] text-2xl font-bold flex-shrink-0 overflow-hidden" id="avatar-preview">
                 {user.avatarUrl ? (
-                  <img src={user.avatarUrl} alt="Avatar" class="w-full h-full object-cover" />
+                  <img src={user.avatarUrl} alt="Foto de perfil actual" class="w-full h-full object-cover" />
                 ) : (
                   initials
                 )}
               </div>
               <div class="flex-1">
-                <label class="block text-xs font-bold text-gray-700 mb-1">Foto de perfil</label>
-                <input type="file" name="avatar" accept="image/*" class="block w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100 transition" />
-                <p class="text-[10px] text-gray-400 mt-1">PNG, JPG. Máx 2MB.</p>
+                <label for="avatar-input" class="block text-xs font-bold text-[var(--text-secondary)] mb-1">Foto de perfil</label>
+                <input id="avatar-input" type="file" name="avatar" accept="image/*" class="block w-full text-xs text-[var(--text-muted)] file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[var(--orange-50)] file:text-[var(--orange-700)] hover:file:bg-[var(--orange-100)] transition" />
+                <p class="text-[10px] text-[var(--text-muted)] mt-1">PNG, JPG. Máx 2MB.</p>
               </div>
-              <button type="submit" class="text-xs bg-orange-500 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-orange-600 transition self-end">Subir</button>
+              <button type="submit" class="text-xs bg-[var(--orange-500)] text-[var(--text-inverse)] px-3 py-1.5 rounded-lg font-bold hover:bg-[var(--orange-600)] transition self-stretch sm:self-end min-h-[44px]">Subir</button>
             </div>
           </form>
 
           <form class="space-y-4" action="/api/v1/providers/me" method="POST" id="form-edit-profile">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-bold text-gray-700 mb-1">Nombre Completo</label>
-                <input type="text" name="name" value={user.name} class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition">
+                <label for="field-name" class="block text-xs font-bold text-[var(--text-secondary)] mb-1">Nombre Completo</label>
+                <input id="field-name" type="text" name="name" value={user.name} class="w-full bg-[var(--bg-warm)] border border-[var(--border-default)] rounded-lg px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-focus)] transition">
               </div>
               <div>
-                <label class="block text-xs font-bold text-gray-700 mb-1">Email (no editable)</label>
-                <input type="email" value={user.email} disabled class="w-full bg-gray-100 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-500 cursor-not-allowed">
+                <label for="field-email" class="block text-xs font-bold text-[var(--text-secondary)] mb-1">Email (no editable)</label>
+                <input id="field-email" type="email" value={user.email} disabled class="w-full bg-[var(--bg-inset)] border border-[var(--border-default)] rounded-lg px-3 py-2 text-sm text-[var(--text-muted)] cursor-not-allowed">
               </div>
             </div>
 
             {myTrades.length > 0 && (
               <div>
-                <label class="block text-xs font-bold text-gray-700 mb-1">Biografía / Presentación</label>
-                <textarea name="description" rows="2" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition" placeholder="Cuéntales a los vecinos sobre ti y tu experiencia">{myTrades[0].description ?? ''}</textarea>
+                <label for="field-description" class="block text-xs font-bold text-[var(--text-secondary)] mb-1">Biografía / Presentación</label>
+                <textarea id="field-description" name="description" rows="2" class="w-full bg-[var(--bg-warm)] border border-[var(--border-default)] rounded-lg px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-focus)] transition" placeholder="Cuéntales a los vecinos sobre ti y tu experiencia">{myTrades[0].description ?? ''}</textarea>
               </div>
             )}
 
             {myTrades.length > 0 && (
               <div>
-                <label class="block text-xs font-bold text-gray-700 mb-1">WhatsApp (para contacto)</label>
+                <label for="field-whatsapp" class="block text-xs font-bold text-[var(--text-secondary)] mb-1">WhatsApp (para contacto)</label>
                 <div class="flex">
-                  <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-200 bg-gray-100 text-gray-500 text-xs font-bold">+56 9</span>
-                  <input type="tel" inputmode="numeric" pattern="[0-9]{8}" maxlength="8" name="whatsapp" value={(myTrades[0].whatsapp ?? '').replace(/^569/, '')} class="w-full bg-gray-50 border border-gray-200 rounded-r-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition" placeholder="12345678">
+                  <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-[var(--border-default)] bg-[var(--bg-inset)] text-[var(--text-muted)] text-xs font-bold">+56 9</span>
+                  <input id="field-whatsapp" type="tel" inputmode="numeric" pattern="[0-9]{8}" maxlength="8" name="whatsapp" value={(myTrades[0].whatsapp ?? '').replace(/^569/, '')} class="w-full bg-[var(--bg-warm)] border border-[var(--border-default)] rounded-r-lg px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-focus)] transition" placeholder="12345678">
                 </div>
-                <p class="text-[10px] text-gray-400 mt-1">8 dígitos, sin el 9 inicial. Se almacena completo (569XXXXXXXX).</p>
+                <p class="text-[10px] text-[var(--text-muted)] mt-1">8 dígitos, sin el 9 inicial. Se almacena completo (569XXXXXXXX).</p>
               </div>
             )}
 
             {myTrades.length === 0 && (
-              <div class="text-center py-4 text-sm text-gray-500 bg-gray-50 rounded-xl">
+              <div class="text-center py-4 text-sm text-[var(--text-muted)] bg-[var(--bg-warm)] rounded-xl">
                 Publica tu primer oficio para habilitar la edición de biografía y WhatsApp.
               </div>
             )}
 
-            <div class="flex justify-end pt-4">
-              <button type="button" class="px-4 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-xs font-bold hover:bg-gray-200 transition mr-2">Cancelar</button>
-              <button type="submit" class="px-4 py-1.5 bg-orange-500 text-white rounded-lg text-xs font-bold hover:bg-orange-600 transition shadow-sm">Guardar cambios</button>
+            <div class="flex flex-col sm:flex-row sm:justify-end gap-2 pt-4">
+              <button type="button" class="px-4 py-1.5 bg-[var(--bg-inset)] text-[var(--text-secondary)] rounded-lg text-xs font-bold hover:bg-[var(--border-default)] transition min-h-[44px]">Cancelar</button>
+              <button type="submit" class="px-4 py-1.5 bg-[var(--orange-500)] text-[var(--text-inverse)] rounded-lg text-xs font-bold hover:bg-[var(--orange-600)] transition shadow-[var(--shadow-card)] min-h-[44px]">Guardar cambios</button>
             </div>
           </form>
         </section>
 
         <!-- Mis Servicios -->
-        <section id="mis-servicios" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <div class="flex justify-between items-center mb-4">
-            <h3 class="font-bold text-gray-800 text-base flex items-center gap-2"><i class="ri-list-settings-line text-orange-500"></i> Mis Servicios Activos</h3>
-            <a href="/crear-oficio" class="text-xs bg-orange-500 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-orange-600 transition">+ Nuevo servicio</a>
+        <section id="mis-servicios" class="bg-[var(--bg-card)] rounded-2xl shadow-[var(--shadow-card)] border border-[var(--border-default)] p-6">
+          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
+            <h3 class="font-bold text-[var(--text-primary)] text-base flex items-center gap-2"><i class="ri-list-settings-line text-[var(--orange-500)]" aria-hidden="true"></i> Mis Servicios Activos</h3>
+            <a href="/crear-oficio" class="text-xs bg-[var(--orange-500)] text-[var(--text-inverse)] px-3 py-1.5 rounded-lg font-bold hover:bg-[var(--orange-600)] transition inline-flex items-center justify-center min-h-[44px] whitespace-nowrap">+ Nuevo servicio</a>
           </div>
 
           {myTrades.length === 0 ? (
-            <div class="text-center py-8 text-gray-500">
-              <i class="ri-briefcase-line text-4xl text-gray-300 mb-2 block"></i>
+            <div class="text-center py-8 text-[var(--text-muted)]">
+              <i class="ri-briefcase-line text-4xl text-[var(--text-muted)] mb-2 block" aria-hidden="true"></i>
               <p class="mb-4">Aún no tienes oficios publicados.</p>
-              <a href="/crear-oficio" class="inline-block bg-orange-500 text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-orange-600 transition">Publicar mi primer oficio</a>
+              <a href="/crear-oficio" class="inline-flex items-center justify-center bg-[var(--orange-500)] text-[var(--text-inverse)] px-4 py-2 rounded-xl text-sm font-bold hover:bg-[var(--orange-600)] transition min-h-[44px]">Publicar mi primer oficio</a>
             </div>
           ) : (
             <div class="space-y-3">
               {myTrades.map((t) => (
-                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-white hover:shadow-sm transition border border-transparent hover:border-gray-100">
-                  <div class="flex-1">
-                    <div class="flex items-center gap-2">
-                      <span class="text-xs uppercase tracking-wide font-bold text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">{t.symbol}</span>
-                      <h4 class="font-bold text-gray-800 text-sm">{t.name}</h4>
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 p-3 bg-[var(--bg-warm)] rounded-xl hover:bg-[var(--bg-card)] hover:shadow-[var(--shadow-card)] transition border border-transparent hover:border-[var(--border-light)]">
+                  <div class="flex-1 min-w-0">
+                    <div class="flex flex-wrap items-center gap-2">
+                      <span class="text-xs uppercase tracking-wide font-bold text-[var(--orange-600)] bg-[var(--orange-100)] px-2 py-0.5 rounded-full whitespace-nowrap">{t.symbol}</span>
+                      <h4 class="font-bold text-[var(--text-primary)] text-sm">{t.name}</h4>
                       {t.verified && (
-                        <span class="text-xs font-bold text-blue-500"><i class="ri-shield-check-fill"></i> Verificado</span>
+                        <span class="text-xs font-bold text-[var(--blue-500)] whitespace-nowrap"><i class="ri-shield-check-fill" aria-hidden="true"></i> Verificado</span>
                       )}
                     </div>
-                    <p class="text-xs text-gray-500 mt-1">${(t.basePriceClp ?? 0).toLocaleString('es-CL')} CLP base</p>
+                    <p class="text-xs text-[var(--text-muted)] mt-1">${(t.basePriceClp ?? 0).toLocaleString('es-CL')} CLP base</p>
                     {Number(t.reviewCount) > 0 && (
-                      <p class="text-xs text-gray-400 mt-1">
-                        <i class="ri-star-fill text-yellow-400"></i> {(Number(t.ratingAvg) || 0).toFixed(1)} ({t.reviewCount})
+                      <p class="text-xs text-[var(--text-muted)] mt-1">
+                        <i class="ri-star-fill text-[var(--amber-400)]" aria-hidden="true"></i> {(Number(t.ratingAvg) || 0).toFixed(1)} ({t.reviewCount})
                       </p>
                     )}
                   </div>
-                  <div class="flex items-center gap-2">
+                  <div class="flex flex-wrap items-center gap-2">
                     {t.status === 'active' && !t.verified ? (
-                      <span class="text-xs px-2 py-1 rounded-full font-bold bg-yellow-100 text-yellow-700">Pendiente</span>
+                      <span class="text-xs px-2 py-1 rounded-full font-bold bg-[var(--amber-100)] text-[var(--amber-700)] whitespace-nowrap">Pendiente</span>
                     ) : (
-                      <span class={`text-xs px-2 py-1 rounded-full font-bold ${t.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
+                      <span class={`text-xs px-2 py-1 rounded-full font-bold whitespace-nowrap ${t.status === 'active' ? 'bg-[var(--green-100)] text-[var(--green-700)]' : 'bg-[var(--orange-100)] text-[var(--orange-700)]'}`}>
                         {t.status === 'active' ? 'Activo' : 'Pausado'}
                       </span>
                     )}
-                    <span class={`text-xs px-2 py-1 rounded-full font-bold ${t.availableNow ? 'bg-green-100 text-green-700 border border-green-200' : 'bg-gray-100 text-gray-400'}`}>
-                      <i class="ri-flashlight-fill"></i> {t.availableNow ? 'Disponible' : 'No disponible'}
+                    <span class={`text-xs px-2 py-1 rounded-full font-bold whitespace-nowrap ${t.availableNow ? 'bg-[var(--green-100)] text-[var(--green-700)] border border-[var(--green-200)]' : 'bg-[var(--bg-inset)] text-[var(--text-muted)]'}`}>
+                      <i class="ri-flashlight-fill" aria-hidden="true"></i> {t.availableNow ? 'Disponible' : 'No disponible'}
                     </span>
-                    <a href={`/p/${t.slug}`} class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg font-bold transition">Ver</a>
+                    <a href={`/p/${t.slug}`} class="text-xs bg-[var(--bg-inset)] hover:bg-[var(--border-default)] text-[var(--text-secondary)] px-3 py-1.5 rounded-lg font-bold transition inline-flex items-center justify-center min-h-[44px]">Ver</a>
                     <button
+                      type="button"
                       data-toggle-id={t.id}
                       data-toggle-status={t.status}
-                      class="text-xs bg-white border border-gray-200 hover:border-orange-500 text-gray-700 px-3 py-1.5 rounded-lg font-bold transition js-toggle-status"
+                      class="text-xs bg-[var(--bg-card)] border border-[var(--border-default)] hover:border-[var(--orange-500)] text-[var(--text-secondary)] px-3 py-1.5 rounded-lg font-bold transition js-toggle-status inline-flex items-center justify-center min-h-[44px]"
                     >
                       {t.status === 'active' ? 'Pausar' : 'Activar'}
                     </button>
                     <button
+                      type="button"
                       data-toggle-availability={t.id}
                       data-avail-current={t.availableNow ? 'true' : 'false'}
-                      class="text-xs bg-white border hover:border-green-500 px-3 py-1.5 rounded-lg font-bold transition"
-                      class:list={[t.availableNow ? 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100' : 'bg-gray-100 text-gray-500 border-gray-200']}
+                      aria-label={t.availableNow ? `Marcar ${t.name} como no disponible` : `Marcar ${t.name} como disponible`}
+                      class:list={['text-xs border hover:border-[var(--green-500)] px-3 py-1.5 rounded-lg font-bold transition inline-flex items-center justify-center min-h-[44px] min-w-[44px]', t.availableNow ? 'bg-[var(--green-50)] text-[var(--green-700)] border-[var(--green-200)] hover:bg-[var(--green-100)]' : 'bg-[var(--bg-inset)] text-[var(--text-muted)] border-[var(--border-default)]']}
                     >
-                      <i class="ri-flashlight-fill"></i>
+                      <i class="ri-flashlight-fill" aria-hidden="true"></i>
                     </button>
                   </div>
                 </div>
@@ -365,77 +395,78 @@ const myPortfolio = myTradeIds.length > 0 ? await db
         </section>
 
         <!-- Mi Horario (placeholder MVP) -->
-        <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <div class="flex justify-between items-center mb-4">
-            <h3 class="font-bold text-gray-800 text-base flex items-center gap-2"><i class="ri-time-line text-orange-500"></i> Mi Horario de Atención</h3>
-            <span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">Próximamente</span>
+        <section class="bg-[var(--bg-card)] rounded-2xl shadow-[var(--shadow-card)] border border-[var(--border-default)] p-6">
+          <div class="flex justify-between items-center gap-3 mb-4">
+            <h3 class="font-bold text-[var(--text-primary)] text-base flex items-center gap-2"><i class="ri-time-line text-[var(--orange-500)]" aria-hidden="true"></i> Mi Horario de Atención</h3>
+            <span class="text-xs bg-[var(--bg-inset)] text-[var(--text-muted)] px-2 py-1 rounded whitespace-nowrap">Próximamente</span>
           </div>
           <div class="grid grid-cols-7 gap-2">
             {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((d, i) => (
-              <div class="text-center p-3 bg-gray-50 rounded-xl">
-                <p class="text-xs font-bold text-gray-500 uppercase mb-2">{d}</p>
-                <p class="text-sm font-bold text-gray-400">{i < 5 ? '9-18' : '—'}</p>
+              <div class="text-center p-3 bg-[var(--bg-warm)] rounded-xl">
+                <p class="text-xs font-bold text-[var(--text-muted)] uppercase mb-2">{d}</p>
+                <p class="text-sm font-bold text-[var(--text-muted)]">{i < 5 ? '9-18' : '—'}</p>
               </div>
             ))}
           </div>
-          <p class="text-xs text-gray-500 mt-4 text-center">Configuración detallada de horario disponible en próxima versión (HU-24.2).</p>
+          <p class="text-xs text-[var(--text-muted)] mt-4 text-center">Configuración detallada de horario disponible en próxima versión (HU-24.2).</p>
         </section>
 
         <!-- Reseñas -->
-        <section id="resenas" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2"><i class="ri-chat-1-line text-orange-500"></i> Reseñas Recibidas</h3>
+        <section id="resenas" class="bg-[var(--bg-card)] rounded-2xl shadow-[var(--shadow-card)] border border-[var(--border-default)] p-6">
+          <h3 class="font-bold text-[var(--text-primary)] text-base mb-4 flex items-center gap-2"><i class="ri-chat-1-line text-[var(--orange-500)]" aria-hidden="true"></i> Reseñas Recibidas</h3>
           {totalReviews === 0 ? (
-            <p class="text-sm text-gray-500 text-center py-4">Aún no tienes reseñas.</p>
+            <p class="text-sm text-[var(--text-muted)] text-center py-4">Aún no tienes reseñas.</p>
           ) : (
             <>
-              <div class="flex items-center gap-4 mb-6 p-4 bg-gray-50 rounded-2xl">
+              <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6 p-4 bg-[var(--bg-warm)] rounded-2xl">
                 <div class="text-center">
-                  <span class="block text-3xl font-extrabold text-gray-800">{ratingGlobal.toFixed(1)}</span>
-                  <div class="flex justify-center text-yellow-400 text-sm">{estrellas.map((n) => <i class={n <= Math.round(ratingGlobal) ? 'ri-star-fill' : 'ri-star-line'}></i>)}</div>
-                  <span class="text-xs text-gray-500">{totalReviews} reseña{totalReviews !== 1 ? 's' : ''}</span>
+                  <span class="block text-3xl font-extrabold text-[var(--text-primary)]">{ratingGlobal.toFixed(1)}</span>
+                  <div class="flex justify-center text-[var(--amber-400)] text-sm" role="img" aria-label={`${ratingGlobal.toFixed(1)} de 5 estrellas`}>{estrellas.map((n) => <i class={n <= Math.round(ratingGlobal) ? 'ri-star-fill' : 'ri-star-line'} aria-hidden="true"></i>)}</div>
+                  <span class="text-xs text-[var(--text-muted)]">{totalReviews} reseña{totalReviews !== 1 ? 's' : ''}</span>
                 </div>
                 <div class="flex-1 space-y-1">
                   {ratingBreakdown.map((rb) => (
                     <div class="flex items-center gap-2 text-xs">
-                      <span class="w-8 text-right text-gray-600 font-bold">{rb.rating}★</span>
-                      <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <div class="h-full bg-yellow-400 rounded-full" style={`width: ${totalReviews > 0 ? (rb.count / totalReviews) * 100 : 0}%`}></div>
+                      <span class="w-8 text-right text-[var(--text-secondary)] font-bold">{rb.rating}★</span>
+                      <div class="flex-1 h-2 bg-[var(--stone-200)] rounded-full overflow-hidden">
+                        <div class="h-full bg-[var(--amber-400)] rounded-full" style={`width: ${totalReviews > 0 ? (rb.count / totalReviews) * 100 : 0}%`}></div>
                       </div>
-                      <span class="w-6 text-gray-500">{rb.count}</span>
+                      <span class="w-6 text-[var(--text-muted)]">{rb.count}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div class="flex gap-2 mb-4">
-                <button type="button" class="text-xs px-3 py-1.5 rounded-lg font-bold bg-orange-500 text-white" data-filter-reviews="all">Todas</button>
-                <button type="button" class="text-xs px-3 py-1.5 rounded-lg font-bold bg-gray-100 text-gray-600 hover:bg-gray-200 transition" data-filter-reviews="pending">Sin responder</button>
-                <button type="button" class="text-xs px-3 py-1.5 rounded-lg font-bold bg-gray-100 text-gray-600 hover:bg-gray-200 transition" data-filter-reviews="responded">Respondidas</button>
+              <div class="flex flex-wrap gap-2 mb-4" role="group" aria-label="Filtrar reseñas">
+                <button type="button" aria-pressed="true" class="text-xs px-3 py-1.5 rounded-lg font-bold bg-[var(--orange-500)] text-[var(--text-inverse)] min-h-[44px] inline-flex items-center" data-filter-reviews="all">Todas</button>
+                <button type="button" aria-pressed="false" class="text-xs px-3 py-1.5 rounded-lg font-bold bg-[var(--bg-inset)] text-[var(--text-secondary)] hover:bg-[var(--border-default)] transition min-h-[44px] inline-flex items-center" data-filter-reviews="pending">Sin responder</button>
+                <button type="button" aria-pressed="false" class="text-xs px-3 py-1.5 rounded-lg font-bold bg-[var(--bg-inset)] text-[var(--text-secondary)] hover:bg-[var(--border-default)] transition min-h-[44px] inline-flex items-center" data-filter-reviews="responded">Respondidas</button>
               </div>
 
               <div class="space-y-3" id="reviews-list">
                 {myReviews.map((r) => (
-                  <div class="border border-gray-100 rounded-2xl p-4" data-review-id={r.id} data-review-status={r.response ? 'responded' : 'pending'}>
+                  <div class="border border-[var(--border-light)] rounded-2xl p-4" data-review-id={r.id} data-review-status={r.response ? 'responded' : 'pending'}>
                     <div class="flex items-center gap-2 mb-2">
-                      <div class="flex text-yellow-400 text-sm">
-                        {[1,2,3,4,5].map((n) => <i class={n <= r.rating ? 'ri-star-fill' : 'ri-star-line'}></i>)}
+                      <div class="flex text-[var(--amber-400)] text-sm" role="img" aria-label={`${r.rating} de 5 estrellas`}>
+                        {[1,2,3,4,5].map((n) => <i class={n <= r.rating ? 'ri-star-fill' : 'ri-star-line'} aria-hidden="true"></i>)}
                       </div>
-                      <span class="font-bold text-gray-800 text-sm">{r.reviewerName}</span>
-                      <span class="text-[10px] text-gray-400 ml-auto">{r.createdAt?.toLocaleDateString('es-CL') ?? ''}</span>
+                      <span class="font-bold text-[var(--text-primary)] text-sm">{r.reviewerName}</span>
+                      <span class="text-[10px] text-[var(--text-muted)] ml-auto">{r.createdAt?.toLocaleDateString('es-CL') ?? ''}</span>
                     </div>
-                    <p class="text-xs text-orange-600 font-bold mb-1">En {r.tradeName} ({r.tradeSymbol})</p>
-                    <p class="text-gray-600 text-sm">{r.body}</p>
+                    <p class="text-xs text-[var(--orange-600)] font-bold mb-1">En {r.tradeName} ({r.tradeSymbol})</p>
+                    <p class="text-[var(--text-secondary)] text-sm">{r.body}</p>
 
                     {r.response ? (
-                      <div class="mt-3 ml-4 pl-3 border-l-2 border-green-300 bg-green-50/50 rounded-r-lg p-3">
-                        <p class="text-xs font-bold text-green-700 mb-1"><i class="ri-reply-line"></i> Tu respuesta</p>
-                        <p class="text-gray-700 text-sm">{r.response}</p>
-                        {r.respondedAt && <p class="text-[10px] text-gray-400 mt-1">{r.respondedAt?.toLocaleDateString('es-CL') ?? ''}</p>}
+                      <div class="mt-3 ml-4 pl-3 border-l-2 border-[var(--green-300)] bg-[var(--green-50)] rounded-r-lg p-3">
+                        <p class="text-xs font-bold text-[var(--green-700)] mb-1"><i class="ri-reply-line" aria-hidden="true"></i> Tu respuesta</p>
+                        <p class="text-[var(--text-secondary)] text-sm">{r.response}</p>
+                        {r.respondedAt && <p class="text-[10px] text-[var(--text-muted)] mt-1">{r.respondedAt?.toLocaleDateString('es-CL') ?? ''}</p>}
                       </div>
                     ) : (
                       <form class="mt-3 ml-4 js-response-form" data-review-id={r.id}>
-                        <textarea name="response" rows="2" placeholder="Responde a esta reseña..." class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition" required></textarea>
-                        <button type="submit" class="mt-1 text-xs bg-orange-500 text-white px-3 py-1 rounded-lg font-bold hover:bg-orange-600 transition">Responder</button>
+                        <label for={`response-${r.id}`} class="sr-only">Responder a la reseña de {r.reviewerName}</label>
+                        <textarea id={`response-${r.id}`} name="response" rows="2" placeholder="Responde a esta reseña..." aria-label={`Responder a la reseña de ${r.reviewerName}`} class="w-full bg-[var(--bg-warm)] border border-[var(--border-default)] rounded-lg px-3 py-2 text-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-focus)] transition" required></textarea>
+                        <button type="submit" aria-label={`Enviar respuesta a la reseña de ${r.reviewerName}`} class="mt-1 text-xs bg-[var(--orange-500)] text-[var(--text-inverse)] px-3 py-1 rounded-lg font-bold hover:bg-[var(--orange-600)] transition min-h-[44px] inline-flex items-center">Responder</button>
                       </form>
                     )}
                   </div>
@@ -446,39 +477,49 @@ const myPortfolio = myTradeIds.length > 0 ? await db
         </section>
 
         <!-- Portfolio Section -->
-        <section id="portfolio" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <h3 class="font-extrabold text-xl text-gray-800 mb-4 flex items-center gap-2">
-            <i class="ri-gallery-line text-orange-500"></i> Portafolio
+        <section id="portfolio" class="bg-[var(--bg-card)] rounded-2xl shadow-[var(--shadow-card)] border border-[var(--border-default)] p-6">
+          <h3 class="font-extrabold text-xl text-[var(--text-primary)] mb-4 flex items-center gap-2">
+            <i class="ri-gallery-line text-[var(--orange-500)]" aria-hidden="true"></i> Portafolio
           </h3>
           {myPortfolio.length > 0 ? (
             <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
               {myPortfolio.map((img) => (
-                <a href={`/p/${img.tradeSlug}`} class="group relative rounded-xl overflow-hidden bg-gray-100 aspect-square">
+                <a href={`/p/${img.tradeSlug}`} class="group relative rounded-xl overflow-hidden bg-[var(--bg-inset)] aspect-square focus-visible:ring-2 focus-visible:ring-[var(--border-focus)] focus-visible:outline-none">
                   <img src={img.url} alt={img.caption || img.tradeName} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                   {img.caption && <span class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-2 text-xs text-white">{img.caption}</span>}
                 </a>
               ))}
             </div>
           ) : (
-            <div class="text-center py-8 text-gray-500">
-              <i class="ri-image-2-line text-4xl text-gray-300 mb-2 block"></i>
+            <div class="text-center py-8 text-[var(--text-muted)]">
+              <i class="ri-image-2-line text-4xl text-[var(--text-muted)] mb-2 block" aria-hidden="true"></i>
               <p class="text-sm font-medium">Aún no tienes fotos en tu portafolio.</p>
-              <p class="text-xs text-gray-400 mt-1">Las fotos que subas aparecerán en tu perfil público.</p>
+              <p class="text-xs text-[var(--text-muted)] mt-1">Las fotos que subas aparecerán en tu perfil público.</p>
             </div>
           )}
         </section>
 
         <!-- Tips Banner -->
-        <div class="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 flex items-start gap-3">
-          <i class="ri-lightbulb-flash-line text-yellow-700 text-2xl flex-shrink-0"></i>
+        <div class="bg-[var(--amber-50)] border border-[var(--amber-200)] rounded-2xl p-4 flex items-start gap-3">
+          <i class="ri-lightbulb-flash-line text-[var(--amber-700)] text-2xl flex-shrink-0" aria-hidden="true"></i>
           <div>
-            <h4 class="font-bold text-yellow-900 text-sm">Consejo Pro</h4>
-            <p class="text-yellow-800 text-xs mt-1">Sube fotos de tus trabajos realizados para aumentar tu visibilidad. Los vecinos contratan 3x más a quienes muestran su portafolio.</p>
+            <h4 class="font-bold text-[var(--amber-700)] text-sm">Consejo Pro</h4>
+            <p class="text-[var(--amber-600)] text-xs mt-1">Sube fotos de tus trabajos realizados para aumentar tu visibilidad. Los vecinos contratan 3x más a quienes muestran su portafolio.</p>
           </div>
         </div>
       </div>
     </div>
   </main>
+
+  <style>
+    /* El modal de preview se controla con la clase .is-open (helper initModal). */
+    .preview-modal {
+      display: none;
+    }
+    .preview-modal.is-open {
+      display: flex;
+    }
+  </style>
 
   <script>
     import { initProviderDashboard } from '../lib/client/dashboard/provider';
@@ -487,5 +528,42 @@ const myPortfolio = myTradeIds.length > 0 ? await db
     initProviderPreview();
     initReviewFilters();
     initReviewResponseForms();
+
+    // Drawer del sidebar en móvil (<768px)
+    const openSidebarBtn = document.getElementById('btn-open-sidebar');
+    const closeSidebarBtn = document.getElementById('btn-close-sidebar');
+    const sidebar = document.getElementById('provider-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+
+    function openSidebar() {
+      if (!sidebar || !overlay) return;
+      sidebar.classList.remove('max-md:hidden');
+      overlay.classList.remove('hidden');
+      openSidebarBtn?.setAttribute('aria-expanded', 'true');
+      closeSidebarBtn?.focus();
+    }
+
+    function closeSidebar() {
+      if (!sidebar || !overlay) return;
+      sidebar.classList.add('max-md:hidden');
+      overlay.classList.add('hidden');
+      openSidebarBtn?.setAttribute('aria-expanded', 'false');
+      openSidebarBtn?.focus();
+    }
+
+    openSidebarBtn?.addEventListener('click', openSidebar);
+    closeSidebarBtn?.addEventListener('click', closeSidebar);
+    overlay?.addEventListener('click', closeSidebar);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay && !overlay.classList.contains('hidden')) {
+        closeSidebar();
+      }
+    });
+    // Cerrar al navegar a una sección
+    sidebar?.querySelectorAll('a[href^="#"]').forEach((link) => {
+      link.addEventListener('click', () => {
+        if (window.matchMedia('(max-width: 767px)').matches) closeSidebar();
+      });
+    });
   </script>
 </BaseLayout>

@@ -2,11 +2,11 @@
 // Advertisement banner
 ---
 
-<div class="ad-banner">
+<div class="ad-banner" role="complementary" aria-label="Publicidad">
   <span class="ad-badge">PUBLICIDAD</span>
   <div class="ad-content">
     <div class="ad-icon">
-      <i class="ri-store-3-line"></i>
+      <i class="ri-store-3-line" aria-hidden="true"></i>
     </div>
     <div class="ad-text">
       <h3 class="ad-title">¿Tienes una ferretería o negocio local?</h3>
@@ -14,12 +14,17 @@
     </div>
   </div>
   <div class="ad-arrow">
-    <i class="ri-arrow-right-line"></i>
+    <i class="ri-arrow-right-line" aria-hidden="true"></i>
   </div>
-  <div class="ad-decoration"></div>
+  <div class="ad-decoration" aria-hidden="true"></div>
 </div>
 
 <style>
+  /*
+   * DECISIÓN DE DISEÑO: el gradiente cálido (stone-50 → cream-200) se
+   * conserva a propósito. El mockup propone un azul, pero se mantiene la
+   * paleta cálida del sistema para coherencia visual con el resto de la home.
+   */
   .ad-banner {
     background: linear-gradient(135deg, var(--stone-50) 0%, var(--cream-200) 100%);
     border-radius: var(--radius-xl);
@@ -52,8 +57,8 @@
     position: absolute;
     top: 0;
     right: 0;
-    background: var(--slate-200);
-    color: var(--slate-500);
+    background: var(--stone-200);
+    color: var(--stone-500);
     font-size: 0.625rem;
     font-weight: 700;
     padding: 0.25rem 0.5rem;
@@ -72,7 +77,7 @@
     width: 3rem;
     height: 3rem;
     border-radius: var(--radius-lg);
-    background: white;
+    background: var(--bg-card);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -82,7 +87,7 @@
 
   .ad-icon i {
     font-size: 1.5rem;
-    color: var(--slate-400);
+    color: var(--stone-400);
   }
 
   .ad-title {
@@ -117,7 +122,7 @@
 
   .ad-arrow i {
     font-size: 1.5rem;
-    color: var(--slate-300);
+    color: var(--stone-300);
     transition: all 200ms ease;
   }
 
@@ -133,7 +138,7 @@
     width: 6rem;
     height: 6rem;
     border-radius: 50%;
-    background: var(--slate-200);
+    background: var(--stone-200);
     opacity: 0.3;
   }
 </style>

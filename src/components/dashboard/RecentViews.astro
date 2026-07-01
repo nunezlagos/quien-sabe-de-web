@@ -16,7 +16,7 @@ const { views } = Astro.props;
 
 <div class="widget-card">
   <h3 class="widget-title">
-    <i class="ri-history-fill" style="color: var(--slate-400)"></i> Vistos recientemente
+    <i class="ri-history-fill" style="color: var(--slate-400)" aria-hidden="true"></i> Vistos recientemente
   </h3>
 
   {views.length > 0 ? (
@@ -36,7 +36,7 @@ const { views } = Astro.props;
   ) : (
     <div class="empty-state">
       <div class="empty-icon">
-        <i class="ri-history-line"></i>
+        <i class="ri-history-line" aria-hidden="true"></i>
       </div>
       <p class="empty-text">Sin actividad reciente.</p>
       <p class="empty-subtext">Tus búsquedas aparecerán aquí.</p>

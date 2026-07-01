@@ -4,7 +4,7 @@ const hasMultipleRoles = userRoles.length > 1;
 ---
 
 {hasMultipleRoles && (
-  <div class="role-switcher">
+  <nav class="role-switcher" aria-label="Cambiar de rol">
     {userRoles.map((role: string) => {
       const label = role === 'provider' ? 'Prestador' : role === 'admin' ? 'Admin' : 'Vecino';
       const targetPath = role === 'provider'
@@ -16,6 +16,8 @@ const hasMultipleRoles = userRoles.length > 1;
       return (
         <a
           href={targetPath}
+          aria-current={isActive ? 'page' : undefined}
+          aria-label={`Ver panel de ${label}`}
           class:list={[
             'role-btn',
             isActive ? 'role-btn-active' : 'role-btn-inactive',
@@ -25,7 +27,7 @@ const hasMultipleRoles = userRoles.length > 1;
         </a>
       );
     })}
-  </div>
+  </nav>
 )}
 
 <style>

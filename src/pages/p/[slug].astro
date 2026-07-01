@@ -59,56 +59,56 @@ const otherTrades = provider
 <BaseLayout title={`${trade.name} — QuiénSabe`} description={trade.description?.slice(0, 200) ?? `Servicio de ${trade.symbol ?? 'oficio'} en tu barrio`}>
   <main class="container mx-auto px-4 py-8 max-w-4xl" data-view-trade={trade.id}>
     <!-- Breadcrumb -->
-    <nav class="text-sm text-gray-500 mb-6">
-      <a href="/" class="hover:text-orange-500">Inicio</a>
-      <span class="mx-2">/</span>
-      <a href={`/?q=${trade.symbol}`} class="hover:text-orange-500">{trade.symbol}</a>
-      <span class="mx-2">/</span>
-      <span class="text-gray-700">{trade.name}</span>
+    <nav class="text-sm mb-6" style="color: var(--text-muted)" aria-label="Migas de pan">
+      <a href="/" class="hover:text-[var(--color-primary)]">Inicio</a>
+      <span class="mx-2" aria-hidden="true">/</span>
+      <a href={`/?q=${trade.symbol}`} class="hover:text-[var(--color-primary)]">{trade.symbol}</a>
+      <span class="mx-2" aria-hidden="true">/</span>
+      <span style="color: var(--text-secondary)" aria-current="page">{trade.name}</span>
     </nav>
 
     <!-- Header card -->
-    <article class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-6">
-      <header class="bg-gradient-to-br from-orange-50 to-amber-50 p-8">
-        <div class="flex items-start gap-6">
-          <div class="w-24 h-24 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 font-extrabold text-3xl shadow-md flex-shrink-0">
+    <article class="bg-[var(--bg-card)] rounded-3xl shadow-[var(--shadow-card)] border border-[var(--border-default)] overflow-hidden mb-6">
+      <header class="bg-gradient-to-br from-[var(--amber-50)] to-[var(--cream-100)] p-6 sm:p-8">
+        <div class="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+          <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[var(--orange-100)] flex items-center justify-center text-[var(--color-primary)] font-extrabold text-2xl sm:text-3xl shadow-[var(--shadow-card)] flex-shrink-0" aria-hidden="true">
             {(provider?.name ?? '?').slice(0, 2).toUpperCase()}
           </div>
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 mb-2 flex-wrap">
-              <span class="text-xs uppercase tracking-wide font-bold text-orange-600 bg-orange-100 px-2 py-1 rounded-full">
+              <span class="text-xs uppercase tracking-wide font-bold text-[var(--color-primary)] bg-[var(--orange-100)] px-2 py-1 rounded-full">
                 {trade.symbol}
               </span>
               {trade.verified ? (
-                <span class="text-xs font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded-full border border-blue-100 flex items-center gap-1">
-                  <i class="ri-shield-check-fill"></i> Verificado
+                <span class="text-xs font-bold text-[var(--blue-700)] bg-[var(--blue-50)] px-2 py-1 rounded-full border border-[var(--blue-200)] flex items-center gap-1">
+                  <i class="ri-shield-check-fill" aria-hidden="true"></i> Verificado
                 </span>
               ) : null}
               {scheduleAvailable ? (
-                <span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full border border-green-200 flex items-center gap-1">
-                  <i class="ri-flashlight-fill"></i> Disponible ahora
+                <span class="text-xs font-bold text-[var(--green-700)] bg-[var(--green-50)] px-2 py-1 rounded-full border border-[var(--green-200)] flex items-center gap-1">
+                  <i class="ri-flashlight-fill" aria-hidden="true"></i> Disponible ahora
                 </span>
               ) : null}
             </div>
-            <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-2">{trade.name}</h1>
-            <p class="text-gray-600 font-medium">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-[var(--text-primary)] mb-2">{trade.name}</h1>
+            <p class="text-[var(--text-secondary)] font-medium">
               {provider?.name ?? 'Vecino anónimo'} · {trade.communeId ? `Comuna ID ${trade.communeId}` : 'Región Metropolitana'}
             </p>
 
             {/* Rating */}
             {rating.count > 0 ? (
               <div class="flex items-center gap-2 mt-3">
-                <div class="flex">
+                <div class="flex" role="img" aria-label={`${rating.avg.toFixed(1)} de 5 estrellas`}>
                   {estrellas.map((n) => (
-                    <i class={`text-xl ${n <= Math.round(rating.avg) ? 'ri-star-fill text-yellow-400' : 'ri-star-line text-gray-300'}`}></i>
+                    <i class={`text-xl ${n <= Math.round(rating.avg) ? 'ri-star-fill text-[var(--amber-500)]' : 'ri-star-line text-[var(--stone-300)]'}`} aria-hidden="true"></i>
                   ))}
                 </div>
-                <span class="font-bold text-gray-800">{rating.avg.toFixed(1)}</span>
-                <span class="text-gray-500 text-sm">({rating.count} reseña{rating.count !== 1 ? 's' : ''})</span>
+                <span class="font-bold text-[var(--text-primary)]">{rating.avg.toFixed(1)}</span>
+                <span class="text-[var(--text-muted)] text-sm">({rating.count} reseña{rating.count !== 1 ? 's' : ''})</span>
               </div>
             ) : (
-              <p class="text-sm text-gray-500 mt-3">
-                <i class="ri-star-line"></i> Aún sin reseñas
+              <p class="text-sm text-[var(--text-muted)] mt-3">
+                <i class="ri-star-line" aria-hidden="true"></i> Aún sin reseñas
               </p>
             )}
           </div>
@@ -116,26 +116,26 @@ const otherTrades = provider
       </header>
 
       <!-- Descripción -->
-      <div class="p-8 border-t border-gray-100">
-        <h2 class="text-xl font-extrabold text-gray-800 mb-3">Sobre este oficio</h2>
-        <p class="text-gray-600 leading-relaxed mb-6 whitespace-pre-line">
+      <div class="p-6 sm:p-8 border-t border-[var(--border-default)]">
+        <h2 class="text-xl font-extrabold text-[var(--text-primary)] mb-3">Sobre este oficio</h2>
+        <p class="text-[var(--text-secondary)] leading-relaxed mb-6 whitespace-pre-line">
           {trade.description ?? 'Servicio profesional disponible en tu barrio.'}
         </p>
 
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <div class="bg-gray-50 rounded-2xl p-4">
-            <span class="text-xs text-gray-400 uppercase font-bold block">Precio base</span>
-            <span class="text-2xl font-extrabold text-gray-800">
+          <div class="bg-[var(--bg-inset)] rounded-2xl p-4">
+            <span class="text-xs text-[var(--text-muted)] uppercase font-bold block">Precio base</span>
+            <span class="text-2xl font-extrabold text-[var(--text-primary)]">
               ${(trade.basePriceClp ?? 0).toLocaleString('es-CL')}
             </span>
           </div>
-          <div class="bg-gray-50 rounded-2xl p-4">
-            <span class="text-xs text-gray-400 uppercase font-bold block">Categoría</span>
-            <span class="text-lg font-bold text-gray-800 capitalize">{trade.category}</span>
+          <div class="bg-[var(--bg-inset)] rounded-2xl p-4">
+            <span class="text-xs text-[var(--text-muted)] uppercase font-bold block">Categoría</span>
+            <span class="text-lg font-bold text-[var(--text-primary)] capitalize">{trade.category}</span>
           </div>
-          <div class="bg-gray-50 rounded-2xl p-4">
-            <span class="text-xs text-gray-400 uppercase font-bold block">Estado</span>
-            <span class={`text-lg font-bold ${trade.status === 'active' ? 'text-green-600' : 'text-orange-600'}`}>
+          <div class="bg-[var(--bg-inset)] rounded-2xl p-4">
+            <span class="text-xs text-[var(--text-muted)] uppercase font-bold block">Estado</span>
+            <span class={`text-lg font-bold ${trade.status === 'active' ? 'text-[var(--green-700)]' : 'text-[var(--color-primary)]'}`}>
               {trade.status === 'active' ? 'Disponible' : 'En pausa'}
             </span>
           </div>
@@ -143,8 +143,8 @@ const otherTrades = provider
       </div>
 
       <!-- Acciones de contacto -->
-      <div class="p-8 border-t border-gray-100 bg-gray-50">
-        <h2 class="text-xl font-extrabold text-gray-800 mb-4">Contactar</h2>
+      <div class="p-6 sm:p-8 border-t border-[var(--border-default)] bg-[var(--bg-inset)]">
+        <h2 class="text-xl font-extrabold text-[var(--text-primary)] mb-4">Contactar</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
           <a
             href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(`Hola, te encontré en QuiénSabe por tu servicio de ${trade.name}.`)}`}
@@ -152,41 +152,43 @@ const otherTrades = provider
             rel="noopener noreferrer"
             data-track-contact={trade.id}
             data-track-type="whatsapp"
-            class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-bold transition shadow-sm"
+            class="flex items-center justify-center gap-2 min-h-[44px] bg-[var(--green-500)] hover:bg-[var(--green-600)] text-white px-6 py-3 rounded-xl font-bold transition shadow-[var(--shadow-card)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-focus)]"
           >
-            <i class="ri-whatsapp-line text-xl"></i> WhatsApp
+            <i class="ri-whatsapp-line text-xl" aria-hidden="true"></i> WhatsApp
           </a>
           <a
             href={`mailto:${email}?subject=${encodeURIComponent(`Consulta por ${trade.name} — QuiénSabe`)}`}
             data-track-contact={trade.id}
             data-track-type="email"
-            class="flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-bold transition shadow-sm"
+            class="flex items-center justify-center gap-2 min-h-[44px] bg-[var(--blue-500)] hover:bg-[var(--blue-600)] text-white px-6 py-3 rounded-xl font-bold transition shadow-[var(--shadow-card)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-focus)]"
           >
-            <i class="ri-mail-line text-xl"></i> Email
+            <i class="ri-mail-line text-xl" aria-hidden="true"></i> Email
           </a>
           {isLoggedIn ? (
             <>
               <button
                 type="button"
                 data-fav-toggle={trade.slug}
-                class="js-fav-btn flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl font-bold transition shadow-sm"
+                class="js-fav-btn flex items-center justify-center gap-2 min-h-[44px] bg-[var(--color-error)] hover:opacity-90 text-white px-6 py-3 rounded-xl font-bold transition shadow-[var(--shadow-card)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-focus)]"
               >
-                <i class="ri-heart-fill text-xl"></i> Guardar
+                <i class="ri-heart-fill text-xl" aria-hidden="true"></i> Guardar
               </button>
               <button
                 type="button"
                 id="btn-report"
-                class="flex items-center justify-center gap-2 bg-white border-2 border-red-400 text-red-500 hover:bg-red-50 px-6 py-3 rounded-xl font-bold transition shadow-sm"
+                aria-haspopup="dialog"
+                aria-controls="report-modal"
+                class="flex items-center justify-center gap-2 min-h-[44px] bg-[var(--bg-card)] border-2 border-[var(--color-error-border)] text-[var(--color-error)] hover:bg-[var(--color-error-bg)] px-6 py-3 rounded-xl font-bold transition shadow-[var(--shadow-card)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-focus)]"
               >
-                <i class="ri-error-warning-line text-xl"></i> Reportar
+                <i class="ri-error-warning-line text-xl" aria-hidden="true"></i> Reportar
               </button>
             </>
           ) : (
             <a
               href={"/iniciar-sesion?redirigir=/p/" + trade.slug}
-              class="flex items-center justify-center gap-2 bg-white border-2 border-orange-500 text-orange-500 hover:bg-orange-50 px-6 py-3 rounded-xl font-bold transition"
+              class="flex items-center justify-center gap-2 min-h-[44px] bg-[var(--bg-card)] border-2 border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--orange-50)] px-6 py-3 rounded-xl font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-focus)]"
             >
-              <i class="ri-user-add-line text-xl"></i> Inicia sesión para guardar
+              <i class="ri-user-add-line text-xl" aria-hidden="true"></i> Inicia sesión para guardar
             </a>
           )}
         </div>
@@ -195,43 +197,60 @@ const otherTrades = provider
 
     <!-- Report Modal -->
     {isLoggedIn && (
-    <div id="report-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center">
+    <div
+      id="report-modal"
+      class="hidden fixed inset-0 z-[100] flex items-center justify-center"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="report-modal-title"
+      aria-hidden="true"
+      tabindex="-1"
+    >
       <div id="report-modal-overlay" class="absolute inset-0 bg-black/60"></div>
-      <div class="relative bg-white rounded-3xl shadow-2xl p-6 w-full max-w-md mx-4 z-10">
+      <div class="relative bg-[var(--bg-card)] rounded-3xl shadow-[var(--shadow-card-hover)] p-6 w-full max-w-md mx-4 z-10">
         <div class="flex justify-between items-center mb-4">
-          <h3 class="text-lg font-extrabold text-gray-800">Reportar</h3>
-          <button id="report-modal-close" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+          <h3 id="report-modal-title" class="text-lg font-extrabold text-[var(--text-primary)]">Reportar</h3>
+          <button
+            id="report-modal-close"
+            type="button"
+            aria-label="Cerrar"
+            class="flex items-center justify-center w-11 h-11 -mr-2 rounded-full text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-inset)] text-2xl leading-none transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-focus)]"
+          >
+            <i class="ri-close-line" aria-hidden="true"></i>
+          </button>
         </div>
         <form id="report-form" data-provider-id={trade.id}>
           <div class="mb-4">
-            <label class="block text-xs font-bold text-gray-600 mb-1">Tipo de reporte</label>
-            <select name="kind" class="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm" required>
+            <label for="report-kind" class="block text-xs font-bold text-[var(--text-secondary)] mb-1">Tipo de reporte</label>
+            <select id="report-kind" name="kind" class="w-full border border-[var(--border-default)] rounded-xl px-3 py-2 text-sm bg-[var(--bg-card)] text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-focus)]" required>
               <option value="suplantacion">Suplantación de identidad</option>
               <option value="mal_servicio">Mal servicio</option>
               <option value="contenido">Contenido inapropiado</option>
             </select>
           </div>
           <div class="mb-4">
-            <label class="block text-xs font-bold text-gray-600 mb-1">Asunto</label>
-            <input name="subject" type="text" class="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm" placeholder="Breve resumen" required minlength={5} maxlength={150} />
+            <label for="report-subject" class="block text-xs font-bold text-[var(--text-secondary)] mb-1">Asunto</label>
+            <input id="report-subject" name="subject" type="text" class="w-full border border-[var(--border-default)] rounded-xl px-3 py-2 text-sm bg-[var(--bg-card)] text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-focus)]" placeholder="Breve resumen" aria-describedby="report-subject-help" required minlength={5} maxlength={150} />
+            <p id="report-subject-help" class="text-xs text-[var(--text-muted)] mt-1">Entre 5 y 150 caracteres.</p>
           </div>
           <div class="mb-4">
-            <label class="block text-xs font-bold text-gray-600 mb-1">Detalle</label>
-            <textarea name="body" rows="4" class="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm" placeholder="Describe el problema..." required minlength={1} maxlength={5000}></textarea>
+            <label for="report-body" class="block text-xs font-bold text-[var(--text-secondary)] mb-1">Detalle</label>
+            <textarea id="report-body" name="body" rows="4" class="w-full border border-[var(--border-default)] rounded-xl px-3 py-2 text-sm bg-[var(--bg-card)] text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-focus)]" placeholder="Describe el problema..." aria-describedby="report-body-help" required minlength={1} maxlength={5000}></textarea>
+            <p id="report-body-help" class="text-xs text-[var(--text-muted)] mt-1">Máximo 5000 caracteres.</p>
           </div>
-          <button type="submit" class="w-full bg-red-500 text-white py-3 rounded-xl font-bold hover:bg-red-600 transition">Enviar Reporte</button>
+          <button type="submit" class="w-full min-h-[44px] bg-[var(--color-error)] text-white py-3 rounded-xl font-bold hover:opacity-90 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-focus)]">Enviar Reporte</button>
         </form>
       </div>
     </div>
     )}
 
     {portfolio.length > 0 && (
-    <section class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 mb-6">
-      <h2 class="text-xl font-extrabold text-gray-800 mb-4">Galería de trabajos</h2>
+    <section class="bg-[var(--bg-card)] rounded-3xl shadow-[var(--shadow-card)] border border-[var(--border-default)] p-6 sm:p-8 mb-6">
+      <h2 class="text-xl font-extrabold text-[var(--text-primary)] mb-4">Galería de trabajos</h2>
       <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
         {portfolio.map((img) => (
-          <a href={img.url} target="_blank" class="aspect-square rounded-xl overflow-hidden bg-gray-100 hover:opacity-90 transition">
-            <img src={img.url} alt={img.caption ?? ''} class="w-full h-full object-cover" loading="lazy" />
+          <a href={img.url} target="_blank" rel="noopener noreferrer" class="aspect-square rounded-xl overflow-hidden bg-[var(--bg-inset)] hover:opacity-90 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-focus)]">
+            <img src={img.url} alt={img.caption ?? `Trabajo de ${trade.name}`} class="w-full h-full object-cover" loading="lazy" />
           </a>
         ))}
       </div>
@@ -239,108 +258,103 @@ const otherTrades = provider
     )}
 
     <!-- Reviews -->
-    <section class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+    <section class="bg-[var(--bg-card)] rounded-3xl shadow-[var(--shadow-card)] border border-[var(--border-default)] p-6 sm:p-8">
       <div class="flex justify-between items-center mb-6">
-        <h2 class="text-xl font-extrabold text-gray-800">Reseñas</h2>
+        <h2 class="text-xl font-extrabold text-[var(--text-primary)]">Reseñas</h2>
         {rating.count > 0 && (
-          <span class="text-sm text-gray-500">
-            <b class="text-gray-800">{rating.avg.toFixed(1)}</b> · {rating.count} reseña{rating.count !== 1 ? 's' : ''}
+          <span class="text-sm text-[var(--text-muted)]">
+            <b class="text-[var(--text-primary)]">{rating.avg.toFixed(1)}</b> · {rating.count} reseña{rating.count !== 1 ? 's' : ''}
           </span>
         )}
       </div>
 
       {resenaEnviada ? (
-        <div class="bg-green-50 border-2 border-green-200 rounded-2xl p-4 flex items-start gap-3 mb-6">
-          <i class="ri-check-line text-green-700 text-2xl flex-shrink-0 mt-0.5"></i>
+        <div class="bg-[var(--color-success-light)] border-2 border-[var(--color-success-border)] rounded-2xl p-4 flex items-start gap-3 mb-6" role="status">
+          <i class="ri-check-line text-[var(--green-700)] text-2xl flex-shrink-0 mt-0.5" aria-hidden="true"></i>
           <div>
-            <h4 class="font-bold text-green-900 text-sm">Reseña enviada</h4>
-            <p class="text-green-800 text-xs mt-1">Gracias por compartir tu experiencia.</p>
+            <h3 class="font-bold text-[var(--green-700)] text-sm">Reseña enviada</h3>
+            <p class="text-[var(--text-secondary)] text-xs mt-1">Gracias por compartir tu experiencia.</p>
           </div>
         </div>
       ) : null}
 
       {reviewsList.length === 0 ? (
-        <div class="text-center py-8 text-gray-500">
-          <i class="ri-chat-smile-2-line text-5xl text-gray-300 mb-3 block"></i>
+        <div class="text-center py-8 text-[var(--text-muted)]">
+          <i class="ri-chat-smile-2-line text-5xl text-[var(--stone-300)] mb-3 block" aria-hidden="true"></i>
           <p>Aún no hay reseñas para este oficio.</p>
-          <section class="bg-gray-50 rounded-2xl p-6 border border-gray-200 mb-6">
-            <h3 class="font-bold text-gray-800 mb-4">Deja tu reseña</h3>
-            <form action={`/api/v1/trades/${trade.id}/reviews`} method="POST" class="space-y-3">
-              <div>
-                <label class="block text-xs font-bold text-gray-600 mb-1">Tu nombre</label>
-                <input type="text" name="reviewerName" placeholder="Tu nombre" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm" />
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-600 mb-1">Calificación</label>
-                <select name="rating" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm">
-                  <option value="5">★★★★★</option>
-                  <option value="4">★★★★☆</option>
-                  <option value="3">★★★☆☆</option>
-                  <option value="2">★★☆☆☆</option>
-                  <option value="1">★☆☆☆☆</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-600 mb-1">Tu reseña</label>
-                <textarea name="body" rows="3" placeholder="Cuenta tu experiencia..." class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm" required></textarea>
-              </div>
-              <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-orange-600 transition">Enviar reseña</button>
-            </form>
-          </section>
-
-          {isLoggedIn && (
-            <p class="text-sm mt-2">
-              ¿Trabajaste con {provider?.name ?? 'este vecino'}?
-              <a href="#" class="text-orange-500 font-bold ml-1">Sé el primero en dejar una reseña</a>
-            </p>
-          )}
         </div>
       ) : (
         <div class="space-y-4">
           {reviewsList.map((r) => (
-            <div class="border border-gray-100 rounded-2xl p-4">
+            <article class="border border-[var(--border-default)] rounded-2xl p-4">
               <div class="flex items-center gap-2 mb-2">
-                <div class="flex">
+                <div class="flex" role="img" aria-label={`${r.rating} de 5 estrellas`}>
                   {estrellas.map((n) => (
-                    <i class={`${n <= r.rating ? 'ri-star-fill text-yellow-400' : 'ri-star-line text-gray-300'}`}></i>
+                    <i class={`${n <= r.rating ? 'ri-star-fill text-[var(--amber-500)]' : 'ri-star-line text-[var(--stone-300)]'}`} aria-hidden="true"></i>
                   ))}
                 </div>
-                <span class="font-bold text-gray-800 text-sm">{r.reviewerName}</span>
-                <span class="text-[10px] text-gray-400 ml-auto">{r.createdAt?.toLocaleDateString?.('es-CL') ?? ''}</span>
+                <span class="font-bold text-[var(--text-primary)] text-sm">{r.reviewerName}</span>
+                <span class="text-[10px] text-[var(--text-muted)] ml-auto">{r.createdAt?.toLocaleDateString?.('es-CL') ?? ''}</span>
               </div>
-              <p class="text-gray-600 text-sm">{r.body}</p>
+              <p class="text-[var(--text-secondary)] text-sm">{r.body}</p>
               {r.response && (
-                <div class="mt-3 ml-4 pl-3 border-l-2 border-orange-300 bg-orange-50/50 rounded-r-lg p-3">
-                  <p class="text-xs font-bold text-orange-700 mb-1"><i class="ri-reply-line"></i> Respuesta del prestador</p>
-                  <p class="text-gray-700 text-sm">{r.response}</p>
+                <div class="mt-3 ml-4 pl-3 border-l-2 border-[var(--orange-300)] bg-[var(--orange-50)] rounded-r-lg p-3">
+                  <p class="text-xs font-bold text-[var(--color-primary)] mb-1"><i class="ri-reply-line" aria-hidden="true"></i> Respuesta del prestador</p>
+                  <p class="text-[var(--text-secondary)] text-sm">{r.response}</p>
                   {r.respondedAt && (
-                    <p class="text-[10px] text-gray-400 mt-1">{r.respondedAt?.toLocaleDateString?.('es-CL') ?? ''}</p>
+                    <p class="text-[10px] text-[var(--text-muted)] mt-1">{r.respondedAt?.toLocaleDateString?.('es-CL') ?? ''}</p>
                   )}
                 </div>
               )}
-            </div>
+            </article>
           ))}
         </div>
       )}
     </section>
 
+    <!-- Formulario de reseña -->
+    <section class="bg-[var(--bg-card)] rounded-3xl shadow-[var(--shadow-card)] border border-[var(--border-default)] p-6 sm:p-8 mt-6" aria-labelledby="review-form-title">
+      <h2 id="review-form-title" class="text-xl font-extrabold text-[var(--text-primary)] mb-4">Deja tu reseña</h2>
+      <form action={`/api/v1/trades/${trade.id}/reviews`} method="POST" class="space-y-3">
+        <div>
+          <label for="review-name" class="block text-xs font-bold text-[var(--text-secondary)] mb-1">Tu nombre</label>
+          <input id="review-name" type="text" name="reviewerName" placeholder="Tu nombre" class="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-focus)]" />
+        </div>
+        <div>
+          <label for="review-rating" class="block text-xs font-bold text-[var(--text-secondary)] mb-1">Calificación</label>
+          <select id="review-rating" name="rating" class="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-focus)]">
+            <option value="5">5 estrellas</option>
+            <option value="4">4 estrellas</option>
+            <option value="3">3 estrellas</option>
+            <option value="2">2 estrellas</option>
+            <option value="1">1 estrella</option>
+          </select>
+        </div>
+        <div>
+          <label for="review-body" class="block text-xs font-bold text-[var(--text-secondary)] mb-1">Tu reseña</label>
+          <textarea id="review-body" name="body" rows="3" placeholder="Cuenta tu experiencia..." class="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-focus)]" required></textarea>
+        </div>
+        <button type="submit" class="min-h-[44px] bg-[var(--color-primary)] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[var(--color-accent)] transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-focus)]">Enviar reseña</button>
+      </form>
+    </section>
+
     {otherTrades.length > 0 ? (
-    <section class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 mt-6">
-      <h2 class="text-xl font-extrabold text-gray-800 mb-4">Otros servicios de {provider?.name?.split(' ')[0] ?? 'este profesional'}</h2>
+    <section class="bg-[var(--bg-card)] rounded-3xl shadow-[var(--shadow-card)] border border-[var(--border-default)] p-6 mt-6">
+      <h2 class="text-xl font-extrabold text-[var(--text-primary)] mb-4">Otros servicios de {provider?.name?.split(' ')[0] ?? 'este profesional'}</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {otherTrades.map((ot) => (
           <a
             href={`/p/${ot.slug}`}
-            class="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100 hover:border-orange-500/50 hover:shadow-sm transition"
+            class="flex items-center gap-3 p-4 min-h-[44px] bg-[var(--bg-inset)] rounded-2xl border border-[var(--border-default)] hover:border-[var(--color-primary)] hover:shadow-[var(--shadow-card)] transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-focus)]"
           >
-            <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 font-bold text-sm flex-shrink-0">
+            <div class="w-10 h-10 rounded-full bg-[var(--orange-100)] flex items-center justify-center text-[var(--color-primary)] font-bold text-sm flex-shrink-0" aria-hidden="true">
               {ot.symbol?.slice(0, 2).toUpperCase() ?? 'OF'}
             </div>
             <div class="flex-1 min-w-0">
-              <h3 class="font-bold text-gray-800 text-sm truncate">{ot.name}</h3>
-              <p class="text-xs text-gray-500">{ot.symbol} {ot.verified ? '· Verificado' : ''}</p>
+              <h3 class="font-bold text-[var(--text-primary)] text-sm truncate">{ot.name}</h3>
+              <p class="text-xs text-[var(--text-muted)]">{ot.symbol} {ot.verified ? '· Verificado' : ''}</p>
             </div>
-            <i class="ri-arrow-right-s-line text-gray-400 text-xl"></i>
+            <i class="ri-arrow-right-s-line text-[var(--text-muted)] text-xl" aria-hidden="true"></i>
           </a>
         ))}
       </div>
@@ -349,8 +363,8 @@ const otherTrades = provider
 
     <!-- Volver -->
     <div class="mt-8 text-center">
-      <a href="/" class="text-orange-500 font-bold hover:underline">
-        ← Volver a la búsqueda
+      <a href="/" class="inline-flex items-center justify-center min-h-[44px] px-4 text-[var(--color-primary)] font-bold hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-focus)]">
+        <span aria-hidden="true">←</span>&nbsp;Volver a la búsqueda
       </a>
     </div>
   </main>
@@ -365,7 +379,6 @@ const otherTrades = provider
   if (mainEl) {
     import('../../lib/client/tracking/view-tracker').then(m => m.recordView(Number(mainEl.dataset.viewTrade))).catch(() => {});
   }
-</script>
 </script>
 
 </BaseLayout>

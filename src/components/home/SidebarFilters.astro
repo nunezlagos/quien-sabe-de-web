@@ -5,27 +5,27 @@ const { visible = false } = Astro.props;
 <aside id="search-sidebar" class:list={["sidebar-wrapper", { hidden: !visible }]}>
   <div class="widget-card">
     <h3 class="sidebar-title">
-      <i class="ri-filter-3-line" style="color: var(--amber-600)"></i> Filtros
+      <i class="ri-filter-3-line" style="color: var(--amber-600)" aria-hidden="true"></i> Filtros
     </h3>
 
     <!-- Categories -->
     <div class="filter-section">
-      <h4 class="filter-label">Oficio</h4>
-      <div class="filter-options">
-        <label class="filter-option">
-          <input type="checkbox" class="filter-checkbox">
+      <h4 class="filter-label" id="filter-oficio-label">Oficio</h4>
+      <div class="filter-options" role="group" aria-labelledby="filter-oficio-label">
+        <label class="filter-option" for="filter-oficio-gasfiter">
+          <input type="checkbox" id="filter-oficio-gasfiter" class="filter-checkbox">
           <span class="filter-text">Gasfiter</span>
         </label>
-        <label class="filter-option">
-          <input type="checkbox" class="filter-checkbox">
+        <label class="filter-option" for="filter-oficio-electricista">
+          <input type="checkbox" id="filter-oficio-electricista" class="filter-checkbox">
           <span class="filter-text">Electricista</span>
         </label>
-        <label class="filter-option">
-          <input type="checkbox" class="filter-checkbox">
+        <label class="filter-option" for="filter-oficio-jardinero">
+          <input type="checkbox" id="filter-oficio-jardinero" class="filter-checkbox">
           <span class="filter-text">Jardinero</span>
         </label>
-        <label class="filter-option">
-          <input type="checkbox" class="filter-checkbox">
+        <label class="filter-option" for="filter-oficio-maestro">
+          <input type="checkbox" id="filter-oficio-maestro" class="filter-checkbox">
           <span class="filter-text">Maestro</span>
         </label>
       </div>
@@ -35,25 +35,27 @@ const { visible = false } = Astro.props;
     <div class="filter-section">
       <h4 class="filter-label">Precio Base</h4>
       <div class="price-inputs">
-        <input type="number" placeholder="Min" class="price-input">
-        <span class="price-separator">-</span>
-        <input type="number" placeholder="Max" class="price-input">
+        <label class="sr-only" for="filter-price-min">Precio mínimo</label>
+        <input type="number" id="filter-price-min" placeholder="Min" class="price-input">
+        <span class="price-separator" aria-hidden="true">-</span>
+        <label class="sr-only" for="filter-price-max">Precio máximo</label>
+        <input type="number" id="filter-price-max" placeholder="Max" class="price-input">
       </div>
     </div>
 
     <!-- Rating -->
     <div class="filter-section">
-      <h4 class="filter-label">Valoración</h4>
-      <div class="filter-options">
-        <label class="filter-option">
-          <input type="radio" name="rating" class="filter-radio">
-          <div class="rating-stars">
+      <h4 class="filter-label" id="filter-rating-label">Valoración</h4>
+      <div class="filter-options" role="radiogroup" aria-labelledby="filter-rating-label">
+        <label class="filter-option" for="filter-rating-5">
+          <input type="radio" name="rating" id="filter-rating-5" class="filter-radio" aria-label="5 estrellas">
+          <div class="rating-stars" aria-hidden="true">
             <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i>
           </div>
         </label>
-        <label class="filter-option">
-          <input type="radio" name="rating" class="filter-radio">
-          <div class="rating-stars">
+        <label class="filter-option" for="filter-rating-4">
+          <input type="radio" name="rating" id="filter-rating-4" class="filter-radio" aria-label="4 estrellas y más">
+          <div class="rating-stars" aria-hidden="true">
             <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-line"></i>
           </div>
           <span class="rating-more">& más</span>
@@ -65,15 +67,27 @@ const { visible = false } = Astro.props;
   <!-- Promo Box -->
   <div class="promo-card">
     <div class="promo-icon">
-      <i class="ri-shield-star-line"></i>
+      <i class="ri-shield-star-line" aria-hidden="true"></i>
     </div>
     <h4 class="promo-title">Vecinos Verificados</h4>
     <p class="promo-text">Contrata con confianza.</p>
-    <button class="promo-btn">Saber más</button>
+    <button type="button" class="promo-btn">Saber más</button>
   </div>
 </aside>
 
 <style>
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   .sidebar-wrapper {
     width: 100%;
   }
@@ -157,6 +171,14 @@ const { visible = false } = Astro.props;
     cursor: pointer;
   }
 
+  .filter-checkbox:focus-visible,
+  .filter-radio:focus-visible,
+  .price-input:focus-visible,
+  .promo-btn:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+
   .filter-text {
     font-size: 0.875rem;
     color: var(--slate-600);
@@ -191,7 +213,7 @@ const { visible = false } = Astro.props;
   .rating-stars {
     display: flex;
     gap: 2px;
-    color: #fbbf24;
+    color: var(--amber-400);
     font-size: 0.875rem;
   }
 

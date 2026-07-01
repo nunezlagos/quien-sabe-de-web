@@ -2,27 +2,46 @@
 // Login/Register modal for unauthenticated users
 ---
 
-<div id="login-modal" class="login-modal" role="dialog" aria-modal="true">
+<div
+  id="login-modal"
+  class="login-modal hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="login-modal-title"
+  aria-hidden="true"
+>
   <div class="login-backdrop"></div>
   <div class="login-card">
-    <button class="login-close close-modal" aria-label="Cerrar">
-      <i class="ri-close-circle-line"></i>
+    <button type="button" class="login-close close-modal" aria-label="Cerrar">
+      <i class="ri-close-circle-line" aria-hidden="true"></i>
     </button>
 
     <div class="login-header">
       <div class="login-icon">
-        <i class="ri-user-smile-line"></i>
+        <i class="ri-user-smile-line" aria-hidden="true"></i>
       </div>
-      <h2 class="login-title">¡Únete al Barrio!</h2>
+      <h2 id="login-modal-title" class="login-title">¡Únete al Barrio!</h2>
       <p class="login-subtitle">Regístrate para ofrecer tus servicios y llegar a más vecinos.</p>
     </div>
 
     <div class="login-buttons">
-      <button id="login-google-btn" class="login-btn login-btn-google">
-        <i class="ri-google-fill"></i> Continuar con Google
+      <button
+        id="login-google-btn"
+        type="button"
+        class="login-btn login-btn-google"
+        disabled
+        aria-label="Continuar con Google (próximamente)"
+      >
+        <i class="ri-google-fill" aria-hidden="true"></i> Continuar con Google
       </button>
-      <button id="login-facebook-btn" class="login-btn login-btn-facebook">
-        <i class="ri-facebook-fill"></i> Continuar con Facebook
+      <button
+        id="login-facebook-btn"
+        type="button"
+        class="login-btn login-btn-facebook"
+        disabled
+        aria-label="Continuar con Facebook (próximamente)"
+      >
+        <i class="ri-facebook-fill" aria-hidden="true"></i> Continuar con Facebook
       </button>
 
       <div class="login-divider">
@@ -30,7 +49,7 @@
       </div>
 
       <a href="/iniciar-sesion" class="login-btn login-btn-email">
-        <i class="ri-dashboard-3-line"></i> Iniciar sesión
+        <i class="ri-dashboard-3-line" aria-hidden="true"></i> Iniciar sesión
       </a>
     </div>
 
@@ -68,7 +87,7 @@
 
   .login-card {
     position: relative;
-    background: white;
+    background: var(--bg-card);
     border-radius: var(--radius-2xl);
     box-shadow: var(--shadow-card-lifted);
     padding: 2.5rem;
@@ -79,14 +98,19 @@
     transition: transform 300ms ease;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .login-modal,
+    .login-card { transition: none; }
+  }
+
   .login-modal:not(.hidden) .login-card {
     transform: scale(1);
   }
 
   .login-close {
     position: absolute;
-    top: 1rem;
-    right: 1.25rem;
+    top: 0.5rem;
+    right: 0.5rem;
     background: none;
     border: none;
     color: var(--stone-300);
@@ -94,10 +118,21 @@
     font-size: 1.75rem;
     line-height: 1;
     transition: color 200ms ease;
-    padding: 0.25rem;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
   }
 
   .login-close:hover {
+    color: var(--stone-500);
+  }
+
+  .login-close:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
     color: var(--stone-500);
   }
 
@@ -143,6 +178,7 @@
     justify-content: center;
     gap: 0.75rem;
     width: 100%;
+    min-height: 44px;
     padding: 0.875rem 1rem;
     border-radius: var(--radius-xl);
     font-size: 0.9375rem;
@@ -154,31 +190,41 @@
     font-family: inherit;
   }
 
+  .login-btn:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+
+  .login-btn[disabled] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
   .login-btn i {
     font-size: 1.25rem;
   }
 
   .login-btn-google {
-    background: white;
+    background: var(--bg-card);
     color: var(--stone-700);
     border: 1px solid var(--border-default);
     box-shadow: var(--shadow-card);
   }
 
-  .login-btn-google:hover {
+  .login-btn-google:not([disabled]):hover {
     background: var(--stone-50);
     box-shadow: var(--shadow-card-hover);
   }
 
   .login-btn-facebook {
-    background: #1877F2;
+    background: var(--color-facebook);
     color: white;
-    box-shadow: 0 2px 4px rgba(24, 119, 242, 0.3);
+    box-shadow: var(--shadow-card);
   }
 
-  .login-btn-facebook:hover {
-    background: #166fe5;
-    box-shadow: 0 4px 12px rgba(24, 119, 242, 0.4);
+  .login-btn-facebook:not([disabled]):hover {
+    background: var(--color-facebook-dark);
+    box-shadow: var(--shadow-card-hover);
   }
 
   .login-divider {
@@ -220,8 +266,19 @@
   }
 
   .login-terms a {
-    color: var(--amber-600);
+    color: var(--color-primary);
     font-weight: 600;
     text-decoration: underline;
+    border-radius: var(--radius-sm);
+  }
+
+  .login-terms a:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 480px) {
+    .login-modal { padding: 0.75rem; }
+    .login-card { padding: 1.75rem 1.5rem; }
   }
 </style>

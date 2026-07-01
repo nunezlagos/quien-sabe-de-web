@@ -102,6 +102,7 @@ const esPrestador = currentUser.role === 'provider';
 								type="checkbox"
 								class="sr-only peer js-consent-toggle"
 								data-consent-key="consent_email_product"
+								aria-label="Recibir emails de comunicaciones del producto"
 								checked={emailProductOn}
 							/>
 							<div class="toggle-track"></div>
@@ -121,6 +122,7 @@ const esPrestador = currentUser.role === 'provider';
 								type="checkbox"
 								class="sr-only peer js-consent-toggle"
 								data-consent-key="consent_analytics"
+								aria-label="Analytics y métricas anónimas"
 								checked={analyticsOn}
 							/>
 							<div class="toggle-track"></div>
@@ -151,6 +153,7 @@ const esPrestador = currentUser.role === 'provider';
 								type="checkbox"
 								class="sr-only peer js-consent-toggle"
 								data-consent-key="consent_profile_public"
+								aria-label="Perfil público visible en el buscador"
 								checked={profilePublicOn}
 								disabled={!esPrestador}
 							/>
@@ -192,6 +195,8 @@ const esPrestador = currentUser.role === 'provider';
 		role="dialog"
 		aria-modal="true"
 		aria-labelledby="delete-modal-title"
+		aria-hidden="true"
+		data-modal-backdrop
 	>
 		<div id="delete-modal-content" class="modal-content">
 			<div class="modal-header">
@@ -210,7 +215,7 @@ const esPrestador = currentUser.role === 'provider';
 
 			<form id="form-eliminar" class="modal-form">
 				<div class="modal-warning">
-					<p class="modal-warning-text">
+					<p id="delete-modal-warning" class="modal-warning-text">
 						<i class="ri-information-line" aria-hidden="true"></i>
 						Esta acción es irreversible. Perderás acceso a tu perfil, mensajes y servicios publicados.
 					</p>
@@ -226,6 +231,7 @@ const esPrestador = currentUser.role === 'provider';
 						type="text"
 						placeholder="ELIMINAR"
 						autocomplete="off"
+						aria-describedby="delete-modal-warning"
 						class="modal-input"
 					/>
 				</div>
@@ -343,7 +349,7 @@ const esPrestador = currentUser.role === 'provider';
 		}
 
 		.cuenta-card-danger {
-			border: 2px solid #fecaca;
+			border: 2px solid var(--color-red-200);
 		}
 
 		.cuenta-card-form {
@@ -389,8 +395,8 @@ const esPrestador = currentUser.role === 'provider';
 		}
 
 		.cuenta-card-icon-red {
-			background: #fef2f2;
-			color: #dc2626;
+			background: var(--color-red-50);
+			color: var(--color-error);
 		}
 
 		.cuenta-card-content {
@@ -440,13 +446,14 @@ const esPrestador = currentUser.role === 'provider';
 		}
 
 		.cuenta-btn-danger {
-			background: #dc2626;
+			background: var(--color-error);
 			color: white;
-			box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
+			box-shadow: var(--shadow-red);
 		}
 
 		.cuenta-btn-danger:hover {
-			background: #b91c1c;
+			background: var(--color-error);
+			filter: brightness(0.9);
 		}
 
 		/* Consent items */
@@ -482,6 +489,21 @@ const esPrestador = currentUser.role === 'provider';
 		.cuenta-consent-disabled:hover {
 			background: var(--stone-50);
 			box-shadow: none;
+		}
+
+		.cuenta-consent-disabled .cuenta-toggle {
+			pointer-events: none;
+		}
+
+		.cuenta-consent-disabled .toggle-track {
+			background: var(--stone-200);
+			cursor: not-allowed;
+		}
+
+		/* Foco visible accesible para el checkbox sr-only */
+		.js-consent-toggle:focus-visible + .toggle-track {
+			outline: 2px solid var(--border-focus);
+			outline-offset: 2px;
 		}
 
 		.cuenta-consent-info {
@@ -594,7 +616,7 @@ const esPrestador = currentUser.role === 'provider';
 		.modal-content {
 			background: white;
 			border-radius: var(--radius-2xl);
-			box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+			box-shadow: var(--shadow-card-lifted);
 			width: 100%;
 			max-width: 28rem;
 			transform: scale(0.95);
@@ -611,7 +633,7 @@ const esPrestador = currentUser.role === 'provider';
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			background: #fef2f2;
+			background: var(--color-red-50);
 			border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
 		}
 
@@ -625,7 +647,7 @@ const esPrestador = currentUser.role === 'provider';
 		}
 
 		.modal-title i {
-			color: #dc2626;
+			color: var(--color-error);
 		}
 
 		.modal-close {
@@ -634,11 +656,18 @@ const esPrestador = currentUser.role === 'provider';
 			color: var(--stone-400);
 			cursor: pointer;
 			font-size: 1.5rem;
-			transition: color 200ms ease;
+			width: 2.75rem;
+			height: 2.75rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: var(--radius-full);
+			transition: color 200ms ease, background 200ms ease;
 		}
 
 		.modal-close:hover {
 			color: var(--stone-600);
+			background: var(--stone-100);
 		}
 
 		.modal-form {
@@ -681,7 +710,7 @@ const esPrestador = currentUser.role === 'provider';
 		}
 
 		.modal-label-danger {
-			color: #dc2626;
+			color: var(--color-error);
 			font-weight: 800;
 		}
 
@@ -695,10 +724,10 @@ const esPrestador = currentUser.role === 'provider';
 			transition: all 200ms ease;
 		}
 
-		.modal-input:focus {
+		.modal-input:focus-visible {
 			outline: none;
-			border-color: #dc2626;
-			box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+			border-color: var(--color-error);
+			box-shadow: var(--shadow-red);
 		}
 
 		.modal-actions {
@@ -709,6 +738,7 @@ const esPrestador = currentUser.role === 'provider';
 
 		.modal-btn {
 			flex: 1;
+			min-height: 2.75rem;
 			padding: 0.75rem;
 			border-radius: var(--radius-xl);
 			font-weight: 700;
@@ -730,18 +760,23 @@ const esPrestador = currentUser.role === 'provider';
 		}
 
 		.modal-btn-danger {
-			background: #dc2626;
+			background: var(--color-error);
 			color: white;
-			box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
+			box-shadow: var(--shadow-red);
 		}
 
 		.modal-btn-danger:hover {
-			background: #b91c1c;
+			background: var(--color-error);
+			filter: brightness(0.9);
 		}
 
 		.modal-btn-disabled {
 			opacity: 0.5;
 			cursor: not-allowed;
+		}
+
+		.modal-btn-disabled:hover {
+			filter: none;
 		}
 	</style>
 

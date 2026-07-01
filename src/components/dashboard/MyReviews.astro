@@ -22,7 +22,7 @@ function stars(rating: number): string {
 
 <div class="widget-card">
   <h3 class="widget-title">
-    <i class="ri-star-smile-fill text-yellow-500"></i> Mis reseñas ({reviews.length})
+    <i class="ri-star-smile-fill" style="color: var(--amber-500)" aria-hidden="true"></i> Mis reseñas ({reviews.length})
   </h3>
 
   {reviews.length > 0 ? (
@@ -41,7 +41,7 @@ function stars(rating: number): string {
   ) : (
     <div class="empty-state">
       <div class="empty-icon">
-        <i class="ri-star-smile-line"></i>
+        <i class="ri-star-smile-line" aria-hidden="true"></i>
       </div>
       <p class="empty-text">Aún no has dejado reseñas.</p>
       <p class="empty-link"><a href="/">Buscar vecinos para reseñar</a></p>
@@ -118,7 +118,7 @@ function stars(rating: number): string {
 
   .review-stars {
     font-size: 0.875rem;
-    color: #fbbf24;
+    color: var(--amber-400);
     margin-bottom: var(--space-2);
   }
 

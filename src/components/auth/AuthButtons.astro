@@ -17,6 +17,7 @@ const { mode = 'full', redirigirAcceso = '/dashboard' } = Astro.props;
     class="auth-buttons__btn auth-buttons__btn--google"
     data-provider="google"
     aria-disabled="true"
+    aria-label="Continuar con Google (próximamente)"
     title="Próximamente — en esta demo solo email + contraseña"
   >
     <i class="ri-google-fill" aria-hidden="true"></i>
@@ -28,6 +29,7 @@ const { mode = 'full', redirigirAcceso = '/dashboard' } = Astro.props;
     class="auth-buttons__btn auth-buttons__btn--facebook"
     data-provider="facebook"
     aria-disabled="true"
+    aria-label="Continuar con Facebook (próximamente)"
     title="Próximamente — en esta demo solo email + contraseña"
   >
     <i class="ri-facebook-fill" aria-hidden="true"></i>
@@ -65,9 +67,10 @@ const { mode = 'full', redirigirAcceso = '/dashboard' } = Astro.props;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-3, 0.75rem);
-    padding: var(--space-3-5, 0.875rem);
-    border-radius: var(--radius-xl, 0.75rem);
+    gap: var(--space-3);
+    padding: var(--space-3);
+    min-height: 44px;
+    border-radius: var(--radius-xl);
     font-weight: 700;
     transition: background-color 200ms, opacity 200ms, transform 100ms;
     text-decoration: none;
@@ -76,30 +79,35 @@ const { mode = 'full', redirigirAcceso = '/dashboard' } = Astro.props;
     cursor: pointer;
   }
 
+  .auth-buttons__btn:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+
   .auth-buttons__btn--google {
-    background: white;
-    color: var(--color-gray-700, #374151);
-    border-color: var(--color-gray-300, #d1d5db);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    border-color: var(--border-strong);
   }
   .auth-buttons__btn--google:not([aria-disabled="true"]):hover {
-    background: var(--color-gray-50, #f9fafb);
+    background: var(--stone-50);
   }
 
   .auth-buttons__btn--facebook {
-    background: var(--color-facebook, #1877F2);
+    background: var(--color-facebook);
     color: white;
   }
   .auth-buttons__btn--facebook:not([aria-disabled="true"]):hover {
-    background: var(--color-facebook-dark, #166fe5);
+    background: var(--color-facebook-dark);
   }
 
   .auth-buttons__btn--corporate {
-    background: var(--color-gray-800, #1f2937);
+    background: var(--stone-800);
     color: white;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    box-shadow: var(--shadow-card);
   }
   .auth-buttons__btn--corporate:hover {
-    background: var(--color-gray-900, #111827);
+    background: var(--stone-900);
   }
 
   .auth-buttons__btn[aria-disabled="true"] {
@@ -108,11 +116,11 @@ const { mode = 'full', redirigirAcceso = '/dashboard' } = Astro.props;
   }
 
   .auth-buttons__btn i {
-    font-size: var(--text-xl, 1.25rem);
+    font-size: 1.25rem;
   }
 
   .auth-buttons--compact .auth-buttons__btn {
     padding: var(--space-2, 0.5rem);
-    font-size: var(--text-sm, 0.875rem);
+    font-size: 0.875rem;
   }
 </style>

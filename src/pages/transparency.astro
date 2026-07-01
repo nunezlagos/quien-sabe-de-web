@@ -7,35 +7,61 @@ const ratio = Math.round((totalExpenses / totalDonations) * 100);
 
 <BaseLayout title="Transparencia — QuiénSabe">
   <main class="container mx-auto px-4 py-12 max-w-4xl">
-    <h1 class="text-3xl font-extrabold text-gray-800 mb-2">Transparencia</h1>
-    <p class="text-gray-500 mb-8">Conoce cómo se administran los recursos de QuiénSabe.</p>
+    <h1 class="text-3xl font-extrabold tp-text-primary mb-2">Transparencia</h1>
+    <p class="tp-text-secondary mb-8">Conoce cómo se administran los recursos de QuiénSabe.</p>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-      <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-        <p class="text-xs text-gray-400 uppercase font-bold mb-1">Donaciones (mes)</p>
-        <p class="text-2xl font-extrabold text-green-600">${totalDonations.toLocaleString('es-CL')}</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+      <div class="tp-card rounded-2xl p-6">
+        <p class="text-xs tp-text-muted uppercase font-bold mb-1">Donaciones (mes)</p>
+        <p class="text-2xl font-extrabold tp-stat-donations">${totalDonations.toLocaleString('es-CL')}</p>
       </div>
-      <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-        <p class="text-xs text-gray-400 uppercase font-bold mb-1">Gastos (mes)</p>
-        <p class="text-2xl font-extrabold text-red-600">${totalExpenses.toLocaleString('es-CL')}</p>
+      <div class="tp-card rounded-2xl p-6">
+        <p class="text-xs tp-text-muted uppercase font-bold mb-1">Gastos (mes)</p>
+        <p class="text-2xl font-extrabold tp-stat-expenses">${totalExpenses.toLocaleString('es-CL')}</p>
       </div>
-      <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-        <p class="text-xs text-gray-400 uppercase font-bold mb-1">Ratio OE3</p>
-        <p class="text-2xl font-extrabold text-orange-500">{ratio}%</p>
-        <div class="w-full bg-gray-100 rounded-full h-2 mt-2">
-          <div class="bg-orange-500 h-2 rounded-full" style="width:{ratio}%"></div>
+      <div class="tp-card rounded-2xl p-6">
+        <p class="text-xs tp-text-muted uppercase font-bold mb-1">Ratio OE3</p>
+        <p class="text-2xl font-extrabold tp-stat-ratio">{ratio}%</p>
+        <div
+          class="tp-bar-track w-full rounded-full h-2 mt-2"
+          role="progressbar"
+          aria-valuenow={ratio}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="Ratio de gastos sobre donaciones"
+        >
+          <div class="tp-bar-fill h-2 rounded-full" style={`width:${ratio}%`}></div>
         </div>
       </div>
     </div>
 
-    <section class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm mb-6">
-      <h2 class="text-xl font-extrabold text-gray-800 mb-4">¿Cómo funciona?</h2>
-      <p class="text-gray-600">QuiénSabe es un proyecto comunitario. Las donaciones de vecinos como tú financian los costos operativos: hosting, dominios y herramientas. Publicamos mensualmente el detalle de ingresos y gastos para mantener la confianza de la comunidad.</p>
+    <section class="tp-card rounded-2xl p-6 mb-6">
+      <h2 class="text-xl font-extrabold tp-text-primary mb-4">¿Cómo funciona?</h2>
+      <p class="tp-text-secondary">QuiénSabe es un proyecto comunitario. Las donaciones de vecinos como tú financian los costos operativos: hosting, dominios y herramientas. Publicamos mensualmente el detalle de ingresos y gastos para mantener la confianza de la comunidad.</p>
     </section>
 
-    <section class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-      <h2 class="text-xl font-extrabold text-gray-800 mb-4">Reportes mensuales</h2>
-      <p class="text-gray-500 text-sm">Los reportes detallados con boletas estarán disponibles próximamente.</p>
+    <section class="tp-card rounded-2xl p-6">
+      <h2 class="text-xl font-extrabold tp-text-primary mb-4">Reportes mensuales</h2>
+      <p class="tp-text-secondary text-sm">Los reportes detallados con boletas estarán disponibles próximamente.</p>
     </section>
   </main>
+
+  <style>
+    .tp-text-primary { color: var(--text-primary); }
+    .tp-text-secondary { color: var(--text-secondary); }
+    .tp-text-muted { color: var(--text-muted); }
+
+    .tp-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-card);
+    }
+
+    .tp-stat-donations { color: var(--color-success); }
+    .tp-stat-expenses { color: var(--color-red-700); }
+    .tp-stat-ratio { color: var(--color-accent); }
+
+    .tp-bar-track { background: var(--bg-inset); }
+    .tp-bar-fill { background: var(--color-accent); }
+  </style>
 </BaseLayout>

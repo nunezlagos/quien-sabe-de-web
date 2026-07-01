@@ -1,48 +1,61 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const equipo = [
+  { iniciales: 'MR', nombre: 'María R.', rol: 'Fundadora · Producto', gradiente: 'team-avatar-orange' },
+  { iniciales: 'DS', nombre: 'Diego S.', rol: 'Co-fundador · Ingeniería', gradiente: 'team-avatar-blue' },
+  { iniciales: 'CF', nombre: 'Camila F.', rol: 'Comunidad', gradiente: 'team-avatar-pink' },
+  { iniciales: 'JT', nombre: 'Joaquín T.', rol: 'Operaciones', gradiente: 'team-avatar-green' },
+];
+
+const pasos = [
+  { icono: 'ri-search-line', n: 'PASO 1', titulo: 'Busca', texto: 'Encuentra vecinos talentosos por oficio y comuna. Filtra por rating, disponibilidad y precio.' },
+  { icono: 'ri-chat-3-line', n: 'PASO 2', titulo: 'Contacta', texto: 'Escríbeles directo por WhatsApp o email. Sin formularios eternos, sin call centers.' },
+  { icono: 'ri-star-smile-line', n: 'PASO 3', titulo: 'Califica', texto: 'Después del trabajo, deja una reseña honesta. Así ayudás al siguiente vecino.' },
+];
 ---
 
 <BaseLayout title="Quiénes Somos — QuiénSabe">
   <main class="flex-grow w-full">
 
     <!-- Hero -->
-    <header class="bg-gradient-to-br from-orange-50 to-amber-50 py-16 md:py-20 relative overflow-hidden">
+    <header class="about-hero py-16 md:py-20 relative overflow-hidden">
       <div class="container mx-auto px-4 text-center relative z-10">
-        <div class="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-1.5 rounded-full text-xs font-bold mb-6">
-          <i class="ri-seedling-line"></i> Hecho con cariño en Chile
+        <div class="inline-flex items-center gap-2 about-badge-green px-4 py-1.5 rounded-full text-xs font-bold mb-6">
+          <i class="ri-seedling-line" aria-hidden="true"></i> Hecho con cariño en Chile
         </div>
-        <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-4 tracking-tight">
-          Somos <span class="text-orange-500">QuiénSabe</span>
+        <h1 class="text-4xl md:text-5xl font-extrabold about-text-primary mb-4 tracking-tight">
+          Somos <span class="about-text-accent">QuiénSabe</span>
         </h1>
-        <p class="text-gray-600 mb-8 text-lg max-w-2xl mx-auto font-medium">
+        <p class="about-text-secondary mb-8 text-lg max-w-2xl mx-auto font-medium">
           Una plataforma comunitaria para conectar vecinos con oficios de barrio.
           Sin comisiones abusivas. Sin algoritmos oscuros. Solo personas ayudándose.
         </p>
         <div class="flex flex-wrap items-center justify-center gap-4">
           <a
             href="/donar"
-            class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-3 rounded-full font-bold shadow-md hover:shadow-lg transition flex items-center gap-2"
+            class="about-btn-primary text-white px-8 py-3 rounded-full font-bold transition flex items-center gap-2"
           >
-            <i class="ri-heart-3-fill"></i> Donar para mantenerlo vivo
+            <i class="ri-heart-3-fill" aria-hidden="true"></i> Donar para mantenerlo vivo
           </a>
           <a
             href="/iniciar-sesion"
-            class="bg-white text-gray-800 px-8 py-3 rounded-full font-bold border-2 border-gray-200 hover:border-orange-500 hover:text-orange-500 transition flex items-center gap-2"
+            class="about-btn-secondary px-8 py-3 rounded-full font-bold transition flex items-center gap-2"
           >
-            <i class="ri-login-box-line"></i> Iniciar sesión
+            <i class="ri-login-box-line" aria-hidden="true"></i> Iniciar sesión
           </a>
         </div>
       </div>
     </header>
 
     <!-- Misión -->
-    <section class="py-16 bg-white">
+    <section class="py-16 about-bg-card">
       <div class="container mx-auto px-4 max-w-4xl">
         <div class="text-center mb-12">
-          <span class="inline-block bg-orange-100 text-orange-500 px-4 py-1.5 rounded-full text-xs font-bold mb-3">Nuestra misión</span>
-          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-4">Construir barrio, un oficio a la vez</h2>
+          <span class="inline-block about-badge-orange px-4 py-1.5 rounded-full text-xs font-bold mb-3">Nuestra misión</span>
+          <h2 class="text-3xl md:text-4xl font-extrabold about-text-primary mb-4">Construir barrio, un oficio a la vez</h2>
         </div>
-        <div class="text-gray-600 leading-relaxed space-y-4">
+        <div class="about-text-secondary leading-relaxed space-y-4">
           <p>
             QuiénSabe nació en 2026 como respuesta a una frustración simple: encontrar un gasfiter,
             electricista o jardinero de confianza en tu propia comuna es más difícil de lo que debería ser.
@@ -62,93 +75,66 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </section>
 
     <!-- Cómo funciona -->
-    <section class="py-16 bg-gray-50">
+    <section class="py-16 about-bg-inset">
       <div class="container mx-auto px-4 max-w-5xl">
         <div class="text-center mb-12">
-          <span class="inline-block bg-blue-100 text-blue-800 px-4 py-1.5 rounded-full text-xs font-bold mb-3">Cómo funciona</span>
-          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-4">3 pasos. Sin enredos.</h2>
+          <span class="inline-block about-badge-blue px-4 py-1.5 rounded-full text-xs font-bold mb-3">Cómo funciona</span>
+          <h2 class="text-3xl md:text-4xl font-extrabold about-text-primary mb-4">3 pasos. Sin enredos.</h2>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 text-center">
-            <div class="bg-orange-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <i class="ri-search-line text-orange-500 text-3xl"></i>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {pasos.map((paso) => (
+            <div class="about-step-card rounded-3xl p-8 text-center">
+              <div class="about-step-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <i class={`${paso.icono} about-text-accent text-3xl`} aria-hidden="true"></i>
+              </div>
+              <div class="text-xs font-bold about-text-accent mb-2">{paso.n}</div>
+              <h3 class="text-xl font-extrabold about-text-primary mb-3">{paso.titulo}</h3>
+              <p class="about-text-secondary text-sm">{paso.texto}</p>
             </div>
-            <div class="text-xs font-bold text-orange-500 mb-2">PASO 1</div>
-            <h3 class="text-xl font-extrabold text-gray-800 mb-3">Busca</h3>
-            <p class="text-gray-600 text-sm">Encuentra vecinos talentosos por oficio y comuna. Filtra por rating, disponibilidad y precio.</p>
-          </div>
-          <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 text-center">
-            <div class="bg-orange-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <i class="ri-chat-3-line text-orange-500 text-3xl"></i>
-            </div>
-            <div class="text-xs font-bold text-orange-500 mb-2">PASO 2</div>
-            <h3 class="text-xl font-extrabold text-gray-800 mb-3">Contacta</h3>
-            <p class="text-gray-600 text-sm">Escríbeles directo por WhatsApp o email. Sin formularios eternos, sin call centers.</p>
-          </div>
-          <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 text-center">
-            <div class="bg-orange-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <i class="ri-star-smile-line text-orange-500 text-3xl"></i>
-            </div>
-            <div class="text-xs font-bold text-orange-500 mb-2">PASO 3</div>
-            <h3 class="text-xl font-extrabold text-gray-800 mb-3">Califica</h3>
-            <p class="text-gray-600 text-sm">Después del trabajo, deja una reseña honesta. Así ayudás al siguiente vecino.</p>
-          </div>
+          ))}
         </div>
       </div>
     </section>
 
     <!-- Equipo -->
-    <section class="py-16 bg-white">
+    <section class="py-16 about-bg-card">
       <div class="container mx-auto px-4 max-w-5xl">
         <div class="text-center mb-12">
-          <span class="inline-block bg-purple-100 text-purple-800 px-4 py-1.5 rounded-full text-xs font-bold mb-3">Equipo</span>
-          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-4">Las personas detrás</h2>
-          <p class="text-gray-600 max-w-xl mx-auto">Un equipo pequeño que cree en lo simple, lo transparente y lo hecho con cariño.</p>
+          <span class="inline-block about-badge-pink px-4 py-1.5 rounded-full text-xs font-bold mb-3">Equipo</span>
+          <h2 class="text-3xl md:text-4xl font-extrabold about-text-primary mb-4">Las personas detrás</h2>
+          <p class="about-text-secondary max-w-xl mx-auto">Un equipo pequeño que cree en lo simple, lo transparente y lo hecho con cariño.</p>
         </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <div class="text-center">
-            <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-orange-500 to-orange-400 flex items-center justify-center text-white text-3xl font-extrabold mb-3 shadow-md">MR</div>
-            <h4 class="font-bold text-gray-800">María R.</h4>
-            <p class="text-xs text-gray-500">Fundadora · Producto</p>
-          </div>
-          <div class="text-center">
-            <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-3xl font-extrabold mb-3 shadow-md">DS</div>
-            <h4 class="font-bold text-gray-800">Diego S.</h4>
-            <p class="text-xs text-gray-500">Co-fundador · Ingeniería</p>
-          </div>
-          <div class="text-center">
-            <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white text-3xl font-extrabold mb-3 shadow-md">CF</div>
-            <h4 class="font-bold text-gray-800">Camila F.</h4>
-            <p class="text-xs text-gray-500">Comunidad</p>
-          </div>
-          <div class="text-center">
-            <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white text-3xl font-extrabold mb-3 shadow-md">JT</div>
-            <h4 class="font-bold text-gray-800">Joaquín T.</h4>
-            <p class="text-xs text-gray-500">Operaciones</p>
-          </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+          {equipo.map((persona) => (
+            <div class="text-center">
+              <div class={`${persona.gradiente} w-24 h-24 mx-auto rounded-full flex items-center justify-center text-white text-3xl font-extrabold mb-3`}>{persona.iniciales}</div>
+              <h4 class="font-bold about-text-primary">{persona.nombre}</h4>
+              <p class="text-xs about-text-muted">{persona.rol}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
 
     <!-- Transparencia radical -->
-    <section class="py-16 bg-gray-50">
+    <section class="py-16 about-bg-inset">
       <div class="container mx-auto px-4 max-w-4xl">
-        <div class="bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-3xl p-10 shadow-xl relative overflow-hidden">
-          <div class="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl"></div>
+        <div class="about-dark-card text-white rounded-3xl p-8 sm:p-10 relative overflow-hidden">
+          <div class="about-dark-glow absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl"></div>
           <div class="relative z-10">
-            <span class="inline-block bg-white/10 px-4 py-1.5 rounded-full text-xs font-bold mb-4">
-              <i class="ri-eye-line"></i> Transparencia radical
+            <span class="inline-block about-dark-badge px-4 py-1.5 rounded-full text-xs font-bold mb-4">
+              <i class="ri-eye-line" aria-hidden="true"></i> Transparencia radical
             </span>
             <h2 class="text-3xl font-extrabold mb-4">Cada peso que entra y sale, publicado</h2>
-            <p class="text-gray-300 mb-6 max-w-2xl">
+            <p class="about-dark-text mb-6 max-w-2xl">
               Creemos que la confianza se construye con información, no con promesas.
               Por eso publicamos mensualmente todos nuestros ingresos, gastos y decisiones.
             </p>
             <a
               href="/transparency"
-              class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-full font-bold shadow-md transition"
+              class="about-btn-primary inline-flex items-center gap-2 text-white px-6 py-3 rounded-full font-bold transition"
             >
-              Ver reportes mensuales <i class="ri-arrow-right-line"></i>
+              Ver reportes mensuales <i class="ri-arrow-right-line" aria-hidden="true"></i>
             </a>
           </div>
         </div>
@@ -156,23 +142,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </section>
 
     <!-- CTA Final -->
-    <section class="py-16 bg-white">
+    <section class="py-16 about-bg-card">
       <div class="container mx-auto px-4 max-w-3xl text-center">
-        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-4">¿Te sumas al barrio?</h2>
-        <p class="text-gray-600 mb-8 max-w-xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-extrabold about-text-primary mb-4">¿Te sumas al barrio?</h2>
+        <p class="about-text-secondary mb-8 max-w-xl mx-auto">
           Ya sea buscando un oficio, ofreciendo tus servicios o simplemente donando un café,
           cada ayuda cuenta para mantener vivo este espacio.
         </p>
         <div class="flex flex-wrap items-center justify-center gap-4">
           <a
             href="/donar"
-            class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-3 rounded-full font-bold shadow-md hover:shadow-lg transition"
+            class="about-btn-primary text-white px-8 py-3 rounded-full font-bold transition"
           >
             Donar
           </a>
           <a
             href="/iniciar-sesion"
-            class="bg-white text-gray-800 px-8 py-3 rounded-full font-bold border-2 border-gray-200 hover:border-orange-500 hover:text-orange-500 transition"
+            class="about-btn-secondary px-8 py-3 rounded-full font-bold transition"
           >
             Iniciar sesión
           </a>
@@ -180,15 +166,68 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </section>
 
-    <!-- Pre-footer: links del mockup (Términos, Privacidad, Transparencia, Donaciones) -->
-    <nav class="bg-gray-900 text-white py-8" aria-label="Enlaces del pie">
-      <div class="container mx-auto px-4 flex flex-wrap items-center justify-center gap-6 text-sm">
-        <a href="/terminos" class="hover:text-orange-500 transition font-bold">Términos</a>
-        <a href="/privacidad" class="hover:text-orange-500 transition font-bold">Privacidad</a>
-        <a href="/transparency" class="hover:text-orange-500 transition font-bold">Transparencia</a>
-        <a href="/donar" class="hover:text-orange-500 transition font-bold">Donaciones</a>
-      </div>
-    </nav>
-
   </main>
+
+  <style>
+    .about-hero { background: linear-gradient(to bottom right, var(--orange-50), var(--amber-50)); }
+    .about-bg-card { background: var(--bg-card); }
+    .about-bg-inset { background: var(--bg-inset); }
+
+    .about-text-primary { color: var(--text-primary); }
+    .about-text-secondary { color: var(--text-secondary); }
+    .about-text-muted { color: var(--text-muted); }
+    .about-text-accent { color: var(--color-accent); }
+
+    .about-badge-green { background: var(--green-100); color: var(--green-800); }
+    .about-badge-orange { background: var(--orange-100); color: var(--color-accent); }
+    .about-badge-blue { background: var(--blue-100); color: var(--blue-700); }
+    .about-badge-pink { background: var(--pink-100); color: var(--pink-600); }
+
+    .about-btn-primary {
+      background: linear-gradient(to right, var(--orange-500), var(--orange-600));
+      box-shadow: var(--shadow-md);
+      min-height: 44px;
+    }
+    .about-btn-primary:hover { box-shadow: var(--shadow-lg); }
+    .about-btn-primary:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--amber-200);
+    }
+
+    .about-btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 2px solid var(--border-default);
+      min-height: 44px;
+    }
+    .about-btn-secondary:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+    .about-btn-secondary:focus-visible {
+      outline: none;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px var(--amber-100);
+    }
+
+    .about-step-card {
+      background: var(--bg-card);
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--border-light);
+    }
+    .about-step-icon { background: var(--orange-100); }
+
+    .team-avatar-orange { background: linear-gradient(to bottom right, var(--orange-500), var(--orange-400)); box-shadow: var(--shadow-md); }
+    .team-avatar-blue { background: linear-gradient(to bottom right, var(--blue-400), var(--blue-600)); box-shadow: var(--shadow-md); }
+    .team-avatar-pink { background: linear-gradient(to bottom right, var(--pink-400), var(--pink-600)); box-shadow: var(--shadow-md); }
+    .team-avatar-green { background: linear-gradient(to bottom right, var(--green-400), var(--green-600)); box-shadow: var(--shadow-md); }
+
+    .about-dark-card {
+      background: linear-gradient(to bottom right, var(--stone-900), var(--stone-800));
+      box-shadow: var(--shadow-card-lifted);
+    }
+    .about-dark-glow { background: color-mix(in srgb, var(--orange-500) 10%, transparent); }
+    .about-dark-badge { background: rgba(255, 255, 255, 0.1); }
+    .about-dark-text { color: var(--stone-300); }
+  </style>
 </BaseLayout>

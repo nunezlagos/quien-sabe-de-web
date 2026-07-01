@@ -45,28 +45,28 @@ function renderStars(r: number): string {
         <div class="badges secondary">
           {trade.verified ? (
           <span class="badge badge-verified">
-            <i class="ri-shield-check-fill"></i> Verificado
+            <i class="ri-shield-check-fill" aria-hidden="true"></i> Verificado
           </span>
           ) : null}
           {trade.availableNow ? (
           <span class="badge badge-available">
-            <i class="ri-flashlight-fill"></i> Disponible
+            <i class="ri-flashlight-fill" aria-hidden="true"></i> Disponible
           </span>
           ) : null}
         </div>
         {trade.communeName ? (
         <span class="badge-location">
-          <i class="ri-map-pin-line"></i> {trade.communeName}
+          <i class="ri-map-pin-line" aria-hidden="true"></i> {trade.communeName}
         </span>
         ) : null}
       </div>
       <div class="card-rating">
-        <div class="stars" set:html={renderStars(rating)}></div>
+        <div class="stars" role="img" aria-label={`Valoración ${rating} de 5`} set:html={renderStars(rating)}></div>
       </div>
     </div>
 
     <div class="card-description">
-      <p>{trade.description ?? 'Servicio profesional disponible en tu barrio.'}</p>
+      <p title={trade.description ?? 'Servicio profesional disponible en tu barrio.'}>{trade.description ?? 'Servicio profesional disponible en tu barrio.'}</p>
     </div>
 
     <div class="card-tags">
@@ -81,25 +81,29 @@ function renderStars(r: number): string {
     </div>
     <div class="card-actions">
       <button
+        type="button"
         data-fav-toggle={trade.slug}
         class="btn-icon btn-fav js-fav-btn"
         title="Guardar"
+        aria-label={`Guardar ${trade.name} en favoritos`}
       >
-        <i class="ri-heart-line"></i>
+        <i class="ri-heart-line" aria-hidden="true"></i>
       </button>
       <a
         href={`/p/${trade.slug}`}
         class="btn-icon btn-view"
         title="Ver Detalles"
+        aria-label={`Ver detalles de ${trade.name}`}
       >
-        <i class="ri-eye-line"></i>
+        <i class="ri-eye-line" aria-hidden="true"></i>
       </a>
       <a
         href={`/p/${trade.slug}`}
         class="btn-icon btn-whatsapp"
         title="Contactar"
+        aria-label={`Contactar a ${trade.name}`}
       >
-        <i class="ri-whatsapp-line"></i>
+        <i class="ri-whatsapp-line" aria-hidden="true"></i>
       </a>
     </div>
   </div>
@@ -233,7 +237,7 @@ function renderStars(r: number): string {
   .stars {
     display: flex;
     gap: 2px;
-    color: #fbbf24;
+    color: var(--amber-400);
     font-size: 0.75rem;
   }
 
@@ -249,6 +253,8 @@ function renderStars(r: number): string {
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    /* Fallback para navegadores sin soporte de -webkit-line-clamp */
+    max-height: calc(1.6em * 3);
   }
 
   .card-tags {
@@ -301,8 +307,8 @@ function renderStars(r: number): string {
   }
 
   .btn-icon {
-    width: 2.25rem;
-    height: 2.25rem;
+    width: 2.75rem;
+    height: 2.75rem;
     border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
@@ -316,14 +322,19 @@ function renderStars(r: number): string {
     font-size: 1rem;
   }
 
+  .btn-icon:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+
   .btn-fav {
     color: var(--slate-400);
   }
 
   .btn-fav:hover {
-    color: #ef4444;
-    border-color: #fecaca;
-    background: #fef2f2;
+    color: var(--color-error);
+    border-color: var(--color-error-border);
+    background: var(--color-error-bg);
   }
 
   .btn-view {
@@ -337,13 +348,13 @@ function renderStars(r: number): string {
   }
 
   .btn-whatsapp {
-    background: #22c55e;
+    background: var(--green-500);
     color: white;
-    border-color: #16a34a;
+    border-color: var(--green-600);
   }
 
   .btn-whatsapp:hover {
-    background: #16a34a;
+    background: var(--green-600);
     transform: scale(1.05);
     box-shadow: var(--shadow-card-hover);
   }

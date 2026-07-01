@@ -31,7 +31,7 @@ const labelMap: Record<string, string> = {
 
 <div class="widget-card">
   <h3 class="widget-title">
-    <i class="ri-chat-1-fill" style="color: var(--orange-500)"></i> Historial de contactos
+    <i class="ri-chat-1-fill" style="color: var(--orange-500)" aria-hidden="true"></i> Historial de contactos
   </h3>
 
   {events.length > 0 ? (
@@ -39,7 +39,7 @@ const labelMap: Record<string, string> = {
       {events.map((ev) => (
         <div class="event-item">
           <div class="event-icon" data-type={ev.eventType}>
-            <i class={iconMap[ev.eventType] || 'ri-question-line'}></i>
+            <i class={iconMap[ev.eventType] || 'ri-question-line'} aria-hidden="true"></i>
           </div>
           <div class="event-info">
             <a href={`/p/${ev.tradeSlug}`} class="event-trade">{ev.tradeName}</a>
@@ -52,7 +52,7 @@ const labelMap: Record<string, string> = {
   ) : (
     <div class="empty-state">
       <div class="empty-icon">
-        <i class="ri-chat-1-line"></i>
+        <i class="ri-chat-1-line" aria-hidden="true"></i>
       </div>
       <p class="empty-text">Aún no has contactado a ningún vecino.</p>
       <p class="empty-subtext">Cuando contactes a un oficio aparecerá aquí.</p>
@@ -117,8 +117,8 @@ const labelMap: Record<string, string> = {
   }
 
   .event-icon[data-type="whatsapp"] {
-    background: #dcfce7;
-    color: #16a34a;
+    background: var(--green-100);
+    color: var(--green-600);
   }
 
   .event-icon[data-type="email"] {

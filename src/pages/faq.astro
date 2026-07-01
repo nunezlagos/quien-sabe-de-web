@@ -1,13 +1,20 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
+// Mapeo explícito de tokens por categoría (evita interpolación dinámica de var()).
+const categoryColors: Record<string, { bg: string; icon: string }> = {
+  amber: { bg: 'var(--amber-100)', icon: 'var(--amber-600)' },
+  blue: { bg: 'var(--blue-100)', icon: 'var(--blue-600)' },
+  orange: { bg: 'var(--orange-100)', icon: 'var(--orange-600)' },
+  pink: { bg: 'var(--pink-100)', icon: 'var(--pink-600)' },
+};
+
 const categorias = [
   {
     id: 'general',
     titulo: 'General',
     icono: 'ri-information-line',
     colorFondo: 'amber',
-    colorIcono: 'text-amber-600',
     preguntas: [
       {
         q: '¿Qué es QuiénSabe?',
@@ -32,7 +39,6 @@ const categorias = [
     titulo: 'Para vecinos',
     icono: 'ri-user-search-line',
     colorFondo: 'blue',
-    colorIcono: 'text-blue-600',
     preguntas: [
       {
         q: '¿Cómo busco un oficio?',
@@ -57,7 +63,6 @@ const categorias = [
     titulo: 'Para prestadores',
     icono: 'ri-tools-line',
     colorFondo: 'orange',
-    colorIcono: 'text-orange-600',
     preguntas: [
       {
         q: '¿Cómo me registro como prestador?',
@@ -82,7 +87,6 @@ const categorias = [
     titulo: 'Donaciones y transparencia',
     icono: 'ri-heart-3-line',
     colorFondo: 'pink',
-    colorIcono: 'text-pink-600',
     preguntas: [
       {
         q: '¿Para qué se usan las donaciones?',
@@ -106,7 +110,7 @@ const categorias = [
   <header class="faq-header">
     <div class="container mx-auto px-4 text-center relative z-10">
       <div class="faq-header-badge">
-        <i class="ri-question-line"></i> Centro de ayuda
+        <i class="ri-question-line" aria-hidden="true"></i> Centro de ayuda
       </div>
       <h1 class="faq-header-title">
         Preguntas frecuentes
@@ -116,7 +120,8 @@ const categorias = [
       </p>
 
       <div class="max-w-xl mx-auto relative">
-        <i class="ri-search-line faq-search-icon"></i>
+        <label for="faq-search" class="sr-only">Buscar una pregunta frecuente</label>
+        <i class="ri-search-line faq-search-icon" aria-hidden="true"></i>
         <input
           id="faq-search"
           type="search"
@@ -129,11 +134,13 @@ const categorias = [
 
   <main class="faq-main">
 
-    {categorias.map((cat) => (
+    {categorias.map((cat) => {
+      const colores = categoryColors[cat.colorFondo] ?? categoryColors.amber;
+      return (
       <section class="faq-category" data-category={cat.id}>
         <h2 class="faq-category-title">
-          <span class="faq-category-icon" style={`background: var(--${cat.colorFondo.replace('bg-', '')}-100); color: var(--${cat.colorIcono.replace('text-', '')}-600)`}>
-            <i class={cat.icono}></i>
+          <span class="faq-category-icon" style={`background: ${colores.bg}; color: ${colores.icon}`}>
+            <i class={cat.icono} aria-hidden="true"></i>
           </span>
           {cat.titulo}
         </h2>
@@ -142,17 +149,18 @@ const categorias = [
             <details class="faq-item" data-faq={`${cat.id}-${idx + 1}`}>
               <summary class="faq-question">
                 <span>{p.q}</span>
-                <i class="ri-arrow-down-s-line faq-arrow"></i>
+                <i class="ri-arrow-down-s-line faq-arrow" aria-hidden="true"></i>
               </summary>
               <div class="faq-answer" set:html={p.a} />
             </details>
           ))}
         </div>
       </section>
-    ))}
+      );
+    })}
 
     <div id="faq-no-matches" class="faq-no-matches hidden">
-      <i class="ri-search-eye-line"></i>
+      <i class="ri-search-eye-line" aria-hidden="true"></i>
       <p class="faq-no-matches-text">No encontramos preguntas para tu búsqueda.</p>
       <p class="faq-no-matches-sub">
         Intenta con otra palabra o escríbenos a <a href="mailto:soporte@quiensabe.cl">soporte@quiensabe.cl</a>.
@@ -163,7 +171,7 @@ const categorias = [
       <h3 class="faq-contact-title">¿No encontraste tu respuesta?</h3>
       <p class="faq-contact-subtitle">Escríbenos y te respondemos en menos de 24h.</p>
       <a href="mailto:soporte@quiensabe.cl" class="faq-contact-btn">
-        <i class="ri-mail-send-line"></i> Contactar soporte
+        <i class="ri-mail-send-line" aria-hidden="true"></i> Contactar soporte
       </a>
     </div>
 
@@ -231,10 +239,16 @@ const categorias = [
       box-shadow: var(--shadow-card);
     }
 
-    .faq-search-input:focus {
+    .faq-search-input:focus-visible {
       outline: none;
-      border-color: var(--amber-400);
+      border-color: var(--border-focus);
       box-shadow: 0 0 0 3px var(--amber-100);
+    }
+
+    .faq-question:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--amber-100);
+      border-radius: var(--radius-xl);
     }
 
     .faq-main {
@@ -379,9 +393,10 @@ const categorias = [
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: var(--orange-500);
-      color: white;
+      background: var(--color-accent);
+      color: var(--text-inverse);
       padding: 0.75rem 1.5rem;
+      min-height: 44px;
       border-radius: var(--radius-full);
       font-weight: 700;
       font-size: 0.875rem;
@@ -390,9 +405,14 @@ const categorias = [
     }
 
     .faq-contact-btn:hover {
-      background: var(--orange-600);
+      background: var(--color-accent-dark);
       transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(249, 115, 22, 0.4);
+      box-shadow: var(--shadow-card-hover);
+    }
+
+    .faq-contact-btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--amber-200);
     }
   </style>
 
