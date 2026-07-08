@@ -1,10 +1,11 @@
-name: Deploy — Production
+name: Deploy — Production (VPS, signed tag)
 on:
   push:
     tags: ['v*']
 
 concurrency:
   group: deploy-prod
+  cancel-in-progress: false
 
 jobs:
   verify-tag:
@@ -15,6 +16,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
+          fetch-depth: 0
       - id: check-signature
         run: |
           if git tag -v ${{ github.ref_name }} 2>/dev/null; then
@@ -29,22 +31,23 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          bun-version: latest
-      - run: bun install --frozen-lockfile
-      - name: Apply D1 migrations
-        run: bunx wrangler d1 migrations apply DB --env production
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      - name: Deploy to production
-        run: bunx wrangler deploy --env production
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      - name: Smoke test
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            cd /opt/quien-sabe
+            git fetch --tags origin
+            git checkout ${{ github.ref_name }}
+            git reset --hard origin/${{ github.ref_name }}
+            make restart
+            sleep 5
+            curl -fsS http://localhost:4323/api/v1/health || echo "health endpoint not ready yet"
+      - name: Smoke test (public)
+        if: success()
         run: |
           curl -f -s -o /dev/null -w "%{http_code}" "https://quien-sabe.cl/api/v1/health" | grep -q 200
       - name: Notify Discord
@@ -52,4 +55,4 @@ jobs:
         uses: tsickert/discord-webhook@v6
         with:
           webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
-          content: "🚀 Production deploy v${{ github.ref_name }} — ${{ job.status }}"
+          content: "🚀 Production deploy ${{ github.ref_name }} — ${{ job.status }} — ${{ github.sha }}"

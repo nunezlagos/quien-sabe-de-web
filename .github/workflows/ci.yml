@@ -26,7 +26,7 @@ jobs:
         with:
           bun-version: latest
       - run: bun install --frozen-lockfile
-      - run: bunx tsc --noEmit
+      - run: bun run typecheck
 
   test-unit:
     runs-on: ubuntu-latest
@@ -40,6 +40,27 @@ jobs:
 
   test-integration:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: rootpass
+          MYSQL_DATABASE: quiensabe_test
+          MYSQL_USER: quiensabe
+          MYSQL_PASSWORD: quiensabe
+        ports:
+          - 3307:3306
+        options: >-
+          --health-cmd "mysqladmin ping -h localhost -u root -prootpass"
+          --health-interval 10s
+          --health-retries 5
+          --health-start-period 30s
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: "3307"
+      DB_USER: quiensabe
+      DB_PASSWORD: quiensabe
+      DB_NAME: quiensabe_test
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
