@@ -1,0 +1,37 @@
+name: Deploy — VPS
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy-vps
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            cd /opt/quien-sabe
+            git fetch origin main
+            git reset --hard origin/main
+            make restart
+            sleep 5
+            curl -fsS http://localhost:4323/api/v1/health || echo "health endpoint not ready yet"
+      - name: Smoke test (public)
+        if: success()
+        run: |
+          curl -f -s -o /dev/null -w "%{http_code}" "https://quien-sabe.cl/api/v1/health" | grep -q 200
+      - name: Notify Discord
+        if: always()
+        uses: tsickert/discord-webhook@v6
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+          content: "🚀 VPS deploy ${{ job.status }} — ${{ github.sha }}"
