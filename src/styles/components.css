@@ -74,3 +74,40 @@
 .toast--info { background: var(--color-gray-800); }
 .toast--success { background: var(--green-700); }
 .toast--error { background: var(--color-red-700); }
+
+/* ── Select popup (progressive enhancement) ──────────────────
+   appearance: base-select estiliza el desplegable a la paleta en
+   Chromium 135+ / Safari 27. Firefox lo ignora → select nativo. */
+@supports (appearance: base-select) {
+  select,
+  ::picker(select) { appearance: base-select; }
+
+  ::picker(select) {
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card-hover);
+    padding: var(--space-1);
+  }
+
+  option {
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+  }
+  option:hover,
+  option:focus  { background: var(--amber-50); }
+  option:checked {
+    background: var(--orange-50);
+    font-weight: 700;
+    color: var(--color-primary-dark);
+  }
+  option::checkmark { display: none; }
+
+  select::picker-icon      { color: var(--text-muted); transition: rotate 200ms ease; }
+  select:open::picker-icon { rotate: 180deg; }
+
+  /* el hero dibuja su propia flecha → evitar doble indicador */
+  .search-select::picker-icon { display: none; }
+}
