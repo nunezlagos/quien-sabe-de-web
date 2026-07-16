@@ -59,21 +59,18 @@ const phrase = phrases[Math.floor(Math.random() * phrases.length)];
     line-height: 1;
   }
 
-  /* letras base: contorno verde muy claro que se va rellenando */
+  /* letras base en verde: se van rellenando de naranja */
   .loader-logo-base {
-    color: var(--green-100);
+    color: var(--green-600);
   }
 
-  /* relleno verde->naranja revelado de abajo hacia arriba segun --fill */
+  /* relleno naranja revelado de izquierda a derecha segun --fill */
   .loader-logo-fill {
     position: absolute;
     top: 0;
     left: 0;
-    background: linear-gradient(180deg, var(--green-500), var(--color-accent));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    clip-path: inset(calc(100% - var(--fill, 0%)) 0 0 0);
+    color: var(--color-accent);
+    clip-path: inset(0 calc(100% - var(--fill, 0%)) 0 0);
     transition: clip-path 250ms ease;
   }
 
