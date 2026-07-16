@@ -43,6 +43,8 @@ const recommendedTrades = shuffled.slice(0, 6);
 // para que la ultima fila del mosaico quede siempre completa (repite imagen si hace falta)
 const COLLAGE_COUNT = 198;
 const COLLAGE_COLS = 20;
+// solo 40 imagenes unicas: los tiles reusan src (i % UNIQUE_IMAGES) para cortar requests
+const UNIQUE_IMAGES = 40;
 const collageShapes = ['c-wide', 'c-tall', 'c-big'];
 const shapeCells = { 'c-wide': 2, 'c-tall': 2, 'c-big': 4, '': 1 };
 const collageTiles = Array.from({ length: COLLAGE_COUNT }, (_, i) =>
@@ -53,6 +55,12 @@ while (collageCells % COLLAGE_COLS !== 0) {
   collageTiles.push('');
   collageCells++;
 }
+// brillo random: ~35% de los tiles pulsan con delay/duracion aleatorios (varios a la vez, sin orden)
+const collageGlow = collageTiles.map(() =>
+  Math.random() > 0.35
+    ? null
+    : { delay: (Math.random() * 8).toFixed(2), dur: (4 + Math.random() * 3).toFixed(2) }
+);
 ---
 
 <BaseLayout title="QuiénSabe — Conecta con oficios de tu barrio">
@@ -61,14 +69,22 @@ while (collageCells % COLLAGE_COLS !== 0) {
   <!-- Primera sección: hero + publicidad sobre un collage de oficios -->
   <section class="hero-block">
     <div class="hero-collage" aria-hidden="true">
-      {collageTiles.map((shape, i) => (
-        <img
-          class={shape ? `c-tile ${shape}` : 'c-tile'}
-          src={`/images/collage/${String(i % COLLAGE_COUNT).padStart(3, '0')}.webp`}
-          alt=""
-          decoding="async"
-        />
-      ))}
+      {collageTiles.map((shape, i) => {
+        const glow = collageGlow[i];
+        const cls = ['c-tile', shape, glow ? 'c-glow' : ''].filter(Boolean).join(' ');
+        return (
+          <div
+            class={cls}
+            style={glow ? `--glow-delay:${glow.delay}s;--glow-dur:${glow.dur}s` : undefined}
+          >
+            <img
+              src={`/images/collage/${String(i % UNIQUE_IMAGES).padStart(3, '0')}.webp`}
+              alt=""
+              decoding="async"
+            />
+          </div>
+        );
+      })}
     </div>
     <div id="hero-section-wrapper">
       <HeroSearch
@@ -345,11 +361,17 @@ while (collageCells % COLLAGE_COLS !== 0) {
     gap: 2px;
   }
 
+  .hero-collage .c-tile {
+    position: relative;
+    overflow: hidden;
+    min-width: 0;
+    min-height: 0;
+    isolation: isolate;
+  }
+
   .hero-collage img {
     width: 100%;
     height: 100%;
-    min-width: 0;
-    min-height: 0;
     object-fit: cover;
     display: block;
   }
@@ -358,6 +380,37 @@ while (collageCells % COLLAGE_COLS !== 0) {
   .hero-collage .c-wide { grid-column: span 2; }
   .hero-collage .c-tall { grid-row: span 2; }
   .hero-collage .c-big { grid-column: span 2; grid-row: span 2; }
+
+  /* mascara naranja de marca: subconjunto random se tiñe, sin orden */
+  .hero-collage .c-glow img {
+    animation: tile-glow var(--glow-dur, 6s) ease-in-out var(--glow-delay, 0s) infinite;
+  }
+
+  .hero-collage .c-glow::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--color-accent);
+    mix-blend-mode: color;
+    opacity: 0;
+    pointer-events: none;
+    animation: tile-tint var(--glow-dur, 6s) ease-in-out var(--glow-delay, 0s) infinite;
+  }
+
+  @keyframes tile-glow {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.4); }
+  }
+
+  @keyframes tile-tint {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 0.85; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-collage .c-glow img,
+    .hero-collage .c-glow::after { animation: none; }
+  }
 
   @media (max-width: 640px) {
     .hero-collage {
