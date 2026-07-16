@@ -1,16 +1,22 @@
 ---
-import '../../styles/pages/page-loader.css';
+const phrases = [
+  'Conectando con los oficios de tu barrio…',
+  'Buscando manos expertas cerca de ti…',
+  'Tejiendo comunidad, un oficio a la vez…',
+  'Reuniendo a los vecinos que saben…',
+  'Cada vecino sabe hacer algo…',
+  'Encendiendo el barrio…',
+];
+const phrase = phrases[Math.floor(Math.random() * phrases.length)];
 ---
 
 <div id="page-loader" class="page-loader" role="status" aria-live="polite" aria-busy="true">
   <div class="loader-content">
-    <div class="loader-brand" aria-hidden="true">
-      <div class="loader-logo-wrap">
-        <div class="loader-logo-base">Quién<span>Sabe</span></div>
-        <div class="loader-logo-fill">Quién<span>Sabe</span></div>
-      </div>
+    <div class="loader-logo-wrap" aria-hidden="true">
+      <div class="loader-logo-base">Quién<span>Sabe</span></div>
+      <div class="loader-logo-fill">Quién<span>Sabe</span></div>
     </div>
-    <p class="loader-text">Cargando barrio...</p>
+    <p class="loader-text">{phrase}</p>
   </div>
 </div>
 
@@ -40,11 +46,6 @@ import '../../styles/pages/page-loader.css';
     text-align: center;
   }
 
-  .loader-brand {
-    position: relative;
-    display: inline-block;
-  }
-
   .loader-logo-wrap {
     position: relative;
     display: inline-block;
@@ -58,28 +59,39 @@ import '../../styles/pages/page-loader.css';
     line-height: 1;
   }
 
+  /* letras base: contorno verde muy claro que se va rellenando */
   .loader-logo-base {
-    color: var(--stone-200);
+    color: var(--green-100);
   }
 
+  /* relleno verde->naranja revelado de abajo hacia arriba segun --fill */
   .loader-logo-fill {
     position: absolute;
     top: 0;
     left: 0;
-    color: var(--amber-600);
-    animation: loader-pulse 1.5s ease-in-out infinite;
+    background: linear-gradient(180deg, var(--green-500), var(--color-accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    clip-path: inset(calc(100% - var(--fill, 0%)) 0 0 0);
+    transition: clip-path 250ms ease;
   }
 
   .loader-text {
-    color: var(--stone-400);
-    font-size: 0.875rem;
-    font-weight: 500;
-    margin-top: 1rem;
-    animation: loader-pulse 1.5s ease-in-out infinite;
+    color: var(--stone-500);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    margin-top: 1.25rem;
+    animation: loader-pulse 1.6s ease-in-out infinite;
   }
 
   @keyframes loader-pulse {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
+    50% { opacity: 0.5; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .loader-text { animation: none; }
+    .loader-logo-fill { transition: none; }
   }
 </style>

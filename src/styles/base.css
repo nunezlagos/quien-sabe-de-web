@@ -10,7 +10,6 @@
 @import "./global/animations.css";
 @import "./pages/login.css";
 @import "./pages/verify-email.css";
-@import "./pages/page-loader.css";
 @import "./pages/home.css";
 
 body {
