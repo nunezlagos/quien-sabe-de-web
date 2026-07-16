@@ -48,7 +48,7 @@ const recommendedTrades = shuffled.slice(0, 6);
     <div class="hero-collage" aria-hidden="true">
       {Array.from({ length: 200 }).map((_, i) => {
         const r = (i * 73 + 17) % 100;
-        const shape = r < 15 ? ' c-wide' : r < 30 ? ' c-tall' : r < 38 ? ' c-big' : '';
+        const shape = r < 16 ? ' c-wide' : r < 32 ? ' c-tall' : r < 40 ? ' c-big' : '';
         return <img class={`c-tile${shape}`} src={`/images/collage/${String(i).padStart(3, '0')}.webp`} alt="" decoding="async" />;
       })}
     </div>
@@ -321,8 +321,8 @@ const recommendedTrades = shuffled.slice(0, 6);
     inset: 0;
     z-index: 0;
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-auto-rows: 1fr;
+    grid-template-columns: repeat(20, 1fr);
+    grid-auto-rows: minmax(0, 1fr);
     grid-auto-flow: dense;
     gap: 2px;
   }
@@ -330,6 +330,8 @@ const recommendedTrades = shuffled.slice(0, 6);
   .hero-collage img {
     width: 100%;
     height: 100%;
+    min-width: 0;
+    min-height: 0;
     object-fit: cover;
     display: block;
   }
@@ -341,7 +343,7 @@ const recommendedTrades = shuffled.slice(0, 6);
 
   @media (max-width: 640px) {
     .hero-collage {
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(10, 1fr);
     }
   }
 
