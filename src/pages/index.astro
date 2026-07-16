@@ -38,6 +38,21 @@ const isSearching = Boolean(q || communeId || availableNow);
 
 const shuffled = [...allTrades].sort(() => Math.random() - 0.5);
 const recommendedTrades = shuffled.slice(0, 6);
+
+// collage del hero: formas espaciadas (1 cada 4, rotando) + padding de cuadrados
+// para que la ultima fila del mosaico quede siempre completa (repite imagen si hace falta)
+const COLLAGE_COUNT = 198;
+const COLLAGE_COLS = 20;
+const collageShapes = ['c-wide', 'c-tall', 'c-big'];
+const shapeCells = { 'c-wide': 2, 'c-tall': 2, 'c-big': 4, '': 1 };
+const collageTiles = Array.from({ length: COLLAGE_COUNT }, (_, i) =>
+  i % 4 === 0 ? collageShapes[(i / 4) % 3] : ''
+);
+let collageCells = collageTiles.reduce((sum, sh) => sum + shapeCells[sh], 0);
+while (collageCells % COLLAGE_COLS !== 0) {
+  collageTiles.push('');
+  collageCells++;
+}
 ---
 
 <BaseLayout title="QuiénSabe — Conecta con oficios de tu barrio">
@@ -46,11 +61,14 @@ const recommendedTrades = shuffled.slice(0, 6);
   <!-- Primera sección: hero + publicidad sobre un collage de oficios -->
   <section class="hero-block">
     <div class="hero-collage" aria-hidden="true">
-      {Array.from({ length: 200 }).map((_, i) => {
-        const shapes = ['c-wide', 'c-tall', 'c-big'];
-        const shape = i % 4 === 0 ? ` ${shapes[(i / 4) % 3]}` : '';
-        return <img class={`c-tile${shape}`} src={`/images/collage/${String(i).padStart(3, '0')}.webp`} alt="" decoding="async" />;
-      })}
+      {collageTiles.map((shape, i) => (
+        <img
+          class={shape ? `c-tile ${shape}` : 'c-tile'}
+          src={`/images/collage/${String(i % COLLAGE_COUNT).padStart(3, '0')}.webp`}
+          alt=""
+          decoding="async"
+        />
+      ))}
     </div>
     <div id="hero-section-wrapper">
       <HeroSearch

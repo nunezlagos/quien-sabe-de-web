@@ -202,5 +202,3 @@ Fotos del collage del hero (`collage/*.webp`, 200 imágenes), vía [Pexels](http
 | 195 | window cleaner | [Wolfgang Weiser](https://www.pexels.com/@wolfgang-weiser-467045605) | [ver](https://www.pexels.com/photo/modern-office-building-with-window-cleaners-in-hamburg-29502230/) |
 | 196 | window cleaner | [David Brown](https://www.pexels.com/@ninobur) | [ver](https://www.pexels.com/photo/man-on-a-ladder-cleaning-the-windows-in-a-building-16804980/) |
 | 197 | window cleaner | [Roman Kaiuk🇺🇦](https://www.pexels.com/@romakaiuk) | [ver](https://www.pexels.com/photo/a-man-cleaning-the-glass-window-11661020/) |
-| 198 | window cleaner | [DinaArt](https://www.pexels.com/@dinaart-124357106) | [ver](https://www.pexels.com/photo/photo-of-a-man-cleaning-windows-10092356/) |
-| 199 | window cleaner | [Jean-Guillaume Starnini](https://www.pexels.com/@jean-guillaume-starnini-2157985596) | [ver](https://www.pexels.com/photo/professional-window-cleaner-in-action-35081286/) |
