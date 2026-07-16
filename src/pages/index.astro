@@ -340,7 +340,7 @@ while (collageCells % COLLAGE_COLS !== 0) {
     z-index: 0;
     display: grid;
     grid-template-columns: repeat(20, 1fr);
-    grid-auto-rows: minmax(0, 1fr);
+    grid-auto-rows: calc((100dvh - 4rem) / 12);
     grid-auto-flow: dense;
     gap: 2px;
   }
@@ -379,6 +379,21 @@ while (collageCells % COLLAGE_COLS !== 0) {
   .hero-block > .ad-section {
     position: relative;
     z-index: 2;
+  }
+
+  /* texto del hero en claro para que resalte sobre el velo naranja */
+  .hero-block :global(.hero-title) {
+    color: #fff;
+    text-shadow: 0 1px 12px rgba(60, 20, 0, 0.45);
+  }
+
+  .hero-block :global(.dynamic-trade) {
+    color: #fcd34d;
+  }
+
+  .hero-block :global(.hero-desc) {
+    color: rgba(255, 255, 255, 0.92);
+    text-shadow: 0 1px 8px rgba(60, 20, 0, 0.4);
   }
 
   /* === AD SECTION === */
