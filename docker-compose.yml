@@ -1,0 +1,125 @@
+name: quien-sabe-de-web
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: quien-sabe-app
+    restart: unless-stopped
+    ports:
+      - "4323:4323"
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+      - ./tests:/app/tests
+      - ./astro.config.mjs:/app/astro.config.mjs
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./drizzle.config.ts:/app/drizzle.config.ts
+      - ./vitest.config.ts:/app/vitest.config.ts
+      - app_node_modules:/app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - HOST=0.0.0.0
+      - PORT=4323
+      # Database (variables que lee src/database/client.ts)
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=${DB_USER:-quiensabe}
+      - DB_PASSWORD=${DB_PASSWORD:-quiensabe}
+      - DB_NAME=${DB_NAME:-quiensabe}
+      # Para drizzle-kit (migrations / studio)
+      - DATABASE_URL=mysql://${DB_USER:-quiensabe}:${DB_PASSWORD:-quiensabe}@mysql:3306/${DB_NAME:-quiensabe}
+      # Image storage (variables que lee uploads.service.ts)
+      - MINIO_ENDPOINT=minio
+      - MINIO_PORT=9000
+      - MINIO_USE_SSL=false
+      - MINIO_ACCESS_KEY=${MINIO_ROOT_USER:-minioadmin}
+      - MINIO_SECRET_KEY=${MINIO_ROOT_PASSWORD:-minioadmin}
+      - MINIO_BUCKET=${MINIO_BUCKET:-quien-sabe-files}
+    env_file:
+      - path: .env
+        required: false
+    depends_on:
+      mysql:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    networks:
+      - quien-sabe-net
+
+  mysql:
+    image: mysql:8.0
+    container_name: quien-sabe-mysql
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-quiensabe_root}
+      - MYSQL_DATABASE=${DB_NAME:-quiensabe}
+      - MYSQL_USER=${DB_USER:-quiensabe}
+      - MYSQL_PASSWORD=${DB_PASSWORD:-quiensabe}
+    ports:
+      - "127.0.0.1:3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./deploy/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-quiensabe_root}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - quien-sabe-net
+
+  minio:
+    image: minio/minio:latest
+    container_name: quien-sabe-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    ports:
+      - "127.0.0.1:9002:9000"
+      - "127.0.0.1:9003:9001"
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER:-minioadmin}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-minioadmin}
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - quien-sabe-net
+
+  minio-bootstrap:
+    image: minio/mc:latest
+    container_name: quien-sabe-minio-bootstrap
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER:-minioadmin}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-minioadmin}
+      - MINIO_BUCKET=${MINIO_BUCKET:-quien-sabe-files}
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 $$MINIO_ROOT_USER $$MINIO_ROOT_PASSWORD
+      mc mb --ignore-existing local/$$MINIO_BUCKET
+      mc anonymous set download local/$$MINIO_BUCKET
+      echo 'Bucket $$MINIO_BUCKET listo';
+      "
+    restart: "no"
+    networks:
+      - quien-sabe-net
+
+volumes:
+  app_node_modules:
+  mysql_data:
+  minio_data:
+
+networks:
+  quien-sabe-net:
+    driver: bridge

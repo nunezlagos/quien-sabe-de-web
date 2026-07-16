@@ -1,63 +1,53 @@
-.PHONY: up down build logs shell restart migrate generate studio status ps clean
+.PHONY: up down build logs ps restart status info help
 
-# Stack dev completo (Astro + Mailpit + MinIO)
+# Producción: usa /opt/quien-sabe/docker-compose.prod.yml (sin Caddy — vía domain-caddy)
+COMPOSE := docker compose -f docker-compose.prod.yml --env-file .env
+
 up:
-	docker compose -f docker-compose.dev.yml up -d --build
+	$(COMPOSE) up -d --build
 	@echo ""
 	@echo "🚀 Stack levantado:"
-	@echo "   App:           http://localhost:4323"
-	@echo "   Mailpit UI:    http://localhost:8026"
-	@echo "   MinIO Console: http://localhost:9003 (user: minioadmin / pass: minioadmin)"
+	@echo "   https://quiensabe.cl (vía domain-caddy)"
+	@echo "   Logs:   make logs"
 	@echo ""
 
 down:
-	docker compose -f docker-compose.dev.yml down
+	$(COMPOSE) down
 
 build:
-	docker compose -f docker-compose.dev.yml build --no-cache
+	$(COMPOSE) build --no-cache
 
 logs:
-	docker logs -f quien-sabe-app
+	$(COMPOSE) logs -f
 
-logs-all:
-	docker compose -f docker-compose.dev.yml logs -f
+logs-app:
+	docker logs -f qs-app
 
-shell:
-	docker exec -it quien-sabe-app sh
+ps:
+	$(COMPOSE) ps
+
+status: ps
 
 restart:
-	docker compose -f docker-compose.dev.yml restart app
+	$(COMPOSE) restart
 
-# Drizzle / D1
-migrate:
-	docker exec quien-sabe-app bun run db:migrate:local
-
-generate:
-	docker exec quien-sabe-app bun run db:generate
-
-studio:
-	docker exec -it quien-sabe-app bun run db:studio
-
-# Estado del stack
-status: ps
-ps:
-	docker compose -f docker-compose.dev.yml ps
-
-# Limpieza profunda (borra volumenes — D1 local, MinIO, node_modules del container)
-clean:
-	docker compose -f docker-compose.dev.yml down -v
+info:
+	@echo "=== Containers ==="
+	@$(COMPOSE) ps
+	@echo
+	@echo "=== Healthchecks ==="
+	@for c in qs-mysql qs-minio qs-app; do \
+	  echo -n "$$c: "; \
+	  docker inspect --format '{{.State.Health.Status}}' $$c 2>/dev/null || echo "N/A"; \
+	done
 
 help:
-	@echo "Comandos disponibles:"
-	@echo "  make up        - Levantar stack dev (app + mailpit + minio)"
-	@echo "  make down      - Detener stack"
+	@echo "Comandos:"
+	@echo "  make up        - Levantar stack (build + start)"
+	@echo "  make down      - Bajar stack"
 	@echo "  make build     - Rebuild forzado (sin cache)"
-	@echo "  make logs      - Seguir logs del container app"
-	@echo "  make logs-all  - Seguir logs de todos los servicios"
-	@echo "  make shell     - Entrar al container app"
-	@echo "  make restart   - Reiniciar solo el container app"
-	@echo "  make migrate   - Aplicar migraciones drizzle a D1 local"
-	@echo "  make generate  - Generar migración nueva desde schema.ts"
-	@echo "  make studio    - Abrir Drizzle Studio"
-	@echo "  make ps        - Estado de los containers"
-	@echo "  make clean     - Bajar stack y borrar volúmenes (D1 local + MinIO data)"
+	@echo "  make logs      - Logs de todos los servicios"
+	@echo "  make logs-app  - Logs solo del app"
+	@echo "  make ps        - Estado de containers"
+	@echo "  make restart   - Reiniciar todos los servicios"
+	@echo "  make info      - Estado + healthchecks"

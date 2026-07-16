@@ -1,0 +1,15 @@
+[Unit]
+Description=quien-sabe-de-web stack (Astro + MySQL + MinIO)
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/quien-sabe
+ExecStart=/usr/bin/make -C /opt/quien-sabe up
+ExecStop=/usr/bin/make -C /opt/quien-sabe down
+RemainAfterExit=yes
+TimeoutStartSec=600
+
+[Install]
+WantedBy=multi-user.target

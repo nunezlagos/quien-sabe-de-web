@@ -1,0 +1,9 @@
+[Unit]
+Description=quien-sabe-de-web healthcheck (HTTPS quiensabe.cl)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'curl -fsS -o /dev/null -w "%%{http_code}\n" --max-time 10 https://quiensabe.cl/ | grep -q "^200$"'
+Restart=no
