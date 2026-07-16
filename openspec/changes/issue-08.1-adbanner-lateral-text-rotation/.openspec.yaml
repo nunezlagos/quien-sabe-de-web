@@ -1,0 +1,14 @@
+schema: spec-driven
+domain:
+  issue_id: cb0c0660-bc79-4383-9711-2f21256cef51
+  issue_slug: issue-08.1-adbanner-lateral-text-rotation
+  req: REQ-08-ux-ads
+  status: proposed
+  priority: low
+  proposal_version: 0
+  design_version: 0
+hashes:
+  "proposal.md": bac06d0b4384ac729704a8a69b5c09553d84518900cb1eb292260abe52055227
+  "design.md": 22e221b64d2f47194dab99363880947cfe606b5a9e0dbf83ee4c9c67fd4c0782
+  "tasks.md": cb315a1a58c036e632e06426922391d2ae27f234b3bdb30e084dd47bb1b85feb
+  "specs/issue-08.1-adbanner-lateral-text-rotation/spec.md": 5f1656ae86e948870815d95484ebff7792e1ca7af8677b009c0859666f51ebff
