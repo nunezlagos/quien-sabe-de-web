@@ -18,10 +18,6 @@ const { q, communeId, communes, trades } = Astro.props;
       Conecta con vecinos talentosos en tu barrio. Rápido, confiable y cercano.
     </p>
 
-    <div class="hero-notice">
-      <i class="ri-megaphone-fill" aria-hidden="true"></i> ¡Oferta! Publica tu oficio GRATIS por tiempo limitado
-    </div>
-
     <div id="hero-search-container" class="search-container">
       <div class="search-field">
         <i class="ri-briefcase-line search-icon" aria-hidden="true"></i>
@@ -111,8 +107,7 @@ const { q, communeId, communes, trades } = Astro.props;
   }
 
   :global(#hero-section-wrapper.hero-collapsed) .hero-title,
-  :global(#hero-section-wrapper.hero-collapsed) .hero-desc,
-  :global(#hero-section-wrapper.hero-collapsed) .hero-notice {
+  :global(#hero-section-wrapper.hero-collapsed) .hero-desc {
     display: none;
   }
 
@@ -171,26 +166,6 @@ const { q, communeId, communes, trades } = Astro.props;
     .hero-desc {
       font-size: 1.125rem;
     }
-  }
-
-  .hero-notice {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: var(--amber-50);
-    color: var(--amber-700);
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius-lg);
-    font-size: 0.75rem;
-    font-weight: 700;
-    border: 1px solid var(--amber-200);
-    margin-bottom: 1.5rem;
-    box-shadow: var(--shadow-card);
-    transition: all 300ms ease;
-  }
-
-  .hero-notice i {
-    font-size: 1rem;
   }
 
   .search-container {
