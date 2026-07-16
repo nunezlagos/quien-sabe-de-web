@@ -43,8 +43,13 @@ const recommendedTrades = shuffled.slice(0, 6);
 <BaseLayout title="QuiénSabe — Conecta con oficios de tu barrio">
   <PageLoader />
 
-  <!-- Primera sección: hero + publicidad sobre un fondo compartido -->
+  <!-- Primera sección: hero + publicidad sobre un collage de oficios -->
   <section class="hero-block">
+    <div class="hero-collage" aria-hidden="true">
+      {Array.from({ length: 100 }).map((_, i) => (
+        <img src={`/images/collage/${String(i).padStart(3, '0')}.webp`} alt="" decoding="async" />
+      ))}
+    </div>
     <div id="hero-section-wrapper">
       <HeroSearch
         q={q}
@@ -304,21 +309,48 @@ const recommendedTrades = shuffled.slice(0, 6);
     flex-direction: column;
     justify-content: space-between;
     padding: 4rem 0 3rem;
-    background: var(--cream-200) url("/images/hero-gemini.jpg") center / contain no-repeat;
+    background: var(--cream-200);
+    overflow: hidden;
   }
 
-  /* velo sutil para legibilidad sin tapar la foto */
+  /* collage: cada oficio en su propio frame dentro de una grilla */
+  .hero-collage {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-auto-rows: 1fr;
+    gap: 2px;
+  }
+
+  .hero-collage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  @media (max-width: 640px) {
+    .hero-collage {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+
+  /* velo sutil para legibilidad sobre el collage */
   .hero-block::before {
     content: '';
     position: absolute;
     inset: 0;
+    z-index: 1;
     background: linear-gradient(180deg, rgba(250, 248, 244, 0.4) 0%, rgba(250, 248, 244, 0.2) 100%);
     pointer-events: none;
   }
 
-  .hero-block > * {
+  .hero-block > #hero-section-wrapper,
+  .hero-block > .ad-section {
     position: relative;
-    z-index: 1;
+    z-index: 2;
   }
 
   /* === AD SECTION === */
