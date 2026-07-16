@@ -1,16 +1,18 @@
 const TRADES = [
   { name: 'Gasfiter', article: 'un' },
-  { name: 'Electricista', article: 'un' },
-  { name: 'Maestro', article: 'un' },
-  { name: 'Jardinero', article: 'un' },
-  { name: 'Pintor', article: 'un' },
   { name: 'Costurera', article: 'una' },
-  { name: 'Programador', article: 'un' },
+  { name: 'Electricista', article: 'un' },
+  { name: 'Jardinera', article: 'una' },
+  { name: 'Pintor', article: 'un' },
+  { name: 'Peluquera', article: 'una' },
+  { name: 'Carpintero', article: 'un' },
+  { name: 'Cocinera', article: 'una' },
 ];
 
 export function initDynamicText(): void {
   const el = document.getElementById('dynamic-trade');
   if (!el) return;
+  const articleEl = document.getElementById('dynamic-article');
 
   let index = 0;
 
@@ -23,6 +25,7 @@ export function initDynamicText(): void {
       if (!el) return;
       index = (index + 1) % TRADES.length;
       el.textContent = TRADES[index].name;
+      if (articleEl) articleEl.textContent = TRADES[index].article;
       el.classList.remove('animate-fade-out-up');
       el.classList.add('animate-fade-in-up');
     }, 500);

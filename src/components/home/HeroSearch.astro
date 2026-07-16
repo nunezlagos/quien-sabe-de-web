@@ -12,7 +12,7 @@ const { q, communeId, communes, trades } = Astro.props;
 <header id="hero-section" class="hero-section">
   <div class="container">
     <h1 class="hero-title">
-      ¿Quién sabe de un <span id="dynamic-trade" class="dynamic-trade">Gasfiter</span>?
+      ¿Quién sabe de <span id="dynamic-article">un</span> <span id="dynamic-trade" class="dynamic-trade">Gasfiter</span>?
     </h1>
     <p class="hero-desc">
       Conecta con vecinos talentosos en tu barrio. Rápido, confiable y cercano.
@@ -146,10 +146,8 @@ const { q, communeId, communes, trades } = Astro.props;
   }
 
   .dynamic-trade {
-    color: var(--amber-600);
+    color: var(--orange-500);
     display: inline-block;
-    min-width: 12rem;
-    text-align: left;
   }
 
   .hero-desc {
