@@ -302,16 +302,17 @@ const recommendedTrades = shuffled.slice(0, 6);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    background: var(--cream-200) url("/images/hero-shoemaker.jpg") center / cover no-repeat;
+    justify-content: space-between;
+    padding: 4rem 0 3rem;
+    background: var(--cream-200) url("/images/hero-gemini.jpg") center / cover no-repeat;
   }
 
-  /* velo crema para legibilidad sobre la foto */
+  /* velo sutil para legibilidad sin tapar la foto */
   .hero-block::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(250, 248, 244, 0.82) 0%, rgba(250, 248, 244, 0.6) 100%);
+    background: linear-gradient(180deg, rgba(250, 248, 244, 0.4) 0%, rgba(250, 248, 244, 0.2) 100%);
     pointer-events: none;
   }
 
