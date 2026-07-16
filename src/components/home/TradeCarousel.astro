@@ -1,0 +1,153 @@
+---
+import TradeCard from './TradeCard.astro';
+
+interface Props {
+  trades: Array<Record<string, unknown>>;
+  title?: string;
+}
+
+const { trades, title = 'Oficios cerca de ti' } = Astro.props;
+const trackId = 'oficios-carousel';
+---
+
+{trades.length > 0 && (
+<section class="carousel-section">
+  <div class="carousel-inner">
+    <h2 class="carousel-title">{title}</h2>
+
+    <div class="carousel-viewport">
+      <button type="button" class="carousel-btn carousel-btn-prev" data-prev={trackId} aria-label="Anterior">
+        <i class="ri-arrow-left-s-line" aria-hidden="true"></i>
+      </button>
+
+      <div class="carousel-track" id={trackId} role="list">
+        {trades.map((trade) => (
+          <div class="carousel-item" role="listitem">
+            <TradeCard trade={trade as any} />
+          </div>
+        ))}
+      </div>
+
+      <button type="button" class="carousel-btn carousel-btn-next" data-next={trackId} aria-label="Siguiente">
+        <i class="ri-arrow-right-s-line" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div class="carousel-dots" data-dots={trackId} aria-hidden="true"></div>
+  </div>
+</section>
+)}
+
+<script>
+  import { initCarousel } from '../../lib/client/home/carousel';
+  initCarousel('oficios-carousel');
+</script>
+
+<style>
+  .carousel-section {
+    position: relative;
+    z-index: 3;
+    max-width: 64rem;
+    margin: var(--space-4) auto;
+    padding: var(--space-5) 0 var(--space-4);
+    background: var(--bg-card);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-card);
+  }
+
+  .carousel-inner {
+    padding-inline: var(--space-4);
+  }
+
+  .carousel-title {
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    text-align: center;
+    margin-bottom: var(--space-4);
+  }
+
+  .carousel-viewport {
+    position: relative;
+  }
+
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 4;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-default);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-card);
+    transition: background 150ms ease, color 150ms ease;
+  }
+  .carousel-btn-prev { left: -0.5rem; }
+  .carousel-btn-next { right: -0.5rem; }
+  .carousel-btn:hover { background: var(--amber-50); color: var(--color-primary-dark); }
+  .carousel-btn:focus-visible { outline: 2px solid var(--border-focus); outline-offset: 2px; }
+
+  .carousel-track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-block: var(--space-2);
+    scrollbar-width: none;
+  }
+  .carousel-track::-webkit-scrollbar { display: none; }
+
+  /* cards SIEMPRE enteras (sin asomo): 1 en movil, 2 y 4 al crecer */
+  .carousel-item {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  @media (min-width: 640px) { .carousel-item { flex-basis: calc((100% - 1rem) / 2); } }
+  @media (min-width: 900px) { .carousel-item { flex-basis: calc((100% - 3rem) / 4); } }
+
+  /* card compacta dentro del carrusel */
+  .carousel-track :global(.card-cover) { aspect-ratio: auto; height: 72px; }
+  .carousel-track :global(.card-body) { padding: var(--space-2); }
+  .carousel-track :global(.card-title) { font-size: 0.9rem; line-height: 1.2; }
+  .carousel-track :global(.card-header) { margin-bottom: var(--space-2); }
+  .carousel-track :global(.card-description),
+  .carousel-track :global(.badges.secondary),
+  .carousel-track :global(.card-tags),
+  .carousel-track :global(.badge-location) { display: none; }
+  .carousel-track :global(.avatar-inner) { width: 2.25rem; height: 2.25rem; font-size: 0.8rem; }
+  .carousel-track :global(.card-footer) { padding: var(--space-1) var(--space-3); }
+  .carousel-track :global(.price-value) { font-size: 1rem; }
+  .carousel-track :global(.btn-icon) { width: 2rem; height: 2rem; }
+  .carousel-track :global(.btn-icon i) { font-size: 0.85rem; }
+
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+
+  :global(.carousel-dot) {
+    width: 7px;
+    height: 7px;
+    border-radius: var(--radius-full);
+    border: none;
+    padding: 0;
+    background: var(--border-strong);
+    cursor: pointer;
+    transition: background 150ms ease, width 150ms ease;
+  }
+  :global(.carousel-dot.is-active) {
+    width: 18px;
+    background: var(--color-accent);
+  }
+</style>

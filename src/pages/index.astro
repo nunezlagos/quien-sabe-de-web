@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageLoader from '../components/home/PageLoader.astro';
 import HeroSearch from '../components/home/HeroSearch.astro';
 import TradeCard from '../components/home/TradeCard.astro';
+import TradeCarousel from '../components/home/TradeCarousel.astro';
 import AdBanner from '../components/home/AdBanner.astro';
 import LoginModal from '../components/home/LoginModal.astro';
 import SidebarFilters from '../components/home/SidebarFilters.astro';
@@ -38,6 +39,7 @@ const isSearching = Boolean(q || communeId || availableNow);
 
 const shuffled = [...allTrades].sort(() => Math.random() - 0.5);
 const recommendedTrades = shuffled.slice(0, 6);
+const carouselTrades = shuffled.slice(0, 12);
 
 // collage del hero: formas espaciadas (1 cada 4, rotando) + padding de cuadrados
 // para que la ultima fila del mosaico quede siempre completa (repite imagen si hace falta)
@@ -94,6 +96,8 @@ const collageGlow = collageTiles.map(() =>
         trades={tradeOptions}
       />
     </div>
+
+    <TradeCarousel trades={carouselTrades} />
 
     <div class="ad-section">
       <div class="container">
@@ -207,7 +211,6 @@ const collageGlow = collageTiles.map(() =>
     import { initDynamicText } from '../lib/client/home/dynamic-text';
     import { initHomeInteractions } from '../lib/client/home/home-interactions';
     import { initFavButtons } from '../lib/client/ui/favorites';
-    import { initHeroCollapse } from '../lib/client/home/hero-collapse';
 
     document.addEventListener('DOMContentLoaded', () => {
       if (typeof AOS !== 'undefined') {
@@ -223,7 +226,6 @@ const collageGlow = collageTiles.map(() =>
     initDynamicText();
     initHomeInteractions();
     initFavButtons();
-    initHeroCollapse();
 
     // Smooth scroll to results when arriving with search params
     const urlParams = new URLSearchParams(window.location.search);
@@ -453,7 +455,7 @@ const collageGlow = collageTiles.map(() =>
   /* === AD SECTION === */
   .ad-section {
     background: transparent;
-    padding: 0.875rem 0;
+    padding: 0.875rem 0 2rem;
   }
 
   /* === RECOMMENDED SECTION === */

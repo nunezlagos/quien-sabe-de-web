@@ -10,6 +10,7 @@ interface Trade {
   verified: number | boolean;
   availableNow: number | boolean;
   rating: number | null;
+  imageUrl?: string | null;
 }
 
 const { trade } = Astro.props as { trade: Trade };
@@ -30,6 +31,11 @@ function renderStars(r: number): string {
 ---
 
 <article class="card-base">
+  {trade.imageUrl ? (
+  <div class="card-cover">
+    <img src={trade.imageUrl} alt={trade.name} loading="lazy" decoding="async" />
+  </div>
+  ) : null}
   <div class="card-body">
     <div class="card-header">
       <div class="avatar-wrapper">
@@ -124,6 +130,24 @@ function renderStars(r: number): string {
   .card-base:hover {
     box-shadow: var(--shadow-card-hover);
     transform: translateY(-2px);
+  }
+
+  .card-cover {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--stone-100);
+  }
+
+  .card-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 300ms ease;
+  }
+
+  .card-base:hover .card-cover img {
+    transform: scale(1.04);
   }
 
   .card-body {
