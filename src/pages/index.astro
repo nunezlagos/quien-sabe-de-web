@@ -47,8 +47,8 @@ const recommendedTrades = shuffled.slice(0, 6);
   <section class="hero-block">
     <div class="hero-collage" aria-hidden="true">
       {Array.from({ length: 200 }).map((_, i) => {
-        const r = (i * 73 + 17) % 100;
-        const shape = r < 16 ? ' c-wide' : r < 32 ? ' c-tall' : r < 40 ? ' c-big' : '';
+        const shapes = ['c-wide', 'c-tall', 'c-big'];
+        const shape = i % 4 === 0 ? ` ${shapes[(i / 4) % 3]}` : '';
         return <img class={`c-tile${shape}`} src={`/images/collage/${String(i).padStart(3, '0')}.webp`} alt="" decoding="async" />;
       })}
     </div>
