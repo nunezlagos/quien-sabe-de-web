@@ -13,6 +13,8 @@ const currentPath = Astro.url.pathname;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/favicon.svg">
     <title>{title}</title>
     <meta name="description" content="Encuentra gasfíteres, electricistas y más oficios en tu comunidad.">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
@@ -38,7 +40,7 @@ const currentPath = Astro.url.pathname;
         <div class="nav-container">
             <a href="/" class="nav-brand">
                 <div class="nav-logo">
-                    <i class="ri-community-fill" aria-hidden="true"></i>
+                    <img src="/favicon.svg" alt="" aria-hidden="true" width="40" height="40" />
                 </div>
                 <span class="nav-brand-text">
                     Quién<span class="brand-accent">Sabe</span>
@@ -136,7 +138,7 @@ const currentPath = Astro.url.pathname;
         <div class="footer-container">
             <div class="footer-brand">
                 <div class="footer-logo">
-                    <i class="ri-community-fill" aria-hidden="true"></i>
+                    <img src="/favicon.svg" alt="" aria-hidden="true" width="32" height="32" class="footer-logo-img" />
                     <span>QuiénSabe</span>
                 </div>
                 <p class="footer-tagline">Conectando barrios, un oficio a la vez. Construido con cariño para la comunidad.</p>
@@ -340,14 +342,15 @@ const currentPath = Astro.url.pathname;
     .nav-logo {
         width: 2.5rem;
         height: 2.5rem;
-        background: linear-gradient(135deg, var(--amber-500) 0%, var(--orange-600) 100%);
-        border-radius: 0.625rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
-        font-size: 1.25rem;
-        box-shadow: 0 2px 4px rgba(249, 115, 22, 0.3);
+    }
+
+    .nav-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
     }
 
     .nav-brand-text {
@@ -625,9 +628,10 @@ const currentPath = Astro.url.pathname;
         color: white;
     }
 
-    .footer-logo i {
-        font-size: 2rem;
-        color: var(--amber-500);
+    .footer-logo-img {
+        width: 2rem;
+        height: 2rem;
+        object-fit: contain;
     }
 
     .footer-tagline {
