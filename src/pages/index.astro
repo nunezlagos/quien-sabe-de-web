@@ -324,7 +324,7 @@ while (collageCells % COLLAGE_COLS !== 0) {
   /* === PRIMERA SECCIÓN (hero + ad sobre foto, ocupa el viewport) === */
   .hero-block {
     position: relative;
-    min-height: 100vh;
+    min-height: calc(100dvh - 4rem);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -365,13 +365,13 @@ while (collageCells % COLLAGE_COLS !== 0) {
     }
   }
 
-  /* velo sutil para legibilidad sobre el collage */
+  /* velo naranja calido para legibilidad de los textos sobre el collage */
   .hero-block::before {
     content: '';
     position: absolute;
     inset: 0;
     z-index: 1;
-    background: linear-gradient(180deg, rgba(250, 248, 244, 0.4) 0%, rgba(250, 248, 244, 0.2) 100%);
+    background: linear-gradient(180deg, rgba(124, 45, 18, 0.72) 0%, rgba(154, 52, 18, 0.5) 55%, rgba(154, 52, 18, 0.42) 100%);
     pointer-events: none;
   }
 
