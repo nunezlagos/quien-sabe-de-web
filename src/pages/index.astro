@@ -183,7 +183,7 @@ const collageGlow = collageTiles.map(() =>
           <button id="filters-toggle-btn" type="button" class="filters-toggle" aria-controls="search-filters" aria-expanded="false">
             <i class="ri-equalizer-line" aria-hidden="true"></i> Filtros
           </button>
-          <!-- Controls bar -->
+          <!-- Controls bar: todo en una fila sobre panel blanco -->
           <div class="controls-bar">
             <div class="controls-left">
               <h2 class="section-title">
@@ -193,6 +193,19 @@ const collageGlow = collageTiles.map(() =>
                 {results.length} vecino{results.length !== 1 ? 's' : ''} disponible{results.length !== 1 ? 's' : ''}
               </p>
             </div>
+
+            {activeChips.length > 0 && (
+              <div class="active-filters" aria-label="Filtros activos">
+                {activeChips.map((chip) => (
+                  <a href={removeFilterUrl(chip.key)} class="filter-chip">
+                    <span>{chip.label}</span>
+                    <i class="ri-close-line" aria-hidden="true"></i>
+                  </a>
+                ))}
+                <a href="/" class="filter-chip-clear">Limpiar todo</a>
+              </div>
+            )}
+
             <div class="view-toggle" role="group" aria-label="Cambiar vista de resultados">
               <button id="grid-view-btn" type="button" class="view-btn view-btn-active" title="Grid" aria-label="Vista grilla" aria-pressed="true">
                 <i class="ri-grid-fill" aria-hidden="true"></i>
@@ -202,18 +215,6 @@ const collageGlow = collageTiles.map(() =>
               </button>
             </div>
           </div>
-
-          {activeChips.length > 0 && (
-            <div class="active-filters" aria-label="Filtros activos">
-              {activeChips.map((chip) => (
-                <a href={removeFilterUrl(chip.key)} class="filter-chip">
-                  <span>{chip.label}</span>
-                  <i class="ri-close-line" aria-hidden="true"></i>
-                </a>
-              ))}
-              <a href="/" class="filter-chip-clear">Limpiar todo</a>
-            </div>
-          )}
 
           {results.length === 0 ? (
             <div class="no-results">
@@ -550,7 +551,8 @@ const collageGlow = collageTiles.map(() =>
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-2);
-    margin-bottom: 1.25rem;
+    flex: 1;
+    min-width: 0;
   }
 
   .filter-chip {
@@ -794,11 +796,13 @@ const collageGlow = collageTiles.map(() =>
   .controls-bar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 0.75rem 1rem;
     margin-bottom: 1rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--border-default);
-    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: white;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-card);
     flex-wrap: wrap;
   }
 
@@ -807,6 +811,7 @@ const collageGlow = collageTiles.map(() =>
     flex-direction: column;
     gap: 0.125rem;
     min-width: 0;
+    flex-shrink: 0;
   }
 
   .controls-left .section-title {
@@ -820,11 +825,11 @@ const collageGlow = collageTiles.map(() =>
   .view-toggle {
     display: flex;
     gap: 0.25rem;
-    background: var(--bg-card);
+    margin-left: auto;
+    background: var(--stone-50);
     border: 1px solid var(--border-default);
     border-radius: var(--radius-xl);
     padding: 0.25rem;
-    box-shadow: var(--shadow-card);
     flex-shrink: 0;
   }
 
@@ -909,9 +914,91 @@ const collageGlow = collageTiles.map(() =>
     text-decoration: underline;
   }
 
-  /* === LIST VIEW === */
+  /* === LIST VIEW (sin imagen, fila clara) === */
   .cards-grid.list-view {
     grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .cards-grid.list-view :global(.hero-card) {
+    height: auto;
+    min-height: 0;
+    background: white;
+    border: 1px solid var(--border-default);
+    box-shadow: var(--shadow-card);
+  }
+
+  .cards-grid.list-view :global(.hero-bg),
+  .cards-grid.list-view :global(.hero-mask) {
+    display: none;
+  }
+
+  .cards-grid.list-view :global(.hero-content) {
+    position: static;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.9rem;
+    padding: 0.7rem 1rem;
+    text-align: left;
+  }
+
+  .cards-grid.list-view :global(.hero-avatar) {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .cards-grid.list-view :global(.hero-info) {
+    flex: 1;
+    align-items: flex-start;
+  }
+
+  .cards-grid.list-view :global(.hero-name) {
+    justify-content: flex-start;
+    color: var(--text-primary);
+    text-shadow: none;
+  }
+
+  .cards-grid.list-view :global(.hero-name-check) {
+    color: var(--green-500);
+  }
+
+  .cards-grid.list-view :global(.hero-trade) {
+    color: var(--text-muted);
+    text-shadow: none;
+  }
+
+  .cards-grid.list-view :global(.hero-stars) {
+    color: var(--amber-400);
+    text-shadow: none;
+  }
+
+  .cards-grid.list-view :global(.hero-card-footer) {
+    margin-top: 0.4rem;
+    width: 100%;
+  }
+
+  .cards-grid.list-view :global(.hero-price-label) {
+    color: var(--text-muted);
+  }
+
+  .cards-grid.list-view :global(.hero-price-value) {
+    color: var(--text-primary);
+    text-shadow: none;
+  }
+
+  .cards-grid.list-view :global(.hero-btn) {
+    background: white;
+    border-color: var(--border-default);
+    color: var(--text-secondary);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .cards-grid.list-view :global(.hero-btn-whatsapp) {
+    background: var(--green-500);
+    border-color: var(--green-600);
+    color: white;
   }
 
   /* Tablet adjustment: 2 columns for cards even in search */
