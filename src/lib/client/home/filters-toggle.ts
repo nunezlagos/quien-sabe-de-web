@@ -8,6 +8,19 @@ export function initFiltersToggle(): void {
     });
   }
 
+  // el sticky del sidebar debe respetar la altura real del header (navbar + barra de búsqueda)
+  const sidebar = document.querySelector<HTMLElement>('.sidebar-col');
+  if (sidebar) {
+    const updateStickyOffset = () => {
+      const nav = document.querySelector<HTMLElement>('.navbar');
+      const bar = document.querySelector<HTMLElement>('.hero-block-search');
+      const top = (nav?.offsetHeight ?? 64) + (bar?.offsetHeight ?? 76) + 8;
+      sidebar.style.top = `${top}px`;
+    };
+    updateStickyOffset();
+    window.addEventListener('resize', updateStickyOffset);
+  }
+
   const verifiedModal = document.getElementById('verified-modal');
   const verifiedBtn = document.getElementById('verified-modal-btn');
   if (verifiedModal && verifiedBtn) {
