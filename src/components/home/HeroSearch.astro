@@ -1,12 +1,14 @@
 ---
 export interface Props {
   q: string;
-  communeId?: number;
+  selectedTrade?: string;
+  selectedCommune?: string;
+  availableNow?: boolean;
   communes: { id: number; name: string }[];
   trades: { name: string; slug: string }[];
 }
 
-const { q, communeId, communes, trades } = Astro.props;
+const { q, selectedTrade = '', selectedCommune = '', availableNow = false, communes, trades } = Astro.props;
 ---
 
 <header id="hero-section" class="hero-section">
@@ -25,7 +27,7 @@ const { q, communeId, communes, trades } = Astro.props;
         <select id="trade-select" class="search-select">
           <option value="">Todos los oficios</option>
           {trades.map((t) => (
-            <option value={t.name}>{t.name}</option>
+            <option value={t.name} selected={t.name === selectedTrade}>{t.name}</option>
           ))}
         </select>
       </div>
@@ -38,7 +40,7 @@ const { q, communeId, communes, trades } = Astro.props;
         <select id="commune-select" class="search-select">
           <option value="">Todas las comunas</option>
           {communes.map((c) => (
-            <option value={c.name} selected={communeId === c.id}>{c.name}</option>
+            <option value={c.name} selected={c.name === selectedCommune}>{c.name}</option>
           ))}
         </select>
       </div>
@@ -70,7 +72,7 @@ const { q, communeId, communes, trades } = Astro.props;
       </div>
 
       <label class="search-available">
-        <input type="checkbox" name="available_now" class="search-checkbox">
+        <input type="checkbox" name="available_now" class="search-checkbox" checked={availableNow}>
         <span>Disponible ahora</span>
       </label>
 

@@ -1,5 +1,5 @@
 import { trades, communes, reviews, users } from '../../database/schema';
-import { eq, desc, sql, like, and, or, gte } from 'drizzle-orm';
+import { eq, desc, sql, like, and, or, gte, lte } from 'drizzle-orm';
 import type { Database } from '../di/database';
 import { insertReturning } from '../db/returning';
 
@@ -60,9 +60,13 @@ export class TradesService {
 	 */
 	async search(params: {
 		q?: string;
+		tradeName?: string;
 		communeId?: number;
 		category?: string;
 		availableNow?: boolean;
+		verified?: boolean;
+		priceMin?: number;
+		priceMax?: number;
 		limit?: number;
 	}) {
 		const conditions = [];
@@ -77,6 +81,9 @@ export class TradesService {
 				)!
 			);
 		}
+		if (params.tradeName && params.tradeName.trim().length > 0) {
+			conditions.push(eq(trades.name, params.tradeName.trim()));
+		}
 		if (params.communeId) {
 			conditions.push(eq(trades.communeId, params.communeId));
 		}
@@ -85,6 +92,15 @@ export class TradesService {
 		}
 		if (params.availableNow) {
 			conditions.push(eq(trades.availableNow, true));
+		}
+		if (params.verified) {
+			conditions.push(eq(trades.verified, true));
+		}
+		if (typeof params.priceMin === 'number' && !Number.isNaN(params.priceMin)) {
+			conditions.push(gte(trades.basePriceClp, params.priceMin));
+		}
+		if (typeof params.priceMax === 'number' && !Number.isNaN(params.priceMax)) {
+			conditions.push(lte(trades.basePriceClp, params.priceMax));
 		}
 
 		const where = conditions.length > 0 ? and(...conditions) : undefined;

@@ -1,68 +1,54 @@
 ---
-const { visible = false } = Astro.props;
+interface FilterState {
+  q?: string;
+  tradeName?: string;
+  communeName?: string;
+  availableNow?: boolean;
+  verified?: boolean;
+  priceMin?: number;
+  priceMax?: number;
+}
+const { filters = {} } = Astro.props as { filters?: FilterState };
 ---
 
-<aside id="search-sidebar" class:list={["sidebar-wrapper", { hidden: !visible }]}>
-  <div class="widget-card">
+<aside id="search-sidebar" class="sidebar-wrapper">
+  <form id="filters-form" class="widget-card">
     <h3 class="sidebar-title">
       <i class="ri-filter-3-line" style="color: var(--amber-600)" aria-hidden="true"></i> Filtros
     </h3>
 
-    <!-- Categories -->
-    <div class="filter-section">
-      <h4 class="filter-label" id="filter-oficio-label">Oficio</h4>
-      <div class="filter-options" role="group" aria-labelledby="filter-oficio-label">
-        <label class="filter-option" for="filter-oficio-gasfiter">
-          <input type="checkbox" id="filter-oficio-gasfiter" class="filter-checkbox">
-          <span class="filter-text">Gasfiter</span>
-        </label>
-        <label class="filter-option" for="filter-oficio-electricista">
-          <input type="checkbox" id="filter-oficio-electricista" class="filter-checkbox">
-          <span class="filter-text">Electricista</span>
-        </label>
-        <label class="filter-option" for="filter-oficio-jardinero">
-          <input type="checkbox" id="filter-oficio-jardinero" class="filter-checkbox">
-          <span class="filter-text">Jardinero</span>
-        </label>
-        <label class="filter-option" for="filter-oficio-maestro">
-          <input type="checkbox" id="filter-oficio-maestro" class="filter-checkbox">
-          <span class="filter-text">Maestro</span>
-        </label>
-      </div>
-    </div>
-
     <!-- Price Range -->
     <div class="filter-section">
-      <h4 class="filter-label">Precio Base</h4>
+      <h4 class="filter-label">Precio base (CLP)</h4>
       <div class="price-inputs">
         <label class="sr-only" for="filter-price-min">Precio mínimo</label>
-        <input type="number" id="filter-price-min" placeholder="Min" class="price-input">
-        <span class="price-separator" aria-hidden="true">-</span>
+        <input type="number" id="filter-price-min" name="price_min" placeholder="Min" class="price-input" min="0" step="1000" value={filters.priceMin ?? ''}>
+        <span class="price-separator" aria-hidden="true">–</span>
         <label class="sr-only" for="filter-price-max">Precio máximo</label>
-        <input type="number" id="filter-price-max" placeholder="Max" class="price-input">
+        <input type="number" id="filter-price-max" name="price_max" placeholder="Max" class="price-input" min="0" step="1000" value={filters.priceMax ?? ''}>
       </div>
     </div>
 
-    <!-- Rating -->
+    <!-- Toggles -->
     <div class="filter-section">
-      <h4 class="filter-label" id="filter-rating-label">Valoración</h4>
-      <div class="filter-options" role="radiogroup" aria-labelledby="filter-rating-label">
-        <label class="filter-option" for="filter-rating-5">
-          <input type="radio" name="rating" id="filter-rating-5" class="filter-radio" aria-label="5 estrellas">
-          <div class="rating-stars" aria-hidden="true">
-            <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i>
-          </div>
+      <h4 class="filter-label">Disponibilidad</h4>
+      <div class="filter-options">
+        <label class="filter-option" for="filter-available">
+          <input type="checkbox" id="filter-available" name="available_now" class="filter-checkbox" checked={filters.availableNow}>
+          <span class="filter-text">Disponible ahora</span>
         </label>
-        <label class="filter-option" for="filter-rating-4">
-          <input type="radio" name="rating" id="filter-rating-4" class="filter-radio" aria-label="4 estrellas y más">
-          <div class="rating-stars" aria-hidden="true">
-            <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-line"></i>
-          </div>
-          <span class="rating-more">& más</span>
+        <label class="filter-option" for="filter-verified">
+          <input type="checkbox" id="filter-verified" name="verified" class="filter-checkbox" checked={filters.verified}>
+          <span class="filter-text">Solo verificados</span>
         </label>
       </div>
     </div>
-  </div>
+
+    <div class="filter-actions">
+      <button type="submit" class="filter-apply">Aplicar filtros</button>
+      <a href="/" class="filter-clear">Limpiar</a>
+    </div>
+  </form>
 
   <!-- Promo Box -->
   <div class="promo-card">
@@ -130,8 +116,45 @@ const { visible = false } = Astro.props;
     margin-bottom: var(--space-5);
   }
 
-  .filter-section:last-child {
-    margin-bottom: 0;
+  .filter-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .filter-apply {
+    flex: 1;
+    padding: 0.6rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: white;
+    background: linear-gradient(135deg, var(--orange-500) 0%, var(--orange-600) 100%);
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    box-shadow: var(--shadow-btn);
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+
+  .filter-apply:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .filter-apply:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+
+  .filter-clear {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-decoration: underline;
+  }
+
+  .filter-clear:hover {
+    color: var(--amber-600);
   }
 
   .filter-label {

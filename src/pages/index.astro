@@ -15,27 +15,39 @@ import { asc } from 'drizzle-orm';
 const isLoggedIn = Boolean(Astro.locals.user);
 const user = Astro.locals.user;
 
+const db = getDb();
+const communesList = await db.select({ id: communes.id, name: communes.name }).from(communes).orderBy(asc(communes.name)).all();
+
 const url = Astro.url;
-const q = url.searchParams.get('q') ?? '';
-const rawCommuneId = url.searchParams.get('commune_id');
-const communeId = rawCommuneId ? Number.parseInt(rawCommuneId, 10) : undefined;
-const availableNow = url.searchParams.get('available_now') === '1';
+const params = url.searchParams;
+const q = params.get('q') ?? '';
+const tradeName = params.get('trade') ?? '';
+const communeName = params.get('commune') ?? '';
+const communeId = communesList.find((c) => c.name === communeName)?.id;
+const availableNow = params.get('available_now') === '1';
+const verified = params.get('verified') === '1';
+const priceMinRaw = Number.parseInt(params.get('price_min') ?? '', 10);
+const priceMaxRaw = Number.parseInt(params.get('price_max') ?? '', 10);
+const priceMin = Number.isNaN(priceMinRaw) ? undefined : priceMinRaw;
+const priceMax = Number.isNaN(priceMaxRaw) ? undefined : priceMaxRaw;
 
 const tradesService = getTradesService(Astro.locals);
 const results = await tradesService.search({
   q: q || undefined,
+  tradeName: tradeName || undefined,
   communeId,
   availableNow: availableNow || undefined,
+  verified: verified || undefined,
+  priceMin,
+  priceMax,
   limit: 50,
 });
-
-const db = getDb();
-const communesList = await db.select({ id: communes.id, name: communes.name }).from(communes).orderBy(asc(communes.name)).all();
 
 const allTrades = await tradesService.search({ limit: 50 });
 const uniqueTrades = [...new Set(allTrades.map((t) => t.name).filter(Boolean))];
 const tradeOptions = uniqueTrades.map((name) => ({ name, slug: name.toLowerCase().replace(/\s+/g, '-') }));
-const isSearching = Boolean(q || communeId || availableNow);
+const isSearching = Boolean(q || tradeName || communeName || availableNow || verified || priceMin !== undefined || priceMax !== undefined);
+const filterState = { q, tradeName, communeName, availableNow, verified, priceMin, priceMax };
 
 const shuffled = [...allTrades].sort(() => Math.random() - 0.5);
 const recommendedTrades = shuffled.slice(0, 6);
@@ -93,7 +105,9 @@ const collageGlow = collageTiles.map(() =>
     <div id="hero-section-wrapper">
       <HeroSearch
         q={q}
-        communeId={communeId}
+        selectedTrade={tradeName}
+        selectedCommune={communeName}
+        availableNow={availableNow}
         communes={communesList}
         trades={tradeOptions}
       />
@@ -145,7 +159,7 @@ const collageGlow = collageTiles.map(() =>
       <div class="search-layout container">
         <!-- Sidebar column (solo filtros, sin publicidad) -->
         <div class="sidebar-col" id="search-filters">
-          <SidebarFilters visible={true} />
+          <SidebarFilters filters={filterState} />
         </div>
 
         <!-- Results column -->
@@ -561,7 +575,14 @@ const collageGlow = collageTiles.map(() =>
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    width: 100%;
     margin-bottom: 1rem;
+  }
+
+  /* el panel de filtros ocupa el mismo ancho que las cards de abajo */
+  .search-layout.filters-open .sidebar-col :global(.sidebar-wrapper),
+  .search-layout.filters-open .sidebar-col :global(.widget-card) {
+    width: 100%;
   }
 
   .filters-toggle {
