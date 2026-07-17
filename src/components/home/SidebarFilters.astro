@@ -57,7 +57,28 @@ const { filters = {} } = Astro.props as { filters?: FilterState };
     </div>
     <h4 class="promo-title">Vecinos Verificados</h4>
     <p class="promo-text">Contrata con confianza.</p>
-    <button type="button" class="promo-btn">Saber más</button>
+    <button type="button" id="verified-modal-btn" class="promo-btn">Saber más</button>
+  </div>
+
+  <div id="verified-modal" class="verified-modal hidden" role="dialog" aria-modal="true" aria-labelledby="verified-modal-title" aria-hidden="true">
+    <div class="verified-backdrop close-verified"></div>
+    <div class="verified-card">
+      <button type="button" class="verified-close close-verified" aria-label="Cerrar">
+        <i class="ri-close-line" aria-hidden="true"></i>
+      </button>
+      <div class="verified-modal-icon">
+        <i class="ri-verified-badge-fill" aria-hidden="true"></i>
+      </div>
+      <h2 id="verified-modal-title" class="verified-modal-title">Vecinos Verificados</h2>
+      <p class="verified-modal-desc">
+        El sello <strong>Verificado</strong> indica que revisamos la identidad y los antecedentes del vecino antes de mostrarlo. Así contratas con más confianza.
+      </p>
+      <ul class="verified-modal-list">
+        <li><i class="ri-checkbox-circle-fill" aria-hidden="true"></i> Identidad validada</li>
+        <li><i class="ri-checkbox-circle-fill" aria-hidden="true"></i> Documentos y oficio revisados</li>
+        <li><i class="ri-checkbox-circle-fill" aria-hidden="true"></i> Reputación de la comunidad</li>
+      </ul>
+    </div>
   </div>
 </aside>
 
@@ -264,7 +285,7 @@ const { filters = {} } = Astro.props as { filters?: FilterState };
     width: 3rem;
     height: 3rem;
     border-radius: var(--radius-xl);
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.95);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -273,8 +294,14 @@ const { filters = {} } = Astro.props as { filters?: FilterState };
 
   .promo-icon i {
     font-size: 1.5rem;
-    color: white;
-    opacity: 0.9;
+    color: var(--green-500);
+  }
+
+  /* ocultar la promo en móvil (solo filtros al desplegar) */
+  @media (max-width: 899px) {
+    .promo-card {
+      display: none;
+    }
   }
 
   .promo-title {
@@ -307,5 +334,112 @@ const { filters = {} } = Astro.props as { filters?: FilterState };
     background: var(--cream-200);
     transform: translateY(-1px);
     box-shadow: var(--shadow-card-hover);
+  }
+
+  /* === MODAL VECINOS VERIFICADOS === */
+  .verified-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .verified-modal.hidden {
+    display: none;
+  }
+
+  .verified-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(41, 37, 36, 0.55);
+    backdrop-filter: blur(2px);
+  }
+
+  .verified-card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 26rem;
+    background: white;
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-card-hover);
+    padding: var(--space-6);
+    text-align: center;
+  }
+
+  .verified-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-default);
+    background: white;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .verified-close:hover {
+    background: var(--stone-50);
+    color: var(--text-primary);
+  }
+
+  .verified-modal-icon {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: var(--radius-full);
+    background: var(--green-50);
+    color: var(--green-500);
+    font-size: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-3);
+  }
+
+  .verified-modal-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+  }
+
+  .verified-modal-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-4);
+  }
+
+  .verified-modal-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    text-align: left;
+  }
+
+  .verified-modal-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .verified-modal-list i {
+    color: var(--green-500);
+    font-size: 1.1rem;
   }
 </style>

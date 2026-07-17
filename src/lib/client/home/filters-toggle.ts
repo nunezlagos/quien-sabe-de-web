@@ -8,6 +8,17 @@ export function initFiltersToggle(): void {
     });
   }
 
+  const verifiedModal = document.getElementById('verified-modal');
+  const verifiedBtn = document.getElementById('verified-modal-btn');
+  if (verifiedModal && verifiedBtn) {
+    const closeVerified = () => verifiedModal.classList.add('hidden');
+    verifiedBtn.addEventListener('click', () => verifiedModal.classList.remove('hidden'));
+    verifiedModal.querySelectorAll('.close-verified').forEach((el) => el.addEventListener('click', closeVerified));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !verifiedModal.classList.contains('hidden')) closeVerified();
+    });
+  }
+
   const form = document.getElementById('filters-form') as HTMLFormElement | null;
   if (!form) return;
 
