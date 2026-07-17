@@ -49,6 +49,22 @@ const tradeOptions = uniqueTrades.map((name) => ({ name, slug: name.toLowerCase(
 const isSearching = Boolean(q || tradeName || communeName || availableNow || verified || priceMin !== undefined || priceMax !== undefined);
 const filterState = { q, tradeName, communeName, availableNow, verified, priceMin, priceMax };
 
+function removeFilterUrl(key: string): string {
+  const next = new URLSearchParams(params);
+  next.delete(key);
+  const qs = next.toString();
+  return qs ? `/?${qs}` : '/';
+}
+const activeChips = [
+  q && { key: 'q', label: `"${q}"` },
+  tradeName && { key: 'trade', label: tradeName },
+  communeName && { key: 'commune', label: communeName },
+  availableNow && { key: 'available_now', label: 'Disponible ahora' },
+  verified && { key: 'verified', label: 'Verificado' },
+  priceMin !== undefined && { key: 'price_min', label: `Desde $${priceMin.toLocaleString('es-CL')}` },
+  priceMax !== undefined && { key: 'price_max', label: `Hasta $${priceMax.toLocaleString('es-CL')}` },
+].filter(Boolean) as { key: string; label: string }[];
+
 const shuffled = [...allTrades].sort(() => Math.random() - 0.5);
 const recommendedTrades = shuffled.slice(0, 6);
 const carouselTrades = shuffled.slice(0, 12);
@@ -186,6 +202,18 @@ const collageGlow = collageTiles.map(() =>
               </button>
             </div>
           </div>
+
+          {activeChips.length > 0 && (
+            <div class="active-filters" aria-label="Filtros activos">
+              {activeChips.map((chip) => (
+                <a href={removeFilterUrl(chip.key)} class="filter-chip">
+                  <span>{chip.label}</span>
+                  <i class="ri-close-line" aria-hidden="true"></i>
+                </a>
+              ))}
+              <a href="/" class="filter-chip-clear">Limpiar todo</a>
+            </div>
+          )}
 
           {results.length === 0 ? (
             <div class="no-results">
@@ -494,6 +522,58 @@ const collageGlow = collageTiles.map(() =>
     background-image:
       radial-gradient(circle at 15% 0%, rgba(234, 88, 12, 0.06), transparent 40%),
       radial-gradient(circle at 85% 20%, rgba(234, 88, 12, 0.05), transparent 45%);
+  }
+
+  /* === CHIPS DE FILTROS ACTIVOS === */
+  .active-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: 1.25rem;
+  }
+
+  .filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.4rem 0.3rem 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--amber-800);
+    background: var(--amber-50);
+    border: 1px solid var(--amber-200);
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    transition: all 200ms ease;
+  }
+
+  .filter-chip i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: var(--radius-full);
+    background: rgba(234, 88, 12, 0.12);
+    font-size: 0.75rem;
+  }
+
+  .filter-chip:hover {
+    background: var(--amber-100);
+    border-color: var(--amber-300, var(--amber-200));
+  }
+
+  .filter-chip-clear {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-decoration: underline;
+    margin-left: 0.25rem;
+  }
+
+  .filter-chip-clear:hover {
+    color: var(--amber-600);
   }
 
   /* === RECOMMENDED SECTION === */
