@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageLoader from '../components/home/PageLoader.astro';
 import HeroSearch from '../components/home/HeroSearch.astro';
-import TradeCard from '../components/home/TradeCard.astro';
+import HeroTradeCard from '../components/home/HeroTradeCard.astro';
 import TradeCarousel from '../components/home/TradeCarousel.astro';
 import AdBanner from '../components/home/AdBanner.astro';
 import LoginModal from '../components/home/LoginModal.astro';
@@ -69,7 +69,8 @@ const collageGlow = collageTiles.map(() =>
   <PageLoader />
 
   <!-- Primera sección: hero + publicidad sobre un collage de oficios -->
-  <section class="hero-block">
+  <section class:list={['hero-block', { 'hero-block-search': isSearching }]}>
+    {!isSearching && (
     <div class="hero-collage" aria-hidden="true">
       {collageTiles.map((shape, i) => {
         const glow = collageGlow[i];
@@ -88,6 +89,7 @@ const collageGlow = collageTiles.map(() =>
         );
       })}
     </div>
+    )}
     <div id="hero-section-wrapper">
       <HeroSearch
         q={q}
@@ -97,20 +99,22 @@ const collageGlow = collageTiles.map(() =>
       />
     </div>
 
-    <TradeCarousel trades={carouselTrades} />
+    {!isSearching && <TradeCarousel trades={carouselTrades} />}
 
+    {!isSearching && (
     <div class="ad-section">
       <div class="container">
         <AdBanner />
       </div>
     </div>
+    )}
   </section>
 
   <!-- Main Content -->
-  <main class="container main-content">
+  <main class:list={['container', 'main-content', { 'main-search': isSearching }]}>
 
     {!isSearching && (
-      <section class="recommended-section">
+      <section id="recomendados" class="recommended-section">
         <div class="recommended-header">
           <div>
             <h2 class="section-title">Vecinos Recomendados</h2>
@@ -125,7 +129,7 @@ const collageGlow = collageTiles.map(() =>
 
           <div class="cards-grid">
             {recommendedTrades.map((t) => (
-              <TradeCard trade={t} />
+              <HeroTradeCard trade={t as any} />
             ))}
           </div>
 
@@ -139,17 +143,16 @@ const collageGlow = collageTiles.map(() =>
 
     {isSearching && (
       <div class="search-layout container">
-        <!-- Sidebar column (desktop only: sidebar + ads) -->
-        <div class="sidebar-col">
+        <!-- Sidebar column (solo filtros, sin publicidad) -->
+        <div class="sidebar-col" id="search-filters">
           <SidebarFilters visible={true} />
-          <div class="lateral-ads">
-            <AdBanner />
-            <AdBanner />
-          </div>
         </div>
 
         <!-- Results column -->
         <div class="results-col" id="results-section">
+          <button id="filters-toggle-btn" type="button" class="filters-toggle" aria-controls="search-filters" aria-expanded="false">
+            <i class="ri-equalizer-line" aria-hidden="true"></i> Filtros
+          </button>
           <!-- Controls bar -->
           <div class="controls-bar">
             <div class="controls-left">
@@ -170,11 +173,6 @@ const collageGlow = collageTiles.map(() =>
             </div>
           </div>
 
-          <!-- Mobile ad banner (shown only on mobile) -->
-          <div class="mobile-ad">
-            <AdBanner />
-          </div>
-
           {results.length === 0 ? (
             <div class="no-results">
               <div class="no-results-icon">
@@ -186,7 +184,7 @@ const collageGlow = collageTiles.map(() =>
           ) : (
             <div id="neighbors-container" class="cards-grid">
               {results.map((t) => (
-                <TradeCard trade={t} />
+                <HeroTradeCard trade={t as any} />
               ))}
             </div>
           )}
@@ -205,12 +203,16 @@ const collageGlow = collageTiles.map(() =>
     )}
   </main>
 
-
+  <button id="scroll-fab" type="button" class="scroll-fab" aria-label="Ir a Vecinos Recomendados">
+    <i class="ri-arrow-down-line" aria-hidden="true"></i>
+  </button>
 
   <script>
     import { initDynamicText } from '../lib/client/home/dynamic-text';
     import { initHomeInteractions } from '../lib/client/home/home-interactions';
     import { initFavButtons } from '../lib/client/ui/favorites';
+    import { initScrollFab } from '../lib/client/home/scroll-fab';
+    import { initFiltersToggle } from '../lib/client/home/filters-toggle';
 
     document.addEventListener('DOMContentLoaded', () => {
       if (typeof AOS !== 'undefined') {
@@ -226,18 +228,8 @@ const collageGlow = collageTiles.map(() =>
     initDynamicText();
     initHomeInteractions();
     initFavButtons();
-
-    // Smooth scroll to results when arriving with search params
-    const urlParams = new URLSearchParams(window.location.search);
-    const hasSearch = urlParams.has('q') || urlParams.has('trade') || urlParams.has('commune') || urlParams.has('available_now');
-    if (hasSearch) {
-      const resultsSection = document.getElementById('results-section');
-      if (resultsSection) {
-        setTimeout(() => {
-          resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 100);
-      }
-    }
+    initScrollFab();
+    initFiltersToggle();
   </script>
 </BaseLayout>
 
@@ -444,6 +436,7 @@ const collageGlow = collageTiles.map(() =>
 
   .hero-block :global(.dynamic-trade) {
     color: var(--orange-500);
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.9), 0 1px 3px rgba(255, 255, 255, 0.8);
   }
 
   .hero-block :global(.hero-desc) {
@@ -458,17 +451,55 @@ const collageGlow = collageTiles.map(() =>
     padding: 0.875rem 0 2rem;
   }
 
+  /* === MODO BÚSQUEDA (hero oculto, barra compacta) === */
+  .hero-block-search {
+    min-height: auto;
+    padding: 0.75rem 0 1rem;
+    justify-content: flex-start;
+    position: sticky;
+    top: 4rem;
+    z-index: 20;
+  }
+
+  .hero-block-search::before {
+    display: none;
+  }
+
+  .hero-block-search :global(.hero-title),
+  .hero-block-search :global(.hero-desc) {
+    display: none;
+  }
+
+  /* fondo full-bleed cream para toda la sección de búsqueda (no un panel centrado) */
+  .main-search {
+    max-width: none;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    padding: 1.5rem max(1rem, calc(50vw - 640px)) 3rem;
+    background: var(--cream-200);
+    background-image:
+      radial-gradient(circle at 15% 0%, rgba(234, 88, 12, 0.06), transparent 40%),
+      radial-gradient(circle at 85% 20%, rgba(234, 88, 12, 0.05), transparent 45%);
+  }
+
   /* === RECOMMENDED SECTION === */
   .recommended-section {
     margin-bottom: 2rem;
+    scroll-margin-top: 5rem;
+    padding: 1.5rem 1.25rem;
+    background: linear-gradient(135deg, rgba(255, 237, 213, 0.5) 0%, rgba(255, 250, 245, 0.35) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: var(--radius-2xl);
+    box-shadow: 0 8px 32px rgba(234, 88, 12, 0.08);
   }
 
   .recommended-header {
     display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
     margin-bottom: 1.25rem;
-    gap: 0.75rem;
+    gap: 0.25rem;
   }
 
   .section-title {
@@ -491,6 +522,10 @@ const collageGlow = collageTiles.map(() =>
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.75rem;
+  }
+
+  .recommended-section .cards-grid {
+    gap: 1rem;
   }
 
   @media (min-width: 480px) {
@@ -517,9 +552,38 @@ const collageGlow = collageTiles.map(() =>
     gap: 1.25rem;
   }
 
-  /* Mobile: sidebar hidden, full-width results */
+  /* Mobile: sidebar hidden tras un toggle, full-width results */
   .sidebar-col {
     display: none;
+  }
+
+  .search-layout.filters-open .sidebar-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .filters-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    align-self: flex-start;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-card);
+    cursor: pointer;
+  }
+
+  .filters-toggle:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
   }
 
   .results-col {
@@ -558,6 +622,10 @@ const collageGlow = collageTiles.map(() =>
       display: flex;
       flex-direction: column;
       gap: 1rem;
+    }
+
+    .filters-toggle {
+      display: none;
     }
 
     .results-col {
@@ -730,5 +798,44 @@ const collageGlow = collageTiles.map(() =>
     .search-layout .cards-grid {
       grid-template-columns: repeat(2, 1fr);
     }
+  }
+
+  /* === SCROLL FAB === */
+  .scroll-fab {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 40;
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--radius-full);
+    border: 2px solid white;
+    background: linear-gradient(135deg, var(--orange-500) 0%, var(--orange-600) 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(234, 88, 12, 0.35);
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+
+  .scroll-fab i {
+    font-size: 1.35rem;
+    transition: transform 300ms ease;
+  }
+
+  .scroll-fab.is-up i {
+    transform: rotate(180deg);
+  }
+
+  .scroll-fab:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 26px rgba(234, 88, 12, 0.45);
+  }
+
+  .scroll-fab:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
   }
 </style>
