@@ -6,6 +6,8 @@ import { readFile } from 'node:fs/promises';
 
 const COMUNAS = ['Providencia', 'Ñuñoa', 'Maipú', 'La Florida', 'Las Condes', 'Puente Alto'];
 const PROVIDERS = ['Juan Pérez', 'María González', 'Pedro Soto', 'Camila Rojas', 'Diego Muñoz', 'Valentina Díaz'];
+const FEMALE_NAMES = ['maría', 'camila', 'valentina', 'ana', 'carolina'];
+const PORTRAIT_IDX = { men: [11, 32, 45, 51, 83], women: [21, 26, 44, 57, 68] };
 const OFICIOS = [
   { name: 'Gasfíter', symbol: 'Gasfitería', category: 'hogar', price: 25000 },
   { name: 'Electricista', symbol: 'Electricidad', category: 'hogar', price: 30000 },
@@ -49,7 +51,22 @@ async function seedCommunes(db: ReturnType<typeof getDb>): Promise<number[]> {
   return ids;
 }
 
-async function seedProviders(db: ReturnType<typeof getDb>): Promise<number[]> {
+function genderOf(name: string): 'men' | 'women' {
+  return FEMALE_NAMES.includes(name.toLowerCase().split(' ')[0]) ? 'women' : 'men';
+}
+
+async function uploadAvatar(minio: Client, bucket: string, userId: number, name: string): Promise<string | null> {
+  const gender = genderOf(name);
+  const idx = PORTRAIT_IDX[gender][userId % PORTRAIT_IDX[gender].length];
+  const res = await fetch(`https://randomuser.me/api/portraits/${gender}/${idx}.jpg`);
+  if (!res.ok) return null;
+  const buffer = Buffer.from(await res.arrayBuffer());
+  const key = `avatars/${String(userId).padStart(2, '0')}.jpg`;
+  await minio.putObject(bucket, key, buffer, buffer.length, { 'Content-Type': 'image/jpeg' });
+  return `http://localhost:9002/${bucket}/${key}`;
+}
+
+async function seedProviders(db: ReturnType<typeof getDb>, minio: Client, bucket: string): Promise<number[]> {
   const ids: number[] = [];
   for (let i = 0; i < PROVIDERS.length; i++) {
     const email = `provider${i}@demo.quiensabe.cl`;
@@ -57,6 +74,10 @@ async function seedProviders(db: ReturnType<typeof getDb>): Promise<number[]> {
     if (!row) {
       await db.insert(users).values({ email, name: PROVIDERS[i], role: 'provider', emailVerified: true }).run();
       row = await db.select({ id: users.id }).from(users).where(eq(users.email, email)).get();
+    }
+    const avatarUrl = await uploadAvatar(minio, bucket, row.id, PROVIDERS[i]);
+    if (avatarUrl) {
+      await db.update(users).set({ avatarUrl }).where(eq(users.id, row.id)).run();
     }
     ids.push(row.id);
   }
@@ -77,7 +98,7 @@ export const seed = async () => {
   const hostBase = `http://localhost:9002/${bucket}/oficios`;
 
   const communeIds = await seedCommunes(db);
-  const providerIds = await seedProviders(db);
+  const providerIds = await seedProviders(db, minio, bucket);
 
   let created = 0;
   for (let i = 0; i < TOTAL; i++) {

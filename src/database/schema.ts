@@ -1,4 +1,4 @@
-import { mysqlTable, int, text, varchar, boolean, datetime, index, uniqueIndex, primaryKey } from 'drizzle-orm/mysql-core';
+import { mysqlTable, int, tinyint, text, varchar, boolean, datetime, index, uniqueIndex, primaryKey } from 'drizzle-orm/mysql-core';
 
 export const users = mysqlTable('users', {
   id: int('id').autoincrement().primaryKey(),
@@ -19,6 +19,7 @@ export const users = mysqlTable('users', {
   emailVerificationToken: text('email_verification_token'),
   sessionToken: text('session_token'),
   createdAt: datetime('created_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 });
 
 export const communes = mysqlTable('communes', {
@@ -26,7 +27,9 @@ export const communes = mysqlTable('communes', {
   name: varchar('name', { length: 255 }).notNull(),
   slug: varchar('slug', { length: 255 }).notNull().unique(),
   region: varchar('region', { length: 100 }).notNull().default('Metropolitana'),
+  status: tinyint('status').notNull().default(1),
   createdAt: datetime('created_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 });
 
 export const trades = mysqlTable('trades', {
@@ -45,11 +48,15 @@ export const trades = mysqlTable('trades', {
   communeId: int('commune_id').references(() => communes.id, { onDelete: 'set null' }),
   availableNow: boolean('available_now').notNull().default(false),
   createdAt: datetime('created_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 });
 
 export const tradeCommunes = mysqlTable('trade_communes', {
   tradeId: int('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
   communeId: int('commune_id').notNull().references(() => communes.id, { onDelete: 'cascade' }),
+  status: tinyint('status').notNull().default(1),
+  createdAt: datetime('created_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 }, (t) => ({
   pk: primaryKey({ columns: [t.tradeId, t.communeId] }),
 }));
@@ -63,7 +70,9 @@ export const reviews = mysqlTable('reviews', {
   body: text('body').notNull(),
   response: text('response'),
   respondedAt: datetime('responded_at'),
+  status: tinyint('status').notNull().default(1),
   createdAt: datetime('created_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 });
 
 export const contactEvents = mysqlTable('contact_events', {
@@ -72,7 +81,9 @@ export const contactEvents = mysqlTable('contact_events', {
   visitorId: text('visitor_id'),
   userId: int('user_id').references(() => users.id, { onDelete: 'set null' }),
   eventType: varchar('event_type', { length: 20, enum: ['whatsapp', 'email', 'phone', 'profile'] }).notNull(),
+  status: tinyint('status').notNull().default(1),
   createdAt: datetime('created_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 });
 
 export type Usuario = typeof users.$inferSelect;
@@ -86,7 +97,9 @@ export const favorites = mysqlTable('favorites', {
   id: int('id').autoincrement().primaryKey(),
   userId: int('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   tradeId: int('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
+  status: tinyint('status').notNull().default(1),
   createdAt: datetime('created_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 });
 
 export const portfolioImages = mysqlTable('portfolio_images', {
@@ -95,7 +108,9 @@ export const portfolioImages = mysqlTable('portfolio_images', {
   url: text('url').notNull(),
   caption: text('caption'),
   sortOrder: int('sort_order').notNull().default(0),
+  status: tinyint('status').notNull().default(1),
   createdAt: datetime('created_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 });
 
 export const adminAuditLog = mysqlTable('admin_audit_log', {
@@ -105,21 +120,27 @@ export const adminAuditLog = mysqlTable('admin_audit_log', {
   entityType: varchar('entity_type', { length: 100 }),
   entityId: int('entity_id'),
   details: text('details'),
+  status: tinyint('status').notNull().default(1),
   createdAt: datetime('created_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 });
 
 export const appSettings = mysqlTable('app_settings', {
   id: int('id').autoincrement().primaryKey(),
   key: varchar('key', { length: 255 }).notNull().unique(),
   value: text('value').notNull(),
-  updatedAt: datetime('updated_at').$defaultFn(() => new Date()),
+  status: tinyint('status').notNull().default(1),
+  createdAt: datetime('created_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 });
 
 export const userViews = mysqlTable('user_views', {
   id: int('id').autoincrement().primaryKey(),
   userId: int('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   tradeId: int('trade_id').notNull().references(() => trades.id, { onDelete: 'cascade' }),
+  status: tinyint('status').notNull().default(1),
   createdAt: datetime('created_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 }, (t) => ({
   byUserCreatedDesc: index('idx_user_views_user_created').on(t.userId, t.createdAt),
   uniqueView: uniqueIndex('uq_user_views_user_trade').on(t.userId, t.tradeId),
@@ -137,7 +158,7 @@ export const donations = mysqlTable('donations', {
   userId: int('user_id').references(() => users.id, { onDelete: 'set null' }),
   recurring: boolean('recurring').notNull().default(false),
   createdAt: datetime('created_at').$defaultFn(() => new Date()),
-  updatedAt: datetime('updated_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 });
 
 export type Donation = typeof donations.$inferSelect;
@@ -147,6 +168,9 @@ export const userRoles = mysqlTable('user_roles', {
   role: varchar('role', { length: 20, enum: ['user', 'provider', 'admin'] }).notNull(),
   grantedAt: datetime('granted_at').$defaultFn(() => new Date()),
   grantedBy: int('granted_by').references(() => users.id, { onDelete: 'set null' }),
+  status: tinyint('status').notNull().default(1),
+  createdAt: datetime('created_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 }, (t) => ({
   pk: primaryKey({ columns: [t.userId, t.role] }),
 }));
@@ -156,7 +180,9 @@ export const eventsLog = mysqlTable('events_log', {
   event: varchar('event', { length: 30, enum: ['signup', 'search', 'contact', 'review', 'donation', 'ticket_open'] }).notNull(),
   actorRole: varchar('actor_role', { length: 20, enum: ['anonymous', 'user', 'provider', 'admin'] }).notNull(),
   propsJson: text('props_json').notNull().default('{}'),
+  status: tinyint('status').notNull().default(1),
   createdAt: datetime('created_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 }, (t) => ({
   byEvent: index('idx_events_log_event').on(t.event),
   byEventCreatedDesc: index('idx_events_log_event_created').on(t.event, t.createdAt),
@@ -171,7 +197,9 @@ export const providerAvailability = mysqlTable('provider_availability', {
   dayOfWeek: int('day_of_week').notNull(),
   startTime: varchar('start_time', { length: 10 }).notNull(),
   endTime: varchar('end_time', { length: 10 }).notNull(),
+  status: tinyint('status').notNull().default(1),
   createdAt: datetime('created_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 }, (t) => ({
   uniqueSlot: uniqueIndex('uq_provider_availability_slot').on(t.userId, t.dayOfWeek, t.startTime),
   byProvider: index('idx_provider_availability_user').on(t.userId),
@@ -187,6 +215,7 @@ export const tickets = mysqlTable('tickets', {
   contactEmail: varchar('contact_email', { length: 255 }),
   subject: varchar('subject', { length: 255 }).notNull(),
   createdAt: datetime('created_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 }, (t) => ({
   byStatusCreated: index('idx_tickets_status_created').on(t.status, t.createdAt),
   byAssignee: index('idx_tickets_assignee').on(t.assigneeAdminId),
@@ -200,7 +229,9 @@ export const ticketMessages = mysqlTable('ticket_messages', {
   sender: varchar('sender', { length: 20, enum: ['author', 'admin', 'system'] }).notNull(),
   body: text('body').notNull(),
   internalNote: boolean('internal_note').notNull().default(false),
+  status: tinyint('status').notNull().default(1),
   createdAt: datetime('created_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 }, (t) => ({
   byTicketPublic: index('idx_ticket_messages_ticket_public').on(t.ticketId, t.internalNote, t.createdAt),
 }));
@@ -212,7 +243,9 @@ export const expenses = mysqlTable('expenses', {
   category: varchar('category', { length: 30, enum: ['hosting', 'dominio', 'marketing', 'legal', 'herramientas', 'otros'] }).notNull().default('otros'),
   receiptUrl: text('receipt_url'),
   createdBy: int('created_by').references(() => users.id, { onDelete: 'set null' }),
+  status: tinyint('status').notNull().default(1),
   createdAt: datetime('created_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 }, (t) => ({
   byCreatedDesc: index('idx_expenses_created').on(t.createdAt),
 }));
@@ -223,7 +256,9 @@ export const monthlyReports = mysqlTable('monthly_reports', {
   totalDonations: int('total_donations').notNull().default(0),
   totalExpenses: int('total_expenses').notNull().default(0),
   pdfUrl: text('pdf_url'),
+  status: tinyint('status').notNull().default(1),
   createdAt: datetime('created_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 });
 
 export const verificationDocuments = mysqlTable('verification_documents', {
@@ -233,7 +268,9 @@ export const verificationDocuments = mysqlTable('verification_documents', {
   objectKey: varchar('object_key', { length: 255 }).notNull(),
   contentType: varchar('content_type', { length: 100 }).notNull(),
   uploadedAt: datetime('uploaded_at'),
+  status: tinyint('status').notNull().default(1),
   createdAt: datetime('created_at').$defaultFn(() => new Date()),
+  updatedAt: datetime('updated_at').$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 }, (t) => ({
   byUser: index('idx_verification_docs_user').on(t.userId),
 }));
