@@ -493,10 +493,10 @@ const collageGlow = collageTiles.map(() =>
     padding: 0.875rem 0 2rem;
   }
 
-  /* === MODO BÚSQUEDA (hero oculto, barra compacta) === */
+  /* === MODO BÚSQUEDA (hero oculto, barra compacta y fit) === */
   .hero-block-search {
     min-height: auto;
-    padding: 0.75rem 0 1rem;
+    padding: 0.5rem 0;
     justify-content: flex-start;
     position: sticky;
     top: 4rem;
@@ -510,6 +510,26 @@ const collageGlow = collageTiles.map(() =>
   .hero-block-search :global(.hero-title),
   .hero-block-search :global(.hero-desc) {
     display: none;
+  }
+
+  /* barra más fit: menos padding en el contenedor y campos */
+  .hero-block-search :global(.search-container) {
+    padding: 0.3rem;
+    gap: 0.25rem;
+  }
+
+  .hero-block-search :global(.search-select),
+  .hero-block-search :global(.search-input) {
+    padding-top: 0.45rem;
+    padding-bottom: 0.45rem;
+  }
+
+  .hero-block-search :global(.search-btn) {
+    padding: 0.5rem 1.1rem;
+  }
+
+  .hero-block-search :global(.search-available) {
+    padding: 0.4rem 0.6rem;
   }
 
   /* fondo full-bleed cream para toda la sección de búsqueda (no un panel centrado) */
