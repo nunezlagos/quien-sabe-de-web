@@ -53,7 +53,7 @@ const { filters = {} } = Astro.props as { filters?: FilterState };
   <!-- Promo Box -->
   <div class="promo-card">
     <div class="promo-icon">
-      <i class="ri-shield-star-line" aria-hidden="true"></i>
+      <i class="ri-verified-badge-fill" aria-hidden="true"></i>
     </div>
     <h4 class="promo-title">Vecinos Verificados</h4>
     <p class="promo-text">Contrata con confianza.</p>
@@ -76,6 +76,9 @@ const { filters = {} } = Astro.props as { filters?: FilterState };
 
   .sidebar-wrapper {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 
   @media (min-width: 1024px) {
